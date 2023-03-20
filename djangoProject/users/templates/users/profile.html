@@ -1,0 +1,6 @@
+{% extends 'users\base.html' %}
+
+{% block main %}
+    <a href="{% url 'logout' %}">Выйти</a>
+    <a href="{% url 'password_change' %}">Изменить пароль</a>
+{% endblock %}

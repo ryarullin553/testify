@@ -1,0 +1,60 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link type="text/css" href="{% static 'users/css/base_styles.css' %}" rel="stylesheet">
+    {% block add_style %}{% endblock %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>{{ title }}</title>
+</head>
+<body>
+  <header class="main-header">
+      <nav class="main-header-nav">
+          <a href="#" class="logo">
+              <img src="{% static 'users/images/logo_icon.svg' %}" alt="Logo" class="logo-icon">
+              <p>Testify</p>
+          </a>
+          <ul class="nav-list">
+              <li><a href="{% url 'base_page' %}">Главная</a></li>
+              <li><a href="#">Каталог</a></li>
+              <li><a href="#">О нас</a></li>
+              <li><a href="/admin">Admin</a></li>
+          </ul>
+{#          <a href="#" class="loupe"><img src="{% static 'images/loupe.svg' %}" alt="Loupe"></a>#}
+          {% if request.user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="profile">
+                <img src="{% static 'users/images/profile.svg' %}" alt="Profile">
+                {{ user.username }}
+            </a>
+          {% else %}
+            <a href='{% url 'sign_in' %}' class="login">Войти</a>
+          {% endif %}
+      </nav>
+  </header>
+  <main>
+      {% block main %}
+      {% endblock %}
+  </main>
+  <footer>
+      <div class="footer-container">
+          <div class="copyrights">
+              <a href="#" class="logo">
+                  <img src="{% static 'users/images/logo_icon.svg' %}" alt="Logo" class="logo-icon">
+                  <p>Testify</p>
+              </a>
+              <p class="copyrights-text">© 2023 Все права защищены</p>
+          </div>
+          <ul class="nav-list">
+              <li><a href="{% url 'base_page' %}">Главная</a></li>
+              <li><a href="#">Каталог</a></li>
+              <li><a href="#">О нас</a></li>
+              <li><a href="#">Admin</a></li>
+          </ul>
+      </div>
+  </footer>
+</body>
+</html>
