@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="hystmodal.min.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <button class="modal-button" data-hystmodal="#modalLogin">Войти</button>
+    <div class="hystmodal" id="modalLogin" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window" role="dialog" aria-modal="true">
+          <button data-hystclose class="hystmodal__close">Закрыть</button>
+          <div class="hystmodal__styled">
+            <header class="modal-header">
+              <button>Войти</button>
+              <button>Регистрация</button>
+            </header>
+            <form action="#" class="login-form">
+              <input type="email" name="login-email" id="login-email" placeholder="E-mail">
+              <input type="password" name="login-password" id="login-password" placeholder="Пароль">
+              <input type="submit" name="login-submit" id="login-submit" value="Войти">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="hystmodal.min.js"></script>
+    <script>
+      const myModal = new HystModal({
+        linkAttributeName: "data-hystmodal",
+      });
+    </script>
+  </body>
+</html>
