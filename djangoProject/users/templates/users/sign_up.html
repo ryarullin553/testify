@@ -1,17 +1,13 @@
-{% extends 'users\sign_base.html' %}
 {% load static %}
 
-
-{% block form %}
-    <div class="sign-form-wrapper">
-        <img src="{% static 'users/images/sign_up_select_line.svg' %}" alt="select line" class="select-line">
-        <form method="post" class="sign-form">
-            {% csrf_token %}  <!-- Защита формы от csrf-атак -->
-            {% for field in form %}
-                {{ field }}
-                {{ field.errors }}
-            {% endfor %}}
-            <button type="submit" class="sign-button sign-up">Регистрация</button>
-        </form>
-    </div>
-{% endblock %}
+<div id="sign-up-tab" class="sign-form-tab">
+    <img src="{% static 'users/images/sign_up_select_line.svg' %}" alt="select line" class="select-line">
+    <form method="post" class="sign-form">
+        {% csrf_token %}  <!-- Защита формы от csrf-атак -->
+        {% for field in form %}
+            {{ field }}
+            {{ field.errors }}
+        {% endfor %}
+        <button type="submit" class="sign-button sign-up">Регистрация</button>
+    </form>
+</div>

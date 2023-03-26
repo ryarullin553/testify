@@ -67,10 +67,14 @@
     flex-shrink:0;
     flex-grow:0;
     background:#fff;
-    width:600px;
+    width:fit-content;
+    border-radius:5px;
     max-width:100%;
     overflow:visible;
-    transition:transform .2s ease 0s,opacity .2s ease 0s;
+    transition: 
+        transform .2s ease 0s, 
+        opacity .2s ease 0s,
+        height .2s ease 0s;
     transform:scale(.9);
     opacity:0
 }
