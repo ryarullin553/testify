@@ -35,7 +35,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'tamara1uchiha@gmail.com'
-EMAIL_HOST_PASSWORD = 'yutrghdftqjxqbqy'
+EMAIL_HOST_PASSWORD = ''
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'users.apps.UsersConfig',
+    'tests.apps.TestsConfig',
 ]
 
 MIDDLEWARE = [
@@ -91,8 +93,12 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'testify_db',
+        'USER': 'testify_user',
+        'PASSWORD': 'testify',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
