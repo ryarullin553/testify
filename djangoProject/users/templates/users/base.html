@@ -31,8 +31,7 @@
                 {{ user.username }}
             </a>
           {% else %}
-<!--            <a href="{% url 'sign_in' %}" class="login">Войти</a>-->
-            <button class="login" data-hystmodal="#modalLogin">Войти</button>
+            <a href="{% url 'sign_in' %}" class="login">Войти</a>
           {% endif %}
       </nav>
   </header>
@@ -57,12 +56,5 @@
           </ul>
       </div>
   </footer>
-  {% include 'users/modal_sign_up.html' with form=sign_up_form %}
-  <script type="text/javascript" src="{% static 'users/js/hystmodal.min.js' %}"></script>
-  <script>
-      const myModal = new HystModal({
-        linkAttributeName: "data-hystmodal",
-      });
-  </script>
 </body>
 </html>

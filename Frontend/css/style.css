@@ -1,0 +1,19 @@
+.modal-button {
+  margin: auto;
+}
+
+.hystmodal__window {
+  width: fit-content;
+}
+
+.hystmodal__styled {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
