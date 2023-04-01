@@ -55,6 +55,15 @@ body {
   a {
     line-height: 41px;
   }
+
+  .main-menu {
+    a {
+      &:hover {
+        text-decoration: underline rgba(69, 72, 104, 0.2) 1px;
+        text-underline-offset: 8px;
+      }
+    }
+  }
 }
 
 .logo {
@@ -117,6 +126,12 @@ body {
 
   line-height: 15px;
   letter-spacing: 0.05em;
+
+  &:hover {
+    background: $color-base;
+
+    color: $color-light;
+  }
 }
 
 .contrast-button {
@@ -132,6 +147,27 @@ body {
   font-size: 16px;
   line-height: 19px;
   color: $color-light;
+
+  &:hover {
+    background-color: $color-light;
+    border: 2px solid $color-span;
+
+    color: $color-span;
+  }
+
+  &.inversed-button {
+    background-color: $color-light;
+    border: 2px solid $color-span;
+
+    color: $color-span;
+
+    &:hover {
+      background-color: $color-span;
+      border: none;
+
+      color: $color-light;
+    }
+  }
 }
 
 .page-main {
@@ -150,7 +186,7 @@ h1 {
   height: 800px;
   margin: 0 auto;
   margin-bottom: 136px;
-  background: url("img/hero-1.png") no-repeat right;
+  background: url("img/hero-1.png") right center no-repeat;
 }
 
 .hero-content {
@@ -304,7 +340,7 @@ h2 {
       display: block;
       width: 600px;
       height: 410px;
-      margin-left: 97px;
+      margin-left: 80px;
       background: url("img/user-profile-2.png") center no-repeat;
     }
   }
@@ -327,7 +363,7 @@ h2 {
   justify-content: space-between;
   align-items: center;
 
-  background: url("img/contact-us-1.png") right 100px center no-repeat;
+  background: url("img/contact-us-1.png") right 75px center no-repeat;
 }
 
 .contact-us-content {
@@ -418,6 +454,12 @@ h2 {
 
   .main-menu {
     padding-top: 13px;
+
+    a {
+      &:hover {
+        color: $color-light-transparent;
+      }
+    }
   }
 }
 
@@ -493,5 +535,12 @@ h2 {
     border-radius: 10px;
 
     color: $color-light;
+
+    &:hover {
+      background-color: $color-light;
+      border: 2px solid $color-span;
+  
+      color: $color-span;
+    }
   }
 }
