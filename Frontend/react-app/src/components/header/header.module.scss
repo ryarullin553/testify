@@ -1,0 +1,78 @@
+$color-base: #454868;
+$color-light: #FFFFFF;
+
+.pageHeader {
+  min-width: 1366px;
+}
+
+.headerContent {
+  width: 1300px;
+  margin: 0 auto;
+  padding: 40px 33px;
+
+  display: flex;
+  align-items: center;
+
+  a {
+    line-height: 41px;
+    color: $color-base;
+  }
+}
+
+.logo {
+  margin-right: 120px;
+
+  display: flex;
+  align-items: center;
+
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 35px;
+
+  img {
+    margin-right: 13px;
+  }
+}
+
+.mainMenu {
+  display: flex;
+
+  letter-spacing: 0.05em;
+
+  li {
+    margin-right: 50px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  
+  a {
+    &:hover {
+      text-decoration: underline rgba(69, 72, 104, 0.2) 1px;
+      text-underline-offset: 8px;
+    }
+  }
+}
+
+.localeButton {
+  margin-left: auto;
+  margin-right: 40px;
+  line-height: 41px;
+
+  font-weight: 400;
+  letter-spacing: 0.05em;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    position: relative;
+    top: 4px;
+    margin-right: 10px;
+    width: 22px;
+    height: 22px;
+    background: url("img/locale.svg") center no-repeat;
+  }
+}

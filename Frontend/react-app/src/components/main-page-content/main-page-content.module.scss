@@ -1,0 +1,274 @@
+$color-base: #454868;
+$color-light: #FFFFFF;
+$color-header: #010851;
+$color-span: #A38FFD;
+$color-light-transparent: rgba(255, 255, 255, 0.5);
+
+.pageMain {
+  min-width: 1366px;
+
+  font-size: 18px;
+  line-height: 25px;
+  color: $color-base;
+
+  h1 {
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 60px;
+    color: $color-header;
+  }
+
+  h2 {
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+    color: $color-header;
+  
+    span {
+      color: $color-span;
+    }
+  }
+}
+
+.heroSection {
+  width: 1300px;
+  height: 800px;
+  margin: 0 auto;
+  margin-bottom: 136px;
+  background: url("img/hero-1.png") right center no-repeat;
+}
+
+.heroContent {
+  width: 805px;
+  padding-top: 160px;
+
+  p {
+    margin-bottom: 30px;
+
+    line-height: 32px;
+  }
+
+  h1 {
+    margin-bottom: 30px;
+  }
+}
+
+.advantagesSection {
+  width: 1300px;
+  height: 480px;
+  margin: 0 auto;
+  margin-bottom: 136px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.advantagesTextBlock {
+  width: 245px;
+
+  h2 {
+    margin-bottom: 26px;
+  }
+}
+
+.advantagesCard {
+  width: 280px;
+  box-shadow: 0px 10px 50px rgba(27, 0, 150, 0.09);
+  border-radius: 48px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  transition: box-shadow 0.3s ease-out;
+
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 31px;
+  color: $color-header;
+
+  p {
+    margin-top: 35px;
+  }
+
+  &:hover {
+    box-shadow: 0px 10px 50px rgba(27, 0, 150, 0.25);
+  }
+
+  &:nth-child(2) {
+    height: 411px;
+
+    p {
+      width: 175px;
+    }
+
+    &::before {
+      content: "";
+      display: block;
+      width: 162px;
+      height: 193px;
+      background: url("img/advantages-1.png") center no-repeat;
+    }
+  }
+
+  &:nth-child(3) {
+    height: 356px;
+    align-self: flex-end;
+
+    p {
+      width: 166px;
+    }
+
+    &::before {
+      content: "";
+      display: block;
+      width: 256px;
+      height: 138px;
+      background: url("img/advantages-2.png") center no-repeat;
+    }
+  }
+
+  &:nth-child(4) {
+    height: 313px;
+
+    p {
+      width: 176px;
+    }
+
+    &::before {
+      content: "";
+      display: block;
+      width: 176px;
+      height: 126px;
+      background: url("img/advantages-3.png") center no-repeat;
+    }
+  }
+}
+
+.userProfileSection {
+  background: #FAF9FF;
+  height: 1408px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.userProfileBlock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:first-child {
+    height: 520px;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 688px;
+      height: 525px;
+      margin-right: 42px;
+      background: url("img/user-profile-1.png") center no-repeat;
+    }
+  }
+
+  &:last-child {
+    height: 440px;
+
+    flex-direction: row-reverse;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 600px;
+      height: 410px;
+      margin-left: 80px;
+      background: url("img/user-profile-2.png") center no-repeat;
+    }
+  }
+}
+
+.userProfileBlockContent {
+  width: 530px;
+
+  h2, p {
+    margin-bottom: 38px;
+  }
+}
+
+.contactUsSection {
+  width: 1300px;
+  height: 800px;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: url("img/contact-us-1.png") right 75px center no-repeat;
+}
+
+.contactUsContent {
+  width: 640px;
+
+  h2 {
+    margin-bottom: 52px;
+
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 44px;
+  }
+}
+
+.contactUsForm {
+  display: flex;
+  flex-direction: column;
+
+  textarea {
+    width: 640px;
+    height: 300px;
+    box-sizing: border-box;
+    padding: 19px 27px;
+    margin-bottom: 50px;
+    border: 1px solid rgba(69, 72, 104, 0.4);
+    border-radius: 15px;
+    resize: none;
+  
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    color: $color-base;
+  
+    &:focus {
+      border: 1px solid $color-header;
+    }
+  
+    &::placeholder {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 24px;
+      color: rgba(69, 72, 104, 0.4);
+    }
+  }
+
+  button {
+    align-self: flex-end;
+  }
+}
+
+.mailLink {
+  position: relative;
+  bottom: 32px;
+
+  font-family: 'Montserrat';
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  color: $color-header;
+}
