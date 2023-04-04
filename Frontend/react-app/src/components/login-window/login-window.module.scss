@@ -1,0 +1,16 @@
+.loginWindow {
+  width: 450px;
+  min-height: 333px;
+  margin: 0 auto;
+  margin-top: 200px;
+
+  border-radius: 5px;
+  background-color: #FFFFFF;
+  opacity: 100;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0px;
+  background-color: rgba(0, 0, 0, 0.85);
+}

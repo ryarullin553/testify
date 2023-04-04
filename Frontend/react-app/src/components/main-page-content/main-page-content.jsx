@@ -1,6 +1,6 @@
-import { ContrastButton } from '../contrast-button/contrast-button'
-import { PaleButton } from '../pale-button/pale-button'
-import styles from './main-page-content.module.scss'
+import { ContrastButton } from '../contrast-button/contrast-button';
+import { PaleButton } from '../pale-button/pale-button';
+import styles from './main-page-content.module.scss';
 
 export const MainPageContent = () => {
   return (
@@ -78,4 +78,4 @@ export const MainPageContent = () => {
       </section>
     </main>
   )
-}
+};
