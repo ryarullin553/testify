@@ -19,51 +19,8 @@
   }
 }
 
-.selectLine {
-  margin-top: 3px;
-  margin-left: -31px;
-  height: 14px;
-  width: 450px;
-  background-image: url(./img/select-line.svg);
-  background-repeat: no-repeat;
-}
-
 .signForm {
   margin-top: 40px;
-
-  input {
-    display: block;
-    box-sizing: border-box;
-    width: 292px;
-    height: 51px;
-    margin: 0 auto;
-    // Уберет наложение рамок
-    margin-top: -1px;
-    padding-left: 11px;
-
-    border: 1px solid #92C8F7;
-
-    font-size: 16px;
-    line-height: 19px;
-    color: #454868;
-
-    &::placeholder {
-      font-size: 16px;
-      line-height: 19px;
-      
-      color: #A5A5A5;
-    }
-
-    &:first-of-type {
-      border-radius: 5px 5px 0 0;
-      margin-top: 0;
-    }
-
-    &:last-of-type {
-      border-bottom-right-radius: 5px;
-      border-bottom-left-radius: 5px;
-    }
-  }
 
   button {
     display: block;

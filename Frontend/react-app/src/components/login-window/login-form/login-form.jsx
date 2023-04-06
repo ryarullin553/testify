@@ -1,13 +1,15 @@
 import { useState } from 'react';
+import { LoginFormInput } from './login-form-input/login-form-input';
 import styles from './login-form.module.scss';
+import { SelectLine } from './select-line/select-line';
+
+export const FORM_STATES = {
+  SIGN_IN: 'sign-in',
+  SIGN_UP: 'sign-up',
+  RESET: 'reset',
+};
 
 export const LoginForm = () => {
-  const FORM_STATES = {
-    SIGN_IN: 'sign-in',
-    SIGN_UP: 'sign-up',
-    RESET: 'reset',
-  };
-
   let [formState, setFormState] = useState(FORM_STATES.SIGN_IN);
 
   const submitButtonValue = () => {
@@ -21,88 +23,30 @@ export const LoginForm = () => {
       default:
         return '';
     }
-  }
+  };
 
-  const selectLinePosition = () => {
-    switch (formState) {
-      case FORM_STATES.SIGN_IN:
-        return '-100px';
-      case FORM_STATES.SIGN_UP:
-        return '-3px';
-      case FORM_STATES.RESET:
-        return '-200px';
-      default:
-        return '-200px';
-    }
-  }
-
-  const setSignInState = () => {
-    setFormState(FORM_STATES.SIGN_IN);
-  }
-
-  const setSignUpState = () => {
-    setFormState(FORM_STATES.SIGN_UP);
-  }
-  
-  const setResetState = () => {
-    setFormState(FORM_STATES.RESET);
-  }
+  const INPUT_LIST = [
+    {formState: formState, type: 'email', id: 'email', placeholder: 'E-mail'},
+    {formState: formState, type: 'text', id: 'name', placeholder: 'Имя и фамилия'},
+    {formState: formState, type: 'password', id: 'password', placeholder: 'Пароль'},
+    {formState: formState, type: 'password', id: 'password-repeat', placeholder: 'Подтвердите пароль'},
+  ];
 
   return (
     <div className={styles.container}>
-      <footer className={styles.tabs}>
+      <header className={styles.tabs}>
         <button
           className={(formState === FORM_STATES.SIGN_IN) && styles.active}
-          onClick={setSignInState}
+          onClick={() => setFormState(FORM_STATES.SIGN_IN)}
         >Вход</button>
         <button
           className={(formState === FORM_STATES.SIGN_UP) && styles.active}
-          onClick={setSignUpState}
+          onClick={() => setFormState(FORM_STATES.SIGN_UP)}
         >Регистрация</button>
-        <div className={styles.selectLine} style={{backgroundPosition: selectLinePosition()}}></div>
-      </footer>
+        <SelectLine formState={formState}/>
+      </header>
       <form className={styles.signForm} action="#">
-        <input
-          type='email'
-          name='sign-form'
-          id='email'
-          placeholder='E-mail'
-          defaultValue=''
-        />
-        {
-          (formState === FORM_STATES.SIGN_UP)
-          &&
-          <input
-            type='text'
-            name='sign-form'
-            id='name'
-            placeholder='Имя и фамилия'
-            defaultValue=''
-          />
-        }
-        {
-          ((formState === FORM_STATES.SIGN_UP)
-          || (formState === FORM_STATES.SIGN_IN))
-          &&
-          <input
-          type='password'
-          name='sign-form'
-          id='password'
-          placeholder='Пароль'
-          defaultValue=''
-          />
-        }
-        {
-          (formState === FORM_STATES.SIGN_UP)
-          &&
-          <input
-          type='password'
-          name='sign-form'
-          id='password-repeat'
-          placeholder='Подтвердите пароль'
-          defaultValue=''
-        />
-        }
+        {INPUT_LIST.map(props => <LoginFormInput {...props}/>)}
         <button>{submitButtonValue()}</button>
       </form>
       {
@@ -110,7 +54,7 @@ export const LoginForm = () => {
         &&
         <button
           className={styles.resetButton}
-          onClick={setResetState}
+          onClick={() => setFormState(FORM_STATES.RESET)}
         >Забыли пароль?</button>
       }
     </div>
