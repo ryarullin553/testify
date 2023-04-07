@@ -11,7 +11,6 @@ class Test(models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
     author = models.ForeignKey('users.MyUser', on_delete=models.SET_NULL, null=True, verbose_name='Автор',
                                related_name='tests_create')
-    users = models.ManyToManyField('users.MyUser', related_name='tests')
 
     def __str__(self):
         return self.title
@@ -20,8 +19,6 @@ class Test(models.Model):
 class TestQuestion(models.Model):
     content = models.TextField()
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
-    user_answer = models.BooleanField(default=None)
-    users = models.ManyToManyField('users.MyUser')  # ??
 
     def __str__(self):
         return f"{self.test} question #{self.pk}"
@@ -31,16 +28,24 @@ class TestAnswer(models.Model):
     content = models.TextField()
     question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
     is_true = models.BooleanField(default=None)
-    choiced = models.BooleanField(default=None)
-    users = models.ManyToManyField('users.MyUser')  # ??
 
     def __str__(self):
         return f"{self.question} answer #{self.pk}"
 
 
 class TestResult(models.Model):
-    right_answers = models.PositiveIntegerField()
-    wrong_answers = models.PositiveIntegerField()
-    procent = models.FloatField()
-    test = models.ForeignKey(Test, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
+    test = models.ForeignKey(Test, on_delete=models.CASCADE)
+    correct_answers = models.IntegerField(default=0)
+    total_questions = models.IntegerField(default=0)
+    score = models.FloatField(default=0)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.test.title}'
+
+
+class TestResultAnswer(models.Model):
+    result = models.ForeignKey(TestResult, on_delete=models.CASCADE, related_name='result_answers')
+    question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
+    answer = models.ForeignKey(TestAnswer, on_delete=models.CASCADE)
+    is_correct = models.BooleanField(default=False)

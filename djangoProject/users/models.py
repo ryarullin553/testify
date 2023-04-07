@@ -32,7 +32,6 @@ class LikeDislike(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
     is_like = models.BooleanField(default=None)
-    is_dislike = models.BooleanField(default=None)
 
 
 class Feedback(models.Model):
