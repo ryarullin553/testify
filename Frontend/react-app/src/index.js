@@ -1,3 +1,6 @@
+import './fonts/Montserrat/Montserrat-Medium.ttf'
+import './fonts/Jost/Jost-Medium.ttf'
+import './fonts/Inter/Inter-VariableFont_slnt,wght.ttf'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <link href="create_test_page.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Jost:wght@500&family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <header class="page-header">
+      <div class="header-content">
+        <a class="logo" href="#">
+          <img src="img/logo.svg" alt="Логотип">
+          Testify
+        </a>
+        <nav class="main-nav">
+          <ul class="main-menu">
+            <li>
+              <a href="#">Каталог</a>
+            </li>
+            <li>
+              <a href="#">Создать тест</a>
+            </li>
+            <li>
+              <a href="#">О нас</a>
+            </li>
+            <li>
+              <a href="#">Контакты</a>
+            </li>
+          </ul>
+        </nav>
+        <button class="locale-button">English</button>
+        <button class="small-button">Войти</button>
+      </div>
+    </header>
+    <main class="page-main">
+      <section class="profile_navigation">
+        <ol>
+          <li>
+            <img src="/Frontend/base-layout/create_test_page/img/profile_icon.svg" alt="" class="profile_icon">
+            <a href="#">Профиль</a>
+          </li>
+          <li>
+            <img src="/Frontend/base-layout/create_test_page/img/test-icon.svg" alt="" class="profile_icon">
+            <a href="#">Тесты</a>
+          </li>
+          <li>
+            <img src="/Frontend/base-layout/create_test_page/img/my_tests_icon.svg" alt="" class="profile_icon">
+            <a href="#">Мои тесты</a>
+          </li>
+          <li>
+            <img src="/Frontend/base-layout/create_test_page/img/settings_icon.svg" alt="" class="profile_icon">
+            <a href="#">Настройки</a>
+          </li>
+        </ol>
+      </section>
+
+      <form class="content-form" action="#" name="temp-name">
+        <h1 class="create_test">Создание нового теста</h1>
+        <fieldset class="content-area name_form">
+          <label>Название</label>
+          <textarea name="" id="" placeholder="Название теста"></textarea>
+          <p>Максимум 64 символа</p>
+        </fieldset>
+
+      <form class="content-form" action="#" name="temp-name">
+        <fieldset class="content-area short_abstract_form">
+          <label>Краткое описание</label>
+          <textarea name="" id="" placeholder="Видно в поиске и на промостранице сразу после названия курса"></textarea>
+          <p>Для публикации нужно больше 100 символов</p>
+        </fieldset>
+      
+      <form class="content-form" action="#" name="temp-name">
+        <fieldset class="content-area abstract_form">
+          <label>Полное описание</label>
+          <textarea name="" id="" placeholder='Все, что важно знать до начала прохождения теста. Расскажите о:
+          
+• цели теста,
+• почему стоит его пройти,
+• какие у него особенности,
+• какие будут вопросы,
+• что можно получить после его прохождения.'></textarea>
+        </fieldset>
+
+      <form class="logotype-form" action="#" name="temp-name">
+        <fieldset class="test-logo">
+          <label>Логотип</label>
+          <div class="drop_zone" id="drop_zone" ondrop="dropHandler(event);">
+            <img src="/Frontend/base-layout/create_test_page/img/test-logo-icon.svg" alt="" class="test_logo_item">
+            <p>png-файл с прозрачностью 230х230px</p>
+          </div>
+        </fieldset>
+        
+
+      </fieldset>
+      <div class="controls">
+        <button class="create-button">Создать тест</button>
+      </div>      
+    </form>
+  </main>
+
+
+    <footer class="page-footer">
+      <div class="footer-content">
+        <div class="copyright-block">
+          <a class="logo" href="#">
+            <img src="img/logo-light.svg" alt="Логотип">
+            Testify
+          </a>
+          <p class="copyright">Testify © 2023</br>
+            Все права защищены</p>
+        </div>
+        <ul class="main-menu">
+          <li>
+            <a href="#">Каталог</a>
+          </li>
+          <li>
+            <a href="#">Создать тест</a>
+          </li>
+          <li>
+            <a href="#">О нас</a>
+          </li>
+          <li>
+            <a href="#">Контакты</a>
+          </li>
+        </ul>
+        <div class="subscribe-block">
+          <p>Будьте в курсе всех обновлений</p>
+          <form class="subscribe-form" action="#">
+            <input type="email" placeholder="Ваш email">
+            <button>Подписаться</button>
+          </form>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

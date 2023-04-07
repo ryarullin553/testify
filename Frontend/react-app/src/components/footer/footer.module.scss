@@ -1,0 +1,152 @@
+$color-header: #010851;
+$color-light-transparent: rgba(255, 255, 255, 0.5);
+$color-light: #FFFFFF;
+$color-span: #A38FFD;
+
+.pageFooter {
+  min-width: 1366px;
+  padding: 41px 36px 41px 0;
+
+  background-color: $color-header;
+}
+
+.footerContent {
+  width: 1300px;
+  margin: 0 auto;
+
+  display: flex;
+  
+  color: $color-light-transparent;
+
+  a {
+    color: $color-light;
+  }
+}
+
+.logo {
+  margin-bottom: 35px;
+
+  display: flex;
+  align-items: center;
+
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 35px;
+
+  img {
+    margin-right: 13px;
+  }
+}
+
+.copyrightBlock {
+  margin-right: 53px;
+}
+
+.copyright {
+  font-size: 16px;
+  line-height: 24px;
+  white-space: pre-line;
+
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.mainMenu {
+  padding-top: 13px;
+
+  display: flex;
+
+  letter-spacing: 0.05em;
+
+  li {
+    margin-right: 50px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  a {
+    &:hover {
+      color: $color-light-transparent;
+    }
+  }
+}
+
+.subscribeBlock {
+  width: 464px;
+  height: 108px;
+  margin-left: auto;
+
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.05em;
+
+  p {
+    margin-bottom: 24px;
+  }
+}
+
+.subscribeForm {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: space-between;
+
+  input {
+    box-sizing: border-box;
+    width: 270px;
+    height: 62px;
+    padding-left: 23px;
+    background: none;
+    border: none;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: 0.05em;
+    color: $color-light;
+
+    &:focus {
+      border: none;
+    }
+
+    &::placeholder {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 22px;
+      letter-spacing: 0.05em;
+      color: $color-light-transparent;
+    }
+  }
+
+  button {
+    box-sizing: border-box;
+    width: 185px;
+    height: 62px;
+    padding: auto 41px;
+  
+    background-color: $color-span;
+    border-radius: 10px;
+
+    transition: 
+      color 0.2s ease-out,
+      background-color 0.2s ease-out;
+
+    color: $color-light;
+
+    &:hover {
+      background-color: $color-light;
+      border: 2px solid $color-span;
+  
+      color: $color-span;
+    }
+  }
+}

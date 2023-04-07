@@ -124,6 +124,10 @@ body {
   border: 1px solid rgba(69, 72, 104, 0.2);
   border-radius: 15px;
 
+  transition: 
+    color 0.3s ease-out,
+    background-color 0.3s ease-out;
+
   line-height: 15px;
   letter-spacing: 0.05em;
 

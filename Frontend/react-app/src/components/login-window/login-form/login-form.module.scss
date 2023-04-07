@@ -1,0 +1,51 @@
+.container {
+  padding-bottom: 35px;
+}
+
+.tabs {
+  padding-top: 26px;
+  padding-left: 31px;
+
+  button {
+    margin-right: 22px;
+
+    font-size: 17px;
+    line-height: 21px;
+    color: #4C8AEE;
+
+    &.active {
+      color: #000000;
+    }
+  }
+}
+
+.signForm {
+  margin-top: 40px;
+
+  button {
+    display: block;
+    margin: 0 auto;
+    width: 292px;
+    height: 42px;
+    margin-top: 20px;
+
+    background: #A38FFD;
+    border-radius: 5px;
+    
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #FFFFFF;
+  }
+}
+
+.resetButton {
+  display: block;
+  margin: 0 auto;
+  margin-top: 30px;
+
+  font-size: 13px;
+  line-height: 16px;
+  color: #4C8AEE;
+}

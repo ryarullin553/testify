@@ -1,0 +1,9 @@
+.selectLine {
+  margin-top: 3px;
+  margin-left: -31px;
+  height: 14px;
+  width: 450px;
+  background-image: url(./img/select-line.svg);
+  background-repeat: no-repeat;
+  transition: all 0.3s ease-in-out;
+}
