@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useImmer } from 'use-immer';
 import { newTestData } from '../../mocks/new-test-data';
-import { AnswersInputArea } from '../question-list-sidebar/answers-input-area/answers-input-area';
-import { QuestionInputArea } from '../question-list-sidebar/question-input-area/question-input-area';
+import { AnswersInputArea } from './answers-input-area/answers-input-area';
+import { QuestionInputArea } from './question-input-area/question-input-area';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import './create-question-page.scss';
 
