@@ -1,0 +1,52 @@
+.questionListSection {  
+  box-sizing: border-box;
+  width: 238px;
+  height: fit-content;
+
+  padding: 21px 18px;
+
+  background-color: #454868;
+  border-radius: 10px;
+
+  color: #FFFFFF;
+
+  h2 {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+  }
+
+  ol {
+    margin: 21px 0;
+  }
+
+  li {
+    list-style: decimal inside;
+  }
+}
+
+.selectQuestionButton {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFFFFF;
+}
+
+.submitTestButton {
+  display: block;
+  margin: 0 auto;
+  padding: 11px 33px;
+  background: #A38FFD;
+  border-radius: 10px;
+
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFFFFF;
+
+  &:hover {
+    background: #FFFFFF;
+
+    color: #454868;
+  }
+}
