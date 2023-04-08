@@ -8,7 +8,7 @@ class Test(models.Model):
     avatar = models.ImageField(upload_to='images/test_avatars/%Y/%m/%d/', verbose_name='Аватар', blank=True)
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
-    is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
+    is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
     author = models.ForeignKey('users.MyUser', on_delete=models.SET_NULL, null=True, verbose_name='Автор',
                                related_name='tests_create')
 
@@ -41,7 +41,7 @@ class TestResult(models.Model):
     score = models.FloatField(default=0)
 
     def __str__(self):
-        return f'{self.user.username} - {self.test.title}'
+        return f"{self.user.username} result {self.test.title}"
 
 
 class TestResultAnswer(models.Model):

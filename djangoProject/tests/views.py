@@ -1,7 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from tests.models import *
 from tests.serializers import *
@@ -11,106 +13,98 @@ from users.models import MyUser
 
 class CatalogViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Test.objects.all()
-    serializer_class = CatalogSerializer
-
-
-class TestViewSet(viewsets.ModelViewSet):
-    queryset = Test.objects.all()
     serializer_class = TestSerializer
 
 
-class TestQuestionViewSet(viewsets.ModelViewSet):
-    queryset = TestQuestion.objects.all()
-    serializer_class = TestQuestionSerializer
-
-    def get_test(self):
-        test_pk = self.kwargs.get('test_pk')
-        return get_object_or_404(Test, pk=test_pk)
-
-    def perform_create(self, serializer):
-        test = self.get_test()
-        serializer.save(test=test)
-
-
-class TestAnswerViewSet(viewsets.ModelViewSet):
-    queryset = TestAnswer.objects.all()
-    serializer_class = TestAnswerSerializer
-
-    def get_question(self):
-        question_pk = self.kwargs.get('question_pk')
-        return get_object_or_404(TestQuestion, pk=question_pk)
-
-    def perform_create(self, serializer):
-        question = self.get_question()
-        serializer.save(question=question)
-
-
-class TestResultViewSet(viewsets.ModelViewSet):
-    queryset = TestResult.objects.all()
-    serializer_class = TestResultSerializer
-
-    def create(self, request, *args, **kwargs):
-        test = get_object_or_404(Test, pk=kwargs.get('test_pk'))
-        user = get_object_or_404(MyUser, pk=request.user.pk)
-
-        result = TestResult.objects.create(test=test, user=user)
-        serializer = self.get_serializer(result)
+class CreateTestAPIView(APIView):
+    def get(self, request):
+        author = request.user
+        author_tests = Test.objects.filter(author__pk=author.pk)
+        serializer = TestSerializer(author_tests, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        author = request.user
+        request.data['author'] = author.pk
+        serializer = TestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class TestResultAnswerViewSet(viewsets.ModelViewSet):
-    queryset = TestResultAnswer.objects.all()
-    serializer_class = TestResultAnswerSerializer
-
-    def get_test_result(self):
-        test_pk = self.kwargs.get('test_pk')
-        result_pk = self.kwargs.get('result_pk')
-        return get_object_or_404(TestResult, pk=result_pk, test__pk=test_pk)
-
-    def perform_create(self, serializer):
-        result = self.get_test_result()
-        serializer.save(test_result=result)
-
-    def list(self, request, *args, **kwargs):
-        result = self.get_test_result()
-        questions = TestQuestion.objects.filter(test=result.test)
-        serializer = TestQuestionSerializer(questions, many=True)
+    def put(self, request, **kwargs):
+        pk = kwargs.get("pk", None)
+        instance = self.get_instance(pk)
+        serializer = TestSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
 
-    def create(self, request, *args, **kwargs):
-        result = self.get_test_result()
-        question = get_object_or_404(TestQuestion, pk=request.data.get('question'))
-        answer = get_object_or_404(TestAnswer, pk=request.data.get('answer'))
-        result_answer = TestResultAnswer.objects.create(test_result=result, question=question, answer=answer)
-        serializer = self.get_serializer(result_answer)
-        return Response(serializer.data)
+    def delete(self, request, **kwargs):
+        pk = kwargs.get("pk", None)
+        instance = self.get_instance(pk)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @staticmethod
+    def get_instance(pk):
+        if not pk:
+            return Response('Отсутствует id в url запросе')
+        try:
+            instance = Test.objects.get(pk=pk)
+        except Test.DoesNotExist:
+            return Response('Данного id не существует')
+        return instance
 
 
-class TestResultSummaryViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = TestResultSummarySerializer
+class CreateTestQuestionAPIView(APIView):
 
-    def get_test_result(self):
-        test_pk = self.kwargs.get('test_pk')
-        result_pk = self.kwargs.get('result_pk')
-        return get_object_or_404(TestResult, pk=result_pk, test__pk=test_pk)
+    @staticmethod
+    def get_instance(pk):
+        if not pk:
+            return Response('Отсутствует id в url запросе')
+        try:
+            instance = TestQuestion.objects.get(pk=pk)
+        except Test.DoesNotExist:
+            return Response('Данного id не существует')
+        return instance
 
-    def retrieve(self, request, *args, **kwargs):
-        result = self.get_test_result()
-        questions = TestQuestion.objects.filter(test=result.test)
-        correct_answers = 0
-        for question in questions:
-            user_answer = TestResultAnswer.objects.filter(test_result=result, question=question).first()
-            if user_answer and user_answer.answer == question.correct_answer:
-                correct_answers += 1
+    @staticmethod
+    def serialize_data(model_serializer, data, instance=None):
+        serializer = model_serializer(data=data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return serializer
 
-        total_questions = questions.count()
-        percent_correct = (correct_answers / total_questions) * 100 if total_questions > 0 else 0
+    @staticmethod
+    def get_question_data(request):
+        question_data = dict()
+        question_data['content'] = request.data['question']
+        question_data['test'] = request.data['test_id']
+        return question_data
 
-        data = {
-            'total_questions': total_questions,
-            'correct_answers': correct_answers,
-            'percent_correct': percent_correct
-        }
+    def post(self, request):
+        question_data = self.get_question_data(request)
+        question_serializer = self.serialize_data(TestQuestionSerializer, question_data)
+        question_pk = question_serializer.instance.pk
 
-        serializer = self.get_serializer(data)
-        return Response(serializer.data)
+        answers_data = request.data['answers']
+        for answer_data in answers_data:
+            answer_data['question'] = question_pk
+            self.serialize_data(TestAnswerSerializer, answer_data)
+
+        return Response(question_serializer.data)
+
+    def put(self, request, **kwargs):
+        pk = kwargs.get("pk", None)
+        question = self.get_instance(pk)
+        question_data = self.get_question_data(request)
+        question_serializer = self.serialize_data(TestQuestionSerializer, question_data, question)
+
+        answers = TestAnswer.objects.filter(question__pk=pk)
+        answers_data = request.data['answers']
+
+        for i in range(len(answers)):
+            answers_data[i]['question'] = pk
+            self.serialize_data(TestAnswerSerializer, answers_data[i], answers[i])
+
+        return Response(question_serializer.data)
