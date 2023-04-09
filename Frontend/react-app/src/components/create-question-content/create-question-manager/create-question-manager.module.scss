@@ -1,12 +1,4 @@
-.page-main {
-  width: 1300px;
-  margin: 0 auto;
-
-  display: flex;
-  justify-content: space-between;
-}
-
-.question-form {
+.questionForm {
   box-sizing: border-box;
   width: 992px;
   padding: 0 21px;
@@ -23,10 +15,12 @@
     background: #A38FFD;
     border-radius: 5px;
     color: #FFFFFF;
+
+    transition: all 0.2s ease-in-out;
   }
 }
 
-.plus-button {
+.plusButton {
   padding: 12px 25px;
   font-family: serif;
   font-weight: 600;
@@ -38,7 +32,7 @@
   }
 }
 
-.save-button {
+.saveButton {
   padding: 9px 34px;
   border: 2px solid #A38FFD;
 
@@ -68,5 +62,7 @@
     display: inline-block;
     padding: 3px;
     transform: scale(1.35) rotate(-45deg);
+      
+    transition: all 0.2s ease-in-out;
   }
 }

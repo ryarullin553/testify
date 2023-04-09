@@ -46,6 +46,12 @@
       font-size: 30px;
       line-height: 17px;
       color: #222222;
+
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        color: #DC143C;
+      }
     }
   }
 

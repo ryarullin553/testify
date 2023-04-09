@@ -1,6 +1,14 @@
 import styles from './question-list-sidebar.module.scss';
 
 export const QuestionListSidebar = ({testTitle, questionList, setCurrentQuestionID}) => {
+  const buttonLabel = (text) => {
+    if (text.length === 0) {
+      return 'Нет описания';
+    } else {
+      return text;
+    }
+  }
+
   return (
     <section className={styles.questionListSection}>
       <h2>{testTitle}</h2>
@@ -10,7 +18,7 @@ export const QuestionListSidebar = ({testTitle, questionList, setCurrentQuestion
           <button
             className={styles.selectQuestionButton}
             onClick={() => setCurrentQuestionID(question.questionID)}
-          >{question.questionDescription}
+          >{buttonLabel(question.questionDescription)}
           </button>
         </li>
         )}

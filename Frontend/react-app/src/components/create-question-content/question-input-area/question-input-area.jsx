@@ -1,9 +1,9 @@
 import styles from './question-input-area.module.scss';
 
-export const QuestionInputArea = ({questionDescription, handleQuestionDescriptionChange}) => {
+export const QuestionInputArea = ({questionDescription, handleQuestionDescriptionChange, currentQuestionID}) => {
   return (
     <fieldset className={styles.questionArea}>
-      <label>Вопрос</label>
+      <label>{`Вопрос ${currentQuestionID}`}</label>
       <textarea
         name="questionDescription"
         id="questionDescription"
