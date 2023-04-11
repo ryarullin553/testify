@@ -18,7 +18,7 @@ class TestAPIView(APIView, APIViewMixin):
     def get(self, request, **kwargs):
         if not kwargs:
             author = request.user
-            author_tests = Test.objects.filter(author__pk=author.pk)
+            author_tests = Test.objects.all()
             serializer = TestSerializer(author_tests, many=True)
         else:
             test_pk = kwargs.get('test_pk', None)
