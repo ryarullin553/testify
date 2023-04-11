@@ -1,0 +1,60 @@
+.profileNavigation {  
+  box-sizing: border-box;
+  width: 238px;
+  height: 200px;
+  margin: 19px 0 0 40px;
+
+  border: 1px solid rgba(69, 72, 104, 0.2);
+  border-radius: 10px;
+
+  color: #454868;
+
+  ol {
+    margin: 20px 30px;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    height: 40px;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 20px;
+      margin: 0;
+    }
+
+    &:nth-child(1)::before {
+      background: url(./img/profile-icon.svg) center no-repeat;
+    }
+
+    &:nth-child(2)::before {
+      background: url(./img/test-icon.svg) center no-repeat;
+    }
+
+    &:nth-child(3)::before {
+      background: url(./img/my-tests-icon.svg) center no-repeat;
+    }
+
+    &:nth-child(4)::before {
+      background: url(./img/settings-icon.svg) center no-repeat;
+    }
+  }
+
+  a {
+    width: 100%;
+    font-weight: 400;
+    font-size: 14px;
+    margin-left: 6px;
+    line-height: 30px;
+    color: #454868;
+    
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      color: #A38FFD;
+    }
+  }
+}

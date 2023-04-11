@@ -1,5 +1,6 @@
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import { CreateQuestionPage } from './pages/create-question-page';
+import { CreateTestPage } from './pages/create-test-page';
 import { MainPage } from "./pages/main-page";
 
 function App() {
@@ -8,7 +9,10 @@ function App() {
       <Routes>
         <Route path={'/'}>
           <Route index element={<MainPage />}/>
-          <Route path={'/create-test'} element={<CreateQuestionPage />}/>
+          <Route path={'create-test/'}>
+            <Route index element={<CreateQuestionPage />} />
+            <Route path={'new'} element={<CreateTestPage />} /> 
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,39 @@
+.questionArea {
+  margin-bottom: 26px;
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #222222;
+  }
+
+  textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 160px;
+    resize: vertical;
+    padding: 7px 10px;
+
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+
+    &::placeholder {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 17px;
+      color: #A5A5A5;
+    }
+  }
+}
