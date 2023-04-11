@@ -17,7 +17,7 @@ class MyUser(AbstractUser):
 
 class Comment(models.Model):
     author = models.ForeignKey(MyUser, on_delete=models.CASCADE)
-    question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     content = models.TextField()
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
@@ -30,7 +30,7 @@ class Bookmark(models.Model):
 
 class LikeDislike(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
-    question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     is_like = models.BooleanField(default=None)
 
 

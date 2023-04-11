@@ -9,12 +9,12 @@ class TestAdmin(ModelAdmin):
     pass
 
 
-@admin.register(TestQuestion)
+@admin.register(Question)
 class TestQuestionAdmin(ModelAdmin):
     pass
 
 
-@admin.register(TestAnswer)
+@admin.register(Answer)
 class TestAnswerAdmin(ModelAdmin):
     pass
 

@@ -5,16 +5,16 @@ from .models import *
 class TestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Test
-        fields = ('title', 'description', 'full_description', 'avatar', 'author')
+        fields = ('pk', 'title', 'description', 'full_description', 'avatar', 'author', 'is_published')
 
 
-class TestQuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TestQuestion
-        fields = ('content', 'test')
+        model = Question
+        fields = ('pk', 'content', 'test')
 
 
 class TestAnswerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TestAnswer
+        model = Answer
         fields = ('content', 'question', 'is_true')

@@ -16,7 +16,7 @@ class Test(models.Model):
         return self.title
 
 
-class TestQuestion(models.Model):
+class Question(models.Model):
     content = models.TextField()
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
 
@@ -24,9 +24,9 @@ class TestQuestion(models.Model):
         return f"{self.test} question #{self.pk}"
 
 
-class TestAnswer(models.Model):
+class Answer(models.Model):
     content = models.TextField()
-    question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     is_true = models.BooleanField(default=None)
 
     def __str__(self):
@@ -46,6 +46,6 @@ class TestResult(models.Model):
 
 class TestResultAnswer(models.Model):
     result = models.ForeignKey(TestResult, on_delete=models.CASCADE, related_name='result_answers')
-    question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
-    answer = models.ForeignKey(TestAnswer, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     is_correct = models.BooleanField(default=False)
