@@ -13,7 +13,7 @@ class APIViewMixin:
         return instance
 
     @staticmethod
-    def get_serializer(model_serializer, data, instance=None, partial=False):
+    def serialize_data(model_serializer, data, instance=None, partial=False):
         serializer = model_serializer(data=data, instance=instance, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()

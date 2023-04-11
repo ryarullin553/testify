@@ -18,7 +18,7 @@ class TestAPIView(APIView, APIViewMixin):
     def get(self, request, **kwargs):
         if not kwargs:
             author = request.user
-            author_tests = Test.objects.all()
+            author_tests = Test.objects.filter(author=author)
             serializer = TestSerializer(author_tests, many=True)
         else:
             test_pk = kwargs.get('test_pk', None)
@@ -30,13 +30,13 @@ class TestAPIView(APIView, APIViewMixin):
         author = request.user
         request.data['author'] = author.pk
         print(request.data)
-        serializer = self.get_serializer(TestSerializer, request.data)
+        serializer = self.serialize_data(TestSerializer, request.data)
         return Response(serializer.data)
 
     def put(self, request, **kwargs):
         test_pk = kwargs.get('test_pk', None)
         instance = self.get_instance(test_pk, Test)
-        serializer = self.get_serializer(TestSerializer, request.data, instance, partial=True)
+        serializer = self.serialize_data(TestSerializer, request.data, instance, partial=True)
         return Response(serializer.data)
 
     def delete(self, request, **kwargs):
@@ -52,29 +52,30 @@ class QuestionAPIView(APIView, APIViewMixin):
         test_pk = kwargs.get('test_pk', None)
         test = self.get_instance(test_pk, Test)
         questions = Question.objects.filter(test=test)
-        response_data = [OrderedDict([('test_title', test.title)])]
+        response_data = []
+        questions_response = []
 
         for question in questions:
             answers = question.answer_set.all()
             question_serializer = QuestionSerializer(question)
             answers_serializer = TestAnswerSerializer(answers, many=True)
-            response_data.append(question_serializer.data)
-            response_data.append(answers_serializer.data)
+            questions_response.append(OrderedDict([('question', question_serializer.data), ('answers', answers_serializer.data)]))
 
+        response_data.append(OrderedDict([('test_title', test.title), ('questions', questions_response)]))
         return Response(response_data)
 
     def post(self, request, **kwargs):
         test_pk = kwargs.get('test_pk', None)
         test = self.get_instance(test_pk, Test)
         question_data = self.get_question_data(request, test)
-        question_serializer = self.get_serializer(QuestionSerializer, question_data)
+        question_serializer = self.serialize_data(QuestionSerializer, question_data)
         question_pk = question_serializer.instance.pk
         response_data = [question_serializer.data]
 
         answers_data = request.data['answers']
         for answer_data in answers_data:
             answer_data['question'] = question_pk
-            answer_serializer = self.get_serializer(TestAnswerSerializer, answer_data)
+            answer_serializer = self.serialize_data(TestAnswerSerializer, answer_data)
             response_data.append(answer_serializer.data)
 
         return Response(response_data)
@@ -83,7 +84,7 @@ class QuestionAPIView(APIView, APIViewMixin):
         question_pk = kwargs.get('question_pk', None)
         question = self.get_instance(question_pk, Question)
         question_data = self.get_question_data(request, question.test)
-        question_serializer = self.get_serializer(QuestionSerializer, question_data, question)
+        question_serializer = self.serialize_data(QuestionSerializer, question_data, question)
         response_data = self.update_answers(request, question)
         response_data.insert(0, question_serializer.data)
         return Response(response_data)
@@ -110,10 +111,10 @@ class QuestionAPIView(APIView, APIViewMixin):
         for i in range(len(answers_data)):
             answers_data[i]['question'] = question.pk
             try:
-                answer_serializer = self.get_serializer(TestAnswerSerializer, answers_data[i], question_answers[i])
+                answer_serializer = self.serialize_data(TestAnswerSerializer, answers_data[i], question_answers[i])
                 response_data.append(answer_serializer.data)
             except IndexError:
-                answer_serializer = self.get_serializer(TestAnswerSerializer, answers_data[i])
+                answer_serializer = self.serialize_data(TestAnswerSerializer, answers_data[i])
                 response_data.append(answer_serializer.data)
 
         number_of_answers_to_delete = len(question_answers) - len(answers_data)
