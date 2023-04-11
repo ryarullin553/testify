@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { api } from '../../store/index.js';
+import { useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { newTestData } from '../../mocks/new-test-data';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
@@ -8,9 +9,23 @@ import { CreateQuestionManager } from './create-question-manager/create-question
 export const CreateQuestionContent = () => {
   let [testState, setTestState] = useImmer(newTestData);
   let [currentQuestionID, setCurrentQuestionID] = useState(1);
+  let [testTest, setTestTest] = useState();
 
   let isLastQuestion = Math.max(...testState.questionList.map(question => question.questionID)) === currentQuestionID;
 
+  const fetchTestData = async () => {
+    try {
+      const {data} = await api.get(`/catalog`);
+      setTestTest(data);
+    } catch (err) {
+      return;
+    }
+  }
+
+  useEffect(() => {
+    fetchTestData();
+  })
+  
   const getCurrentQuestionData = (state) => state.questionList
     .find(question => (question.questionID === currentQuestionID));
 

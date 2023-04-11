@@ -21,7 +21,7 @@ export const AnswersInputArea = ({
                   id={`radio-${answer.answerID}`}
                   name="correct-answer-form"
                   value={answer.answerID}
-                  checked={answer.answerID === correctAnswerID}
+                  defaultChecked={answer.answerID === correctAnswerID}
                   onClick={handleCorrectAnswerChange}
                 />
                 <input
