@@ -56,7 +56,7 @@ class QuestionAPIView(APIView, APIViewMixin):
 
         for question in questions:
             question_serializer = QuestionSerializer(question)
-            questions_data.append({'question': question_serializer.data})
+            questions_data.append(question_serializer.data)
 
         response_data = {'test_title': test.title, 'questions': questions_data}
         return Response(response_data)
