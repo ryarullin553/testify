@@ -13,37 +13,32 @@ export const CreateQuestionContent = () => {
   let [testState, setTestState] = useImmer(newTestData);
   let [currentQuestionID, setCurrentQuestionID] = useState(1);
 
+  const convertTestDataStC = (data, testID) => {
+    const modifiedData = {
+      testID: testID,
+      testTitle: data.test_title,
+      questionList: data.questions.map(q => ({
+        questionID: q.id,
+        questionDescription: q.content,
+        answerList: q.answer_set.map((a, i) => ({
+          answerID: i,
+          answerDescription: a.content,
+        })),
+        correctAnswerID: q.answer_set.findIndex(a => (a.is_true === true)),
+      })),
+    }
+    return modifiedData;
+  }
+
   const fetchTestData = async () => {
     try {
       const {data} = await api.get(`/test/${testID}/questions/`);
-<<<<<<< Updated upstream
-      let modifiedData = {
-        testID: testID,
-        testTitle: data.test_title,
-        questionList: data.questions.map(q => ({
-          questionID: q.id,
-          questionDescription: q.content,
-          answerList: q.answer_set.map((a, i) => ({
-            answerID: i,
-            answerDescription: a.content,
-          })),
-          correctAnswerID: q.answer_set.findIndex(a => (a.is_true === true)),
-        })),
-      }
-      setTestState(modifiedData);
-      if (modifiedData.questionList.length === 0) {
-        actionQuestionAdd();
-      }
-      setCurrentQuestionID(modifiedData.questionList[0].questionID);
-=======
-      console.log(data);
       const convertedData = convertTestDataStC(data, testState.testID);
       setTestState(convertedData);
       if (convertedData.questionList.length === 0) {
         actionQuestionAdd();
       }
       setCurrentQuestionID(convertedData.questionList[0].questionID);
->>>>>>> Stashed changes
     } catch (err) {
       return;
     }
