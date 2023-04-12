@@ -14,7 +14,7 @@ export const QuestionListSidebar = ({testTitle, questionList, setCurrentQuestion
       <h2>{testTitle}</h2>
       <ol>
         {questionList.map(question => 
-        <li>
+        <li key={question.questionID}>
           <button
             className={styles.selectQuestionButton}
             onClick={() => setCurrentQuestionID(question.questionID)}

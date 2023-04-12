@@ -5,10 +5,12 @@ import styles from './create-question-manager.module.scss';
 
 export const CreateQuestionManager = ({
   defaultQuestionData,
-  actionQuestionSave,
+  actionQuestionUpdate,
   isLastQuestion,
   actionQuestionAdd,
-  currentQuestionID
+  actionQuestionSave,
+  currentQuestionID,
+  currentQuestionIndex,
 }) => {
   let [currentQuestionData, setCurrentQuestionData] = useImmer(defaultQuestionData);
 
@@ -66,7 +68,9 @@ export const CreateQuestionManager = ({
 
   const handleSaveClick = (evt) => {
     evt.preventDefault();
-    actionQuestionSave(currentQuestionData);
+    if (currentQuestionID === 0) {
+      actionQuestionSave(currentQuestionData);
+    } else actionQuestionUpdate(currentQuestionData);
     if (isLastQuestion) {
       actionQuestionAdd();
     }
@@ -76,6 +80,7 @@ export const CreateQuestionManager = ({
     <form className={styles.questionForm} action="#" name="question-form">
       <QuestionInputArea
         currentQuestionID={currentQuestionID}
+        currentQuestionIndex={currentQuestionIndex}
         questionDescription={currentQuestionData.questionDescription}
         handleQuestionDescriptionChange={handleQuestionDescriptionChange}
       />

@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './create-test-form.module.scss';
+import { api } from '../../../store';
+import { AppRoute } from '../../../consts/const.js';
 
 export const CreateTestForm = () => {
+  const navigate = useNavigate();
   let [formData, setFormData] = useState({
     title: '',
     shortAbstract: '',
@@ -11,6 +15,20 @@ export const CreateTestForm = () => {
   const handleOnFormChange = (evt) => {
     let {name, value} = evt.target;
     setFormData({...formData, [name]: value});
+  }
+
+  const handleSubmit = async (evt) => {
+    evt.preventDefault();
+    try {
+      let {pk} = await api.post('/tests/', {
+        title: formData.title,
+        description: formData.shortAbstract,
+        full_description: formData.abstract,
+      });
+      navigate(`${AppRoute.EditTest}/${pk}`);
+    } catch (err) {
+      return;
+    }
   }
 
   return (
@@ -68,7 +86,7 @@ export const CreateTestForm = () => {
         </div>
       </fieldset>
       <div className={styles.controls}>
-        <button className={styles.createButton}>Создать тест</button>
+        <button className={styles.createButton} onClick={handleSubmit}>Создать тест</button>
       </div>
     </form>
   );

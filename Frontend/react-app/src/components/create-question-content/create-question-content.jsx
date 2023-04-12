@@ -9,14 +9,25 @@ import { CreateQuestionManager } from './create-question-manager/create-question
 export const CreateQuestionContent = () => {
   let [testState, setTestState] = useImmer(newTestData);
   let [currentQuestionID, setCurrentQuestionID] = useState(1);
-  let [testTest, setTestTest] = useState();
-
-  let isLastQuestion = Math.max(...testState.questionList.map(question => question.questionID)) === currentQuestionID;
 
   const fetchTestData = async () => {
     try {
-      const {data} = await api.get(`/catalog`);
-      setTestTest(data);
+      const {data} = await api.get(`/test/31/questions/`);
+      let modifiedData = {
+        testID: 31,
+        testTitle: data.test_title,
+        questionList: data.questions.map(q => ({
+          questionID: q.id,
+          questionDescription: q.content,
+          answerList: q.answer_set.map((a, i) => ({
+            answerID: i,
+            answerDescription: a.content,
+          })),
+          correctAnswerID: q.answer_set.findIndex(a => (a.is_true === true)),
+        })),
+      }
+      setTestState(modifiedData);
+      setCurrentQuestionID(modifiedData.questionList[0].questionID);
     } catch (err) {
       return;
     }
@@ -24,12 +35,29 @@ export const CreateQuestionContent = () => {
 
   useEffect(() => {
     fetchTestData();
-  })
+  }, []);
+
+  const convertQuestionDataCtS = (data) => {
+    const convertedData = {
+      question: data.questionDescription,
+      answers: data.answerList.map(a => ({
+        content: a.answerDescription,
+        is_true: (a.answerID === data.correctAnswerID),
+      }))
+    }
+    return convertedData;
+  }
   
   const getCurrentQuestionData = (state) => state.questionList
     .find(question => (question.questionID === currentQuestionID));
 
-  const actionQuestionSave = (updatedQuestionData) => {
+  const getCurrentQuestionIndex = (state) => state.questionList
+    .findIndex(question => (question.questionID === currentQuestionID));
+
+  let isLastQuestion = (getCurrentQuestionIndex(testState) === (testState.questionList.length - 1));
+
+  const actionQuestionUpdate = async (updatedQuestionData) => {
+    await api.put(`/update_question/${currentQuestionID}/`, convertQuestionDataCtS(updatedQuestionData));
     setTestState(draft => {
       draft.questionList
         .splice(draft.questionList
@@ -38,18 +66,29 @@ export const CreateQuestionContent = () => {
     });
   }
 
+  const actionQuestionSave = async (updatedQuestionData) => {
+    const {newID} = await api.post(`/test/${testState.testID}/questions/`, convertQuestionDataCtS(updatedQuestionData));
+    setTestState(draft => {
+      draft.questionList
+        .splice(draft.questionList
+          .findIndex(question => (question.questionID === currentQuestionID)),
+          1, {...updatedQuestionData, questionID: newID});
+    });
+  }
+
   const actionQuestionAdd = () => {
+    console.log('henlow');
     setTestState(draft => {
       draft.questionList.push({
-        questionID: currentQuestionID + 1,
+        questionID: 0,
         questionDescription: '',
         answerList: [
+          { answerID: 0, answerDescription: '' },
           { answerID: 1, answerDescription: '' },
-          { answerID: 2, answerDescription: '' },
         ],
       });
     });
-    setCurrentQuestionID(currentQuestionID + 1);
+    setCurrentQuestionID(0);
   }
 
   return (
@@ -62,7 +101,9 @@ export const CreateQuestionContent = () => {
       <CreateQuestionManager
         key={currentQuestionID}
         currentQuestionID={currentQuestionID}
+        currentQuestionIndex={getCurrentQuestionIndex(testState)}
         defaultQuestionData={getCurrentQuestionData(testState)}
+        actionQuestionUpdate={actionQuestionUpdate}
         actionQuestionSave={actionQuestionSave}
         isLastQuestion={isLastQuestion}
         actionQuestionAdd={actionQuestionAdd}

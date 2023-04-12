@@ -1,7 +1,6 @@
 export const newTestData = {
   testID: 1,
   testTitle: 'Мой первый тест',
-  testDescription: '',
   questionList: [
     {
       questionID: 1,
