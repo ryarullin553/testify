@@ -1,0 +1,89 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link type="text/css" href="{% static 'users/css/base_styles.css' %}" rel="stylesheet">
+    {% block add_style %}{% endblock %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'users/images/favicon.svg' %}">
+    <title>{{ title }}</title>
+</head>
+<body>
+  <header class="main-header">
+      <div class="header-contacts">
+          <a href="#" class="email">
+              <img src="{% static 'users/images/email_icon.svg' %}" alt="Email">
+              <p>ryarullin553@gmail.com</p>
+          </a>
+          <a href="#" class="phone">
+              <img src="{% static 'users/images/phone_icon.svg' %}" alt="Phone">
+              <p>+7 (917) 275-75-73</p>
+          </a>
+          <a href="#" class="telegram">
+              <img src="{% static 'users/images/telegram_icon.svg' %}" alt="Telegram">
+              <p>@vita_vacua</p>
+          </a>
+      </div>
+      <nav class="main-header-nav">
+          <a href="#" class="logo">
+              <img src="{% static 'users/images/logo_icon.svg' %}" alt="Logo" class="logo-icon">
+              <p>RUSLAN</p>
+          </a>
+          <ul class="nav-list">
+              <li><a href="{% url 'main_page' %}">Главная</a></li>
+              <li><a href="#">Проекты</a></li>
+              <li><a href="#">Навыки</a></li>
+              <li><a href="/admin">Admin</a></li>
+          </ul>
+{#          <a href="#" class="loupe"><img src="{% static 'images/loupe.svg' %}" alt="Loupe"></a>#}
+          {% if request.user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="profile">
+                <img src="{% static 'users/images/profile.svg' %}" alt="Profile">
+                {{ user.username }}
+            </a>
+          {% else %}
+            <a href='{% url 'sign_in' %}' class="login">Войти</a>
+          {% endif %}
+      </nav>
+  </header>
+  <main>
+      {% block main %}
+      {% endblock %}
+  </main>
+  <footer>
+      <div class="footer-container">
+          <div class="copyrights">
+              <a href="#" class="logo">
+                  <img src="{% static 'users/images/logo_icon.svg' %}" alt="Logo" class="logo-icon">
+                  <p>RUSLAN</p>
+              </a>
+              <p class="copyrights-text">© 2023 Все права защищены</p>
+          </div>
+          <div class="footer-contacts">
+              <a href="#" class="email">
+                <img src="{% static 'users/images/email_icon.svg' %}" alt="Email">
+                <p>ryarullin553@gmail.com</p>
+              </a>
+              <a href="#" class="phone">
+                <img src="{% static 'users/images/phone_icon.svg' %}" alt="Phone">
+                <p>+7 (917) 275-75-73</p>
+              </a>
+              <a href="#" class="telegram">
+                <img src="{% static 'users/images/telegram_icon.svg' %}" alt="Telegram">
+                <p>@vita_vacua</p>
+              </a>
+          </div>
+          <ul class="nav-list">
+              <li><a href="{% url 'main_page' %}">Главная</a></li>
+              <li><a href="#">Проекты</a></li>
+              <li><a href="#">Навыки</a></li>
+              <li><a href="#">Admin</a></li>
+          </ul>
+      </div>
+  </footer>
+</body>
+</html>
