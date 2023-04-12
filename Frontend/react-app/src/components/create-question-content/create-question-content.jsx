@@ -5,16 +5,19 @@ import { newTestData } from '../../mocks/new-test-data';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import styles from './create-question-content.module.scss';
 import { CreateQuestionManager } from './create-question-manager/create-question-manager';
+import { useParams } from 'react-router';
 
 export const CreateQuestionContent = () => {
+  const { id } = useParams();
+  const testID = Number(id);
   let [testState, setTestState] = useImmer(newTestData);
   let [currentQuestionID, setCurrentQuestionID] = useState(1);
 
   const fetchTestData = async () => {
     try {
-      const {data} = await api.get(`/test/31/questions/`);
+      const {data} = await api.get(`/test/${testID}/questions/`);
       let modifiedData = {
-        testID: 31,
+        testID: testID,
         testTitle: data.test_title,
         questionList: data.questions.map(q => ({
           questionID: q.id,
@@ -27,6 +30,9 @@ export const CreateQuestionContent = () => {
         })),
       }
       setTestState(modifiedData);
+      if (modifiedData.questionList.length === 0) {
+        actionQuestionAdd();
+      }
       setCurrentQuestionID(modifiedData.questionList[0].questionID);
     } catch (err) {
       return;
@@ -67,20 +73,25 @@ export const CreateQuestionContent = () => {
   }
 
   const actionQuestionSave = async (updatedQuestionData) => {
-    const {newID} = await api.post(`/test/${testState.testID}/questions/`, convertQuestionDataCtS(updatedQuestionData));
-    setTestState(draft => {
-      draft.questionList
-        .splice(draft.questionList
-          .findIndex(question => (question.questionID === currentQuestionID)),
-          1, {...updatedQuestionData, questionID: newID});
-    });
+    try {
+      const {data} = await api.post(`/test/${testState.testID}/questions/`, convertQuestionDataCtS(updatedQuestionData));
+      const newID = data.id;
+      setTestState(draft => {
+        draft.questionList
+          .splice(draft.questionList
+            .findIndex(question => (question.questionID === currentQuestionID)),
+            1, {...updatedQuestionData, questionID: newID});
+      });
+    } catch (err) {
+      return;
+    }
   }
 
   const actionQuestionAdd = () => {
-    console.log('henlow');
+    const newQuestionID = Math.min(currentQuestionID, 0) - 1;
     setTestState(draft => {
       draft.questionList.push({
-        questionID: 0,
+        questionID: newQuestionID,
         questionDescription: '',
         answerList: [
           { answerID: 0, answerDescription: '' },
@@ -88,7 +99,7 @@ export const CreateQuestionContent = () => {
         ],
       });
     });
-    setCurrentQuestionID(0);
+    setCurrentQuestionID(newQuestionID);
   }
 
   return (

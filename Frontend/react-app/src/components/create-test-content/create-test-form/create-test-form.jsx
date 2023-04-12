@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './create-test-form.module.scss';
 import { api } from '../../../store';
-import { AppRoute } from '../../../consts/const.js';
 
 export const CreateTestForm = () => {
   const navigate = useNavigate();
@@ -20,12 +19,13 @@ export const CreateTestForm = () => {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     try {
-      let {pk} = await api.post('/tests/', {
+      const {data} = await api.post('/tests/', {
         title: formData.title,
         description: formData.shortAbstract,
         full_description: formData.abstract,
       });
-      navigate(`${AppRoute.EditTest}/${pk}`);
+      const id = data.id;
+      navigate(`/edit-test/${id}`);
     } catch (err) {
       return;
     }

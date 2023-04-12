@@ -66,11 +66,11 @@ export const CreateQuestionManager = ({
     }
   }
 
-  const handleSaveClick = (evt) => {
+  const handleSaveClick =  async (evt) => {
     evt.preventDefault();
-    if (currentQuestionID === 0) {
-      actionQuestionSave(currentQuestionData);
-    } else actionQuestionUpdate(currentQuestionData);
+    if (currentQuestionID <= 0) {
+      await actionQuestionSave(currentQuestionData);
+    } else await actionQuestionUpdate(currentQuestionData);
     if (isLastQuestion) {
       actionQuestionAdd();
     }

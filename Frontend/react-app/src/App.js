@@ -2,7 +2,6 @@ import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import { CreateQuestionPage } from './pages/create-question-page';
 import { CreateTestPage } from './pages/create-test-page';
 import { MainPage } from "./pages/main-page";
-import { AppRoute } from './consts/const';
 
 function App() {
   return (
@@ -11,7 +10,7 @@ function App() {
         <Route path={'/'}>
           <Route index element={<MainPage />}/>
           <Route path={'/create-test'} element={<CreateTestPage />} />
-          <Route path={'/edit-test'} element={<CreateQuestionPage />} />
+          <Route path={'/edit-test/:id'} element={<CreateQuestionPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
