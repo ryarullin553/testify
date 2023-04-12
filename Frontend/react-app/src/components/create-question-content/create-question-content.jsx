@@ -33,7 +33,7 @@ export const CreateQuestionContent = () => {
   const fetchTestData = async () => {
     try {
       const {data} = await api.get(`/test/${testID}/questions/`);
-      const convertedData = convertTestDataStC(data, testState.testID);
+      const convertedData = convertTestDataStC(data, testID);
       setTestState(convertedData);
       if (convertedData.questionList.length === 0) {
         actionQuestionAdd();
