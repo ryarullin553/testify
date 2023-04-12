@@ -16,6 +16,7 @@ export const CreateQuestionContent = () => {
   const fetchTestData = async () => {
     try {
       const {data} = await api.get(`/test/${testID}/questions/`);
+<<<<<<< Updated upstream
       let modifiedData = {
         testID: testID,
         testTitle: data.test_title,
@@ -34,6 +35,15 @@ export const CreateQuestionContent = () => {
         actionQuestionAdd();
       }
       setCurrentQuestionID(modifiedData.questionList[0].questionID);
+=======
+      console.log(data);
+      const convertedData = convertTestDataStC(data, testState.testID);
+      setTestState(convertedData);
+      if (convertedData.questionList.length === 0) {
+        actionQuestionAdd();
+      }
+      setCurrentQuestionID(convertedData.questionList[0].questionID);
+>>>>>>> Stashed changes
     } catch (err) {
       return;
     }
