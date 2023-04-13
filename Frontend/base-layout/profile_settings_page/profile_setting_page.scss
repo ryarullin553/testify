@@ -1,0 +1,296 @@
+/* Общие стили */
+@font-face {
+  font-family: 'Inter';
+  src: local('Inter'),
+  url("./fonts/Inter/Inter-VariableFont_slnt,wght.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: local('Montserrat'),
+  url("./fonts/Montserrat/Montserrat-Medium.ttf") format("truetype");
+  font-weight: medium;
+}
+
+@font-face {
+  font-family: 'Jost';
+  src: local('Jost'),
+  url("./fonts/Jost/Jost-Medium.ttf") format("truetype");
+  font-weight: medium;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+  text-decoration: none;
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+
+  background-color: #FFFFFF;
+}
+
+a {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000000;
+}
+
+button {
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000000;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+/* Стили шапки и подвала */
+
+.page-header{min-width:1366px}.header-content{width:1300px;margin:0 auto;padding:40px 33px;display:flex;align-items:center}.header-content a{line-height:41px}.header-content .main-menu a:hover{-webkit-text-decoration:underline rgba(69,72,104,.2) 1px;text-decoration:underline rgba(69,72,104,.2) 1px;text-underline-offset:8px}.logo{margin-right:120px;display:flex;align-items:center;font-family:"Jost";font-style:normal;font-weight:500;font-size:28px;line-height:35px}.logo img{margin-right:13px}.main-menu{display:flex;letter-spacing:.05em}.main-menu li{margin-right:50px}.main-menu li:last-child{margin-right:0}.locale-button{margin-left:auto;margin-right:40px;line-height:41px;font-weight:400;letter-spacing:.05em}.locale-button::before{content:"";display:inline-block;position:relative;top:4px;margin-right:10px;width:22px;height:22px;background:url("img/locale.svg") center no-repeat}.small-button{height:35px;padding:9px 35px;border:1px solid rgba(69,72,104,.2);border-radius:15px;transition:color .3s ease-out,background-color .3s ease-out;line-height:15px;letter-spacing:.05em}.small-button:hover{background:#454868;color:#fff}.contrast-button{width:188px;height:48px;padding:auto 41px;margin-right:15px;background-color:#a38ffd;border-radius:15px;font-weight:600;font-size:16px;line-height:19px;color:#fff}.contrast-button:hover{background-color:#fff;border:2px solid #a38ffd;color:#a38ffd}.contrast-button.inversed-button{background-color:#fff;border:2px solid #a38ffd;color:#a38ffd}.contrast-button.inversed-button:hover{background-color:#a38ffd;border:none;color:#fff}.page-footer{min-width:1366px;padding:41px 36px 41px 0;background-color:#010851}.footer-content{width:1300px;margin:0 auto;display:flex;color:rgba(255,255,255,.5)}.footer-content a{color:#fff}.footer-content .logo{margin-bottom:35px}.footer-content .main-menu{padding-top:13px}.footer-content .main-menu a:hover{color:rgba(255,255,255,.5)}.copyright{font-size:16px;line-height:24px}.copyright p{font-weight:400;color:rgba(255,255,255,.5)}.subscribe-block{width:464px;height:108px;margin-left:auto;font-size:16px;line-height:22px;letter-spacing:.05em}.subscribe-block p{margin-bottom:24px}.subscribe-form{background-color:rgba(255,255,255,.1);border-radius:10px;display:flex;justify-content:space-between}.subscribe-form input{box-sizing:border-box;width:270px;height:62px;padding-left:23px;background:none;border:none;font-family:"Inter";font-style:normal;font-weight:400;font-size:18px;line-height:22px;letter-spacing:.05em;color:#fff}.subscribe-form input:focus{border:none}.subscribe-form input::-moz-placeholder{font-family:"Inter";font-style:normal;font-weight:400;font-size:18px;line-height:22px;letter-spacing:.05em;color:rgba(255,255,255,.5)}.subscribe-form input::placeholder{font-family:"Inter";font-style:normal;font-weight:400;font-size:18px;line-height:22px;letter-spacing:.05em;color:rgba(255,255,255,.5)}.subscribe-form button{box-sizing:border-box;width:185px;height:62px;padding:auto 41px;background-color:#a38ffd;border-radius:10px;color:#fff}.subscribe-form button:hover{background-color:#fff;border:2px solid #a38ffd;color:#a38ffd}
+
+/* Стили страницы */
+
+.page-main {
+  width: 1300px;
+  margin: 0 auto;
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile_navigation {  
+  box-sizing: border-box;
+  width: 238px;
+  height: 200px;
+  margin: 19px 0 0 40px;
+
+  border: 1px solid rgba(69, 72, 104, 0.2);
+  border-radius: 10px;
+
+  color: #454868;
+
+  ol {
+    margin: 20px 30px;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    height: 40px;
+  }
+
+  a {
+    font-weight: 400;
+    font-size: 14px;
+    margin-left: 10px;
+    line-height: 17px;
+    color: #454868;
+
+    &:hover {
+      color: #A38FFD;
+    }
+  }
+
+}
+
+.content-form {
+  box-sizing: border-box;
+  margin-top: 19px;
+  margin-left: 92px;
+  margin-bottom: 50px;
+  width: 992px;
+  padding: 0 21px;
+
+  .create_test {
+    color: #222222;
+    margin-top: 24px;
+    margin-bottom: 32px;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 29px;
+  }
+}
+
+.content-area {
+  margin-bottom: 26px;
+
+  label {
+    display: block;
+    margin-bottom: 9px;
+
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #222222;
+  }
+
+  textarea {
+    box-sizing: border-box;
+    width: 100%;
+    resize: vertical;
+    padding: 7px 10px;
+
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+
+    &::placeholder {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 17px;
+      color: #A5A5A5;
+    }
+  }
+
+  p {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #5E5E5E;
+  }
+  
+}
+
+.name_form {
+  textarea {
+    min-height: 32px;
+  }
+}
+.short_abstract_form {
+  textarea {
+    min-height: 96px;
+  }
+}
+.abstract_form {
+  textarea {
+    min-height: 160px;
+  }
+}
+
+.test-logo {
+  margin-bottom: 32px;
+
+  label {
+    display: block;
+    margin-bottom: 9px;
+
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: hsl(0, 0%, 13%);
+  }
+
+  .drop_zone {
+    border: 1px dashed #000000;
+    border-radius: 5px;
+      width: 128px;
+    height: 128px;
+
+    .test_logo_item {
+      margin: 10px 34px 11px 34px;
+    }
+    p {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 15px;
+      text-align: center;
+      color: #848492;
+    }
+    }
+}
+
+hr {
+  width: 640px;
+  margin-left: 0;
+  margin-bottom: 30px;
+  color: rgba(69, 72, 104, 0.2);
+}
+
+.controls {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    display: flex;
+    box-sizing: border-box;
+    background: #A38FFD;
+    border-radius: 5px;
+    color: #FFFFFF;
+  }
+}
+
+.create-button {
+  padding: 9px 34px;
+  border: 2px solid #A38FFD;
+
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+
+  &:hover {
+    background: #FFFFFF;
+    border: 2px solid #A38FFD;
+
+    color: #A38FFD;
+
+    &::after {
+      border: solid 1px #A38FFD;
+      border-width: 0 2px 2px 0;
+    }
+  }
+}
