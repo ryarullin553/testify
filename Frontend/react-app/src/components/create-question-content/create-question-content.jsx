@@ -1,65 +1,129 @@
-import './create-question-page.css';
+import { api } from '../../store/index.js';
+import { useEffect, useState } from 'react';
+import { useImmer } from 'use-immer';
+import { newTestData } from '../../mocks/new-test-data';
+import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
+import styles from './create-question-content.module.scss';
+import { CreateQuestionManager } from './create-question-manager/create-question-manager';
+import { useParams } from 'react-router';
 
 export const CreateQuestionContent = () => {
+  const { id } = useParams();
+  const testID = Number(id);
+  let [testState, setTestState] = useImmer(newTestData);
+  let [currentQuestionID, setCurrentQuestionID] = useState(1);
+
+  const convertTestDataStC = (data, testID) => {
+    const modifiedData = {
+      testID: testID,
+      testTitle: data.test_title,
+      questionList: data.questions.map(q => ({
+        questionID: q.id,
+        questionDescription: q.content,
+        answerList: q.answer_set.map((a, i) => ({
+          answerID: i,
+          answerDescription: a.content,
+        })),
+        correctAnswerID: q.answer_set.findIndex(a => (a.is_true === true)),
+      })),
+    }
+    return modifiedData;
+  }
+
+  const fetchTestData = async () => {
+    try {
+      const {data} = await api.get(`/test/${testID}/questions/`);
+      const convertedData = convertTestDataStC(data, testID);
+      setTestState(convertedData);
+      if (convertedData.questionList.length === 0) {
+        actionQuestionAdd();
+      }
+      setCurrentQuestionID(convertedData.questionList[0].questionID);
+    } catch (err) {
+      return;
+    }
+  }
+
+  useEffect(() => {
+    fetchTestData();
+  }, []);
+
+  const convertQuestionDataCtS = (data) => {
+    const convertedData = {
+      question: data.questionDescription,
+      answers: data.answerList.map(a => ({
+        content: a.answerDescription,
+        is_true: (a.answerID === data.correctAnswerID),
+      }))
+    }
+    return convertedData;
+  }
+  
+  const getCurrentQuestionData = (state) => state.questionList
+    .find(question => (question.questionID === currentQuestionID));
+
+  const getCurrentQuestionIndex = (state) => state.questionList
+    .findIndex(question => (question.questionID === currentQuestionID));
+
+  let isLastQuestion = (getCurrentQuestionIndex(testState) === (testState.questionList.length - 1));
+
+  const actionQuestionUpdate = async (updatedQuestionData) => {
+    await api.put(`/update_question/${currentQuestionID}/`, convertQuestionDataCtS(updatedQuestionData));
+    setTestState(draft => {
+      draft.questionList
+        .splice(draft.questionList
+          .findIndex(question => (question.questionID === currentQuestionID)),
+          1, updatedQuestionData);
+    });
+  }
+
+  const actionQuestionSave = async (updatedQuestionData) => {
+    try {
+      const {data} = await api.post(`/test/${testState.testID}/questions/`, convertQuestionDataCtS(updatedQuestionData));
+      const newID = data.id;
+      setTestState(draft => {
+        draft.questionList
+          .splice(draft.questionList
+            .findIndex(question => (question.questionID === currentQuestionID)),
+            1, {...updatedQuestionData, questionID: newID});
+      });
+    } catch (err) {
+      return;
+    }
+  }
+
+  const actionQuestionAdd = () => {
+    const newQuestionID = Math.min(currentQuestionID, 0) - 1;
+    setTestState(draft => {
+      draft.questionList.push({
+        questionID: newQuestionID,
+        questionDescription: '',
+        answerList: [
+          { answerID: 0, answerDescription: '' },
+          { answerID: 1, answerDescription: '' },
+        ],
+      });
+    });
+    setCurrentQuestionID(newQuestionID);
+  }
+
   return (
-    <main className="page-main">
-      <section className="question-list-section">
-        <h2>Название теста</h2>
-        <ol>
-          <li>
-            <a href="#">Текст вопроса</a>
-          </li>
-          <li>
-            <a href="#">Текст вопросааааааааааа</a>
-          </li>
-        </ol>
-        <button>Опубликовать тест</button>
-      </section>
-      <form className="question-form" action="#" name="temp-name">
-        <fieldset className="question-area">
-          <label>Вопрос</label>
-          <textarea
-            name=""
-            id=""
-            placeholder="Напишите ваш вопрос или условие задачи"
-            defaultValue={""}
-          />
-        </fieldset>
-        <fieldset className="answers-area">
-          <legend>Ответы</legend>
-          <p>Добавьте варианты ответа и отметьте правильный</p>
-          <ul>
-            <li>
-              <label htmlFor="1-answer">
-                <input type="radio" id="1-answer" name="temp-name" />
-                <input type="text" placeholder="Первый ответ" />
-              </label>
-            </li>
-            <li>
-              <label htmlFor="2-answer">
-                <input type="radio" id="2-answer" name="temp-name" />
-                <input type="text" placeholder="Второй ответ" />
-              </label>
-            </li>
-            <li>
-              <label htmlFor="3-answer">
-                <input type="radio" id="3-answer" name="temp-name" />
-                <input type="text" placeholder="Третий ответ" />
-              </label>
-            </li>
-            <li>
-              <label htmlFor="4-answer">
-                <input type="radio" id="4-answer" name="temp-name" />
-                <input type="text" placeholder="Четвертый ответ" />
-              </label>
-            </li>
-          </ul>
-        </fieldset>
-        <div className="controls">
-          <button className="plus-button">+</button>
-          <button className="save-button">Сохранить вопрос</button>
-        </div>
-      </form>
+    <main className={styles.pageMain}>
+      <QuestionListSidebar
+        testTitle={testState.testTitle}
+        questionList={testState.questionList}
+        setCurrentQuestionID={setCurrentQuestionID}
+      />
+      <CreateQuestionManager
+        key={currentQuestionID}
+        currentQuestionID={currentQuestionID}
+        currentQuestionIndex={getCurrentQuestionIndex(testState)}
+        defaultQuestionData={getCurrentQuestionData(testState)}
+        actionQuestionUpdate={actionQuestionUpdate}
+        actionQuestionSave={actionQuestionSave}
+        isLastQuestion={isLastQuestion}
+        actionQuestionAdd={actionQuestionAdd}
+      />
     </main>
-  )
-};
+  );
+}

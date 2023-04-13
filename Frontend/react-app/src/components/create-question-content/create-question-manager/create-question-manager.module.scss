@@ -1,0 +1,68 @@
+.questionForm {
+  box-sizing: border-box;
+  width: 992px;
+  padding: 0 21px;
+}
+
+.controls {
+  margin-bottom: 60px;
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    display: flex;
+    box-sizing: border-box;
+    background: #A38FFD;
+    border-radius: 5px;
+    color: #FFFFFF;
+
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+.plusButton {
+  padding: 12px 25px;
+  font-family: serif;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 19px;
+
+  &:hover {
+    background: #8C7BD8;
+  }
+}
+
+.saveButton {
+  padding: 9px 34px;
+  border: 2px solid #A38FFD;
+
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+
+  &:hover {
+    background: #FFFFFF;
+    border: 2px solid #A38FFD;
+
+    color: #A38FFD;
+
+    &::after {
+      border: solid 1px #A38FFD;
+      border-width: 0 2px 2px 0;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: relative;
+    top: 6px;
+    left: 6px;
+    border: solid 1px #ffffff;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: scale(1.35) rotate(-45deg);
+      
+    transition: all 0.2s ease-in-out;
+  }
+}
