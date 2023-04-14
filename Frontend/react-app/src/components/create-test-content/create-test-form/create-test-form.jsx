@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './create-test-form.module.scss';
 import { api } from '../../../store';
+import { AppRoute } from '../../../const';
 
 export const CreateTestForm = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export const CreateTestForm = () => {
         full_description: formData.abstract,
       });
       const id = data.id;
-      navigate(`/edit-test/${id}`);
+      navigate(`${AppRoute.EditTest}/${id}`);
     } catch (err) {
       return;
     }
