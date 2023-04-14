@@ -12,23 +12,18 @@ export const CreateQuestionContent = () => {
   const testID = Number(id);
   let [testState, setTestState] = useImmer(newTestData);
   let [currentQuestionID, setCurrentQuestionID] = useState(1);
+  
+  const getCurrentQuestionData = (state, currentQuestionID) => state.questionList
+    .find(question => (question.questionID === currentQuestionID));
 
-  const convertTestDataStC = (data, testID) => {
-    const modifiedData = {
-      testID: testID,
-      testTitle: data.test_title,
-      questionList: data.questions.map(q => ({
-        questionID: q.id,
-        questionDescription: q.content,
-        answerList: q.answer_set.map((a, i) => ({
-          answerID: i,
-          answerDescription: a.content,
-        })),
-        correctAnswerID: q.answer_set.findIndex(a => (a.is_true === true)),
-      })),
-    }
-    return modifiedData;
-  }
+  const getCurrentQuestionIndex = (state, currentQuestionID) => state.questionList
+    .findIndex(question => (question.questionID === currentQuestionID));
+
+  let isLastQuestion = (getCurrentQuestionIndex(testState, currentQuestionID) === (testState.questionList.length - 1));
+
+  useEffect(() => {
+    fetchTestData();
+  }, []);
 
   const fetchTestData = async () => {
     try {
@@ -43,29 +38,6 @@ export const CreateQuestionContent = () => {
       return;
     }
   }
-
-  useEffect(() => {
-    fetchTestData();
-  }, []);
-
-  const convertQuestionDataCtS = (data) => {
-    const convertedData = {
-      question: data.questionDescription,
-      answers: data.answerList.map(a => ({
-        content: a.answerDescription,
-        is_true: (a.answerID === data.correctAnswerID),
-      }))
-    }
-    return convertedData;
-  }
-  
-  const getCurrentQuestionData = (state) => state.questionList
-    .find(question => (question.questionID === currentQuestionID));
-
-  const getCurrentQuestionIndex = (state) => state.questionList
-    .findIndex(question => (question.questionID === currentQuestionID));
-
-  let isLastQuestion = (getCurrentQuestionIndex(testState) === (testState.questionList.length - 1));
 
   const actionQuestionUpdate = async (updatedQuestionData) => {
     await api.put(`/update_question/${currentQuestionID}/`, convertQuestionDataCtS(updatedQuestionData));
@@ -107,22 +79,70 @@ export const CreateQuestionContent = () => {
     setCurrentQuestionID(newQuestionID);
   }
 
+  const actionTestPublish = async () => {
+    await api.put(`/update_test/${testID}/`, {is_published: true});
+  }
+
+  const actionQuestionDelete = async () => {
+    const index = getCurrentQuestionIndex(testState, currentQuestionID);
+    const deletedID = currentQuestionID;
+    const newID = (testState.questionList[index + 1] || testState.questionList[index - 1]).questionID;
+    console.log(index, deletedID, newID);
+    await api.delete(`/update_question/${deletedID}/`);
+    setCurrentQuestionID(newID);
+    setTestState(draft => {
+      draft.questionList
+        .splice(draft.questionList
+          .findIndex(question => (question.questionID === deletedID)), 1);
+    });
+  }
+
+  const convertTestDataStC = (data, testID) => {
+    const modifiedData = {
+      testID: testID,
+      testTitle: data.test_title,
+      questionList: data.questions.map(q => ({
+        questionID: q.id,
+        questionDescription: q.content,
+        answerList: q.answer_set.map((a, i) => ({
+          answerID: i,
+          answerDescription: a.content,
+        })),
+        correctAnswerID: q.answer_set.findIndex(a => (a.is_true === true)),
+      })),
+    }
+    return modifiedData;
+  }
+
+  const convertQuestionDataCtS = (data) => {
+    const convertedData = {
+      question: data.questionDescription,
+      answers: data.answerList.map(a => ({
+        content: a.answerDescription,
+        is_true: (a.answerID === data.correctAnswerID),
+      }))
+    }
+    return convertedData;
+  }
+
   return (
     <main className={styles.pageMain}>
       <QuestionListSidebar
         testTitle={testState.testTitle}
         questionList={testState.questionList}
         setCurrentQuestionID={setCurrentQuestionID}
+        actionTestPublish={actionTestPublish}
       />
       <CreateQuestionManager
         key={currentQuestionID}
         currentQuestionID={currentQuestionID}
-        currentQuestionIndex={getCurrentQuestionIndex(testState)}
-        defaultQuestionData={getCurrentQuestionData(testState)}
+        currentQuestionIndex={getCurrentQuestionIndex(testState, currentQuestionID)}
+        defaultQuestionData={getCurrentQuestionData(testState, currentQuestionID)}
         actionQuestionUpdate={actionQuestionUpdate}
         actionQuestionSave={actionQuestionSave}
         isLastQuestion={isLastQuestion}
         actionQuestionAdd={actionQuestionAdd}
+        actionQuestionDelete={actionQuestionDelete}
       />
     </main>
   );

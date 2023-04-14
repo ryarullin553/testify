@@ -2,6 +2,7 @@ import { useImmer } from 'use-immer';
 import { QuestionInputArea } from '../question-input-area/question-input-area';
 import { AnswersInputArea } from '../answers-input-area/answers-input-area';
 import styles from './create-question-manager.module.scss';
+import { useEffect } from 'react';
 
 export const CreateQuestionManager = ({
   defaultQuestionData,
@@ -11,8 +12,13 @@ export const CreateQuestionManager = ({
   actionQuestionSave,
   currentQuestionID,
   currentQuestionIndex,
+  actionQuestionDelete,
 }) => {
   let [currentQuestionData, setCurrentQuestionData] = useImmer(defaultQuestionData);
+
+  useEffect(() => {
+    setCurrentQuestionData(defaultQuestionData);
+  }, [defaultQuestionData]);
 
   const actionAnswerDelete = (answerID) => {
     setCurrentQuestionData(draft => {
@@ -58,6 +64,11 @@ export const CreateQuestionManager = ({
     actionAnswerAdd();
   }
 
+  const handleQuestionDelete = async (evt) => {
+    evt.preventDefault();
+    await actionQuestionDelete();
+  }
+
   const handleAnswerDelete = (evt, answerID) => {
     evt.preventDefault();
     actionAnswerDelete(answerID);
@@ -96,10 +107,14 @@ export const CreateQuestionManager = ({
           className={styles.plusButton}
           onClick={handleAnswerAdd}
         >+</button>
+        <div className={styles.questionControls}>
         <button
-          className={styles.saveButton}
+          onClick={handleQuestionDelete}
+        >Удалить вопрос</button>
+        <button
           onClick={handleSaveClick}
         >Сохранить вопрос</button>
+        </div>
       </div>
     </form>
   );
