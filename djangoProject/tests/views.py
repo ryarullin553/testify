@@ -14,7 +14,7 @@ class CatalogViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TestAPIView(APIView, APIViewMixin):
-    permission_classes = (IsAuthenticated, )
+    #permission_classes = (IsAuthenticated,)
 
     def get(self, request, **kwargs):
         if not kwargs:
@@ -59,7 +59,11 @@ class QuestionAPIView(APIView, APIViewMixin):
             question_serializer = QuestionSerializer(question)
             questions_data.append(question_serializer.data)
 
-        response_data = {'test_title': test.title, 'questions': questions_data}
+        response_data = {'test_id': test.pk,
+                         'test_title': test.title,
+                         'is_published': test.is_published,
+                         'questions': questions_data}
+
         return Response(response_data)
 
     def post(self, request, **kwargs):
@@ -114,4 +118,3 @@ class QuestionAPIView(APIView, APIViewMixin):
         number_of_answers_to_delete = len(question_answers) - len(answers_data)
         for i in range(number_of_answers_to_delete):
             question_answers.last().delete()
-
