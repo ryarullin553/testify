@@ -13,13 +13,13 @@ export const CreateQuestionContent = () => {
   let [testState, setTestState] = useImmer(newTestData);
   let [currentQuestionID, setCurrentQuestionID] = useState(1);
   
-  const getCurrentQuestionData = (state) => state.questionList
+  const getCurrentQuestionData = (state, currentQuestionID) => state.questionList
     .find(question => (question.questionID === currentQuestionID));
 
-  const getCurrentQuestionIndex = (state) => state.questionList
+  const getCurrentQuestionIndex = (state, currentQuestionID) => state.questionList
     .findIndex(question => (question.questionID === currentQuestionID));
 
-  let isLastQuestion = (getCurrentQuestionIndex(testState) === (testState.questionList.length - 1));
+  let isLastQuestion = (getCurrentQuestionIndex(testState, currentQuestionID) === (testState.questionList.length - 1));
 
   useEffect(() => {
     fetchTestData();
@@ -79,6 +79,24 @@ export const CreateQuestionContent = () => {
     setCurrentQuestionID(newQuestionID);
   }
 
+  const actionTestPublish = async () => {
+    await api.put(`/update_test/${testID}/`, {is_published: true});
+  }
+
+  const actionQuestionDelete = async () => {
+    const index = getCurrentQuestionIndex(testState, currentQuestionID);
+    const deletedID = currentQuestionID;
+    const newID = (testState.questionList[index + 1] || testState.questionList[index - 1]).questionID;
+    console.log(index, deletedID, newID);
+    await api.delete(`/update_question/${deletedID}/`);
+    setCurrentQuestionID(newID);
+    setTestState(draft => {
+      draft.questionList
+        .splice(draft.questionList
+          .findIndex(question => (question.questionID === deletedID)), 1);
+    });
+  }
+
   const convertTestDataStC = (data, testID) => {
     const modifiedData = {
       testID: testID,
@@ -113,16 +131,18 @@ export const CreateQuestionContent = () => {
         testTitle={testState.testTitle}
         questionList={testState.questionList}
         setCurrentQuestionID={setCurrentQuestionID}
+        actionTestPublish={actionTestPublish}
       />
       <CreateQuestionManager
         key={currentQuestionID}
         currentQuestionID={currentQuestionID}
-        currentQuestionIndex={getCurrentQuestionIndex(testState)}
-        defaultQuestionData={getCurrentQuestionData(testState)}
+        currentQuestionIndex={getCurrentQuestionIndex(testState, currentQuestionID)}
+        defaultQuestionData={getCurrentQuestionData(testState, currentQuestionID)}
         actionQuestionUpdate={actionQuestionUpdate}
         actionQuestionSave={actionQuestionSave}
         isLastQuestion={isLastQuestion}
         actionQuestionAdd={actionQuestionAdd}
+        actionQuestionDelete={actionQuestionDelete}
       />
     </main>
   );
