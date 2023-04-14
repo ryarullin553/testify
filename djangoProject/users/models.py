@@ -9,8 +9,11 @@ from tests.models import *
 class MyUser(AbstractUser):
     username = models.CharField(_("username"), max_length=150)
     email = models.EmailField(_('email address'), unique=True)
-    email_confirmed = models.BooleanField(default=False)
-    avatar = models.ImageField(upload_to='images/user_avatars/%Y/%m/%d/', blank=True)
+    avatar = models.ImageField(upload_to='images/user_avatars/%Y/%m/%d/', blank=True, null=True)
+    bio = models.CharField(max_length=140, blank=True, null=True)
+    first_name = None
+    last_name = None
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 

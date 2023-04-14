@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -15,6 +14,8 @@ class CatalogViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TestAPIView(APIView, APIViewMixin):
+    permission_classes = (IsAuthenticated, )
+
     def get(self, request, **kwargs):
         if not kwargs:
             author = request.user

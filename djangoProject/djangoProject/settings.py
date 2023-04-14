@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,8 +24,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'tamara1uchiha@gmail.com'
-EMAIL_HOST_PASSWORD = 'yutrghdftqjxqbqy'
+EMAIL_HOST_USER = 'testify.project.info@gmail.com'
+EMAIL_HOST_PASSWORD = 'mpfqwatvwbkghsml'
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
@@ -73,7 +74,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'users.context_processors.users_forms'
             ],
         },
     },
@@ -145,9 +145,23 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication'],
+        'rest_framework.authentication.SessionAuthentication'
+    ],
 
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}/',
+    'SEND_ACTIVATION_EMAIL': True,
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'EMAIL': {
+        'activation': 'users.email.ActivationEmail',
+        'password_reset': 'users.email.PasswordResetEmail',
+             },
+    'SET_PASSWORD_RETYPE': True,
+}
+
