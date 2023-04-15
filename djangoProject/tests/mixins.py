@@ -2,12 +2,12 @@
 
 class APIViewMixin:
 
-    @staticmethod
-    def get_instance(pk, model):
+    def get_instance(self, pk, model):
         if not pk:
             raise Exception('Отсутствует id в запросе')
         try:
             instance = model.objects.get(pk=pk)
+            self.check_object_permissions(self.request, instance)
         except model.DoesNotExist:
             raise Exception('Данного id не существует')
         return instance

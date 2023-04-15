@@ -1,20 +1,25 @@
 from rest_framework import generics, status
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from tests.mixins import APIViewMixin
 from tests.models import *
+from tests.permissions import *
 from tests.serializers import *
 from rest_framework import viewsets
 
 
 class CatalogViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Test.objects.all()
+    queryset = Test.objects.filter(is_published=True)
     serializer_class = TestSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['title', 'description']
+    ordering_fields = ['time_create']
 
 
 class TestAPIView(APIView, APIViewMixin):
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsTestAuthor)
 
     def get(self, request, **kwargs):
         if not kwargs:
@@ -48,6 +53,7 @@ class TestAPIView(APIView, APIViewMixin):
 
 
 class QuestionAPIView(APIView, APIViewMixin):
+    permission_classes = (IsAuthenticated, IsQuestionAuthor)
 
     def get(self, request, **kwargs):
         test_pk = kwargs.get('test_pk', None)

@@ -19,4 +19,4 @@ class QuestionSerializer(serializers.ModelSerializer):
 class TestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Test
-        fields = ('id', 'title', 'description', 'full_description', 'avatar', 'author', 'is_published')
+        fields = ('id', 'title', 'description', 'full_description', 'avatar', 'author', 'is_published', 'time_create')

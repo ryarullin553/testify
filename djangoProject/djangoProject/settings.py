@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
+    'django_filters',
     'users.apps.UsersConfig',
     'tests.apps.TestsConfig',
 ]
@@ -149,6 +150,8 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
