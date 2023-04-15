@@ -17,6 +17,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class TestSerializer(serializers.ModelSerializer):
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Test
         fields = ('id', 'title', 'description', 'full_description', 'avatar', 'author', 'is_published', 'time_create')

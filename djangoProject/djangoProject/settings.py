@@ -165,6 +165,6 @@ DJOSER = {
         'activation': 'users.email.ActivationEmail',
         'password_reset': 'users.email.PasswordResetEmail',
              },
-    'SET_PASSWORD_RETYPE': True,
+    #'SET_PASSWORD_RETYPE': True,
 }
 

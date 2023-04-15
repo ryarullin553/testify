@@ -1,12 +1,15 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from tests.mixins import APIViewMixin
-from tests.models import *
-from tests.permissions import *
-from tests.serializers import *
+from .mixins import APIViewMixin
+from .models import *
+from .paginations import TestPagination
+from .permissions import *
+from .serializers import *
 from rest_framework import viewsets
 
 
@@ -18,38 +21,51 @@ class CatalogViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ['time_create']
 
 
-class TestAPIView(APIView, APIViewMixin):
+class NewTestAPIView(GenericAPIView):
+    queryset = Test.objects.all()
+    serializer_class = TestSerializer
+    lookup_url_kwarg = 'test_pk'
     permission_classes = (IsAuthenticated, IsTestAuthor)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ['title', 'description']
+    filterset_fields = ['is_published']
+    pagination_class = TestPagination
 
     def get(self, request, **kwargs):
         if not kwargs:
             author = request.user
             author_tests = Test.objects.filter(author__pk=author.pk)
-            test_serializer = TestSerializer(author_tests, many=True)
+            queryset = self.filter_queryset(author_tests)
+
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = self.get_serializer(queryset, many=True)
         else:
-            test_pk = kwargs.get('test_pk', None)
-            instance = self.get_instance(test_pk, Test)
-            test_serializer = TestSerializer(instance)
-        return Response(test_serializer.data)
+            instance = self.get_object()
+            serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     def post(self, request):
-        author = request.user
-        request.data['author'] = author.pk
-        test_serializer = self.serialize_data(TestSerializer, request.data)
-        return Response(test_serializer.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def put(self, request, **kwargs):
-        test_pk = kwargs.get('test_pk', None)
-        instance = self.get_instance(test_pk, Test)
-        test_serializer = self.serialize_data(TestSerializer, request.data, instance, partial=True)
-        return Response(test_serializer.data)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
     def delete(self, request, **kwargs):
-        test_pk = kwargs.get('test_pk', None)
-        test = self.get_instance(test_pk, Test)
-        delete_pk = test.pk
+        test = self.get_object()
+        test_title = test.title
         test.delete()
-        return Response(f"Тест №{delete_pk} успешно удален")
+        return Response(f"Тест {test_title} успешно удален")
 
 
 class QuestionAPIView(APIView, APIViewMixin):

@@ -1,6 +1,4 @@
-from rest_framework import mixins
-from rest_framework.generics import UpdateAPIView, RetrieveUpdateAPIView
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.generics import RetrieveUpdateAPIView
 from .models import *
 from .permissions import IsOwnerOrReadOnly
 from .serializers import *
