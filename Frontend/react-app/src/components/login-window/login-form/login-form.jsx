@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { LoginFormInput } from './login-form-input/login-form-input';
 import styles from './login-form.module.scss';
 import { SelectLine } from './select-line/select-line';
-import { loginAction } from '../../../store/api-actions.js';
+import { checkAuthAction, loginAction } from '../../../store/api-actions.js';
 
 export const FORM_TABS = {
   SIGN_IN: 'sign-in',
@@ -40,7 +40,8 @@ export const LoginForm = () => {
 
   const handleFormSubmit = async (evt) => {
     evt.preventDefault();
-    store.dispatch(loginAction({email: formState.email, password: formState.password}));
+    await store.dispatch(loginAction({email: formState.email, password: formState.password}));
+    await store.dispatch(checkAuthAction());
   }
 
   const actionRegister = async () => {

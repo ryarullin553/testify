@@ -1,6 +1,6 @@
 import { dropToken, saveToken } from '../services/token';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setAuthorizationStatus, setAuthorizationToken, setUserInfo } from './actions';
+import { setAuthorizationStatus, setUserInfo } from './actions';
 
 export const checkAuthAction = createAsyncThunk(
   'user/checkAuth',
@@ -23,7 +23,7 @@ export const loginAction = createAsyncThunk(
 export const logoutAction = createAsyncThunk(
   'user/logout',
   async (_arg, {dispatch, extra: api}) => {
-    await api.delete('/auth/token/logout/');
+    await api.post('/auth/token/logout/');
     dropToken();
     dispatch(setAuthorizationStatus(false));
     dispatch(setUserInfo({
