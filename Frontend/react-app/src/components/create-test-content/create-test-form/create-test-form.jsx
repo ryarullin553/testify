@@ -14,17 +14,31 @@ export const CreateTestForm = () => {
 
   const handleOnFormChange = (evt) => {
     let {name, value} = evt.target;
-    setFormData({...formData, [name]: value});
+      setFormData({...formData, [name]: value});
+  }
+
+  const handleAvatarUpload = (evt) => {
+    let {files} = evt.target;
+    setFormData({...formData, avatar: files[0]});
   }
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
+    let config;
+    if (formData.avatar) {
+      config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+    }
     try {
       const {data} = await api.post('/api/tests/', {
         title: formData.title,
         description: formData.shortAbstract,
         full_description: formData.abstract,
-      });
+        avatar: formData.avatar,
+      }, config);
       const id = data.id;
       navigate(`${AppRoute.EditTest}/${id}`);
     } catch (err) {
@@ -82,7 +96,8 @@ export const CreateTestForm = () => {
           type='file'
           id='avatar'
           name='avatar'
-          accept="image/png, image/jpeg"
+          accept="image/png"
+          onChange={handleAvatarUpload}
         />
         </div>
       </fieldset>
