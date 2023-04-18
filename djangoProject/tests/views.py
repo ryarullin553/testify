@@ -19,9 +19,10 @@ class CatalogViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['title', 'description']
     ordering_fields = ['time_create']
+    pagination_class = TestPagination
 
 
-class NewTestAPIView(GenericAPIView):
+class TestAPIView(GenericAPIView):
     queryset = Test.objects.all()
     serializer_class = TestSerializer
     lookup_url_kwarg = 'test_pk'
