@@ -27,7 +27,7 @@ export const CreateQuestionContent = () => {
 
   const fetchTestData = async () => {
     try {
-      const {data} = await api.get(`/test/${testID}/questions/`);
+      const {data} = await api.get(`/api/test/${testID}/questions/`);
       const convertedData = convertTestDataStC(data, testID);
       setTestState(convertedData);
       if (convertedData.questionList.length === 0) {
@@ -40,7 +40,7 @@ export const CreateQuestionContent = () => {
   }
 
   const actionQuestionUpdate = async (updatedQuestionData) => {
-    await api.put(`/update_question/${currentQuestionID}/`, convertQuestionDataCtS(updatedQuestionData));
+    await api.put(`/api/update_question/${currentQuestionID}/`, convertQuestionDataCtS(updatedQuestionData));
     setTestState(draft => {
       draft.questionList
         .splice(draft.questionList
@@ -51,7 +51,7 @@ export const CreateQuestionContent = () => {
 
   const actionQuestionSave = async (updatedQuestionData) => {
     try {
-      const {data} = await api.post(`/test/${testState.testID}/questions/`, convertQuestionDataCtS(updatedQuestionData));
+      const {data} = await api.post(`/api/test/${testState.testID}/questions/`, convertQuestionDataCtS(updatedQuestionData));
       const newID = data.id;
       setTestState(draft => {
         draft.questionList
@@ -80,7 +80,7 @@ export const CreateQuestionContent = () => {
   }
 
   const actionTestPublish = async () => {
-    await api.put(`/update_test/${testID}/`, {is_published: true});
+    await api.put(`/api/update_test/${testID}/`, {is_published: true});
   }
 
   const actionQuestionDelete = async () => {
@@ -88,7 +88,7 @@ export const CreateQuestionContent = () => {
     const deletedID = currentQuestionID;
     const newID = (testState.questionList[index + 1] || testState.questionList[index - 1]).questionID;
     console.log(index, deletedID, newID);
-    await api.delete(`/update_question/${deletedID}/`);
+    await api.delete(`/api/update_question/${deletedID}/`);
     setCurrentQuestionID(newID);
     setTestState(draft => {
       draft.questionList
