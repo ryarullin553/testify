@@ -1,60 +1,87 @@
+import { api, store } from '../../../store/index.js';
 import { useState } from 'react';
 import { LoginFormInput } from './login-form-input/login-form-input';
 import styles from './login-form.module.scss';
 import { SelectLine } from './select-line/select-line';
+import { checkAuthAction, loginAction } from '../../../store/api-actions.js';
 
-export const FORM_STATES = {
+export const FORM_TABS = {
   SIGN_IN: 'sign-in',
   SIGN_UP: 'sign-up',
   RESET: 'reset',
 };
 
 export const LoginForm = () => {
-  let [formState, setFormState] = useState(FORM_STATES.SIGN_IN);
+  let [formTab, setFormTab] = useState(FORM_TABS.SIGN_IN);
+  let [formState, setFormState] = useState({
+    email: '',
+    username: '',
+    password: '',
+    passwordRepeat: '',
+  });
+
+  const handleFieldChange = (evt) => {
+    const {value, name} = evt.target;
+    setFormState({...formState, [name]: value});
+  }
 
   const submitButtonValue = () => {
-    switch (formState) {
-      case FORM_STATES.SIGN_IN:
+    switch (formTab) {
+      case FORM_TABS.SIGN_IN:
         return 'Войти';
-      case FORM_STATES.SIGN_UP:
+      case FORM_TABS.SIGN_UP:
         return 'Зарегистрироваться';
-      case FORM_STATES.RESET:
+      case FORM_TABS.RESET:
         return 'Сбросить пароль';
       default:
         return '';
     }
   };
 
+  const handleFormSubmit = async (evt) => {
+    evt.preventDefault();
+    await store.dispatch(loginAction({email: formState.email, password: formState.password}));
+    await store.dispatch(checkAuthAction());
+  }
+
+  const actionRegister = async () => {
+    await api.post(``)
+  }
+
   const INPUT_LIST = [
-    {formState: formState, type: 'email', id: 'email', placeholder: 'E-mail'},
-    {formState: formState, type: 'text', id: 'name', placeholder: 'Имя и фамилия'},
-    {formState: formState, type: 'password', id: 'password', placeholder: 'Пароль'},
-    {formState: formState, type: 'password', id: 'password-repeat', placeholder: 'Подтвердите пароль'},
+    {type: 'email', id: 'email', placeholder: 'E-mail', value: formState.email},
+    {type: 'text', id: 'name', placeholder: 'Имя и фамилия', value: formState.id},
+    {type: 'password', id: 'password', placeholder: 'Пароль', value: formState.password},
+    {type: 'password', id: 'passwordRepeat', placeholder: 'Подтвердите пароль', value: formState.passwordRepeat},
   ];
 
   return (
     <div className={styles.container}>
       <header className={styles.tabs}>
         <button
-          className={(formState === FORM_STATES.SIGN_IN) && styles.active}
-          onClick={() => setFormState(FORM_STATES.SIGN_IN)}
+          className={(formTab === FORM_TABS.SIGN_IN) && styles.active}
+          onClick={() => setFormTab(FORM_TABS.SIGN_IN)}
         >Вход</button>
         <button
-          className={(formState === FORM_STATES.SIGN_UP) && styles.active}
-          onClick={() => setFormState(FORM_STATES.SIGN_UP)}
+          className={(formTab === FORM_TABS.SIGN_UP) && styles.active}
+          onClick={() => setFormTab(FORM_TABS.SIGN_UP)}
         >Регистрация</button>
-        <SelectLine formState={formState}/>
+        <SelectLine formTab={formTab}/>
       </header>
       <form className={styles.signForm} action="#">
-        {INPUT_LIST.map(props => <LoginFormInput {...props}/>)}
-        <button>{submitButtonValue()}</button>
+        {INPUT_LIST.map(props => <LoginFormInput
+          formTab={formTab}
+          handleFieldChange={handleFieldChange}
+          {...props}
+        />)}
+        <button onClick={handleFormSubmit}>{submitButtonValue()}</button>
       </form>
       {
-        (formState === FORM_STATES.SIGN_IN)
+        (formTab === FORM_TABS.SIGN_IN)
         &&
         <button
           className={styles.resetButton}
-          onClick={() => setFormState(FORM_STATES.RESET)}
+          onClick={() => setFormTab(FORM_TABS.RESET)}
         >Забыли пароль?</button>
       }
     </div>

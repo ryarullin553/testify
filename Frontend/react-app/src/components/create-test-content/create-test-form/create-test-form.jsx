@@ -20,7 +20,7 @@ export const CreateTestForm = () => {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     try {
-      const {data} = await api.post('/tests/', {
+      const {data} = await api.post('/api/tests/', {
         title: formData.title,
         description: formData.shortAbstract,
         full_description: formData.abstract,

@@ -1,12 +1,12 @@
-import { FORM_STATES } from '../login-form';
+import { FORM_TABS } from '../login-form';
 import styles from './login-form-input.module.scss'
 
-export const LoginFormInput = ({type, id, placeholder, formState}) => {
+export const LoginFormInput = ({type, id, placeholder, formTab, value, handleFieldChange}) => {
   let isRendered = (
     (id === 'email')
-    || (formState === FORM_STATES.SIGN_UP)
+    || (formTab === FORM_TABS.SIGN_UP)
     || (
-      (formState === FORM_STATES.SIGN_IN)
+      (formTab === FORM_TABS.SIGN_IN)
       && (id === 'password')
     )
   );
@@ -16,10 +16,11 @@ export const LoginFormInput = ({type, id, placeholder, formState}) => {
       <input
         className={styles.loginFormInput}
         type={type}
-        name='sign-form'
+        name={id}
         id={id}
         placeholder={placeholder}
-        defaultValue=''
+        value={value}
+        onChange={handleFieldChange}
       />
     : <></>
   )
