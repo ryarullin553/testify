@@ -14,6 +14,9 @@ export const ProfileNavigation = () => {
           <a href="#">Мои тесты</a>
         </li>
         <li>
+          <a href="#">Избранное</a>
+        </li>
+        <li>
           <a href="#">Настройки</a>
         </li>
       </ol>
