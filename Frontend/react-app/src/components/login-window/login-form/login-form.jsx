@@ -11,7 +11,7 @@ export const FORM_TABS = {
   RESET: 'reset',
 };
 
-export const LoginForm = () => {
+export const LoginForm = ({handleCloseModal}) => {
   let [formTab, setFormTab] = useState(FORM_TABS.SIGN_IN);
   let [formState, setFormState] = useState({
     email: '',
@@ -42,6 +42,7 @@ export const LoginForm = () => {
     evt.preventDefault();
     await store.dispatch(loginAction({email: formState.email, password: formState.password}));
     await store.dispatch(checkAuthAction());
+    handleCloseModal();
   }
 
   const actionRegister = async () => {

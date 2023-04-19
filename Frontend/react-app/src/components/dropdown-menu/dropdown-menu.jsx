@@ -17,7 +17,7 @@ export const DropdownMenu = ({styles, actionCloseMenu}) => {
       }
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
       };
     }, [ref]);
   }

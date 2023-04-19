@@ -20,8 +20,8 @@ export const UserBlock = () => {
     setIsModalOpen(false);
   }
 
-  const handleMenuClick = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const handleMenuClick = (evt) => {
+    setIsMenuOpen(true);
   }
 
   const actionCloseMenu = () => {
