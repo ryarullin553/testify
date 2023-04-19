@@ -44,7 +44,7 @@ export const UserBlock = () => {
     <div className={styles.userBlock}>
       <img src={avatar} />
       <button onClick={handleMenuClick}>{username}</button>
-      {isMenuOpen && <DropdownMenu styles={styles.userMenu} actionCloseMenu={actionCloseMenu} />}
+      {isMenuOpen && <DropdownMenu actionCloseMenu={actionCloseMenu} />}
     </div>
   );
 }
