@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { logoutAction } from '../../store/api-actions';
 import { store } from '../../store/index.js';
-import styles from './dropdown-menu.module.scss';
 
-export const DropdownMenu = ({actionCloseMenu}) => {
+export const DropdownMenu = ({styles, actionCloseMenu}) => {
   const handleLogoutClick = async () => {
     await store.dispatch(logoutAction());
     actionCloseMenu();
@@ -18,7 +17,7 @@ export const DropdownMenu = ({actionCloseMenu}) => {
       }
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
       };
     }, [ref]);
   }
@@ -28,7 +27,7 @@ export const DropdownMenu = ({actionCloseMenu}) => {
 
   return (
     <div ref={wrapperRef}>
-      <div className={styles.userMenu}>
+      <div className={styles}>
         <ul>
           <li>
             <a href="#">Профиль</a>

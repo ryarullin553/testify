@@ -20,8 +20,8 @@ export const UserBlock = () => {
     setIsModalOpen(false);
   }
 
-  const handleMenuClick = (evt) => {
-    setIsMenuOpen(true);
+  const handleMenuClick = () => {
+    setIsMenuOpen(!isMenuOpen);
   }
 
   const actionCloseMenu = () => {
@@ -44,7 +44,7 @@ export const UserBlock = () => {
     <div className={styles.userBlock}>
       <img src={avatar} />
       <button onClick={handleMenuClick}>{username}</button>
-      {isMenuOpen && <DropdownMenu actionCloseMenu={actionCloseMenu} />}
+      {isMenuOpen && <DropdownMenu styles={styles.userMenu} actionCloseMenu={actionCloseMenu} />}
     </div>
   );
 }

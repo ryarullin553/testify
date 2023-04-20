@@ -7,7 +7,7 @@ export const Footer = () => {
     <footer className={styles.pageFooter}>
       <div className={styles.footerContent}>
         <div className={styles.copyrightBlock}>
-          <Logo color={'#FFFFFF'}/>
+          <Logo styles={styles.logo} isLight/>
           <p className={styles.copyright}>
             Testify © 2023{'\n'}Все права защищены
           </p>

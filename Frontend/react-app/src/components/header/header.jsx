@@ -8,7 +8,7 @@ export const Header = () => {
   return (
     <header className={styles.pageHeader}>
       <div className={styles.headerContent}>
-        <Logo color={'#454868'}/>
+        <Logo styles={styles.logo}/>
         <nav>
           <MainMenu styles={styles.mainMenu}/>
         </nav>

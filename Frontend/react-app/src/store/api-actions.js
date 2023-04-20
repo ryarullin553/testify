@@ -5,13 +5,9 @@ import { setAuthorizationStatus, setUserInfo } from './actions';
 export const checkAuthAction = createAsyncThunk(
   'user/checkAuth',
   async (_arg, {dispatch, extra: api}) => {
-    try {
-      const {data} = await api.get('/api/auth/users/me/');
-      dispatch(setAuthorizationStatus(true));
-      dispatch(setUserInfo(data));
-    } catch {
-      dropToken();
-    }
+    const {data} = await api.get('/api/auth/users/me/');
+    dispatch(setAuthorizationStatus(true));
+    dispatch(setUserInfo(data));
   },
 );
 

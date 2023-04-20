@@ -10,7 +10,7 @@ export const LoginWindow = ({isOpen, handleCloseModal}) => {
       overlayClassName={styles.overlay}
       onRequestClose={handleCloseModal}
     >
-      <LoginForm handleCloseModal={handleCloseModal}/>
+      <LoginForm/>
     </ReactModal>
   )
 };
