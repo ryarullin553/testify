@@ -1,12 +1,12 @@
 import { AppRoute } from '../../const';
 import { Link } from 'react-router-dom';
-import logo from './img/logo.svg';
-import logoLight from './img/logo-light.svg';
+import { ReactComponent as LogoIcon } from './img/logo.svg';
+import styles from './logo.module.scss'
 
-export const Logo = ({styles, isLight}) => {
+export const Logo = ({color}) => {
   return (
-    <Link to={AppRoute.Root} className={styles}>
-      <img src={isLight ? logoLight : logo} alt="Логотип" />
+    <Link to={AppRoute.Root} className={styles.logo}>
+      <LogoIcon alt="Логотип" fill={color}/>
       Testify
     </Link>
   );
