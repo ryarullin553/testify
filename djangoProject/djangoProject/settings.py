@@ -24,8 +24,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'testify.project.info@gmail.com'
-EMAIL_HOST_PASSWORD = 'mpfqwatvwbkghsml'
+EMAIL_HOST_USER = 'testify.project.team@gmail.com'
+EMAIL_HOST_PASSWORD = 'ptebbczsxhviozav'
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
@@ -40,12 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'rest_framework_nested',
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
     'django_filters',
+
     'users.apps.UsersConfig',
     'tests.apps.TestsConfig',
 ]
@@ -160,11 +162,11 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'activate/{uid}/{token}/',
     'SEND_ACTIVATION_EMAIL': True,
-    'USER_CREATE_PASSWORD_RETYPE': True,
+    #'USER_CREATE_PASSWORD_RETYPE': True,
     'EMAIL': {
         'activation': 'users.email.ActivationEmail',
         'password_reset': 'users.email.PasswordResetEmail',
              },
-    #'SET_PASSWORD_RETYPE': True,
+    'SET_PASSWORD_RETYPE': True,
 }
 
