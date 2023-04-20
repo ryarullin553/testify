@@ -1,7 +1,7 @@
 .profileNavigation {  
   box-sizing: border-box;
   width: 238px;
-  height: 200px;
+  height: 238px;
   margin: 19px 0 0 40px;
 
   border: 1px solid rgba(69, 72, 104, 0.2);
@@ -18,34 +18,35 @@
     align-items: center;
     height: 40px;
 
-    &::before {
-      content: '';
-      display: block;
-      width: 30px;
-      height: 20px;
-      margin: 0;
+    &:nth-child(1) >a::before {
+      background-image: url(./img/profile-icon.svg);
     }
 
-    &:nth-child(1)::before {
-      background: url(./img/profile-icon.svg) center no-repeat;
+    &:nth-child(2) >a::before {
+      background-image: url(./img/test-icon.svg);
     }
 
-    &:nth-child(2)::before {
-      background: url(./img/test-icon.svg) center no-repeat;
+    &:nth-child(3) >a::before {
+      background-image: url(./img/my-tests-icon.svg);
     }
 
-    &:nth-child(3)::before {
-      background: url(./img/my-tests-icon.svg) center no-repeat;
+    &:nth-child(4) >a::before {
+      background-image: url(./img/favorite-icon.svg);
     }
 
-    &:nth-child(4)::before {
-      background: url(./img/settings-icon.svg) center no-repeat;
+    &:nth-child(5) >a::before {
+      background-image: url(./img/settings-icon.svg);
     }
   }
 
   a {
+    height: 100%;
     width: 100%;
-    font-weight: 400;
+
+    display: flex;
+    align-items: center;
+
+    font-weight: 500;
     font-size: 14px;
     margin-left: 6px;
     line-height: 30px;
@@ -55,6 +56,24 @@
 
     &:hover {
       color: #A38FFD;
+
+      &::before {
+        background-color: #A38FFD;
+      }
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+
+      background-color: #454868;
+      background-position: center;
+      background-repeat: no-repeat;
+    
+      transition: all 0.2s ease-in-out;
     }
   }
 }
