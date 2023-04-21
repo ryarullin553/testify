@@ -1,6 +1,7 @@
 import { getToken } from '../services/token';
 import axios from 'axios';
 import { StatusCodes } from 'http-status-codes';
+import { processErrorHandle } from './process-error-handler';
 
 const BACKEND_URL = 'http://127.0.0.1:8000'
 const REQUEST_TIMEOUT = 5000;
@@ -10,6 +11,8 @@ const StatusCodeMapping = {
   [StatusCodes.UNAUTHORIZED]: true,
   [StatusCodes.NOT_FOUND]: true,
 }
+
+const shouldDisplayError = (response) => !!StatusCodeMapping[response.status];
 
 export const createAPI = () => {
   const api = axios.create({
@@ -27,6 +30,18 @@ export const createAPI = () => {
 
       return config;
     },
+  );
+
+  api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && shouldDisplayError(error.response)) {
+        processErrorHandle(error.response.data.toString());
+        console.log(error.response.data);
+      }
+
+      throw error;
+    }
   );
 
   return api;

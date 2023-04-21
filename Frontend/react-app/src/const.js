@@ -5,3 +5,5 @@ export const AppRoute = {
   Profile: '/profile',
   MyTests: '/profile/my-tests',
 }
+
+export const TIMEOUT_SHOW_ERROR = 5000;
