@@ -40,18 +40,31 @@ export const LoginForm = ({handleCloseModal}) => {
 
   const handleFormSubmit = async (evt) => {
     evt.preventDefault();
-    await store.dispatch(loginAction({email: formState.email, password: formState.password}));
-    await store.dispatch(checkAuthAction());
+    switch (formTab) {
+      case FORM_TABS.SIGN_IN:
+        actionLogin();
+        break;
+      case FORM_TABS.SIGN_UP:
+        actionRegister();
+        break;
+      case FORM_TABS.RESET:
+        break;
+    }
     handleCloseModal();
   }
 
+  const actionLogin = async () => {
+    await store.dispatch(loginAction({email: formState.email, password: formState.password}));
+    await store.dispatch(checkAuthAction());
+  }
+
   const actionRegister = async () => {
-    await api.post(``)
+    await api.post('api/auth/users/', {username: formState.username, email: formState.email, password: formState.password});
   }
 
   const INPUT_LIST = [
     {type: 'email', id: 'email', placeholder: 'E-mail', value: formState.email},
-    {type: 'text', id: 'name', placeholder: 'Имя и фамилия', value: formState.id},
+    {type: 'text', id: 'username', placeholder: 'Имя и фамилия', value: formState.id},
     {type: 'password', id: 'password', placeholder: 'Пароль', value: formState.password},
     {type: 'password', id: 'passwordRepeat', placeholder: 'Подтвердите пароль', value: formState.passwordRepeat},
   ];
