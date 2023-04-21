@@ -14,19 +14,87 @@
   src: local("Jost"), url("./fonts/Jost/Jost-Medium.ttf") format("truetype");
   font-weight: medium;
 }
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
   margin: 0;
   padding: 0;
   border: 0;
@@ -36,8 +104,17 @@ time, mark, audio, video {
   text-decoration: none;
 }
 
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
   display: block;
 }
 
@@ -75,11 +152,13 @@ button {
   color: #000000;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
-blockquote, q {
+blockquote,
+q {
   quotes: none;
 }
 
@@ -154,18 +233,33 @@ blockquote, q {
 }
 
 .small-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 35px;
-  padding: 9px 35px;
-  border: 1px solid rgba(69, 72, 104, 0.2);
-  border-radius: 15px;
-  transition: color 0.3s ease-out, background-color 0.3s ease-out;
-  line-height: 15px;
-  letter-spacing: 0.05em;
+  height: 37px;
 }
-
-.small-button:hover {
-  background: #454868;
-  color: #fff;
+.small-button .avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #BCBCC3;
+  border-radius: 10px;
+}
+.small-button .svg {
+  width: 5px;
+  height: 5px;
+}
+.small-button a {
+  margin-left: 10px;
+  width: 132px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  color: #454868;
 }
 
 .contrast-button {
@@ -422,6 +516,10 @@ blockquote, q {
 }
 .test a:hover {
   text-decoration: underline;
+}
+.test .results {
+  display: inline-block;
+  margin-left: 20px;
 }
 .test svg {
   margin-left: 50px;

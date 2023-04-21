@@ -15,7 +15,7 @@ class MyUser(AbstractUser):
     last_name = None
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['username', 'avatar']
 
 
 class Comment(models.Model):
