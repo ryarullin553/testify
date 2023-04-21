@@ -9,40 +9,42 @@ import { api } from '../../store';
 
 export const MyTestsPageContent = () => {
   const [testList, setTestList] = useState([]);
-  const [nextPage, setNextPage] = useState('api/tests/');
-
-  // Без этого стейт не обновляется
-  const stateRef = useRef();
-  stateRef.nextPage = nextPage;
-  stateRef.testList = testList;
+  const [baseRequest, setBaseRequest] = useState('api/tests/');
+  let nextPage = useRef();
+  let isLoading = useRef(false);
 
   const fetchTestListData = async () => {
-    // Избегаю лишних запросов к серверу
-    if (stateRef.nextPage === null) return;
 
-    const {data} = await api.get(stateRef.nextPage);
-    // Избегаю дублирования
-    if ((stateRef.testList.length === 0) || (stateRef.testList.at(-1).id !== data.results.at(-1).id)) {
-      setTestList(stateRef.testList.concat(data.results));
-      // Убираю начало адреса запроса
-      setNextPage(data.next ? data.next.slice(22) : null);
+    if (!nextPage.current) return;
+
+    if (isLoading.current) return;
+    isLoading.current = true;
+
+    try {
+      const {data} = await api.get(nextPage.current);
+      setTestList(prevData => [...prevData, ...data.results]);
+      nextPage.current = (data.next ? data.next.slice(22) : null);
+    } finally {
+      isLoading.current = false;
     }
   }
 
   useEffect(() => {
+    nextPage.current = baseRequest;
+    setTestList([]);
     fetchTestListData();
 
     window.addEventListener('scroll', handleScroll, {
-      passive: true
+      passive: true,
     });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [baseRequest]);
 
   const handleScroll = () => {
-    const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight
+    const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight;
 
     if (bottom) {
       fetchTestListData();
@@ -55,7 +57,11 @@ export const MyTestsPageContent = () => {
       <section className={styles.sectionMain}>
         <h1>Мои тесты</h1>
         <div className={styles.listControls}>
-          <FilterForm />
+          <FilterForm
+            setTestList={setTestList}
+            fetchTestListData={fetchTestListData}
+            setBaseRequest={setBaseRequest}
+          />
           <Link to={AppRoute.CreateTest} className={styles.createTestLink}>Создать тест</Link>
         </div>
         <TestListProfile testList={testList}/>

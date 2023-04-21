@@ -7,7 +7,6 @@ export const MyTestsPage = () => {
     <>
       <Header />
       <MyTestsPageContent />
-      <Footer />
     </>
   );
 }
