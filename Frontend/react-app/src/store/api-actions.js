@@ -1,6 +1,18 @@
 import { dropToken, saveToken } from '../services/token';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setAuthorizationStatus, setUserInfo } from './actions';
+import { setAuthorizationStatus, setError, setUserInfo } from './actions';
+import { store } from '.';
+import { TIMEOUT_SHOW_ERROR } from '../const';
+
+export const clearErrorAction = createAsyncThunk(
+  'app/clearError',
+  () => {
+    setTimeout(
+      () => store.dispatch(setError(null)),
+      TIMEOUT_SHOW_ERROR,
+    );
+  },
+);
 
 export const checkAuthAction = createAsyncThunk(
   'user/checkAuth',
