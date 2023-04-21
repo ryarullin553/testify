@@ -517,6 +517,10 @@ q {
 .test a:hover {
   text-decoration: underline;
 }
+.test .results {
+  display: inline-block;
+  margin-left: 20px;
+}
 .test svg {
   margin-left: 50px;
   width: 20px;
