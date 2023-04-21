@@ -1,0 +1,84 @@
+.testTile {
+  box-sizing: border-box;
+  width: 640px;
+  height: 100px;
+  margin-bottom: 15px;
+  padding: 20px;
+
+  display: grid;
+  grid-template-columns: 60px 1fr 15px;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "logo title button"
+    "logo controls controls";
+  column-gap: 20px;
+  
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    border-color: #a38ffd;
+    box-shadow: 1px 1px 9px 0px rgba(146, 154, 159, 0.17);
+  }
+
+  h3 {
+    grid-area: title;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+  }
+
+  button {
+    position: relative;
+    bottom: 13px;
+    left: 17px;
+    grid-area: button;
+
+    color: #A5A5A5;
+
+    transform: rotate(90deg) scale(1.15);
+
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      color: #000000;
+    }
+  }
+}
+
+.logo {
+  display: block;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+
+  grid-area: logo;
+
+  border: 1px solid #BCBCC3;
+  border-radius: 10px;
+}
+
+.testTileLinks {
+  grid-area: controls;
+  
+  align-self: end;
+
+  a {
+    margin-right: 20px;
+
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #4485ED;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

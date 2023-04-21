@@ -1,9 +1,11 @@
 import styles from './profile-navigation.module.scss';
+import { AppRoute } from '../../const';
+import { NavLink } from 'react-router-dom';
 
 export const ProfileNavigation = () => {
   return (
     <section className={styles.profileNavigation}>
-      <ol>
+      <ul>
         <li>
           <a href="#">Профиль</a>
         </li>
@@ -11,7 +13,7 @@ export const ProfileNavigation = () => {
           <a href="#">Тесты</a>
         </li>
         <li>
-          <a href="#">Мои тесты</a>
+          <NavLink to={AppRoute.MyTests} className={({isActive}) => styles.activeLink}>Мои тесты</NavLink>
         </li>
         <li>
           <a href="#">Избранное</a>
@@ -19,7 +21,7 @@ export const ProfileNavigation = () => {
         <li>
           <a href="#">Настройки</a>
         </li>
-      </ol>
+      </ul>
     </section>
   );
 }
