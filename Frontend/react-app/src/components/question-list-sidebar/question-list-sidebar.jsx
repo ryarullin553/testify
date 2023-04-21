@@ -1,6 +1,6 @@
 import styles from './question-list-sidebar.module.scss';
 
-export const QuestionListSidebar = ({testTitle, questionList, setCurrentQuestionID, actionTestPublish}) => {
+export const QuestionListSidebar = ({testTitle, questionList, setCurrentQuestionID, actionTestPublish, isPublished}) => {
   const handleTestPublish = async (evt) => {
     evt.preventDefault();
     await actionTestPublish();
@@ -28,7 +28,7 @@ export const QuestionListSidebar = ({testTitle, questionList, setCurrentQuestion
           </li>
         )}
       </ol>
-      <button className={styles.submitTestButton} onClick={handleTestPublish}>Опубликовать тест</button>
+      {!isPublished && <button className={styles.submitTestButton} onClick={handleTestPublish}>Опубликовать тест</button>}
     </section>
   );
 }

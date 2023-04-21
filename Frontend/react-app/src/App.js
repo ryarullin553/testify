@@ -3,6 +3,7 @@ import { CreateQuestionPage } from './pages/create-question-page';
 import { CreateTestPage } from './pages/create-test-page';
 import { MainPage } from "./pages/main-page";
 import { AppRoute } from './const';
+import { MyTestsPage } from './pages/my-tests-page';
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
           <Route index element={<MainPage />}/>
           <Route path={AppRoute.CreateTest} element={<CreateTestPage />} />
           <Route path={`${AppRoute.EditTest}/:id`} element={<CreateQuestionPage />} />
+          <Route path={AppRoute.Profile}>
+            <Route path={AppRoute.MyTests} element={<MyTestsPage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
