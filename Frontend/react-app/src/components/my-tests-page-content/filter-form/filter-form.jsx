@@ -1,44 +1,53 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './filter-form.module.scss';
 
 export const FilterForm = ({setTestList, setBaseRequest}) => {
-  const [formState, setFormState] = useState({
-    filter: 'all',
-    search: '',
-  });
+  const [searchField, setSearchField] = useState('');
+  const [filter, setFilter] = useState('all');
 
   const handleFieldChange = (evt) => {
-    const {name, value} = evt.target;
-    setFormState({...formState, [name]: value});
+    const {value} = evt.target;
+    setSearchField(value);
   }
 
   const handleSearchClick = async (evt) => {
     evt.preventDefault();
-    setBaseRequest(composeRequest());
+    const newRequest = composeRequest();
+    setBaseRequest(newRequest);
+  }
+
+  const handleFilterChange = (evt) => {
+    const {value} = evt.target;
+    setFilter(value);
   }
 
   const composeRequest = () => {
-    const {search, filter} = formState;
-    let request = 'api/tests/';
-    console.log(search, filter);
-    if (search) {
-      request = request.concat(`?search=${search}`);
+    let request = 'api/tests/?';
+    if (searchField) {
+      request = request.concat(`search=${searchField}`);
+      if (filter !== 'all') {
+        request = request.concat('&');
+      }
     }
     switch (filter) {
       case 'published':
-        request = request.concat('?is_published=True');
+        request = request.concat('is_published=True');
         break;
       case 'unpublished':
-        request = request.concat('?is_published=False');
+        request = request.concat('is_published=False');
         break;
-      }
-    console.log(request);
+    }
     return request;
   }
 
+  useEffect(() => {
+    const newRequest = composeRequest();
+    setBaseRequest(newRequest);
+  }, [filter])
+
   return (
     <form className={styles.filterForm}>
-      <select name="filter" id="filter" value={formState.filter} onChange={handleFieldChange}>
+      <select name="filter" id="filter" value={filter} onChange={handleFilterChange}>
         <option value="all">Все</option>
         <option value="published">Опубликованные</option>
         <option value="unpublished">Неопубликованные</option>
@@ -47,7 +56,7 @@ export const FilterForm = ({setTestList, setBaseRequest}) => {
         type='search'
         name='search'
         id='search'
-        value={formState.search}
+        value={searchField}
         onChange={handleFieldChange}
         placeholder='Название теста'
       />
