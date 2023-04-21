@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './filter-form.module.scss';
 
-export const FilterForm = ({setTestList, setBaseRequest}) => {
+export const FilterForm = ({setBaseRequest}) => {
   const [searchField, setSearchField] = useState('');
   const [filter, setFilter] = useState('all');
 

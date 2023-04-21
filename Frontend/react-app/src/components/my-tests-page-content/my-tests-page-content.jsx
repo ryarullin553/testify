@@ -58,8 +58,6 @@ export const MyTestsPageContent = () => {
         <h1>Мои тесты</h1>
         <div className={styles.listControls}>
           <FilterForm
-            setTestList={setTestList}
-            fetchTestListData={fetchTestListData}
             setBaseRequest={setBaseRequest}
           />
           <Link to={AppRoute.CreateTest} className={styles.createTestLink}>Создать тест</Link>
