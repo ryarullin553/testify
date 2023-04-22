@@ -8,8 +8,7 @@ import { CreateQuestionManager } from './create-question-manager/create-question
 import { useParams } from 'react-router';
 
 export const CreateQuestionContent = () => {
-  const { id } = useParams();
-  const testID = Number(id);
+  const { testID } = useParams();
   let [testState, setTestState] = useImmer(newTestData);
   let [currentQuestionID, setCurrentQuestionID] = useState(1);
   

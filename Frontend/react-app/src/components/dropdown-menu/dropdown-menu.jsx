@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { logoutAction } from '../../store/api-actions';
 import { store } from '../../store/index.js';
 import styles from './dropdown-menu.module.scss';
+import { AppRoute } from '../../const';
 
 export const DropdownMenu = ({actionCloseMenu}) => {
   const handleLogoutClick = async () => {
@@ -37,7 +39,7 @@ export const DropdownMenu = ({actionCloseMenu}) => {
             <a href="#">Тесты</a>
           </li>
           <li>
-            <a href="#">Мои тесты</a>
+            <Link to={AppRoute.MyTests}>Мои тесты</Link>
           </li>
           <li>
             <a href="#">Настройки</a>

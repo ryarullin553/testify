@@ -2,7 +2,7 @@ import { EditTestDescriptionContent } from '../components/edit-test-description-
 import { Footer } from '../components/footer/footer';
 import { Header } from '../components/header/header';
 
-export const CreateTestPage = () => {
+export const EditTestDescriptionPage = () => {
   return (
     <>
       <Header />
