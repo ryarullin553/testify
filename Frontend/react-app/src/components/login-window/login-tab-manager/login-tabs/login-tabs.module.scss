@@ -1,7 +1,3 @@
-.container {
-  padding-bottom: 35px;
-}
-
 .tabs {
   padding-top: 26px;
   padding-left: 31px;
@@ -19,27 +15,6 @@
   }
 }
 
-.signForm {
-  margin-top: 40px;
-
-  button {
-    display: block;
-    margin: 0 auto;
-    width: 292px;
-    height: 42px;
-    margin-top: 20px;
-
-    background: #A38FFD;
-    border-radius: 5px;
-    
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-
-    color: #FFFFFF;
-  }
-}
-
 .resetButton {
   display: block;
   margin: 0 auto;
@@ -48,4 +23,29 @@
   font-size: 13px;
   line-height: 16px;
   color: #4C8AEE;
+}
+
+.additionalContent {
+  h2 {
+    margin-top: 32px;
+    margin-bottom: 20px;
+
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 30px;
+    text-align: center;
+
+    color: #222222;
+  }
+
+  p {
+    margin: 0 auto;
+    width: 305px;
+
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+
+    color: #777777;
+  }
 }

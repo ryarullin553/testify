@@ -1,6 +1,6 @@
 import ReactModal from 'react-modal';
-import { LoginForm } from './login-form/login-form';
 import styles from './login-window.module.scss';
+import { LoginTabManager } from './login-tab-manager/login-tab-manager';
 
 export const LoginWindow = ({isOpen, handleCloseModal}) => {
   return (
@@ -10,7 +10,7 @@ export const LoginWindow = ({isOpen, handleCloseModal}) => {
       overlayClassName={styles.overlay}
       onRequestClose={handleCloseModal}
     >
-      <LoginForm handleCloseModal={handleCloseModal}/>
+      <LoginTabManager handleCloseModal={handleCloseModal}/>
     </ReactModal>
   )
 };
