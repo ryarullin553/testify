@@ -6,6 +6,7 @@ import { AppRoute } from './const';
 import { MyTestsPage } from './pages/my-tests-page';
 import { UserActivationPage } from './pages/user-activation-page';
 import { ResetPasswordPage } from './pages/reset-password-page';
+import { EditTestDescriptionPage } from './pages/edit-test-description-page';
 
 function App() {
   return (
@@ -14,7 +15,10 @@ function App() {
         <Route path={AppRoute.Root}>
           <Route index element={<MainPage />}/>
           <Route path={AppRoute.CreateTest} element={<CreateTestPage />} />
-          <Route path={`${AppRoute.EditTest}/:id`} element={<CreateQuestionPage />} />
+          <Route path={AppRoute.EditTest} >
+            <Route path={`${AppRoute.EditTest}/:testID`} element={<CreateQuestionPage />} />
+            <Route path={`${AppRoute.EditTestDescription}/:testID`} element={<EditTestDescriptionPage />} />
+          </Route>
           <Route path={AppRoute.Profile}>
             <Route path={AppRoute.MyTests} element={<MyTestsPage />} />
           </Route>

@@ -22,7 +22,7 @@ export const TestTileProfile = ({id, title, avatar, isPublished}) => {
         src={avatar}
       />
       <div className={styles.testTileLinks}>
-        <Link>Описание</Link>
+        <Link to={`${AppRoute.EditTestDescription}/${id}`}>Описание</Link>
         <Link to={`${AppRoute.EditTest}/${id}`}>Редактировать</Link>
         <Link>Статистика</Link>
       </div>
