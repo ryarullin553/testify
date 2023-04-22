@@ -7,7 +7,7 @@ import { DropdownMenu } from '../../dropdown-menu/dropdown-menu';
 import { PaleButton } from '../../pale-button/pale-button';
 
 export const UserBlock = () => {
-  let {username, avatar} = useSelector(selectUserInfo);
+  let {avatar} = useSelector(selectUserInfo);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isAuthorized = useSelector(selectAuthorizationStatus);
@@ -42,8 +42,9 @@ export const UserBlock = () => {
 
   return (
     <div className={styles.userBlock}>
-      <img src={avatar} />
-      <button onClick={handleMenuClick}>{username}</button>
+      <button onClick={handleMenuClick}>
+        <img src={avatar} />
+      </button>
       {isMenuOpen && <DropdownMenu actionCloseMenu={actionCloseMenu} />}
     </div>
   );

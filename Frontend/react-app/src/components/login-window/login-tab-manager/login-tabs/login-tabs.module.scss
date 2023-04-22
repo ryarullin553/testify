@@ -1,0 +1,51 @@
+.tabs {
+  padding-top: 26px;
+  padding-left: 31px;
+
+  button {
+    margin-right: 22px;
+
+    font-size: 17px;
+    line-height: 21px;
+    color: #4C8AEE;
+
+    &.active {
+      color: #000000;
+    }
+  }
+}
+
+.resetButton {
+  display: block;
+  margin: 0 auto;
+  margin-top: 30px;
+
+  font-size: 13px;
+  line-height: 16px;
+  color: #4C8AEE;
+}
+
+.additionalContent {
+  h2 {
+    margin-top: 32px;
+    margin-bottom: 20px;
+
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 30px;
+    text-align: center;
+
+    color: #222222;
+  }
+
+  p {
+    margin: 0 auto;
+    width: 305px;
+
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+
+    color: #777777;
+  }
+}

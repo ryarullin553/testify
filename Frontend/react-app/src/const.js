@@ -5,4 +5,5 @@ export const AppRoute = {
   Profile: '/profile',
   MyTests: '/profile/my-tests',
   UserActivation: '/activate/:uid/:token',
+  PasswordReset: '/password/reset/confirm/:uid/:token',
 }
