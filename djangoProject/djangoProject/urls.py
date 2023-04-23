@@ -12,6 +12,7 @@ urlpatterns = [
 
     path('', include('users.urls')),
     path('api/', include('tests.urls')),
+    path('api/', include('test_results.urls')),
 ]
 
 if settings.DEBUG:
