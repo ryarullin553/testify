@@ -73,22 +73,3 @@
   border: 1px solid #BCBCC3;
   border-radius: 10px;
 }
-
-.testTileLinks {
-  grid-area: controls;
-  
-  align-self: end;
-
-  a {
-    margin-right: 20px;
-
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    color: #4485ED;
-    
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}

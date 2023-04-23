@@ -36,8 +36,7 @@ export const createAPI = () => {
     (response) => response,
     (error) => {
       if (error.response && shouldDisplayError(error.response)) {
-        processErrorHandle(error.response.data.toString());
-        console.log(error.response.data);
+        processErrorHandle(error.response.data.error);
       }
 
       throw error;

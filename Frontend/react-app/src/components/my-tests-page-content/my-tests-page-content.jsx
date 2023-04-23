@@ -13,6 +13,12 @@ export const MyTestsPageContent = () => {
   let nextPage = useRef();
   let isLoading = useRef(false);
 
+  const linkList = (id) => ([
+    {key: 1, link: `${AppRoute.EditTestDescription}/${id}`, label: 'Описание'},
+    {key: 2, link: `${AppRoute.EditTest}/${id}`, label: 'Редактировать'},
+    {key: 3, link: '#', label: 'Статистика'},
+  ]);
+
   const fetchTestListData = async () => {
 
     if (!nextPage.current) return;
@@ -62,7 +68,7 @@ export const MyTestsPageContent = () => {
           />
           <Link to={AppRoute.CreateTest} className={styles.createTestLink}>Создать тест</Link>
         </div>
-        <TestListProfile testList={testList}/>
+        <TestListProfile testList={testList} linkList={linkList}/>
       </section>
     </main>
   );
