@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './create-test-form.module.scss';
-import { api } from '../../../store';
-import { AppRoute } from '../../../const';
+import styles from './test-description-form.module.scss';
+import { api } from '../../store';
+import { AppRoute } from '../../const';
 
-export const CreateTestForm = () => {
+export const TestDescriptionForm = ({testID}) => {
   const navigate = useNavigate();
   let [formData, setFormData] = useState({
     title: '',
@@ -32,13 +32,10 @@ export const CreateTestForm = () => {
         },
       };
     }
-    try {
-      const {data} = await api.post('/api/tests/', {
-        title: formData.title,
-        description: formData.shortAbstract,
-        full_description: formData.abstract,
-        avatar: formData.avatar,
-      }, config);
+    if (testID) {
+      await api.put(`/api/update_test/${testID}/`, convertTestDataCtS(formData), config);
+    } else try {
+      const {data} = await api.post('/api/tests/', convertTestDataCtS(formData), config);
       const id = data.id;
       navigate(`${AppRoute.EditTest}/${id}`);
     } catch (err) {
@@ -46,9 +43,41 @@ export const CreateTestForm = () => {
     }
   }
 
+  const convertTestDataCtS = (data) => {
+    const modifiedData = {
+      title: data.title,
+      description: data.shortAbstract,
+      full_description: data.abstract,
+      avatar: data.avatar,
+    }
+    return modifiedData;
+  }
+
+  const convertTestDataStC = (data) => {
+    const modifiedData = {
+      title: data.title,
+      shortAbstract: data.description,
+      abstract: data.full_description,
+    }
+    return modifiedData;
+  }
+
+  const fetchTestData = async () => {
+    const {data} = await api.get(`/api/test/${testID}/`);
+    const convertedData = convertTestDataStC(data);
+    setFormData(convertedData);
+  }
+
+  const pageTitle = testID ? 'Редактировать описание теста' : 'Создать новый тест';
+  const buttonLabel = testID ? 'Сохранить' : 'Создать тест';
+
+  useEffect(() => {
+    if (testID) fetchTestData();
+  }, []);
+
   return (
     <form className={styles.contentForm} action="#" name="create-test-form">
-      <h1 className={styles.createTest}>Создание нового теста</h1>
+      <h1 className={styles.createTest}>{pageTitle}</h1>
       <fieldset className={`${styles.contentArea} ${styles.titleForm}`}>
         <label>Название</label>
         <textarea 
@@ -102,7 +131,7 @@ export const CreateTestForm = () => {
         </div>
       </fieldset>
       <div className={styles.controls}>
-        <button className={styles.createButton} onClick={handleSubmit}>Создать тест</button>
+        <button className={styles.createButton} onClick={handleSubmit}>{buttonLabel}</button>
       </div>
     </form>
   );

@@ -35,7 +35,26 @@
         </ul>
       </nav>
       <button class="locale-button">English</button>
-      <button class="small-button">Войти</button>
+      <button class="small-button">
+        <div class="avatar">
+          <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_560_1189)">
+              <path
+                d="M26.7295 6.33164C26.4716 5.90544 26.0639 5.60548 25.5817 5.48689L11.2104 1.95219C11.0651 1.91639 10.9158 1.89832 10.7666 1.89832C9.90623 1.89832 9.162 2.48126 8.95669 3.31607L8.52407 5.07511L1.33871 7.35513C0.378549 7.65978 -0.185146 8.66465 0.0554127 9.64296L3.51167 23.6954C3.63123 24.1815 3.93401 24.5893 4.36422 24.8438C4.65272 25.0145 4.97385 25.1016 5.29996 25.1016C5.46028 25.1016 5.62192 25.0805 5.78128 25.0379L16.8493 22.0779L21.2355 23.1567C21.3808 23.1925 21.5302 23.2106 21.6795 23.2106C22.5398 23.2106 23.284 22.6276 23.4892 21.7929L26.9456 7.74036C27.0642 7.25821 26.9875 6.75791 26.7295 6.33164ZM5.46698 22.9798L2.09868 9.28533L7.94479 7.43026L5.5005 17.3684C5.38178 17.8506 5.45856 18.351 5.7165 18.7773C5.97438 19.2035 6.38195 19.5035 6.86438 19.6222L12.6765 21.0516L5.46698 22.9798ZM23.1594 14.4687L21.1938 11.4416C20.9529 11.0705 20.5526 10.849 20.123 10.849C19.8312 10.849 19.5524 10.9482 19.3165 11.1358L15.132 14.4647C15.0065 14.5647 14.853 14.6176 14.6881 14.6176C14.4717 14.6176 14.2702 14.5254 14.1353 14.3649L12.5499 12.4781C12.2459 12.1164 11.759 11.9005 11.2475 11.9005C10.9949 11.9005 10.7503 11.9559 10.5401 12.0605L8.71351 12.9707L10.9171 4.01126L24.8865 7.44716L23.1594 14.4687Z"
+                fill="#BCBCC3" />
+              <path
+                d="M14.3485 10.0612C14.4943 10.0971 14.6439 10.1152 14.7929 10.1152C15.6488 10.1152 16.3895 9.53414 16.5941 8.70215C16.8385 7.70839 16.2288 6.70097 15.2351 6.45648C15.0892 6.42061 14.9396 6.40247 14.7906 6.40247C13.9348 6.40247 13.1941 6.98355 12.9894 7.81553C12.7451 8.80929 13.3547 9.81671 14.3485 10.0612Z"
+                fill="#BCBCC3" />
+            </g>
+            <defs>
+              <clipPath id="clip0_560_1189">
+                <rect width="27" height="27" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+        <a href="" class="name">Имя Фамилия</a>
+      </button>
     </div>
   </header>
 
@@ -44,19 +63,19 @@
     <section class="profile_navigation">
       <ol>
         <li>
-          <img src="/Frontend/base-layout/profile_tests_page/img/profile_icon.svg" alt="" class="profile_icon">
+          <img src="img/profile_icon.svg" alt="" class="profile_icon">
           <a href="#">Профиль</a>
         </li>
         <li>
-          <img src="/Frontend/base-layout/profile_tests_page/img/test-icon.svg" alt="" class="profile_icon">
+          <img src="img/test-icon.svg" alt="" class="profile_icon">
           <a href="#">Тесты</a>
         </li>
         <li>
-          <img src="/Frontend/base-layout/profile_tests_page/img/my_tests_icon.svg" alt="" class="profile_icon">
+          <img src="img/my_tests_icon.svg" alt="" class="profile_icon">
           <a href="#">Мои тесты</a>
         </li>
         <li>
-          <img src="/Frontend/base-layout/profile_tests_page/img/settings_icon.svg" alt="" class="profile_icon">
+          <img src="img/settings_icon.svg" alt="" class="profile_icon">
           <a href="#">Настройки</a>
         </li>
       </ol>
@@ -69,52 +88,64 @@
         <section class="test">
           <div class="container">
             <div class="logo">
-              <img src="/Frontend/base-layout/profile_tests_page/img/test-logo-icon.svg" alt="logo">
+              <img src="img/test-logo-icon.svg" alt="logo">
             </div>
-          <div class="content">
-            <h3 class="testName">Название теста</h3>
-            <a href="" class="results">Результаты</a>
+            <div class="content">
+              <h3 class="testName">Название теста</h3>
+              <div class="testAbout">
+                <a href="" class="description">Описание</a>
+                <a href="" class="results">Результаты</a>
+              </div>
+            </div>
+            <svg id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+              <path
+                d="M144,192a16,16,0,1,1-16-16A16.01833,16.01833,0,0,1,144,192ZM128,80a16,16,0,1,0-16-16A16.01833,16.01833,0,0,0,128,80Zm0,32a16,16,0,1,0,16,16A16.01833,16.01833,0,0,0,128,112Z" />
+            </svg>
           </div>
-          <svg id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-            <path d="M144,192a16,16,0,1,1-16-16A16.01833,16.01833,0,0,1,144,192ZM128,80a16,16,0,1,0-16-16A16.01833,16.01833,0,0,0,128,80Zm0,32a16,16,0,1,0,16,16A16.01833,16.01833,0,0,0,128,112Z"/>
-          </svg>
-          </div>
-          
+
         </section>
 
         <section class="test">
           <div class="container">
             <div class="logo">
-              <img src="/Frontend/base-layout/profile_tests_page/img/test-logo-icon.svg" alt="logo">
+              <img src="img/test-logo-icon.svg" alt="logo">
             </div>
-          <div class="content">
-            <h3 class="testName">Название теста</h3>
-            <a href="" class="results">Результаты</a>
+            <div class="content">
+              <h3 class="testName">Название теста</h3>
+              <div class="testAbout">
+                <a href="" class="description">Описание</a>
+                <a href="" class="results">Результаты</a>
+              </div>
+            </div>
+            <svg id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+              <path
+                d="M144,192a16,16,0,1,1-16-16A16.01833,16.01833,0,0,1,144,192ZM128,80a16,16,0,1,0-16-16A16.01833,16.01833,0,0,0,128,80Zm0,32a16,16,0,1,0,16,16A16.01833,16.01833,0,0,0,128,112Z" />
+            </svg>
           </div>
-          <svg id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-            <path d="M144,192a16,16,0,1,1-16-16A16.01833,16.01833,0,0,1,144,192ZM128,80a16,16,0,1,0-16-16A16.01833,16.01833,0,0,0,128,80Zm0,32a16,16,0,1,0,16,16A16.01833,16.01833,0,0,0,128,112Z"/>
-          </svg>
-          </div>
-          
+
         </section>
 
         <section class="test">
           <div class="container">
             <div class="logo">
-              <img src="/Frontend/base-layout/profile_tests_page/img/test-logo-icon.svg" alt="logo">
+              <img src="img/test-logo-icon.svg" alt="logo">
             </div>
-          <div class="content">
-            <h3 class="testName">Название теста</h3>
-            <a href="" class="results">Результаты</a>
+            <div class="content">
+              <h3 class="testName">Название теста</h3>
+              <div class="testAbout">
+                <a href="" class="description">Описание</a>
+                <a href="" class="results">Результаты</a>
+              </div>
+            </div>
+            <svg id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+              <path
+                d="M144,192a16,16,0,1,1-16-16A16.01833,16.01833,0,0,1,144,192ZM128,80a16,16,0,1,0-16-16A16.01833,16.01833,0,0,0,128,80Zm0,32a16,16,0,1,0,16,16A16.01833,16.01833,0,0,0,128,112Z" />
+            </svg>
           </div>
-          <svg id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-            <path d="M144,192a16,16,0,1,1-16-16A16.01833,16.01833,0,0,1,144,192ZM128,80a16,16,0,1,0-16-16A16.01833,16.01833,0,0,0,128,80Zm0,32a16,16,0,1,0,16,16A16.01833,16.01833,0,0,0,128,112Z"/>
-          </svg>
-          </div>
-          
+
         </section>
       </section>
-      
+
 
     </div>
   </main>

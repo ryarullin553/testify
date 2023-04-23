@@ -1,7 +1,8 @@
-import { setAuthorizationStatus, setUserInfo, setAuthorizationToken } from './actions';
+import { setAuthorizationStatus, setUserInfo, setError } from './actions';
 import { createReducer } from '@reduxjs/toolkit';
 
 const initialState = {
+  error: null,
   authorizationStatus: false,
   userInfo: {
     id: '',
@@ -17,5 +18,8 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setUserInfo, (state, action) => {
       state.userInfo = action.payload;
+    })
+    .addCase(setError, (state, action) => {
+      state.error = action.payload;
     });
 });

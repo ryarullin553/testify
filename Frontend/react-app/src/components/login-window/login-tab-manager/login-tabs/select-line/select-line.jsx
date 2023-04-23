@@ -1,9 +1,9 @@
 import styles from './select-line.module.css';
-import { FORM_TABS } from '../login-form';
+import { FORM_TABS } from '../../login-tab-manager';
 
-export const SelectLine = ({formState}) => {
+export const SelectLine = ({formTab}) => {
     const selectLinePosition = () => {
-    switch (formState) {
+    switch (formTab) {
       case FORM_TABS.SIGN_IN:
         return '-100px';
       case FORM_TABS.SIGN_UP:

@@ -8,8 +8,7 @@ import { CreateQuestionManager } from './create-question-manager/create-question
 import { useParams } from 'react-router';
 
 export const CreateQuestionContent = () => {
-  const { id } = useParams();
-  const testID = Number(id);
+  const { testID } = useParams();
   let [testState, setTestState] = useImmer(newTestData);
   let [currentQuestionID, setCurrentQuestionID] = useState(1);
   
@@ -80,7 +79,14 @@ export const CreateQuestionContent = () => {
   }
 
   const actionTestPublish = async () => {
-    await api.put(`/api/update_test/${testID}/`, {is_published: true});
+    try {
+      await api.put(`/api/update_test/${testID}/`, {is_published: true});
+      setTestState(draft => {
+        draft.isPublished = true;
+      });
+    } catch {
+      return;
+    }
   }
 
   const actionQuestionDelete = async () => {
@@ -101,6 +107,7 @@ export const CreateQuestionContent = () => {
     const modifiedData = {
       testID: testID,
       testTitle: data.test_title,
+      isPublished: data.is_published,
       questionList: data.questions.map(q => ({
         questionID: q.id,
         questionDescription: q.content,
@@ -130,6 +137,7 @@ export const CreateQuestionContent = () => {
       <QuestionListSidebar
         testTitle={testState.testTitle}
         questionList={testState.questionList}
+        isPublished={testState.isPublished}
         setCurrentQuestionID={setCurrentQuestionID}
         actionTestPublish={actionTestPublish}
       />

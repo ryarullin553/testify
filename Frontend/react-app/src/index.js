@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ErrorMessage } from './components/error-message/error-message';
 
 store.dispatch(checkAuthAction());
 
@@ -17,6 +18,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
+      <ErrorMessage />
       <App />
     </Provider>
   </React.StrictMode>
