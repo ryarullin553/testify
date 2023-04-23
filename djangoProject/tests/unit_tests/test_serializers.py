@@ -1,6 +1,6 @@
 from django.test import TestCase
-from tests.models import Test
-from tests.serializers import TestSerializer
+from ..models import Test, Answer, Question
+from ..serializers import TestSerializer, QuestionSerializer, AnswerSerializer
 
 
 class TestSerializerTestCase(TestCase):
@@ -26,6 +26,36 @@ class TestSerializerTestCase(TestCase):
                 'avatar': None,
                 'author': None,
                 'is_published': False
+            }
+        ]
+        self.assertEqual(expected_data, data)
+
+
+class AnswerSerializerTestCase(TestCase):  # тест-кейс написан, однако проблемы с запуском, есть проблемы с импортом
+    def test_two(self):
+        test_3 = Answer.objects.create(content = 'Ответ №1', is_true = 0)
+        data = AnswerSerializer(test_3).data
+        expected_data = [
+                {
+                    "content": "Ответ №1",
+                    'question': test_3.pk,
+                    "is_true": 0
+                }]
+
+        self.assertEqual(expected_data, data)
+
+
+class QuestionSerializerTestCase(TestCase):
+    def test_three(self):
+        test_5 = Question.objects.create(content = 'Тут мог бы быть ваш тест')
+        data = QuestionSerializer(test_5).data
+        expected_data = [
+            {
+                'answer_set': None,
+                'id': test_5.pk,
+                'content': 'Тут мог бы быть ваш тест',
+                'test': None
+
             }
         ]
         self.assertEqual(expected_data, data)
