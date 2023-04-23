@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
 import styles from './test-tile-profile.module.scss';
-import { AppRoute } from '../../../const';
 import hiddenIcon from './img/unpublished.svg';
+import { TestTileLinks } from './test-tile-links/test-tile-links';
 
-export const TestTileProfile = ({id, title, avatar, isPublished}) => {
+export const TestTileProfile = ({id, title, avatar, isPublished, linkList}) => {
   return (
     <li className={styles.testTile}>
       <div className={styles.titleWrapper}>
@@ -21,11 +20,7 @@ export const TestTileProfile = ({id, title, avatar, isPublished}) => {
         className={styles.logo}
         src={avatar}
       />
-      <div className={styles.testTileLinks}>
-        <Link to={`${AppRoute.EditTestDescription}/${id}`}>Описание</Link>
-        <Link to={`${AppRoute.EditTest}/${id}`}>Редактировать</Link>
-        <Link>Статистика</Link>
-      </div>
+      <TestTileLinks linkList={linkList} id={id}/>
       <button>...</button>
     </li>
   );
