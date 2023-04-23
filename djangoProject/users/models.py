@@ -7,7 +7,7 @@ from tests.models import *
 
 
 class MyUser(AbstractUser):
-    username = models.CharField(_("username"), max_length=150)
+    username = models.CharField(_("username"), max_length=40)
     email = models.EmailField(_('email address'), unique=True)
     avatar = models.ImageField(upload_to='images/user_avatars/%Y/%m/%d/', blank=True, null=True)
     bio = models.CharField(max_length=140, blank=True, null=True)

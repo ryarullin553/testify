@@ -18,7 +18,3 @@ class TestQuestionAdmin(ModelAdmin):
 class TestAnswerAdmin(ModelAdmin):
     pass
 
-
-@admin.register(TestResult)
-class TestResultAdmin(ModelAdmin):
-    pass

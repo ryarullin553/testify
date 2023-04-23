@@ -1,6 +1,6 @@
 from rest_framework_nested import routers
 from django.urls import path, include
-from tests.views import *
+from .views import *
 
 router = routers.SimpleRouter()
 router.register(r'catalog', CatalogViewSet)   # get

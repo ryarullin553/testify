@@ -9,8 +9,7 @@ class Test(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
     is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
-    author = models.ForeignKey('users.MyUser', on_delete=models.SET_NULL, null=True, verbose_name='Автор',
-                               related_name='tests_create')
+    author = models.ForeignKey('users.MyUser', on_delete=models.SET_NULL, null=True, verbose_name='Автор')
 
     def __str__(self):
         return self.title
@@ -32,20 +31,3 @@ class Answer(models.Model):
     def __str__(self):
         return f"{self.question} answer #{self.pk}"
 
-
-class TestResult(models.Model):
-    user = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
-    test = models.ForeignKey(Test, on_delete=models.CASCADE)
-    correct_answers = models.IntegerField(default=0)
-    total_questions = models.IntegerField(default=0)
-    score = models.FloatField(default=0)
-
-    def __str__(self):
-        return f"{self.user.username} result {self.test.title}"
-
-
-class TestResultAnswer(models.Model):
-    result = models.ForeignKey(TestResult, on_delete=models.CASCADE, related_name='result_answers')
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
-    is_correct = models.BooleanField(default=False)

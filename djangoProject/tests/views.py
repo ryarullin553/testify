@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -87,7 +88,7 @@ class QuestionAPIView(APIView, APIViewMixin):
                          'is_published': test.is_published,
                          'questions': questions_data}
 
-        return Response(response_data)
+        return JsonResponse(response_data)
 
     def post(self, request, **kwargs):
         test_pk = kwargs.get('test_pk', None)
