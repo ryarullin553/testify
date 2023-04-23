@@ -1,3 +1,6 @@
 .idea/
 *.pyc
 djangoProject/secret_settings.py
+Design/images/
+djangoProject/media/
+djangoProject/users/static/users/images/
