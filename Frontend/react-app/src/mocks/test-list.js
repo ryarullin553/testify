@@ -1,8 +1,4 @@
-export const TestList = {
-  "count": 15,
-  "next": null,
-  "previous": null,
-  "results": [
+export const TestList = [
       {
           "id": 31,
           "title": "Измененный тест",
@@ -138,5 +134,4 @@ export const TestList = {
           "is_published": true,
           "time_create": "2023-04-20T19:45:41.662879+03:00"
       }
-  ]
-}
+]
