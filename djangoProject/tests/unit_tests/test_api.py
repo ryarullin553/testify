@@ -79,14 +79,10 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
 
-class CatalogViewSetTestCase(APITestCase):
+class CatalogViewSetTestCase(APITestCase): #надо дописать
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create(username='test_username')
-        self.test_1 = Test.objects.create(title='Тест №1', description='Описание теста',
-                                     full_description='Полное описание теста')
-        self.test_2 = Test.objects.create(title='Тест №2', description='Описание теста',
-                                     full_description='Полное описание теста')
     def test_get_catalog(self):
         url = reverse('catalog')
         self.client.force_login(self.user)
