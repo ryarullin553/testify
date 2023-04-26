@@ -9,7 +9,10 @@ class Test(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
     is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
-    author = models.ForeignKey('users.MyUser', on_delete=models.SET_NULL, null=True, verbose_name='Автор')
+    author = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, verbose_name='Автор')
+
+    class Meta:
+        db_table = 'tests'
 
     def __str__(self):
         return self.title
@@ -19,8 +22,11 @@ class Question(models.Model):
     content = models.TextField()
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = 'questions'
+
     def __str__(self):
-        return f"{self.test} question #{self.pk}"
+        return f"Тест {self.test} вопрос №{self.pk}"
 
 
 class Answer(models.Model):
@@ -28,6 +34,9 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     is_true = models.BooleanField(default=None)
 
+    class Meta:
+        db_table = 'answers'
+
     def __str__(self):
-        return f"{self.question} answer #{self.pk}"
+        return f"{self.question} ответ №{self.pk}"
 

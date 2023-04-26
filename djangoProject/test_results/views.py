@@ -2,15 +2,16 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.generics import GenericAPIView, get_object_or_404
+from rest_framework.generics import GenericAPIView
 from .answer_validators import answer_is_exist, choiced_answer_is_exist
 from .models import Result, ChoicedAnswer
 from .permissions import IsUserResult, IsUserAnswer
 from .serializers import ResultSerializer, ChoicedAnswerSerializer
 from .services import get_result_data
+from tests.mixins import APIViewMixin
 
 
-class TestResultAPIView(GenericAPIView):
+class TestResultAPIView(GenericAPIView, APIViewMixin):
     queryset = Result.objects
     serializer_class = ResultSerializer
     lookup_url_kwarg = 'result_pk'
@@ -29,23 +30,18 @@ class TestResultAPIView(GenericAPIView):
             return JsonResponse(result_data)
 
     def post(self, request, **kwargs):
-        """Создает результат по принятому id теста"""
-        serializer = self.serialize_data(kwargs)
+        """Создает результат по принятому id теста из url"""
+        serializer = self.get_default_saved_serializer(kwargs)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def patch(self, request, **kwargs):
-        """Завершает прохождение теста"""
-        serializer = self.serialize_data(request.data, self.get_object(), partial=True)
+        """Завершает прохождение теста, изменяя is_finished результата"""
+        instance = self.get_object()
+        serializer = self.get_default_saved_serializer(request.data, instance, partial=True)
         return Response(serializer.data)
 
-    def serialize_data(self, data, instance=None, partial=False):
-        serializer = self.get_serializer(data=data, instance=instance, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return serializer
 
-
-class ChoicedAnswerAPIView(GenericAPIView):
+class ChoicedAnswerAPIView(GenericAPIView, APIViewMixin):
     queryset = ChoicedAnswer.objects
     serializer_class = ChoicedAnswerSerializer
     permission_classes = (IsAuthenticated, IsUserAnswer)
@@ -62,7 +58,7 @@ class ChoicedAnswerAPIView(GenericAPIView):
         if choiced_answer_is_exist(self, answer_pk, result_pk):
             return JsonResponse({'error': f'Выбранный ответ уже существует'})
 
-        serializer = self.serialize_data(request.data)
+        serializer = self.get_default_saved_serializer(request.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def patch(self, request, **kwargs):
@@ -74,16 +70,7 @@ class ChoicedAnswerAPIView(GenericAPIView):
         if not answer_is_exist(self, answer_pk, result_pk):
             return JsonResponse({'error': f'Ответ №{answer_pk} не относится к текущему результату'})
 
-        serializer = self.serialize_data(request.data, self.get_object(), partial=True)
+        instance = self.get_object()
+        serializer = self.get_default_saved_serializer(request.data, instance, partial=True)
         return Response(serializer.data)
 
-    def get_instance(self, pk, model):
-        instance = get_object_or_404(model, pk=pk)
-        self.check_object_permissions(self.request, instance)
-        return instance
-
-    def serialize_data(self, data, instance=None, partial=False):
-        serializer = self.get_serializer(data=data, instance=instance, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return serializer
