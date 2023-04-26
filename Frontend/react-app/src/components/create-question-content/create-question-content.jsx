@@ -6,6 +6,7 @@ import { QuestionListSidebar } from '../question-list-sidebar/question-list-side
 import styles from './create-question-content.module.scss';
 import { CreateQuestionManager } from './create-question-manager/create-question-manager';
 import { useParams } from 'react-router';
+import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button.jsx';
 
 export const CreateQuestionContent = () => {
   const { testID } = useParams();
@@ -103,9 +104,9 @@ export const CreateQuestionContent = () => {
     });
   }
 
-  const convertTestDataStC = (data, testID) => {
-    const modifiedData = {
-      testID: testID,
+  const convertTestDataStC = (data) => {
+    const convertedData = {
+      testID: data.test_id,
       testTitle: data.test_title,
       isPublished: data.is_published,
       questionList: data.questions.map(q => ({
@@ -118,7 +119,7 @@ export const CreateQuestionContent = () => {
         correctAnswerID: q.answer_set.findIndex(a => (a.is_true === true)),
       })),
     }
-    return modifiedData;
+    return convertedData;
   }
 
   const convertQuestionDataCtS = (data) => {
@@ -137,10 +138,14 @@ export const CreateQuestionContent = () => {
       <QuestionListSidebar
         testTitle={testState.testTitle}
         questionList={testState.questionList}
-        isPublished={testState.isPublished}
         setCurrentQuestionID={setCurrentQuestionID}
-        actionTestPublish={actionTestPublish}
-      />
+      >
+        <QuestionListSidebarButton
+          label={'Опубликовать тест'}
+          onClickAction={actionTestPublish}
+          condition={!testState.isPublished}
+        />
+      </QuestionListSidebar>
       <CreateQuestionManager
         key={currentQuestionID}
         currentQuestionID={currentQuestionID}

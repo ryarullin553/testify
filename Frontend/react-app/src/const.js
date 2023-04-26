@@ -8,6 +8,7 @@ export const AppRoute = {
   UserActivation: '/activate/:uid/:token',
   PasswordReset: '/password/reset/confirm/:uid/:token',
   ProfileTests: '/profile/tests',
+  TestMain: '/test',
 }
 
 export const TIMEOUT_SHOW_ERROR = 5000;
