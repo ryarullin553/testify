@@ -1,11 +1,14 @@
-from django.urls import path
-from .views import *
+from django.urls import path, include
+from .routers import ResultRouter
+from .views import ResultAPIView, ChoicedAnswerAPIView
+
+result_router = ResultRouter()
+result_router.register(r'results', ResultAPIView)
 
 urlpatterns = [
-    path('<int:test>/results/', TestResultAPIView.as_view()),  # get (list), post
-    path('result/<int:result_pk>/', TestResultAPIView.as_view()),  # get (one)
-    path('update_result/<int:result_pk>/', TestResultAPIView.as_view()),  # patch
+    path('', include(result_router.urls)),
 
     path('add_anwser/', ChoicedAnswerAPIView.as_view()),  # post
     path('update_anwser/<int:choiced_answer_pk>/', ChoicedAnswerAPIView.as_view()),  # patch
 ]
+
