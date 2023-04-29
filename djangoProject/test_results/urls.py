@@ -7,8 +7,7 @@ result_router.register(r'results', ResultAPIView)
 
 urlpatterns = [
     path('', include(result_router.urls)),
-
-    path('add_anwser/', ChoicedAnswerAPIView.as_view()),  # post
-    path('update_anwser/<int:choiced_answer_pk>/', ChoicedAnswerAPIView.as_view()),  # patch
+    path('answers/', ChoicedAnswerAPIView.as_view({'post': 'add_answer'}), name='add_answer'),
+    path('answers/<int:pk>/', ChoicedAnswerAPIView.as_view({'patch': 'update_answer'}), name='update_answer'),
 ]
 

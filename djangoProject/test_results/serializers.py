@@ -5,7 +5,14 @@ from .models import Result, ChoicedAnswer
 class ChoicedAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChoicedAnswer
-        fields = '__all__'
+        fields = ['result', 'answer']
+
+    def validate(self, attrs):
+        result = attrs.get('result')
+        answer = attrs.get('answer')
+        if result.test != answer.question.test:
+            raise serializers.ValidationError('Поля result, answer должны относится к одному тесту.')
+        return attrs
 
 
 class ResultSerializer(serializers.ModelSerializer):
