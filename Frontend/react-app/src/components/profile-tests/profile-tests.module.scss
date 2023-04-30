@@ -1,0 +1,26 @@
+.pageMain {
+    width: 1300px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.contentForm {
+    box-sizing: border-box;
+    margin-left: 92px;
+    margin-bottom: 50px;
+    width: 992px;
+    padding: 0 21px;
+
+    .createTest {
+        color: #222222;
+        margin-top: 24px;
+        margin-bottom: 32px;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 29px;
+    }
+}
+
