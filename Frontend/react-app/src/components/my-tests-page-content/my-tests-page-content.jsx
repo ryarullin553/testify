@@ -13,6 +13,7 @@ export const MyTestsPageContent = () => {
   let nextPage = useRef();
   let isLoading = useRef(false);
 
+  // Список ссылок в подвале плашке
   const linkList = (id) => ([
     {key: 1, link: `${AppRoute.EditTestDescription}/${id}`, label: 'Описание'},
     {key: 2, link: `${AppRoute.EditTest}/${id}`, label: 'Редактировать'},
