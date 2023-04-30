@@ -1,10 +1,10 @@
 from rest_framework.generics import RetrieveUpdateAPIView
-from .models import *
+from .models import User
 from .permissions import IsOwnerOrReadOnly
-from .serializers import *
+from .serializers import UserSerializer
 
 
-class MyUserAPIView(RetrieveUpdateAPIView):
-    queryset = MyUser.objects.all()
-    serializer_class = MyUserSerializer
+class UserAPIView(RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
     permission_classes = (IsOwnerOrReadOnly,)

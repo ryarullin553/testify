@@ -7,15 +7,14 @@ from ..models import *
 from django.contrib.auth import get_user_model
 
 
-
 class TestAPITestCase(APITestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create(username='test_username')
         self.test_1 = Test.objects.create(title='Тест №1', description='Описание теста',
-                                     full_description='Полное описание теста')
+                                          full_description='Полное описание теста')
         self.test_2 = Test.objects.create(title='Тест №2', description='Описание теста',
-                                     full_description='Полное описание теста')
+                                          full_description='Полное описание теста')
 
     def test_get(self):
         url = reverse('tests')
@@ -26,7 +25,7 @@ class TestAPITestCase(APITestCase):
 
     def test_create(self):
         url = reverse('tests')
-        data ={
+        data = {
             "title": "Первый тест",
             "description": "Описание теста",
             "full_description": "Полное описание теста"
@@ -51,10 +50,11 @@ class TestAPITestCase(APITestCase):
         response = self.client.put(url, data=json_data, content_type='application/json')
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)"""
-    def test_update(self): #негативный
+
+    def test_update(self):  # негативный
         url = reverse('update_test', args=(self.test_1.pk,))
         self.client.force_login(self.user)
-        data ={
+        data = {
             "title": self.test_1.title,
             "description": "Тест предназначенный для unit",
             "full_description": self.test_1.full_description
@@ -65,7 +65,8 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         # self.test_1.refresh_from_db()
         # self.assertEqual("Тест предназначенный для unit", self.test_1.description)
-    def test_delete(self): #негативный
+
+    def test_delete(self):  # негативный
         url = reverse('update_test', args=(self.test_1.pk,))
         self.client.force_login(self.user)
         data = {
@@ -79,15 +80,14 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
 
-class CatalogViewSetTestCase(APITestCase): #надо дописать
+class CatalogViewSetTestCase(APITestCase):  # надо дописать
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create(username='test_username')
+
     def test_get_catalog(self):
         url = reverse('catalog')
         self.client.force_login(self.user)
         response = self.client.get(url)
         print(response)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-

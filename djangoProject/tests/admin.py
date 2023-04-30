@@ -10,11 +10,11 @@ class TestAdmin(ModelAdmin):
 
 
 @admin.register(Question)
-class TestQuestionAdmin(ModelAdmin):
+class QuestionAdmin(ModelAdmin):
     pass
 
 
 @admin.register(Answer)
-class TestAnswerAdmin(ModelAdmin):
+class AnswerAdmin(ModelAdmin):
     pass
 

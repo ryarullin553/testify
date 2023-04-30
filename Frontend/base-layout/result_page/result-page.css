@@ -1,0 +1,286 @@
+@charset "UTF-8";
+/* Общие стили */
+@font-face {
+  font-family: "Inter";
+  src: local("Inter"), url("./fonts/Inter/Inter-VariableFont_slnt,wght.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Montserrat";
+  src: local("Montserrat"), url("./fonts/Montserrat/Montserrat-Medium.ttf") format("truetype");
+  font-weight: medium;
+}
+@font-face {
+  font-family: "Jost";
+  src: local("Jost"), url("./fonts/Jost/Jost-Medium.ttf") format("truetype");
+  font-weight: medium;
+}
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  background-color: #FFFFFF;
+}
+
+a {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000000;
+}
+
+button {
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000000;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+/* Стили страницы */
+.resultContent .abstract {
+  width: 640px;
+  height: 61px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 130%;
+  margin-bottom: 90px;
+  color: #454868;
+}
+.resultContent .resultContainer {
+  width: 900px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.resultContent p {
+  height: 27px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #222222;
+  margin-bottom: 15px;
+}
+.resultContent span {
+  color: #A38FFD;
+}
+
+.controls {
+  margin-bottom: 60px;
+  display: flex;
+}
+.controls button {
+  display: flex;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+.controls .feedback {
+  padding: 9px 34px;
+  border: 2px solid #A38FFD;
+  background: #A38FFD;
+  color: #FFFFFF;
+  margin-right: 20px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+}
+.controls .feedback:hover {
+  background: #FFFFFF;
+  border: 2px solid #A38FFD;
+  color: #A38FFD;
+}
+.controls .feedback:hover::after {
+  border: solid 1px #A38FFD;
+  border-width: 0 2px 2px 0;
+}
+.controls .catalog {
+  padding: 9px 34px;
+  border: 2px solid #A38FFD;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  background: #FFFFFF;
+  color: #A38FFD;
+}
+.controls .catalog:hover {
+  background: #A38FFD;
+  border: 2px solid #A38FFD;
+  color: #ffffff;
+}
+.controls .catalog:hover::after {
+  border: solid 1px #A38FFD;
+  border-width: 0 2px 2px 0;
+}
+
+.progressBar {
+  width: 200px;
+}
+.progressBar h3 {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  color: #222222;
+  text-align: center;
+}
+.progressBar .container {
+  display: flex;
+  width: 200px;
+  padding: 13px 0;
+  border-radius: 8px;
+  background: #fff;
+  row-gap: 30px;
+  flex-direction: column;
+  align-items: center;
+}
+.progressBar .circular-progress {
+  position: relative;
+  height: 190px;
+  width: 190px;
+  border-radius: 50%;
+  background: conic-gradient(#A38FFD 3.6deg, #ffffff 0deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.progressBar .circular-progress::before {
+  content: "";
+  position: absolute;
+  height: 140px;
+  width: 140px;
+  border-radius: 50%;
+  background-color: #fff;
+}
+.progressBar .progress-value {
+  position: relative;
+  font-size: 50px;
+  font-weight: 800;
+  color: #A38FFD;
+}/*# sourceMappingURL=result-page.css.map */

@@ -1,6 +1,6 @@
-from .serializers import ChoicedAnswerSerializer
 from tests.models import Question
-from tests.serializers import AnswerSerializer, QuestionSerializer
+from tests.serializers import QuestionSerializer
+from .serializers import ChoicedAnswerSerializer
 
 
 def get_result_data(result):

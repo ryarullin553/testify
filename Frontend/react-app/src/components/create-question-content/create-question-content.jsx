@@ -27,7 +27,7 @@ export const CreateQuestionContent = () => {
 
   const fetchTestData = async () => {
     try {
-      const {data} = await api.get(`/api/test/${testID}/questions/`);
+      const {data} = await api.get(`/api/test_questions/${testID}/`);
       const convertedData = convertTestDataStC(data, testID);
       setTestState(convertedData);
       if (convertedData.questionList.length === 0) {
@@ -51,7 +51,7 @@ export const CreateQuestionContent = () => {
 
   const actionQuestionSave = async (updatedQuestionData) => {
     try {
-      const {data} = await api.post(`/api/test/${testState.testID}/questions/`, convertQuestionDataCtS(updatedQuestionData));
+      const {data} = await api.post(`/api/create_question/`, convertQuestionDataCtS(updatedQuestionData));
       const newID = data.id;
       setTestState(draft => {
         draft.questionList
@@ -104,12 +104,13 @@ export const CreateQuestionContent = () => {
     });
   }
 
-  const convertTestDataStC = (data) => {
+
+  const convertTestDataStC = (data, testID) => {
     const convertedData = {
-      testID: data.test_id,
-      testTitle: data.test_title,
+      testID: testID,
+      testTitle: data.title,
       isPublished: data.is_published,
-      questionList: data.questions.map(q => ({
+      questionList: data.question_set.map(q => ({
         questionID: q.id,
         questionDescription: q.content,
         answerList: q.answer_set.map((a, i) => ({
@@ -124,8 +125,9 @@ export const CreateQuestionContent = () => {
 
   const convertQuestionDataCtS = (data) => {
     const convertedData = {
-      question: data.questionDescription,
-      answers: data.answerList.map(a => ({
+      test: testID,
+      content: data.questionDescription,
+      answer_set: data.answerList.map(a => ({
         content: a.answerDescription,
         is_true: (a.answerID === data.correctAnswerID),
       }))
