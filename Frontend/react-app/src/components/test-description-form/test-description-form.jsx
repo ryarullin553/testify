@@ -35,7 +35,7 @@ export const TestDescriptionForm = ({testID}) => {
     if (testID) {
       await api.put(`/api/update_test/${testID}/`, convertTestDataCtS(formData), config);
     } else try {
-      const {data} = await api.post('/api/tests/', convertTestDataCtS(formData), config);
+      const {data} = await api.post('/api/create_test/', convertTestDataCtS(formData), config);
       const id = data.id;
       navigate(`${AppRoute.EditTest}/${id}`);
     } catch (err) {
@@ -63,7 +63,7 @@ export const TestDescriptionForm = ({testID}) => {
   }
 
   const fetchTestData = async () => {
-    const {data} = await api.get(`/api/test/${testID}/`);
+    const {data} = await api.get(`/api/test_description/${testID}/`);
     const convertedData = convertTestDataStC(data);
     setFormData(convertedData);
   }
