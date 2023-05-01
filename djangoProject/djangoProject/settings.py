@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'tests.apps.TestsConfig',
-    'test_results.apps.TestResultsConfig',
+    'results.apps.ResultsConfig',
 ]
 
 MIDDLEWARE = [

@@ -26,7 +26,7 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ['content', 'is_true']
+        fields = ['id', 'content', 'is_true']
 
 
 class QuestionSerializer(DynamicFieldsModelSerializer):
