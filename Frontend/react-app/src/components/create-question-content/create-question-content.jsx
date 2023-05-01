@@ -6,6 +6,7 @@ import { QuestionListSidebar } from '../question-list-sidebar/question-list-side
 import styles from './create-question-content.module.scss';
 import { CreateQuestionManager } from './create-question-manager/create-question-manager';
 import { useParams } from 'react-router';
+import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button.jsx';
 
 export const CreateQuestionContent = () => {
   const { testID } = useParams();
@@ -26,7 +27,7 @@ export const CreateQuestionContent = () => {
 
   const fetchTestData = async () => {
     try {
-      const {data} = await api.get(`/api/test/${testID}/questions/`);
+      const {data} = await api.get(`/api/test_questions/${testID}/`);
       const convertedData = convertTestDataStC(data, testID);
       setTestState(convertedData);
       if (convertedData.questionList.length === 0) {
@@ -50,7 +51,7 @@ export const CreateQuestionContent = () => {
 
   const actionQuestionSave = async (updatedQuestionData) => {
     try {
-      const {data} = await api.post(`/api/test/${testState.testID}/questions/`, convertQuestionDataCtS(updatedQuestionData));
+      const {data} = await api.post(`/api/create_question/`, convertQuestionDataCtS(updatedQuestionData));
       const newID = data.id;
       setTestState(draft => {
         draft.questionList
@@ -103,12 +104,13 @@ export const CreateQuestionContent = () => {
     });
   }
 
+
   const convertTestDataStC = (data, testID) => {
-    const modifiedData = {
+    const convertedData = {
       testID: testID,
-      testTitle: data.test_title,
+      testTitle: data.title,
       isPublished: data.is_published,
-      questionList: data.questions.map(q => ({
+      questionList: data.question_set.map(q => ({
         questionID: q.id,
         questionDescription: q.content,
         answerList: q.answer_set.map((a, i) => ({
@@ -118,13 +120,14 @@ export const CreateQuestionContent = () => {
         correctAnswerID: q.answer_set.findIndex(a => (a.is_true === true)),
       })),
     }
-    return modifiedData;
+    return convertedData;
   }
 
   const convertQuestionDataCtS = (data) => {
     const convertedData = {
-      question: data.questionDescription,
-      answers: data.answerList.map(a => ({
+      test: testID,
+      content: data.questionDescription,
+      answer_set: data.answerList.map(a => ({
         content: a.answerDescription,
         is_true: (a.answerID === data.correctAnswerID),
       }))
@@ -137,10 +140,14 @@ export const CreateQuestionContent = () => {
       <QuestionListSidebar
         testTitle={testState.testTitle}
         questionList={testState.questionList}
-        isPublished={testState.isPublished}
         setCurrentQuestionID={setCurrentQuestionID}
-        actionTestPublish={actionTestPublish}
-      />
+      >
+        <QuestionListSidebarButton
+          label={'Опубликовать тест'}
+          onClickAction={actionTestPublish}
+          condition={!testState.isPublished}
+        />
+      </QuestionListSidebar>
       <CreateQuestionManager
         key={currentQuestionID}
         currentQuestionID={currentQuestionID}

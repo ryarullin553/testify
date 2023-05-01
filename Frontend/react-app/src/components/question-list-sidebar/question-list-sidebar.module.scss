@@ -22,6 +22,7 @@
 
   li {
     list-style: decimal inside;
+    margin-bottom: 13px;
   }
 }
 
@@ -36,25 +37,4 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.submitTestButton {
-  display: block;
-  margin: 0 auto;
-  padding: 11px 33px;
-  background: #A38FFD;
-  border-radius: 10px;
-
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 17px;
-  color: #FFFFFF;
-  
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    background: #FFFFFF;
-
-    color: #454868;
-  }
 }

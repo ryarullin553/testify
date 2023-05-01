@@ -8,6 +8,7 @@ import { UserActivationPage } from './pages/user-activation-page';
 import { ResetPasswordPage } from './pages/reset-password-page';
 import { EditTestDescriptionPage } from './pages/edit-test-description-page';
 import { ProfileTests } from './pages/profile-tests';
+import { TestPage } from './pages/test-page';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path={AppRoute.Root}>
           <Route index element={<MainPage />}/>
+          <Route path={`${AppRoute.TestMain}/:testID`} element={<TestPage/>}/>
           <Route path={AppRoute.CreateTest} element={<CreateTestPage />} />
           <Route path={AppRoute.EditTest} >
             <Route path={`${AppRoute.EditTest}/:testID`} element={<CreateQuestionPage />} />
