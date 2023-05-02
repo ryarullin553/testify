@@ -9,7 +9,7 @@ class Test(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
     is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
-    author = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, verbose_name='Автор')
+    user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, verbose_name='Автор')
 
     class Meta:
         db_table = 'tests'
