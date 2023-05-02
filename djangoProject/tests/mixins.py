@@ -9,7 +9,7 @@ class APIViewMixin:
         self.check_object_permissions(self.request, instance)
         return instance
 
-    def get_default_saved_serializer(self, data, instance=None, partial=False):
+    def get_saved_serializer(self, data, instance=None, partial=False):
         """Возвращает сохраненный сериализатор, который определен в serializer_class APIView"""
         serializer = self.get_serializer(data=data, instance=instance, partial=partial)
         serializer.is_valid(raise_exception=True)
