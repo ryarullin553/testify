@@ -1,24 +1,30 @@
 import styles from './profile-tests.module.scss';
+import { AppRoute } from '../../const';
+import { api } from '../../store';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
-import { PassedTestComponent } from './passed-test-component/passed-test-component'
 import { TestListProfile } from '../test-list-profile/test-list-profile';
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 
 export const ProfileTestsComponent = () => {
+    const [testList, setTestList] = useState([]);
+    let nextPage = useRef();
+    let isLoading = useRef(false);
+
+    // Список ссылок в подвале плашке
+    const linkList = (id) => ([
+        { key: 1, link: `${AppRoute.EditTestDescription}/${id}`, label: 'Описание' },
+        { key: 2, link: `${AppRoute.EditTest}/${id}`, label: 'Редактировать' },
+    ]);
     // useState
     return (
         <>
             <main className={styles.pageMain}>
-            <ProfileNavigation />
-            <div className={styles.contentForm} action="#" name="temp-name">
-                <h1 className={styles.createTest}>Пройденные</h1>
-                {/* <TestListProfile /> */}
-                <PassedTestComponent />
-                <PassedTestComponent />
-                <PassedTestComponent />
-            </div>
-                
-
+                <ProfileNavigation />
+                <section className={styles.sectionMain}>
+                    <h1>Пройденные</h1>
+                    <TestListProfile testList={testList} linkList={linkList} />
+                </section>
             </main>
         </>
     );
