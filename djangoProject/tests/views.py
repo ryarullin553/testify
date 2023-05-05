@@ -39,7 +39,7 @@ class TestAPIView(viewsets.GenericViewSet, APIViewMixin):
     def get_tests(self, request):
         """Возвращает список тестов, которые создал пользователь"""
         author = request.user
-        author_tests = Test.objects.filter(author=author)
+        author_tests = Test.objects.filter(user=author)
         queryset = self.filter_queryset(author_tests)
         page = self.paginate_queryset(queryset)
         serializer_fields = ('id', 'title', 'description', 'full_description', 'avatar', 'is_published')

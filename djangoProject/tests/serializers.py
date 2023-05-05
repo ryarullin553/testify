@@ -55,9 +55,9 @@ class QuestionSerializer(DynamicFieldsModelSerializer):
 
 
 class TestSerializer(DynamicFieldsModelSerializer):
-    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     question_set = QuestionSerializer(required=False, many=True, fields=('id', 'content', 'answer_set'))
 
     class Meta:
         model = Test
-        fields = ['id', 'title', 'description', 'full_description', 'avatar', 'author', 'is_published', 'question_set']
+        fields = ['id', 'title', 'description', 'full_description', 'avatar', 'user', 'is_published', 'question_set']
