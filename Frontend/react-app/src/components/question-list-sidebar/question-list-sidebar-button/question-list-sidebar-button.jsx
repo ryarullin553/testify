@@ -7,6 +7,6 @@ export const QuestionListSidebarButton = ({onClickAction, label, condition}) => 
   }
 
   return (
-    condition && <button className={styles.submitTestButton} onClick={handleOnClick}>{label}</button>
+    condition && <button className={styles.sidebarButton} onClick={handleOnClick}>{label}</button>
   );
 }
