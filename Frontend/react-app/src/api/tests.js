@@ -18,11 +18,16 @@ export const editTestAction = async (testID, newTestData, config) => {
 }
 
 export const fetchTestDescriptionAction = async (testID) => {
-  const {data} = await api.get(`${BASE_REQUEST}${testID}`);
+  const {data} = await api.get(`${BASE_REQUEST}${testID}/`);
   return data;
 }
 
 export const fetchTestQuestionsAction = async (testID) => {
-  const {data} = await api.get(`${BASE_REQUEST}${testID}/questions`);
+  const {data} = await api.get(`${BASE_REQUEST}${testID}/questions/`);
+  return data;
+}
+
+export const fetchResultsAction = async (testID) => {
+  const {data} = await api.get(`${BASE_REQUEST}${testID}/results/`);
   return data;
 }

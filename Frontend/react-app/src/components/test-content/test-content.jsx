@@ -7,6 +7,8 @@ import { AppRoute } from '../../const';
 import { QuestionArea } from './question-area/question-area';
 import { useImmer } from 'use-immer';
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button';
+import { fetchResultsAction } from '../../api/tests';
+import { createAttemptAction, fetchAttemptAction } from '../../api/results';
 
 export const QUESTION_STATES = {
   NoAnswer: 'noAnswer',
@@ -31,23 +33,17 @@ export const TestContent = () => {
     .findIndex(question => (question.questionID === currentQuestionID));
 
   const fetchActiveAttempt = async (testID) => {
-    const {data} = await api.get(`api/${testID}/results/`);
-    const activeAttempt = data.find(attempt => attempt.is_finished === false);
+    const attemptList = await fetchResultsAction(testID);
+    const activeAttempt = attemptList.find(attempt => attempt.is_finished === false);
     return activeAttempt;
-  }
-
-  const fetchAttemptData = async (attempt) => {
-    const {data} = await api.get(`api/result/${attempt}/`);
-    return data;
   }
   
   const getActiveAttempt = async (testID) => {
     let attempt = await fetchActiveAttempt(testID);
     if (!attempt) {
-      let {data} = await api.post(`api/${testID}/results/`);
-      attempt = data;
+      attempt = await createAttemptAction(testID);
     }
-    const rawData = await fetchAttemptData(attempt.id);
+    const rawData = await fetchAttemptAction(attempt.id);
     const testData = convertDataStC(rawData);
     setTestState(testData);
     setCurrentQuestionID(testData.questionList[0].questionID);
