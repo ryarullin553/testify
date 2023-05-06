@@ -5,7 +5,7 @@ from users.views import *
 
 
 urlpatterns = [
-    path('api/auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 
     path('profile/<int:pk>/', UserAPIView.as_view()),  # get, put, patch

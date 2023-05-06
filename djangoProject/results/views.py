@@ -26,7 +26,7 @@ class ResultAPIView(viewsets.GenericViewSet, APIViewMixin):
         """Возвращает список результатов теста пользователя по принятому test_pk из url"""
         test_pk = kwargs.get('test_pk')
         results = self.queryset.filter(user=request.user, test__pk=test_pk)
-        serializer = self.get_serializer(results, many=True, fields=('id',))
+        serializer = self.get_serializer(results, many=True, fields=('id', 'total'))
         return Response(serializer.data)
 
     def create_result(self, request):
