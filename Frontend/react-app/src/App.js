@@ -9,6 +9,7 @@ import { ResetPasswordPage } from './pages/reset-password-page';
 import { EditTestDescriptionPage } from './pages/edit-test-description-page';
 import { ProfileTests } from './pages/profile-tests';
 import { TestPage } from './pages/test-page';
+import { ErrorPage } from './pages/error-page';
 
 function App() {
   return (
@@ -27,7 +28,8 @@ function App() {
             <Route path={AppRoute.ProfileTests} element={<ProfileTests />} />
           </Route>
           <Route path={AppRoute.UserActivation} element={<UserActivationPage />} />
-          <Route path={AppRoute.PasswordReset} element={<ResetPasswordPage/>} />
+          <Route path={AppRoute.PasswordReset} element={<ResetPasswordPage />} />
+          <Route path='*' element={<ErrorPage />}/>
         </Route>
       </Routes>
     </BrowserRouter>
