@@ -1,10 +1,11 @@
 import { api } from '../store';
 
-const BASE_REQUEST = '/api/questions/';
+const BASE_REQUEST = 'questions/';
 
 export const createQuestionAction = async (newQuestionData) => {
   const {data} = await api.post(BASE_REQUEST, newQuestionData);
-  return data;
+  const newID = data.id;
+  return newID;
 }
 
 export const updateQuestionAction = async (questionID, newQuestionData) => {

@@ -9,7 +9,7 @@ import { api } from '../../store';
 
 export const MyTestsPageContent = () => {
   const [testList, setTestList] = useState([]);
-  const [baseRequest, setBaseRequest] = useState('api/tests/');
+  const [baseRequest, setBaseRequest] = useState('tests/');
   let nextPage = useRef();
   let isLoading = useRef(false);
 

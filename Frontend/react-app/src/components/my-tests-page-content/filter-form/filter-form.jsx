@@ -22,7 +22,7 @@ export const FilterForm = ({setBaseRequest}) => {
   }
 
   const composeRequest = () => {
-    let request = 'api/tests/?';
+    let request = 'tests/?';
     if (searchField) {
       request = request.concat(`search=${searchField}`);
       if (filter !== 'all') {

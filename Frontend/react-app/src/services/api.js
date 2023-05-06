@@ -3,7 +3,7 @@ import axios from 'axios';
 import { StatusCodes } from 'http-status-codes';
 import { processErrorHandle } from './process-error-handler';
 
-const BACKEND_URL = 'http://127.0.0.1:8000'
+const BACKEND_URL = 'http://127.0.0.1:8000/api/'
 const REQUEST_TIMEOUT = 5000;
 
 const StatusCodeMapping = {

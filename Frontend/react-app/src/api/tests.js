@@ -1,6 +1,6 @@
 import { api } from '../store';
 
-const BASE_REQUEST = '/api/tests/';
+const BASE_REQUEST = 'tests/';
 
 export const fetchUserTests = async () => {
   const {data} = await api.get(BASE_REQUEST);
