@@ -34,7 +34,7 @@ class TestAPIView(viewsets.GenericViewSet, APIViewMixin):
     def create_test(self, request):
         """Создает тест на основе переданного JSON"""
         serializer = self.get_saved_serializer(request.data)
-        return Response(serializer.data['id'], status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def get_tests(self, request):
         """Возвращает список тестов, которые создал пользователь"""
@@ -82,8 +82,8 @@ class QuestionAPIView(viewsets.GenericViewSet, APIViewMixin):
 
     def create_question(self, request):
         """Создает вопрос с ответами на основе переданного JSON"""
-        self.get_saved_serializer(request.data)
-        return Response(status=status.HTTP_201_CREATED)
+        serializer = self.get_saved_serializer(request.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update_question(self, request, **kwargs):
         """Обновляет вопрос и пересоздает его ответы на основе переданного JSON"""

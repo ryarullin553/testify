@@ -9,7 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='users/main-page.html')),
 
-    path('', include('users.urls')),
+    path('api/', include('users.urls')),
     path('api/', include('tests.urls')),
     path('api/', include('results.urls')),
 ]

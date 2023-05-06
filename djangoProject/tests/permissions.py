@@ -6,13 +6,13 @@ class IsTestAuthor(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in ('GET', 'POST', 'HEAD', 'OPTIONS'):
             return True
-        return obj.author == request.user
+        return obj.user == request.user
 
 
 class IsQuestionAuthor(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.method in ('GET', 'POST', 'HEAD', 'OPTIONS'):
-            return obj.author == request.user
+            return obj.user == request.user
         else:
-            return obj.test.author == request.user
+            return obj.test.user == request.user
