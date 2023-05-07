@@ -3,7 +3,7 @@ import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { useState } from 'react';
 
-export const ProfileBookmarkPage = () => {
+export const ProfileBookmarkPageComponent = () => {
     const [testList, setTestList] = useState([]);
 
     return (

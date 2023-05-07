@@ -1,13 +1,13 @@
 import { Footer } from '../components/footer/footer';
-import { ProfileBookmarkPage } from '../components/profile-bookmarks-page/profile-bookmark-page-component'
+import { ProfilePageComponent } from '../components/profile-page/profile-page-component';
 import { Header } from '../components/header/header';
 
-export const Favorites = () => {
+export const ProfilePage = () => {
     
     return (
         <>
             <Header />
-            <ProfileBookmarkPage  />
+            <ProfilePageComponent />
             <Footer />
         </>
     );
