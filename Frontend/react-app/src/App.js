@@ -4,6 +4,7 @@ import { CreateTestPage } from './pages/create-test-page';
 import { MainPage } from "./pages/main-page";
 import { AppRoute } from './const';
 import { MyTestsPage } from './pages/my-tests-page';
+import { Favorites } from './pages/favorites';
 import { UserActivationPage } from './pages/user-activation-page';
 import { ResetPasswordPage } from './pages/reset-password-page';
 import { EditTestDescriptionPage } from './pages/edit-test-description-page';
@@ -22,6 +23,7 @@ function App() {
           </Route>
           <Route path={AppRoute.Profile}>
             <Route path={AppRoute.MyTests} element={<MyTestsPage />} />
+            <Route path={AppRoute.Favorites} element={<Favorites />} />
             <Route path={AppRoute.ProfileTests} element={<ProfileTests />} />
           </Route>
           <Route path={AppRoute.UserActivation} element={<UserActivationPage />} />

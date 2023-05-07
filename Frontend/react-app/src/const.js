@@ -5,6 +5,7 @@ export const AppRoute = {
   EditTestDescription: '/edit-test/description',
   Profile: '/profile',
   MyTests: '/profile/my-tests',
+  Favorites: '/profile/favorites',
   UserActivation: '/activate/:uid/:token',
   PasswordReset: '/password/reset/confirm/:uid/:token',
   ProfileTests: '/profile/tests',

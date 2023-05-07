@@ -16,7 +16,7 @@ export const ProfileNavigation = () => {
           <NavLink to={AppRoute.MyTests} className={({isActive}) => isActive && styles.activeLink}>Мои тесты</NavLink>
         </li>
         <li>
-          <a href="#">Избранное</a>
+        <NavLink to={AppRoute.Favorites} className={({isActive}) => isActive && styles.activeLink}>Избранное</NavLink>
         </li>
         <li>
           <a href="#">Настройки</a>
