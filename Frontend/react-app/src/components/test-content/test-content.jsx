@@ -1,14 +1,14 @@
 import { useNavigate, useParams } from 'react-router';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import styles from './test-content.module.scss';
-import { api } from '../../store';
 import { useEffect, useState } from 'react';
 import { AppRoute } from '../../const';
 import { QuestionArea } from './question-area/question-area';
 import { useImmer } from 'use-immer';
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button';
 import { fetchResultsAction } from '../../api/tests';
-import { createAttemptAction, fetchAttemptAction } from '../../api/results';
+import { createAttemptAction, fetchAttemptAction, submitAttemptAction } from '../../api/results';
+import { submitAnswerAction, updateAnswerAction } from '../../api/answers';
 
 export const QUESTION_STATES = {
   NoAnswer: 'noAnswer',
@@ -24,7 +24,7 @@ export const TestContent = () => {
 
   useEffect(() => {
     getActiveAttempt(testID);
-  }, []);
+  }, );
 
   const getCurrentQuestionData = (state, currentQuestionID) => state.questionList
     .find(question => (question.questionID === currentQuestionID));
@@ -34,7 +34,7 @@ export const TestContent = () => {
 
   const fetchActiveAttempt = async (testID) => {
     const attemptList = await fetchResultsAction(testID);
-    const activeAttempt = attemptList.find(attempt => attempt.is_finished === false);
+    const activeAttempt = attemptList.find(a => (!a.total));
     return activeAttempt;
   }
   
@@ -56,22 +56,24 @@ export const TestContent = () => {
   }
 
   const submitNewAnswer = async (questionID, answerID) => {
-    const {data} = await api.post('api/add_anwser/', {
+    const answerData = {
       result: testState.attemptID,
       answer: answerID,
-    })
+    }
+    const {id} = await submitAnswerAction(answerData);
     setTestState(draft => {
-      draft.questionList[getCurrentQuestionIndex(testState, questionID)].selectedAnswer.dbEntry = data.id;
+      draft.questionList[getCurrentQuestionIndex(testState, questionID)].selectedAnswer.dbEntry = id;
     })
   }
 
   const submitUpdatedAnswer = async (questionData) => {
     const dbEntry = questionData.selectedAnswer.dbEntry;
     const answerID = questionData.selectedAnswer.answerID;
-    await api.patch(`api/update_anwser/${dbEntry}/`, {
+    const payload = {
       result: testState.attemptID,
       answer: answerID,
-    })
+    }
+    await updateAnswerAction(dbEntry, payload);
   }
 
   const setQuestionState = (newState) => {
@@ -88,27 +90,27 @@ export const TestContent = () => {
   }
 
   const submitAttempt = async () => {
-    await api.patch(`api/update_result/${testState.attemptID}/`, {is_finished: true});
+    await submitAttemptAction(testState.attemptID);
     navigate(AppRoute.Root);
   }
 
   const convertDataStC = (data) => {
     const convertedData = {
-      testTitle: data.test_title,
-      attemptID: data.result_id,
-      questionList: data.questions.map(q => ({
+      testTitle: data.passage.test_title,
+      attemptID: data.id,
+      questionList: data.passage.question_set.map(q => ({
         questionID: q.id,
         questionDescription: q.content,
-        questionState: q.choiced_answers[0] ? QUESTION_STATES.Submitted : QUESTION_STATES.NoAnswer,
+        questionState: q.choiced_answer ? QUESTION_STATES.Submitted : QUESTION_STATES.NoAnswer,
         answerList: q.answer_set.map(a => ({
           answerID: a.id,
           answerDescription: a.content,
         })),
         selectedAnswer: 
-          q.choiced_answers[0]
+          q.choiced_answer
           ? {
-            answerID: q.choiced_answers[0].answer,
-            dbEntry: q.choiced_answers[0].id,
+            answerID: q.choiced_answer.answer,
+            dbEntry: q.choiced_answer.id,
           }
           : {},
       })),

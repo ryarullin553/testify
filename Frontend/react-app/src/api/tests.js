@@ -18,7 +18,7 @@ export const editTestAction = async (testID, newTestData, config) => {
 }
 
 export const fetchTestDescriptionAction = async (testID) => {
-  const {data} = await api.get(`${BASE_REQUEST}${testID}/`);
+  const {data} = await api.get(`${BASE_REQUEST}${testID}/description/`);
   return data;
 }
 
