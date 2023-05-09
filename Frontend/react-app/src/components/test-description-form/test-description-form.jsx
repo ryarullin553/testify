@@ -63,7 +63,7 @@ export const TestDescriptionForm = ({testID}) => {
   }
 
   const fetchTestData = async () => {
-    const data = fetchTestDescriptionAction(testID);
+    const data = await fetchTestDescriptionAction(testID);
     const convertedData = convertTestDataStC(data);
     setFormData(convertedData);
   }

@@ -27,17 +27,13 @@ export const CreateQuestionContent = () => {
   }, []);
 
   const fetchTestData = async () => {
-    try {
-      const data = await fetchTestQuestionsAction(testID);
-      const convertedData = convertTestDataStC(data, testID);
-      setTestState(convertedData);
-      if (convertedData.questionList.length === 0) {
-        actionQuestionAdd();
-      }
-      setCurrentQuestionID(convertedData.questionList[0].questionID);
-    } catch (err) {
-      return;
+    const data = await fetchTestQuestionsAction(testID);
+    const convertedData = convertTestDataStC(data, testID);
+    setTestState(convertedData);
+    if (convertedData.questionList.length === 0) {
+      actionQuestionAdd();
     }
+    setCurrentQuestionID(convertedData.questionList[0].questionID);
   }
 
   const actionQuestionUpdate = async (updatedQuestionData) => {
@@ -53,15 +49,15 @@ export const CreateQuestionContent = () => {
 
   const actionQuestionSave = async (updatedQuestionData) => {
     const convertedData = convertQuestionDataCtS(updatedQuestionData);
-    const data = await createQuestionAction(convertedData);
-    const newID = data.id;
-    console.log(newID);
+    const data = await createQuestionAction({...convertedData, test: testID});
+    const newID = data;
     setTestState(draft => {
       draft.questionList
         .splice(draft.questionList
           .findIndex(question => (question.questionID === currentQuestionID)),
           1, {...updatedQuestionData, questionID: newID});
     });
+    setCurrentQuestionID(newID);
   }
 
   const actionQuestionAdd = () => {
@@ -80,14 +76,10 @@ export const CreateQuestionContent = () => {
   }
 
   const actionTestPublish = async () => {
-    try {
-      await editTestAction(testID, {is_published: true});
-      setTestState(draft => {
-        draft.isPublished = true;
-      });
-    } catch {
-      return;
-    }
+    await editTestAction(testID, {is_published: true});
+    setTestState(draft => {
+      draft.isPublished = true;
+    });
   }
 
   const actionQuestionDelete = async () => {
@@ -123,7 +115,6 @@ export const CreateQuestionContent = () => {
 
   const convertQuestionDataCtS = (data) => {
     const convertedData = {
-      test: testID,
       content: data.questionDescription,
       answer_set: data.answerList.map(a => ({
         content: a.answerDescription,
