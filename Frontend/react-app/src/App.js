@@ -11,15 +11,17 @@ import { ProfileTests } from './pages/profile-tests';
 import { TestPage } from './pages/test-page';
 import { ErrorPage } from './pages/error-page';
 import { ResultsPage } from './pages/results-page';
+import { CatalogPage } from './pages/catalog-page';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={AppRoute.Root}>
-          <Route index element={<MainPage />}/>
-          <Route path={`${AppRoute.TestMain}/:testID`} element={<TestPage/>}/>
-          <Route path={`${AppRoute.Results}/:attemptID`} element={<ResultsPage/>}/>
+          <Route index element={<MainPage />} />
+          <Route path={AppRoute.Catalog} element={<CatalogPage/>} />
+          <Route path={`${AppRoute.TestMain}/:testID`} element={<TestPage/>} />
+          <Route path={`${AppRoute.Results}/:attemptID`} element={<ResultsPage/>} />
           <Route path={AppRoute.CreateTest} element={<CreateTestPage />} />
           <Route path={AppRoute.EditTest} >
             <Route path={`${AppRoute.EditTest}/:testID`} element={<CreateQuestionPage />} />
@@ -31,7 +33,7 @@ function App() {
           </Route>
           <Route path={AppRoute.UserActivation} element={<UserActivationPage />} />
           <Route path={AppRoute.PasswordReset} element={<ResetPasswordPage />} />
-          <Route path='*' element={<ErrorPage />}/>
+          <Route path='*' element={<ErrorPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
