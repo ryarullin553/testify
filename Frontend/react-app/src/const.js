@@ -9,6 +9,7 @@ export const AppRoute = {
   PasswordReset: '/password/reset/confirm/:uid/:token',
   ProfileTests: '/profile/tests',
   TestMain: '/test',
+  Results: '/results',
 }
 
 export const TIMEOUT_SHOW_ERROR = 5000;
