@@ -1,30 +1,25 @@
 import { QUESTION_STATES } from '../test-content';
 import styles from './question-area.module.scss';
 
-export const QuestionArea = ({questionData, questionIndex, changeCorrectAnswer, submitNewAnswer, submitUpdatedAnswer, gotoNextQuestion, setQuestionState}) => {
+export const QuestionArea = ({
+  children,
+  questionData,
+  questionIndex,
+  changeCorrectAnswer,
+  setQuestionState,
+  isTogglable,
+}) => {
   const isChecked = (answerID) => (!!questionData.selectedAnswer && answerID === questionData.selectedAnswer.answerID);
 
   const handleRadioToggle = (evt) => {
+    if (!isTogglable) {
+      evt.preventDefault();
+      return;
+    }
     const {value} = evt.target;
     const numVal = Number(value);
     changeCorrectAnswer(questionData.questionID, numVal);
     setQuestionState(QUESTION_STATES.PendingAnswer);
-  }
-
-  const handleSubmitClick = async (evt) => {
-    evt.preventDefault();
-    if (questionData.selectedAnswer.dbEntry) {
-      await submitUpdatedAnswer(questionData);
-    } else {
-      await submitNewAnswer(questionData.questionID, questionData.selectedAnswer.answerID);
-    }
-    setQuestionState(QUESTION_STATES.Submitted);
-    gotoNextQuestion();
-  }
-
-  const handleNextClick = (evt) => {
-    evt.preventDefault();
-    gotoNextQuestion();
   }
 
   return (
@@ -49,14 +44,7 @@ export const QuestionArea = ({questionData, questionIndex, changeCorrectAnswer, 
           )}
         </ul>
       </form>
-        <div className={styles.questionControls}>
-          <button
-            onClick={handleSubmitClick}
-          >Ответить</button>
-          <button
-            onClick={handleNextClick}
-          >Следующий вопрос</button>
-        </div>
+      {children}
     </section>
   );
 }

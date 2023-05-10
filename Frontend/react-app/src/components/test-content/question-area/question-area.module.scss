@@ -45,33 +45,3 @@
     margin-right: 9px;
   }
 }
-
-.questionControls {
-  margin-top: 30px;
-  display: flex;
-  justify-content: space-between;
-
-  button {
-    padding: 9px 34px;
-    border: 2px solid #A38FFD;
-
-    display: flex;
-    box-sizing: border-box;
-    background: #A38FFD;
-    border-radius: 5px;
-    color: #FFFFFF;
-
-    transition: all 0.2s ease-in-out;
-  
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
-  
-    &:hover {
-      background: #FFFFFF;
-      border: 2px solid #A38FFD;
-  
-      color: #A38FFD;
-    }
-  }
-}

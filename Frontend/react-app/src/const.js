@@ -11,6 +11,5 @@ export const AppRoute = {
   TestMain: '/test',
   Results: '/results',
   Catalog: '/catalog',
-}
 
 export const TIMEOUT_SHOW_ERROR = 5000;

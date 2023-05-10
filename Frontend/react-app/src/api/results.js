@@ -13,5 +13,5 @@ export const createAttemptAction = async (testID) => {
 }
 
 export const submitAttemptAction = async (attemptID) => {
-  api.patch(`${BASE_REQUEST}${attemptID}/`);
+  await api.patch(`${BASE_REQUEST}${attemptID}/`);
 }
