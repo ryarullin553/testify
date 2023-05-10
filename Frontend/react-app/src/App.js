@@ -10,6 +10,7 @@ import { EditTestDescriptionPage } from './pages/edit-test-description-page';
 import { ProfileTests } from './pages/profile-tests';
 import { TestPage } from './pages/test-page';
 import { ErrorPage } from './pages/error-page';
+import { ResultsPage } from './pages/results-page';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path={AppRoute.Root}>
           <Route index element={<MainPage />}/>
           <Route path={`${AppRoute.TestMain}/:testID`} element={<TestPage/>}/>
+          <Route path={`${AppRoute.Results}/:attemptID`} element={<ResultsPage/>}/>
           <Route path={AppRoute.CreateTest} element={<CreateTestPage />} />
           <Route path={AppRoute.EditTest} >
             <Route path={`${AppRoute.EditTest}/:testID`} element={<CreateQuestionPage />} />

@@ -9,11 +9,14 @@ import { QuestionListSidebarButton } from '../question-list-sidebar/question-lis
 import { fetchResultsAction } from '../../api/tests';
 import { createAttemptAction, fetchAttemptAction, submitAttemptAction } from '../../api/results';
 import { submitAnswerAction, updateAnswerAction } from '../../api/answers';
+import { QuestionControls } from '../question-controls/question-controls';
 
 export const QUESTION_STATES = {
   NoAnswer: 'noAnswer',
   PendingAnswer: 'pendingAnswer',
   Submitted: 'submitted',
+  Correct: 'correct',
+  Incorrect: 'incorrect',
 }
 
 export const TestContent = () => {
@@ -24,7 +27,7 @@ export const TestContent = () => {
 
   useEffect(() => {
     getActiveAttempt(testID);
-  }, );
+  }, []);
 
   const getCurrentQuestionData = (state, currentQuestionID) => state.questionList
     .find(question => (question.questionID === currentQuestionID));
@@ -91,12 +94,12 @@ export const TestContent = () => {
 
   const submitAttempt = async () => {
     await submitAttemptAction(testState.attemptID);
-    navigate(AppRoute.Root);
+    navigate(`${AppRoute.Results}/${testState.attemptID}`);
   }
 
   const convertDataStC = (data) => {
     const convertedData = {
-      testTitle: data.passage.test_title,
+      testTitle: data.passage.title,
       attemptID: data.id,
       questionList: data.passage.question_set.map(q => ({
         questionID: q.id,
@@ -137,11 +140,17 @@ export const TestContent = () => {
         questionData={getCurrentQuestionData(testState, currentQuestionID)}
         questionIndex={getCurrentQuestionIndex(testState, currentQuestionID)}
         changeCorrectAnswer={changeCorrectAnswer}
-        submitNewAnswer={submitNewAnswer}
-        submitUpdatedAnswer={submitUpdatedAnswer}
-        gotoNextQuestion={gotoNextQuestion}
         setQuestionState={setQuestionState}
-      />
+        isTogglable
+      >
+        <QuestionControls
+          questionData={getCurrentQuestionData(testState, currentQuestionID)}
+          submitNewAnswer={submitNewAnswer}
+          submitUpdatedAnswer={submitUpdatedAnswer}
+          gotoNextQuestion={gotoNextQuestion}
+          setQuestionState={setQuestionState}
+        />
+      </QuestionArea>
     </main>
   );
 }

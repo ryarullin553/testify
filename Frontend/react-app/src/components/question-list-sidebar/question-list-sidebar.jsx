@@ -16,6 +16,10 @@ export const QuestionListSidebar = ({testTitle, questionList, setCurrentQuestion
         return '#A5A5A5';
       case QUESTION_STATES.PendingAnswer:
         return 'yellow';
+      case QUESTION_STATES.Correct:
+        return 'lightgreen';
+      case QUESTION_STATES.Incorrect:
+        return 'red';
       default: return '';
     }
   }
