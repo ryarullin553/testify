@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'tests.apps.TestsConfig',
     'results.apps.ResultsConfig',
     'user_relations.apps.UserRelationsConfig',
+    'catalog.apps.CatalogConfig',
 ]
 
 MIDDLEWARE = [
