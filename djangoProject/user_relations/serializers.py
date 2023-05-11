@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from tests.serializers import TestSerializer
-from .models import Bookmark
+from .models import Bookmark, Feedback
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
@@ -15,3 +15,11 @@ class BookmarkSerializer(serializers.ModelSerializer):
         test_data = TestSerializer(instance.test, fields=('id', 'title', 'avatar')).data
         representation['test'] = test_data
         return representation
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Feedback
+        fields = ['id', 'user', 'test', 'content', 'rate']
