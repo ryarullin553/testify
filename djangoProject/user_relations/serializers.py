@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from tests.serializers import TestSerializer
-from .models import Bookmark, Feedback, Comment
+from .models import Bookmark, Feedback, Comment, LikeDislike
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
@@ -31,3 +31,11 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'user', 'question', 'content', 'time_create']
+
+
+class LikeDislikeSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = LikeDislike
+        fields = ['id', 'user', 'question', 'is_like']

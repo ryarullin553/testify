@@ -1,11 +1,12 @@
+from django.http import JsonResponse
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import OrderingFilter
 
 from tests.paginations import TestPagination
-from .models import Bookmark, Feedback, Comment
+from .models import Bookmark, Feedback, Comment, LikeDislike
 from .permissions import IsOwner
-from .serializers import BookmarkSerializer, FeedbackSerializer, CommentSerializer
+from .serializers import BookmarkSerializer, FeedbackSerializer, CommentSerializer, LikeDislikeSerializer
 
 
 class BookmarkAPIView(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
@@ -42,4 +43,17 @@ class CommentAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
+
+
+class LikeDislikeAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                         viewsets.GenericViewSet):
+    queryset = LikeDislike.objects
+    serializer_class = LikeDislikeSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.queryset.filter(question=request.data['question_id'])
+        likes = queryset.filter(is_like=True).count()
+        dislikes = queryset.filter(is_like=False).count()
+        return JsonResponse({'likes': likes, 'dislikes': dislikes})
 
