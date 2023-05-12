@@ -22,7 +22,7 @@ class Feedback(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     question = models.ForeignKey('tests.Question', on_delete=models.CASCADE)
     content = models.TextField()
     time_create = models.DateTimeField(auto_now_add=True)
