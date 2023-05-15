@@ -5,6 +5,7 @@ import { MainPage } from "./pages/main-page";
 import { AppRoute } from './const';
 import { MyTestsPage } from './pages/my-tests-page';
 import { ProfilePage } from './pages/profile_page';
+import { ProfileSettingPage } from './pages/profile_settings_page'
 
 import { UserActivationPage } from './pages/user-activation-page';
 import { ResetPasswordPage } from './pages/reset-password-page';
@@ -28,6 +29,8 @@ function App() {
             <Route path={AppRoute.MyTests} element={<MyTestsPage />} />
             <Route path={AppRoute.ProfileTests} element={<ProfileTests />} />
             <Route path={AppRoute.ProfileBookmarkPage} element={<ProfileBookmarkPage />} />
+            <Route path={AppRoute.ProfileSettingPage} element={<ProfileSettingPage />} />
+
           </Route>
           <Route path={AppRoute.UserActivation} element={<UserActivationPage />} />
           <Route path={AppRoute.PasswordReset} element={<ResetPasswordPage/>} />

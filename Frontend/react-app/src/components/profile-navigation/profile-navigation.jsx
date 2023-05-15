@@ -19,7 +19,7 @@ export const ProfileNavigation = () => {
         <NavLink to={AppRoute.ProfileBookmarkPage} className={({isActive}) => isActive && styles.activeLink}>Избранное</NavLink>
         </li>
         <li>
-          <a href="#">Настройки</a>
+        <NavLink to={AppRoute.ProfileSettingPage} className={({isActive}) => isActive && styles.activeLink}>Настройки</NavLink>
         </li>
       </ul>
     </section>

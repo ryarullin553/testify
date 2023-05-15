@@ -7,9 +7,11 @@ export const AppRoute = {
   Profile: '/profile',
   MyTests: '/profile/my-tests',
   ProfileBookmarkPage: '/profile/profile-bookmark-page',
+  ProfileSettingPage: '/profile/profile-setting-page',
   UserActivation: '/activate/:uid/:token',
   PasswordReset: '/password/reset/confirm/:uid/:token',
   ProfileTests: '/profile/tests',
+  ProfileSettingPage: '/profile/'
   
 }
 
