@@ -1,0 +1,43 @@
+.controls {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+
+    button {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        background: #FFFFFF;
+        border-radius: 5px;
+        color: #282B41;
+    }
+
+    svg {
+        margin-left: 7px;
+    }
+}
+
+.button {
+    padding: 4px 5px;
+    border: 2px solid #282B41;
+    font-weight: 400;
+    font-size: 14px;
+    
+    -webkit-transition: color 0, 5s;
+    -moz-transition: color 0, 5s;
+    -ms-transition: color 0, 5s;
+    -o-transition: color 0, 5s;
+    transition: color 0, 5s;
+
+    &:hover {
+        background: #282B41;
+        border: 2px solid #282B41;
+
+        color: #FFFFFF;
+
+        &::after {
+            border: solid 1px #282B41 4s;
+            border-width: 0 2px 2px 0;
+        }
+    }
+}
