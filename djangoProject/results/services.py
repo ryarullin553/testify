@@ -1,3 +1,5 @@
+from django.db.models import Avg, FloatField
+from django.db.models.functions import Cast
 from pytz import timezone
 from datetime import datetime
 from .serializers import ChoicedAnswerSerializer
@@ -20,6 +22,8 @@ def get_total_data(result):
         'score': score,
     }
 
+    total_data.update(get_average_score(result))
+
     return total_data
 
 
@@ -38,6 +42,15 @@ def get_score(correct_answers, questions_count):
     except ZeroDivisionError:
         score = 0
     return score
+
+
+def get_average_score(result):
+    """Вычисляет средний процент прохождения теста всех пользователей"""
+    test = result.test
+    finished_results = test.result_set.exclude(total=None)
+    total_scores = finished_results.annotate(total_score=Cast('total__score', output_field=FloatField()))
+    average_score = total_scores.aggregate(average_score=Avg('total_score'))
+    return average_score
 
 
 def update_result_passage(choiced_answer):
