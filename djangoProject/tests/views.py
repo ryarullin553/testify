@@ -1,14 +1,13 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets
 
 from .mixins import APIViewMixin
 from .models import Test, Question
-from .paginations import TestPagination
 from .permissions import IsTestAuthor, IsQuestionAuthor
 from .serializers import TestSerializer, QuestionSerializer
 
@@ -16,11 +15,11 @@ from .serializers import TestSerializer, QuestionSerializer
 class TestAPIView(viewsets.GenericViewSet, APIViewMixin):
     queryset = Test.objects
     serializer_class = TestSerializer
-    permission_classes = (IsAuthenticated, IsTestAuthor)
-    filter_backends = [SearchFilter, DjangoFilterBackend]
+    permission_classes = [IsAuthenticated, IsTestAuthor]
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     search_fields = ['title']
     filterset_fields = ['is_published']
-    pagination_class = TestPagination
+    ordering = 'time_create'
 
     def create_test(self, request):
         """Создает тест на основе переданного JSON"""

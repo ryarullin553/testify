@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from rest_framework import status, viewsets
+from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -14,7 +15,9 @@ from tests.mixins import APIViewMixin
 class ResultAPIView(viewsets.GenericViewSet, APIViewMixin):
     queryset = Result.objects
     serializer_class = ResultSerializer
-    permission_classes = (IsAuthenticated, IsUserResult)
+    permission_classes = [IsAuthenticated, IsUserResult]
+    filter_backends = [OrderingFilter]
+    ordering = 'time_create'
 
     def get_result(self, request, **kwargs):
         """Возвращает результат теста по принятому pk из url"""
@@ -26,8 +29,9 @@ class ResultAPIView(viewsets.GenericViewSet, APIViewMixin):
         """Возвращает список результатов теста пользователя по принятому test_pk из url"""
         test_pk = kwargs.get('test_pk')
         results = self.queryset.filter(user=request.user, test__pk=test_pk)
-        serializer = self.get_serializer(results, many=True, fields=('id', 'total'))
-        return Response(serializer.data)
+        page = self.paginate_queryset(results)
+        serializer = self.get_serializer(page, many=True, fields=('id', 'total'))
+        return self.get_paginated_response(serializer.data)
 
     def create_result(self, request):
         """Создает результат по принятому id теста из JSON"""

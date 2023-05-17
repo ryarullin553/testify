@@ -3,7 +3,6 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 
 from catalog.serializers import CatalogSerializer
 from tests.models import Test
-from tests.paginations import TestPagination
 
 
 class CatalogAPIView(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -12,7 +11,7 @@ class CatalogAPIView(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['title', 'description']
     ordering_fields = ['time_create']
-    pagination_class = TestPagination
+    ordering = 'time_create'
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())

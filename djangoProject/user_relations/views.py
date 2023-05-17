@@ -3,7 +3,6 @@ from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import OrderingFilter
 
-from tests.paginations import TestPagination
 from .models import Bookmark, Feedback, Comment, LikeDislike
 from .permissions import IsOwner
 from .serializers import BookmarkSerializer, FeedbackSerializer, CommentSerializer, LikeDislikeSerializer
@@ -13,7 +12,8 @@ class BookmarkAPIView(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewset
     queryset = Bookmark.objects
     serializer_class = BookmarkSerializer
     permission_classes = [IsAuthenticated, IsOwner]
-    pagination_class = TestPagination
+    filter_backends = [OrderingFilter]
+    ordering = 'id'
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.queryset.filter(user=request.user))
@@ -33,10 +33,10 @@ class CommentAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
                      viewsets.GenericViewSet):
     queryset = Comment.objects
     serializer_class = CommentSerializer
-    filter_backends = [OrderingFilter, ]
     permission_classes = [IsAuthenticated, IsOwner]
+    filter_backends = [OrderingFilter]
     ordering_fields = ['time_create']
-    pagination_class = TestPagination
+    ordering = 'time_create'
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.queryset.filter(question=request.data['question_id']))
