@@ -1,28 +1,29 @@
 from rest_framework import serializers
-from tests.serializers import TestSerializer
 from .models import Bookmark, Feedback, Comment, LikeDislike
+import locale
+
+locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    title = serializers.CharField(source='test.title', read_only=True)
+    avatar = serializers.ImageField(source='test.avatar', read_only=True)
 
     class Meta:
         model = Bookmark
-        fields = ['id', 'user', 'test']
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        test_data = TestSerializer(instance.test, fields=('id', 'title', 'avatar')).data
-        representation['test'] = test_data
-        return representation
+        fields = ['user', 'test', 'title', 'avatar']
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user_name = serializers.CharField(source='user.username', read_only=True)
+    created = serializers.DateTimeField(format='%d %b. %Y г.', read_only=True)
 
     class Meta:
         model = Feedback
-        fields = ['id', 'user', 'test', 'content', 'rate']
+        fields = ['user', 'test', 'rate', 'content', 'user_name', 'created']
+        extra_kwargs = {'test': {'write_only': True}}
 
 
 class CommentSerializer(serializers.ModelSerializer):

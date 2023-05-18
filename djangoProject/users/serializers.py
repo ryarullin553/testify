@@ -25,4 +25,4 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'avatar', 'bio', 'created_tests', 'unfinished_tests', 'finished_tests']
+        fields = ['id', 'username', 'avatar', 'bio', 'created_tests', 'unfinished_tests', 'finished_tests']

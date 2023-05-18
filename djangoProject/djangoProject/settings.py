@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'tests.apps.TestsConfig',
     'results.apps.ResultsConfig',
     'user_relations.apps.UserRelationsConfig',
-    'catalog.apps.CatalogConfig',
 ]
 
 MIDDLEWARE = [
@@ -156,6 +155,8 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
     'PAGE_SIZE': 15,
+
+    'DATETIME_FORMAT': "%d.%m.%Y %H:%M:%S"
 
 }
 

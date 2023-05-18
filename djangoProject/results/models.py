@@ -4,7 +4,7 @@ from django.db import models
 class Result(models.Model):
     """Результат теста пользователя"""
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    test = models.ForeignKey('tests.Test', on_delete=models.CASCADE, limit_choices_to={'is_published': True})
+    test = models.ForeignKey('tests.Test', on_delete=models.CASCADE, limit_choices_to={'is_published': True}, related_name='results')
     time_create = models.DateTimeField(auto_now_add=True)
     passage = models.JSONField(null=True)
     total = models.JSONField(null=True)
