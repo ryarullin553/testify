@@ -35,8 +35,8 @@ class CommentAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated, IsOwner]
     filter_backends = [OrderingFilter]
-    ordering_fields = ['time_create']
-    ordering = 'time_create'
+    ordering_fields = ['created']
+    ordering = 'created'
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.queryset.filter(question=request.data['question_id']))

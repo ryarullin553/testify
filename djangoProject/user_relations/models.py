@@ -27,8 +27,8 @@ class Comment(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     question = models.ForeignKey('tests.Question', on_delete=models.CASCADE)
     content = models.TextField()
-    time_create = models.DateTimeField(auto_now_add=True)
-    time_update = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'comments'

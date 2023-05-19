@@ -28,10 +28,14 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user_name = serializers.CharField(read_only=True, source='user.username')
+    user_avatar = serializers.ImageField(read_only=True, source='user.avatar')
+    created = serializers.DateTimeField(format='%d %b. %Y г.', read_only=True)
 
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'question', 'content', 'time_create']
+        fields = ['id', 'user', 'question', 'user_name', 'user_avatar', 'created', 'content']
+        extra_kwargs = {'question': {'write_only': True}}
 
 
 class LikeDislikeSerializer(serializers.ModelSerializer):
