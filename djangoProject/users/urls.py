@@ -1,10 +1,9 @@
-from django.contrib.auth import views
 from django.urls import path, re_path, include
 from rest_framework import routers
-from users.views import *
+from users.views import UserAPIView
 
 router = routers.SimpleRouter()
-router.register(r'profile', UserAPIView)
+router.register(r'users', UserAPIView)
 
 urlpatterns = [
     path('auth/', include('djoser.urls')),

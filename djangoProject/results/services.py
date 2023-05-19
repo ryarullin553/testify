@@ -47,7 +47,7 @@ def get_score(correct_answers, questions_count):
 def get_average_score(result):
     """Вычисляет средний процент прохождения теста всех пользователей"""
     test = result.test
-    finished_results = test.result_set.exclude(total=None)
+    finished_results = test.results.exclude(total=None)
     total_scores = finished_results.annotate(total_score=Cast('total__score', output_field=FloatField()))
     average_score = total_scores.aggregate(average_score=Avg('total_score'))
     return average_score
