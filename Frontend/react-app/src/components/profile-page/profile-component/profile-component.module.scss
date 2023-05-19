@@ -1,9 +1,12 @@
-.page-main {
-    width: 1300px;
-    margin: 0 auto;
-    flex-grow: 1;
-    display: flex;
-    justify-content: space-between;
+.sectionMain {
+    box-sizing: border-box;
+    margin-top: 19px;
+    margin-left: 92px;
+    margin-bottom: 50px;
+    width: 992px;
+    padding: 0 21px;
+    h1 {
+    margin-left: 0;
     h1 {
         margin-bottom: 32px;
 
@@ -11,6 +14,7 @@
         line-height: 31px;
         font-weight: 600;
         color: #222222;
+    }
     }
 }
 

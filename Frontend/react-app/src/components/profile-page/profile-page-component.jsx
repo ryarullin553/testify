@@ -2,7 +2,7 @@ import styles from './profile-page-component.module.scss';
 import { ProfileComponent } from './profile-component/profile-component';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
-import { ShowMoreButton } from './show-more-button/show-more-button'
+import { ShowMoreButton } from './show-more-button/show-more-button';
 import { useState } from 'react';
 import { AppRoute } from '../../const';
 
@@ -25,14 +25,7 @@ export const ProfilePageComponent = () => {
         <>
             <main className={styles.pageMain}>
                 <ProfileNavigation />
-                <section className={styles.sectionMain}>
-                    <ProfileComponent />
-                    <h1>Прохожу сейчас</h1>
-                    <TestListProfile testList={recentTestList} linkList={linkListTest} />
-                    <h1>Пройденные</h1>
-                    <TestListProfile testList={testList} linkList={linkList} />
-                    <ShowMoreButton />
-                </section>
+                <ProfileComponent />
             </main>
         </>
     );
