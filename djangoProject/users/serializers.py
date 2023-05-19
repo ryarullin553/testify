@@ -13,13 +13,13 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
     @staticmethod
     def get_finished_tests(user):
-        tests = Test.objects.filter(result__user=user, result__total__isnull=False).distinct()
+        tests = Test.objects.filter(results__user=user, results__total__isnull=False).distinct()
         serializer = TestSerializer(tests, many=True, read_only=True, fields=('id', 'title', 'avatar'))
         return serializer.data
 
     @staticmethod
     def get_unfinished_tests(user):
-        tests = Test.objects.filter(~Q(result__total__isnull=False), result__user=user).distinct()
+        tests = Test.objects.filter(~Q(results__total__isnull=False), results__user=user).distinct()
         serializer = TestSerializer(tests, many=True, read_only=True, fields=('id', 'title', 'avatar'))
         return serializer.data
 
