@@ -20,6 +20,7 @@ def get_total_data(result):
         'correct_answers': correct_answers,
         'time': time,
         'score': score,
+        'finished': datetime.now().isoformat(),
     }
 
     total_data.update(get_average_score(result))

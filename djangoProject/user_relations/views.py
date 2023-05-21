@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from rest_framework import viewsets, mixins
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import OrderingFilter
 
@@ -34,26 +35,26 @@ class CommentAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
     queryset = Comment.objects
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated, IsOwner]
-    filter_backends = [OrderingFilter]
-    ordering_fields = ['created']
-    ordering = 'created'
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.queryset.filter(question=request.data['question_id']))
-        page = self.paginate_queryset(queryset)
-        serializer = self.get_serializer(page, many=True)
-        return self.get_paginated_response(serializer.data)
 
 
-class LikeDislikeAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
-                         viewsets.GenericViewSet):
+class LikeAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                  viewsets.GenericViewSet):
     queryset = LikeDislike.objects
     serializer_class = LikeDislikeSerializer
     permission_classes = [IsAuthenticated, IsOwner]
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.queryset.filter(question=request.data['question_id'])
-        likes = queryset.filter(is_like=True).count()
-        dislikes = queryset.filter(is_like=False).count()
-        return JsonResponse({'likes': likes, 'dislikes': dislikes})
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
 
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        assert lookup_url_kwarg in self.kwargs, (
+                'Expected view %s to be called with a URL keyword argument '
+                'named "%s". Fix your URL conf, or set the `.lookup_field` '
+                'attribute on the view correctly.' %
+                (self.__class__.__name__, lookup_url_kwarg)
+        )
+
+        question_id = self.kwargs[lookup_url_kwarg]
+        obj = get_object_or_404(queryset, question=question_id, user=self.request.user)
+        self.check_object_permissions(self.request, obj)
+        return obj

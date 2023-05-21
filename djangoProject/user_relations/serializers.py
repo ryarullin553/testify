@@ -1,8 +1,5 @@
 from rest_framework import serializers
 from .models import Bookmark, Feedback, Comment, LikeDislike
-import locale
-
-locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
@@ -18,7 +15,6 @@ class BookmarkSerializer(serializers.ModelSerializer):
 class FeedbackSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     user_name = serializers.CharField(source='user.username', read_only=True)
-    created = serializers.DateTimeField(format='%d %b. %Y г.', read_only=True)
 
     class Meta:
         model = Feedback
@@ -30,11 +26,11 @@ class CommentSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     user_name = serializers.CharField(read_only=True, source='user.username')
     user_avatar = serializers.ImageField(read_only=True, source='user.avatar')
-    created = serializers.DateTimeField(format='%d %b. %Y г.', read_only=True)
+    user_id = serializers.IntegerField(read_only=True, source='user.id')
 
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'question', 'user_name', 'user_avatar', 'created', 'content']
+        fields = ['id', 'user', 'question', 'user_id', 'user_name', 'user_avatar', 'created', 'content']
         extra_kwargs = {'question': {'write_only': True}}
 
 

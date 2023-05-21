@@ -1,4 +1,5 @@
 from django.db.models import Count, Avg, Q
+from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins
 from rest_framework.decorators import action
@@ -7,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from rest_framework import viewsets
 
-from user_relations.serializers import FeedbackSerializer
+from user_relations.serializers import FeedbackSerializer, CommentSerializer
 from .models import Test, Question
 from .permissions import IsTestAuthor, IsQuestionAuthor
 from .serializers import TestSerializer, QuestionSerializer
@@ -91,14 +92,27 @@ class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Destr
     def get_test_feedbacks(self, request, **kwargs):
         """Возвращает отзывы теста"""
         test = self.get_object()
-        feedbacks = test.feedbacks.all()
-        page = self.paginate_queryset(feedbacks)
+        page = self.paginate_queryset(test.feedbacks)
         serializer = FeedbackSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
 
-class QuestionAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class QuestionAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                      viewsets.GenericViewSet):
     queryset = Question.objects
     serializer_class = QuestionSerializer
     permission_classes = [IsAuthenticated, IsQuestionAuthor]
 
+    @action(detail=True, url_path='likes', url_name='likes')
+    def get_question_likes(self, request, **kwargs):
+        question = self.get_object()
+        likes = question.likes.filter(is_like=True).count()
+        dislikes = question.likes.filter(is_like=False).count()
+        return JsonResponse({'likes': likes, 'dislikes': dislikes})
+
+    @action(detail=True, url_path='comments', url_name='comments')
+    def get_question_comments(self, request, **kwargs):
+        question = self.get_object()
+        page = self.paginate_queryset(question.comments)
+        serializer = CommentSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)

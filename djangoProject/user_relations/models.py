@@ -7,7 +7,7 @@ class Bookmark(models.Model):
 
     class Meta:
         db_table = 'bookmarks'
-        unique_together = ['user', 'test']
+        unique_together = ('user', 'test')
 
 
 class Feedback(models.Model):
@@ -24,8 +24,8 @@ class Feedback(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    question = models.ForeignKey('tests.Question', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='comments')
+    question = models.ForeignKey('tests.Question', on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -35,9 +35,10 @@ class Comment(models.Model):
 
 
 class LikeDislike(models.Model):
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    question = models.ForeignKey('tests.Question', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='likes')
+    question = models.ForeignKey('tests.Question', on_delete=models.CASCADE, related_name='likes')
     is_like = models.BooleanField(default=None)
 
     class Meta:
         db_table = 'likes'
+        unique_together = ('user', 'question')

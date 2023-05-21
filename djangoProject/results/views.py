@@ -17,7 +17,7 @@ class ResultAPIView(viewsets.GenericViewSet, APIViewMixin):
     serializer_class = ResultSerializer
     permission_classes = [IsAuthenticated, IsUserResult]
     filter_backends = [OrderingFilter]
-    ordering = 'time_create'
+    ordering = '-time_create'
 
     def get_result(self, request, **kwargs):
         """Возвращает результат теста по принятому pk из url"""
