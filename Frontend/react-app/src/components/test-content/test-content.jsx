@@ -37,7 +37,7 @@ export const TestContent = () => {
 
   const fetchActiveAttempt = async (testID) => {
     const attemptList = await fetchResultsAction(testID);
-    const activeAttempt = attemptList.find(a => (!a.total));
+    const activeAttempt = attemptList.results.find(a => (!a.total));
     return activeAttempt;
   }
   

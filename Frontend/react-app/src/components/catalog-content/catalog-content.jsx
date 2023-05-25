@@ -5,7 +5,7 @@ import { useScroll } from '../../hooks';
 
 export const CatalogContent = () => {
   const [testList, setTestList] = useState([]);
-  const [baseRequest, setBaseRequest] = useState('catalog/');
+  const [baseRequest, setBaseRequest] = useState('tests/');
 
   useScroll(baseRequest, setTestList);
 
