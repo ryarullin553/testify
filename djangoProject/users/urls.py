@@ -1,12 +1,13 @@
-from django.contrib.auth import views
 from django.urls import path, re_path, include
 from rest_framework import routers
-from users.views import *
+from users.views import UserAPIView
 
+router = routers.SimpleRouter()
+router.register(r'users', UserAPIView)
 
 urlpatterns = [
-    path('api/auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 
-    path('profile/<int:pk>/', UserAPIView.as_view()),  # get, put, patch
+    path('', include(router.urls)),
 ]

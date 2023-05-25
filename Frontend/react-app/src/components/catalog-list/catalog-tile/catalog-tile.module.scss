@@ -1,0 +1,112 @@
+.card {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+
+  transition: box-shadow 0.3s ease-out;
+}
+
+.card:hover {
+  border: 1px solid #a38ffd;
+  box-shadow: 0px 4px 35px rgba(27, 0, 150, 0.1);
+  border-radius: 10px;
+}
+
+.card__link {
+  text-decoration: none;
+  color: #222222;
+}
+
+.card__image {
+  width: 107px;
+  height: 107px;
+  border: 1px solid #bcbcc3;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card__image img {
+  width: 100%;
+}
+
+.card__info {
+  flex: 1 1 auto;
+}
+
+.card__info > .card__link {
+  display: flex;
+  height: 100%;
+  width: max-content;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card__title {
+  margin: 0;
+  color: #222222;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.card__description {
+  margin: 0;
+  height: 100%;
+  width: 620px;
+  color: #222222;
+  font-weight: 400;
+  font-size: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 20px;
+}
+
+.card__stats {
+  display: flex;
+  gap: 15px;
+}
+
+.card__feedback,
+.card__users {
+  display: flex;
+  align-items: center;
+}
+
+.card__feedback {
+  gap: 6px;
+}
+
+.card__users {
+  gap: 4px;
+}
+
+.card__feedback__stars {
+  display: flex;
+  gap: 3px;
+}
+
+.card__feedback__value,
+.card__users__count {
+  font-weight: 500;
+  font-size: 12px;
+  color: #999999;
+  line-height: 15px;
+}
+
+.bookmark__button {
+  display: flex;
+  height: max-content;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.bookmark__button.active .bookmark__icon-path,
+.bookmark__button.active .bookmark__icon-fill {
+  fill: #a38ffd;
+}

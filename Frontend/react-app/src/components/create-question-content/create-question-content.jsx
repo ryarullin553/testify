@@ -1,15 +1,16 @@
-import { api } from '../../store/index.js';
 import { useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
-import { newTestData } from '../../mocks/new-test-data';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import styles from './create-question-content.module.scss';
 import { CreateQuestionManager } from './create-question-manager/create-question-manager';
 import { useParams } from 'react-router';
+import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button.jsx';
+import { editTestAction, fetchTestQuestionsAction } from '../../api/tests.js';
+import { createQuestionAction, deleteQuestionAction, updateQuestionAction } from '../../api/questions.js';
 
 export const CreateQuestionContent = () => {
   const { testID } = useParams();
-  let [testState, setTestState] = useImmer(newTestData);
+  let [testState, setTestState] = useImmer();
   let [currentQuestionID, setCurrentQuestionID] = useState(1);
   
   const getCurrentQuestionData = (state, currentQuestionID) => state.questionList
@@ -18,28 +19,25 @@ export const CreateQuestionContent = () => {
   const getCurrentQuestionIndex = (state, currentQuestionID) => state.questionList
     .findIndex(question => (question.questionID === currentQuestionID));
 
-  let isLastQuestion = (getCurrentQuestionIndex(testState, currentQuestionID) === (testState.questionList.length - 1));
+  const isLastQuestion = (state, currentQuestionID) => (getCurrentQuestionIndex(state, currentQuestionID) === (testState.questionList.length - 1));
 
   useEffect(() => {
     fetchTestData();
   }, []);
 
   const fetchTestData = async () => {
-    try {
-      const {data} = await api.get(`/api/test_questions/${testID}/`);
-      const convertedData = convertTestDataStC(data, testID);
-      setTestState(convertedData);
-      if (convertedData.questionList.length === 0) {
-        actionQuestionAdd();
-      }
-      setCurrentQuestionID(convertedData.questionList[0].questionID);
-    } catch (err) {
-      return;
+    const data = await fetchTestQuestionsAction(testID);
+    const convertedData = convertTestDataStC(data, testID);
+    setTestState(convertedData);
+    if (convertedData.questionList.length === 0) {
+      actionQuestionAdd();
     }
+    setCurrentQuestionID(convertedData.questionList[0].questionID);
   }
 
   const actionQuestionUpdate = async (updatedQuestionData) => {
-    await api.put(`/api/update_question/${currentQuestionID}/`, convertQuestionDataCtS(updatedQuestionData));
+    const convertedData = convertQuestionDataCtS(updatedQuestionData);
+    await updateQuestionAction(currentQuestionID, convertedData);
     setTestState(draft => {
       draft.questionList
         .splice(draft.questionList
@@ -49,18 +47,16 @@ export const CreateQuestionContent = () => {
   }
 
   const actionQuestionSave = async (updatedQuestionData) => {
-    try {
-      const {data} = await api.post(`/api/create_question/`, convertQuestionDataCtS(updatedQuestionData));
-      const newID = data.id;
-      setTestState(draft => {
-        draft.questionList
-          .splice(draft.questionList
-            .findIndex(question => (question.questionID === currentQuestionID)),
-            1, {...updatedQuestionData, questionID: newID});
-      });
-    } catch (err) {
-      return;
-    }
+    const convertedData = convertQuestionDataCtS(updatedQuestionData);
+    const data = await createQuestionAction({...convertedData, test: testID});
+    const newID = data;
+    setTestState(draft => {
+      draft.questionList
+        .splice(draft.questionList
+          .findIndex(question => (question.questionID === currentQuestionID)),
+          1, {...updatedQuestionData, questionID: newID});
+    });
+    setCurrentQuestionID(newID);
   }
 
   const actionQuestionAdd = () => {
@@ -79,14 +75,10 @@ export const CreateQuestionContent = () => {
   }
 
   const actionTestPublish = async () => {
-    try {
-      await api.put(`/api/update_test/${testID}/`, {is_published: true});
-      setTestState(draft => {
-        draft.isPublished = true;
-      });
-    } catch {
-      return;
-    }
+    await editTestAction(testID, {is_published: true});
+    setTestState(draft => {
+      draft.isPublished = true;
+    });
   }
 
   const actionQuestionDelete = async () => {
@@ -94,7 +86,7 @@ export const CreateQuestionContent = () => {
     const deletedID = currentQuestionID;
     const newID = (testState.questionList[index + 1] || testState.questionList[index - 1]).questionID;
     console.log(index, deletedID, newID);
-    await api.delete(`/api/update_question/${deletedID}/`);
+    await deleteQuestionAction(deletedID);
     setCurrentQuestionID(newID);
     setTestState(draft => {
       draft.questionList
@@ -103,9 +95,8 @@ export const CreateQuestionContent = () => {
     });
   }
 
-  const convertTestDataStC = (data, testID) => {
-    const modifiedData = {
-      testID: testID,
+  const convertTestDataStC = (data) => {
+    const convertedData = {
       testTitle: data.title,
       isPublished: data.is_published,
       questionList: data.question_set.map(q => ({
@@ -118,12 +109,11 @@ export const CreateQuestionContent = () => {
         correctAnswerID: q.answer_set.findIndex(a => (a.is_true === true)),
       })),
     }
-    return modifiedData;
+    return convertedData;
   }
 
   const convertQuestionDataCtS = (data) => {
     const convertedData = {
-      test: testID,
       content: data.questionDescription,
       answer_set: data.answerList.map(a => ({
         content: a.answerDescription,
@@ -133,15 +123,28 @@ export const CreateQuestionContent = () => {
     return convertedData;
   }
 
+  if (!testState) return <></>;
+
   return (
     <main className={styles.pageMain}>
       <QuestionListSidebar
         testTitle={testState.testTitle}
         questionList={testState.questionList}
-        isPublished={testState.isPublished}
         setCurrentQuestionID={setCurrentQuestionID}
-        actionTestPublish={actionTestPublish}
-      />
+      >
+        <QuestionListSidebarButton
+          key={1}
+          label={'Новый вопрос'}
+          onClickAction={actionQuestionAdd}
+          condition={true}
+        />
+        <QuestionListSidebarButton
+          key={2}
+          label={'Опубликовать тест'}
+          onClickAction={actionTestPublish}
+          condition={!testState.isPublished}
+        />
+      </QuestionListSidebar>
       <CreateQuestionManager
         key={currentQuestionID}
         currentQuestionID={currentQuestionID}
@@ -149,7 +152,7 @@ export const CreateQuestionContent = () => {
         defaultQuestionData={getCurrentQuestionData(testState, currentQuestionID)}
         actionQuestionUpdate={actionQuestionUpdate}
         actionQuestionSave={actionQuestionSave}
-        isLastQuestion={isLastQuestion}
+        isLastQuestion={isLastQuestion(testState, currentQuestionID)}
         actionQuestionAdd={actionQuestionAdd}
         actionQuestionDelete={actionQuestionDelete}
       />

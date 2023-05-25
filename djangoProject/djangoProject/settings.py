@@ -51,7 +51,8 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'tests.apps.TestsConfig',
-    'test_results.apps.TestResultsConfig',
+    'results.apps.ResultsConfig',
+    'user_relations.apps.UserRelationsConfig',
 ]
 
 MIDDLEWARE = [
@@ -151,6 +152,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
 
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
+    'PAGE_SIZE': 15,
+
+    #'DATETIME_FORMAT': "%d.%m.%Y %H:%M:%S"
+
 }
 
 CORS_ALLOW_ALL_ORIGINS = True

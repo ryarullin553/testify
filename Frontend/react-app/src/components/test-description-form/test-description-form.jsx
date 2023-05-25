@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './test-description-form.module.scss';
-import { api } from '../../store';
 import { AppRoute } from '../../const';
+import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests';
 
 export const TestDescriptionForm = ({testID}) => {
   const navigate = useNavigate();
@@ -25,6 +25,7 @@ export const TestDescriptionForm = ({testID}) => {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     let config;
+    const convertedFormData = convertTestDataCtS(formData);
     if (formData.avatar) {
       config = {
         headers: {
@@ -33,11 +34,10 @@ export const TestDescriptionForm = ({testID}) => {
       };
     }
     if (testID) {
-      await api.put(`/api/update_test/${testID}/`, convertTestDataCtS(formData), config);
+      await editTestAction(testID, convertedFormData, config);
     } else try {
-      const {data} = await api.post('/api/create_test/', convertTestDataCtS(formData), config);
-      const id = data.id;
-      navigate(`${AppRoute.EditTest}/${id}`);
+      const newTestID = await createTestAction(convertedFormData, config);
+      navigate(`${AppRoute.EditTest}/${newTestID}`);
     } catch (err) {
       return;
     }
@@ -63,7 +63,7 @@ export const TestDescriptionForm = ({testID}) => {
   }
 
   const fetchTestData = async () => {
-    const {data} = await api.get(`/api/test_description/${testID}/`);
+    const data = await fetchTestDescriptionAction(testID);
     const convertedData = convertTestDataStC(data);
     setFormData(convertedData);
   }

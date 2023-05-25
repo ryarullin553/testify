@@ -4,14 +4,14 @@ import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { FilterForm } from './filter-form/filter-form';
 import { Link } from 'react-router-dom';
 import styles from './my-tests-page-content.module.scss';
-import { useEffect, useRef, useState } from 'react';
-import { api } from '../../store';
+import { useState } from 'react';
+import { useScroll } from '../../hooks';
 
 export const MyTestsPageContent = () => {
   const [testList, setTestList] = useState([]);
-  const [baseRequest, setBaseRequest] = useState('api/user_tests/');
-  let nextPage = useRef();
-  let isLoading = useRef(false);
+  const [baseRequest, setBaseRequest] = useState('tests/');
+
+  useScroll(baseRequest, setTestList);
 
   // Список ссылок в подвале плашке
   const linkList = (id) => ([
@@ -19,44 +19,6 @@ export const MyTestsPageContent = () => {
     {key: 2, link: `${AppRoute.EditTest}/${id}`, label: 'Редактировать'},
     {key: 3, link: '#', label: 'Статистика'},
   ]);
-
-  const fetchTestListData = async () => {
-
-    if (!nextPage.current) return;
-
-    if (isLoading.current) return;
-    isLoading.current = true;
-
-    try {
-      const {data} = await api.get(nextPage.current);
-      setTestList(prevData => [...prevData, ...data.results]);
-      nextPage.current = (data.next ? data.next.slice(22) : null);
-    } finally {
-      isLoading.current = false;
-    }
-  }
-
-  useEffect(() => {
-    nextPage.current = baseRequest;
-    setTestList([]);
-    fetchTestListData();
-
-    window.addEventListener('scroll', handleScroll, {
-      passive: true,
-    });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [baseRequest]);
-
-  const handleScroll = () => {
-    const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight;
-
-    if (bottom) {
-      fetchTestListData();
-    }
-  }
 
   return (
     <main className={styles.pageMain}>
