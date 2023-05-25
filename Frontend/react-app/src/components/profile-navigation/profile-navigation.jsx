@@ -7,7 +7,7 @@ export const ProfileNavigation = () => {
     <section className={styles.profileNavigation}>
       <ul>
         <li>
-          <a href="#">Профиль</a>
+        <NavLink to={AppRoute.ProfilePage} className={({isActive}) => isActive && styles.activeLink}>Профиль</NavLink>
         </li>
         <li>
           <NavLink to={AppRoute.ProfileTests} className={({isActive}) => isActive && styles.activeLink}>Тесты</NavLink>
@@ -16,10 +16,10 @@ export const ProfileNavigation = () => {
           <NavLink to={AppRoute.MyTests} className={({isActive}) => isActive && styles.activeLink}>Мои тесты</NavLink>
         </li>
         <li>
-          <a href="#">Избранное</a>
+        <NavLink to={AppRoute.ProfileBookmarkPage} className={({isActive}) => isActive && styles.activeLink}>Избранное</NavLink>
         </li>
         <li>
-          <a href="#">Настройки</a>
+        <NavLink to={AppRoute.ProfileSettingPage} className={({isActive}) => isActive && styles.activeLink}>Настройки</NavLink>
         </li>
       </ul>
     </section>

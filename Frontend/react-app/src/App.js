@@ -4,10 +4,14 @@ import { CreateTestPage } from './pages/create-test-page';
 import { MainPage } from "./pages/main-page";
 import { AppRoute } from './const';
 import { MyTestsPage } from './pages/my-tests-page';
+import { ProfilePage } from './pages/profile_page';
+import { ProfileSettingPage } from './pages/profile_settings_page'
+
 import { UserActivationPage } from './pages/user-activation-page';
 import { ResetPasswordPage } from './pages/reset-password-page';
 import { EditTestDescriptionPage } from './pages/edit-test-description-page';
 import { ProfileTests } from './pages/profile-tests';
+import { ProfileBookmarkPage } from './pages/profile-bookmark-page'
 import { TestPage } from './pages/test-page';
 import { ErrorPage } from './pages/error-page';
 import { ResultsPage } from './pages/results-page';
@@ -28,8 +32,12 @@ function App() {
             <Route path={`${AppRoute.EditTestDescription}/:testID`} element={<EditTestDescriptionPage />} />
           </Route>
           <Route path={AppRoute.Profile}>
+            <Route path={AppRoute.ProfilePage} element={<ProfilePage />} />
             <Route path={AppRoute.MyTests} element={<MyTestsPage />} />
             <Route path={AppRoute.ProfileTests} element={<ProfileTests />} />
+            <Route path={AppRoute.ProfileBookmarkPage} element={<ProfileBookmarkPage />} />
+            <Route path={AppRoute.ProfileSettingPage} element={<ProfileSettingPage />} />
+
           </Route>
           <Route path={AppRoute.UserActivation} element={<UserActivationPage />} />
           <Route path={AppRoute.PasswordReset} element={<ResetPasswordPage />} />
