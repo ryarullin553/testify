@@ -33,16 +33,16 @@ export const DropdownMenu = ({actionCloseMenu}) => {
       <div className={styles.userMenu}>
         <ul>
           <li>
-            <a href="#">Профиль</a>
+            <Link to={AppRoute.Profile}>Профиль</Link>
           </li>
           <li>
-            <a href="#">Тесты</a>
+            <Link to={AppRoute.ProfileTests}>Тесты</Link>
           </li>
           <li>
             <Link to={AppRoute.MyTests}>Мои тесты</Link>
           </li>
           <li>
-            <a href="#">Настройки</a>
+            <Link to={AppRoute.ProfileSetting}>Настройки</Link>
           </li>
           <li>
             <button onClick={handleLogoutClick}>Выход</button>

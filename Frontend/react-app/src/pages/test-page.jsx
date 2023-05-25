@@ -5,9 +5,9 @@ import { TestContent } from "../components/test-content/test-content";
 export const TestPage = () => {
   return (
     <>
-      <Header/>
+      <Header />
       <TestContent />
-      <Footer/>
+      <Footer />
     </>
   );
 }
