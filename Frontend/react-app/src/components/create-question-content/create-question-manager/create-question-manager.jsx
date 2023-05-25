@@ -2,7 +2,8 @@ import { useImmer } from 'use-immer';
 import { QuestionInputArea } from '../question-input-area/question-input-area';
 import { AnswersInputArea } from '../answers-input-area/answers-input-area';
 import styles from './create-question-manager.module.scss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { generateAnswersAction } from '../../../api/questions';
 
 export const CreateQuestionManager = ({
   defaultQuestionData,
@@ -14,7 +15,8 @@ export const CreateQuestionManager = ({
   currentQuestionIndex,
   actionQuestionDelete,
 }) => {
-  let [currentQuestionData, setCurrentQuestionData] = useImmer(defaultQuestionData);
+  const [currentQuestionData, setCurrentQuestionData] = useImmer(defaultQuestionData);
+  const [generateAmount, setGenerateAmount] = useState(0);
 
   useEffect(() => {
     setCurrentQuestionData(defaultQuestionData);
@@ -77,7 +79,7 @@ export const CreateQuestionManager = ({
     }
   }
 
-  const handleSaveClick =  async (evt) => {
+  const handleSaveClick = async (evt) => {
     evt.preventDefault();
     if (currentQuestionID <= 0) {
       await actionQuestionSave(currentQuestionData);
@@ -85,6 +87,24 @@ export const CreateQuestionManager = ({
     if (isLastQuestion) {
       actionQuestionAdd();
     }
+  }
+
+  const handleGenerateAmountChange = (evt) => {
+    let newValue = evt.target.value.replace(/\D/,'');
+    newValue = Math.min(newValue, 10);
+    setGenerateAmount(newValue);
+  }
+
+  const handleGenerateAnswersClick = async (evt) => {
+    evt.preventDefault();
+    const request = {
+      content: currentQuestionData.questionDescription,
+      test: 1,
+      answer_set: currentQuestionData.answerList.map(a => ({content: a.answerDescription, is_true: (a.answerID === currentQuestionData.correctAnswerID)})),
+      generate_count: generateAmount,
+    }
+    const response = await generateAnswersAction(request);
+    console.log(response);
   }
 
   return (
@@ -107,6 +127,20 @@ export const CreateQuestionManager = ({
           className={styles.plusButton}
           onClick={handleAnswerAdd}
         >+</button>
+        <fieldset className={styles.generateAnswersForm}>
+          <button
+            className={styles.generateAnswersButton}
+            onClick={handleGenerateAnswersClick}
+          >Сгенерировать варианты ответов</button>
+          <input
+            type='number'
+            min={0}
+            max={10}
+            id='generateAmount'
+            value={generateAmount}
+            onChange={handleGenerateAmountChange}
+          />
+        </fieldset>
         <div className={styles.questionControls}>
         <button
           onClick={handleQuestionDelete}
