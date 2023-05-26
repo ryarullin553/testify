@@ -103,8 +103,19 @@ export const CreateQuestionManager = ({
       answer_set: currentQuestionData.answerList.map(a => ({content: a.answerDescription, is_true: (a.answerID === currentQuestionData.correctAnswerID)})),
       generate_count: generateAmount,
     }
-    const response = await generateAnswersAction(request);
+    const {answer_set} = await generateAnswersAction(request);
+    const response = {
+      answerList: answer_set.map((a, i) => ({
+        answerID: i,
+        answerDescription: a.content,
+      })),
+      correctAnswerID: answer_set.findIndex(a => (a.is_true === true)),
+    }
     console.log(response);
+    setCurrentQuestionData(draft => {
+      draft.answerList = response.answerList;
+      draft.correctAnswerID = response.correctAnswerID;
+    });
   }
 
   return (
