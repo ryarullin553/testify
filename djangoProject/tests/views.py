@@ -118,9 +118,8 @@ class QuestionAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.D
         serializer = CommentSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
-    @action(detail=False, methods=['POST'], url_path='generated', url_name='generated')
+    @action(detail=False, methods=['POST'], url_path='generated', url_name='generated',
+            permission_classes=[IsAuthenticated])
     def generate_wrong_answers(self, request):
         wrong_answers = get_wrong_answers(request.data)
-        for wrong_answer in wrong_answers:
-            request.data['answer_set'].append({'content': wrong_answer[3:], 'is_true': False})
-        return JsonResponse(request.data)
+        return JsonResponse({"answer_set": wrong_answers})
