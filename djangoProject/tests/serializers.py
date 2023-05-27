@@ -45,6 +45,7 @@ class QuestionSerializer(DynamicFieldsModelSerializer):
         setattr(question, *validated_data, validated_data['content'])
         for answer_data in answers_data:
             Answer.objects.create(question=question, **answer_data)
+        question.save()
         return question
 
 
