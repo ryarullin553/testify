@@ -16,7 +16,7 @@ export const CreateQuestionManager = ({
   actionQuestionDelete,
 }) => {
   const [currentQuestionData, setCurrentQuestionData] = useImmer(defaultQuestionData);
-  const [generateAmount, setGenerateAmount] = useState(0);
+  const [generateAmount, setGenerateAmount] = useState(1);
 
   useEffect(() => {
     setCurrentQuestionData(defaultQuestionData);
@@ -29,11 +29,11 @@ export const CreateQuestionManager = ({
     });
   }
 
-  const actionAnswerAdd = () => {
+  const actionAnswerAdd = (answerDescription) => {
     setCurrentQuestionData(draft => {
       draft.answerList.push({
         answerID: Math.max(...draft.answerList.map(answer => answer.answerID)) + 1,
-        answerDescription: '',
+        answerDescription: answerDescription ?? '',
       });
     });
   }
@@ -91,31 +91,21 @@ export const CreateQuestionManager = ({
 
   const handleGenerateAmountChange = (evt) => {
     let newValue = evt.target.value.replace(/\D/,'');
-    newValue = Math.min(newValue, 10);
+    newValue = Math.max(Math.min(newValue, 10), 1);
     setGenerateAmount(newValue);
   }
 
   const handleGenerateAnswersClick = async (evt) => {
     evt.preventDefault();
+    const {questionDescription, correctAnswerID, answerList} = currentQuestionData;
     const request = {
-      content: currentQuestionData.questionDescription,
-      test: 1,
-      answer_set: currentQuestionData.answerList.map(a => ({content: a.answerDescription, is_true: (a.answerID === currentQuestionData.correctAnswerID)})),
+      question: questionDescription,
+      right_answer: answerList[correctAnswerID].answerDescription,
+      wrong_answers: answerList.map(a => (a.answerDescription)).toSpliced(correctAnswerID, 1),
       generate_count: generateAmount,
     }
     const {answer_set} = await generateAnswersAction(request);
-    const response = {
-      answerList: answer_set.map((a, i) => ({
-        answerID: i,
-        answerDescription: a.content,
-      })),
-      correctAnswerID: answer_set.findIndex(a => (a.is_true === true)),
-    }
-    console.log(response);
-    setCurrentQuestionData(draft => {
-      draft.answerList = response.answerList;
-      draft.correctAnswerID = response.correctAnswerID;
-    });
+    answer_set.map(a => actionAnswerAdd(a));
   }
 
   return (
@@ -145,7 +135,7 @@ export const CreateQuestionManager = ({
           >Сгенерировать варианты ответов</button>
           <input
             type='number'
-            min={0}
+            min={1}
             max={10}
             id='generateAmount'
             value={generateAmount}
