@@ -15,3 +15,8 @@ export const updateQuestionAction = async (questionID, newQuestionData) => {
 export const deleteQuestionAction = async (questionID) => {
   await api.delete(`${BASE_REQUEST}${questionID}/`);
 }
+
+export const generateAnswersAction = async (request) => {
+  const {data} = await api.post(`${BASE_REQUEST}generated/`, request);
+  return data;
+}

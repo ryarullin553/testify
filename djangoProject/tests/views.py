@@ -12,6 +12,7 @@ from user_relations.serializers import FeedbackSerializer, CommentSerializer
 from .models import Test, Question
 from .permissions import IsTestAuthor, IsQuestionAuthor
 from .serializers import TestSerializer, QuestionSerializer
+from .services import get_wrong_answers
 
 
 class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
@@ -116,3 +117,9 @@ class QuestionAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.D
         page = self.paginate_queryset(question.comments)
         serializer = CommentSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
+
+    @action(detail=False, methods=['POST'], url_path='generated', url_name='generated',
+            permission_classes=[IsAuthenticated])
+    def generate_wrong_answers(self, request):
+        wrong_answers = get_wrong_answers(request.data)
+        return JsonResponse({"answer_set": wrong_answers})
