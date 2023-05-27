@@ -15,7 +15,7 @@ export const ProfilePageComponent = () => {
         { key: 1, link: `${AppRoute.EditTestDescription}/${id}`, label: 'Описание' },
     ]);
 
-    // Список ссылок в подвале плашке
+    // Список ссылок в подвале плашки
     const linkList = (id) => ([
         { key: 1, link: `${AppRoute.EditTestDescription}/${id}`, label: 'Описание' },
         { key: 2, link: `${AppRoute.EditTest}/${id}`, label: 'Редактировать' },

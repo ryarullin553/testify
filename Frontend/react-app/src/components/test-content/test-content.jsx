@@ -7,7 +7,7 @@ import { QuestionArea } from './question-area/question-area';
 import { useImmer } from 'use-immer';
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button';
 import { fetchResultsAction } from '../../api/tests';
-import { createAttemptAction, fetchAttemptAction, submitAttemptAction } from '../../api/results';
+import { fetchAttemptAction, submitAttemptAction } from '../../api/results';
 import { submitAnswerAction, updateAnswerAction } from '../../api/answers';
 import { QuestionControls } from '../question-controls/question-controls';
 
@@ -44,7 +44,7 @@ export const TestContent = () => {
   const getActiveAttempt = async (testID) => {
     let attempt = await fetchActiveAttempt(testID);
     if (!attempt) {
-      attempt = await createAttemptAction(testID);
+      navigate(`${AppRoute.TestDescription}/${testID}`)
     }
     const rawData = await fetchAttemptAction(attempt.id);
     const testData = convertDataStC(rawData);

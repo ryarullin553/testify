@@ -1,7 +1,4 @@
 .card {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 
@@ -12,6 +9,12 @@
   border: 1px solid #a38ffd;
   box-shadow: 0px 4px 35px rgba(27, 0, 150, 0.1);
   border-radius: 10px;
+}
+
+.linkWrapper {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
 }
 
 .card__link {

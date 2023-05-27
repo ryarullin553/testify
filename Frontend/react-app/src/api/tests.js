@@ -17,6 +17,11 @@ export const editTestAction = async (testID, newTestData, config) => {
   await api.patch(`${BASE_REQUEST}${testID}/`, newTestData, config);
 }
 
+export const fetchTestInfoAction = async (testID) => {
+  const {data} = await api.get(`${BASE_REQUEST}${testID}/`);
+  return data;
+}
+
 export const fetchTestDescriptionAction = async (testID) => {
   const {data} = await api.get(`${BASE_REQUEST}${testID}/description/`);
   return data;
