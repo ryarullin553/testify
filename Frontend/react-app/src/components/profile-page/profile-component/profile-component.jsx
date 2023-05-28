@@ -1,32 +1,17 @@
 import styles from './profile-component.module.scss';
 import { TestListProfile } from '../../test-list-profile/test-list-profile';
 import { ShowMoreButton } from '../show-more-button/show-more-button';
-import { useEffect, useState } from 'react';
+import { AvatarBlock } from '../../avatar-block/avatar-block';
 import { AppRoute } from '../../../const';
-import { selectUserInfo } from '../../../store/selectors';
-import { useSelector } from 'react-redux';
-import { fetchUserInfoAction } from '../../../api/user';
 
-export const ProfileComponent = () => {
-    const [userInfo, setUserInfo] = useState();
-
-    const {id} = useSelector(selectUserInfo);
-
-    const fetchUserInfo = async (userID) => {
-        const userData = await fetchUserInfoAction(userID);
-        setUserInfo(userData);
-    }
-
-    useEffect(() => {
-        fetchUserInfo(id);
-    }, []);
+export const ProfileComponent = ({userInfo}) => {
 
     const linkListUnfinished = (id) => ([
-        { key: 1, link: '#', label: 'Описание' },
+        { key: 1, link: `${AppRoute.TestDescription}/${id}`, label: 'Описание' },
     ]);
 
     const linkListFinished = (id) => ([
-        { key: 1, link: '#', label: 'Описание' },
+        { key: 1, link: `${AppRoute.TestDescription}/${id}`, label: 'Описание' },
         { key: 2, link: '#', label: 'Результаты' },
     ]);
 
@@ -37,7 +22,7 @@ export const ProfileComponent = () => {
             <section className={styles.tests}>
                 <section className={styles.info}>
                     <div className={styles.container}>
-                        <div className={styles.logo}/>
+                        <AvatarBlock additionalStyle={styles.logo} src={userInfo.userAvatar} size={99}/>
                         <div className={styles.content}>
                             <h3 className={styles.name}>{userInfo.username}</h3>
                             <p className={styles.about}>{userInfo.bio}</p>

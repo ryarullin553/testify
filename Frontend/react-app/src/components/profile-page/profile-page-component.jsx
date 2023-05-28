@@ -1,31 +1,30 @@
+import { useParams } from 'react-router';
 import styles from './profile-page-component.module.scss';
 import { ProfileComponent } from './profile-component/profile-component';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
-import { TestListProfile } from '../test-list-profile/test-list-profile';
-import { ShowMoreButton } from './show-more-button/show-more-button';
-import { useState } from 'react';
-import { AppRoute } from '../../const';
+import { useEffect, useState } from 'react';
+import { fetchUserInfoAction } from '../../api/user';
 
 
 export const ProfilePageComponent = () => {
-    const [testList, setTestList] = useState([]);
-    const [recentTestList, setRecentTestList] = useState([]);
+    const [userInfo, setUserInfo] = useState();
 
-    const linkListTest = (id) => ([
-        { key: 1, link: `${AppRoute.EditTestDescription}/${id}`, label: 'Описание' },
-    ]);
+    const {userID} = useParams();
 
-    // Список ссылок в подвале плашки
-    const linkList = (id) => ([
-        { key: 1, link: `${AppRoute.EditTestDescription}/${id}`, label: 'Описание' },
-        { key: 2, link: `${AppRoute.EditTest}/${id}`, label: 'Редактировать' },
-    ]);
+    const fetchUserInfo = async (userID) => {
+        const userData = await fetchUserInfoAction(userID);
+        setUserInfo(userData);
+    }
+
+    useEffect(() => {
+        fetchUserInfo(userID);
+    }, []);
 
     return (
         <>
             <main className={styles.pageMain}>
                 <ProfileNavigation />
-                <ProfileComponent />
+                <ProfileComponent userInfo={userInfo}/>
             </main>
         </>
     );

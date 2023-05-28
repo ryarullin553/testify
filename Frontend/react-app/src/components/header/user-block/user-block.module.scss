@@ -2,24 +2,8 @@
   position: relative;
   display: flex;
   height: 41px;
+}
 
-  img {
-    height: 41px;
-    width: 41px;
-
-    margin-right: 10px;
-
-    background: #FCFCFC url(./img/avatar-placeholder.svg) no-repeat center;
-    border: 1px solid #BCBCC3;
-    border-radius: 10px;
-  }
-
-  button {
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 41px;
-    letter-spacing: 0.05em;
-
-    color: #454868;
-  }
+.userAvatar {
+  margin-right: 10px;
 }

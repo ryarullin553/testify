@@ -1,10 +1,15 @@
-import styles from './profile-bookmark-page-component.module.scss';
+import styles from './profile-bookmark-content.module.scss';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { useState } from 'react';
+import { useScroll } from '../../hooks';
 
-export const ProfileBookmarkPageComponent = () => {
+export const ProfileBookmarkContent = () => {
     const [testList, setTestList] = useState([]);
+
+    const baseRequest = 'bookmarks/';
+
+    useScroll(baseRequest, setTestList);
 
     return (
         <>
@@ -12,7 +17,7 @@ export const ProfileBookmarkPageComponent = () => {
                 <ProfileNavigation />
                 <section className={styles.sectionMain}>
                     <h1>Избранное</h1>
-                    <TestListProfile testList={testList} />
+                    <TestListProfile testList={testList} linkList={() => []}/>
                 </section>
             </main>
         </>

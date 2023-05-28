@@ -9,7 +9,7 @@ import { useScroll } from '../../hooks';
 
 export const MyTestsPageContent = () => {
   const [testList, setTestList] = useState([]);
-  const [baseRequest, setBaseRequest] = useState('tests/');
+  const [baseRequest, setBaseRequest] = useState('tests/created/');
 
   useScroll(baseRequest, setTestList);
 

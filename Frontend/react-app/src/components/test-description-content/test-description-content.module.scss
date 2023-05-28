@@ -6,11 +6,17 @@
 
 .title {
   display: flex;
-  flex-direction: column;
-  gap: 25px;
-  padding: 50px 500px 40px 150px;
+  justify-content: space-between;
+
+  padding: 50px 169px 40px 150px;
   background: #282B41;
   border-radius: 10px;
+}
+
+.descriptionWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .title__testName {

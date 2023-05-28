@@ -9,6 +9,7 @@ export const ResetPasswordComponent = () => {
         password: '',
         passwordRepeat: '',
     });
+
     const { uid, token } = useParams();
     const navigate = useNavigate();
 
@@ -33,7 +34,7 @@ export const ResetPasswordComponent = () => {
     }
 
     return (
-        <div classname={styles.container}>
+        <div className={styles.container}>
             <h1>Изменение пароля</h1>
             <form>
                 <input type='password' name='password' id='password' placeholder='Новый пароль' value={formState.password} onChange={handleFieldChange} />

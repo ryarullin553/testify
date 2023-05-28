@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import styles from './catalog-tile.module.scss';
 import { AppRoute } from '../../../const';
+import { AvatarBlock } from '../../avatar-block/avatar-block';
 
 export const CatalogTile = ({id, title, avatar, shortAbstract}) => {
   return (
     <li className={styles.card}>
       <Link to={`${AppRoute.TestDescription}/${id}`} className={styles.linkWrapper}>
-        <img src={avatar} alt="" className={styles.card__image}/>
+        <AvatarBlock src={avatar} size={107}/>
         <div className={styles.card__info}>
           <div className={styles.card__link}>
             <h3 className={styles.card__title}>{title}</h3>

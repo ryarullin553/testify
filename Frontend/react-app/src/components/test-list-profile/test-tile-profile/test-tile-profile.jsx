@@ -1,6 +1,7 @@
 import styles from './test-tile-profile.module.scss';
 import hiddenIcon from './img/unpublished.svg';
 import { TestTileLinks } from './test-tile-links/test-tile-links';
+import { AvatarBlock } from '../../avatar-block/avatar-block';
 
 export const TestTileProfile = ({id, title, avatar, isPublished, linkList}) => {
   return (
@@ -16,10 +17,7 @@ export const TestTileProfile = ({id, title, avatar, isPublished, linkList}) => {
           />
         }
       </div>
-      <img
-        className={styles.logo}
-        src={avatar}
-      />
+      <AvatarBlock src={avatar} size={60} additionalStyle={styles.logo}/>
       <TestTileLinks linkList={linkList} id={id}/>
       <button>...</button>
     </li>

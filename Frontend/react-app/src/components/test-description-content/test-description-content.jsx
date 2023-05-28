@@ -5,6 +5,7 @@ import { fetchTestInfoAction } from '../../api/tests';
 import { createAttemptAction } from '../../api/results';
 import { AppRoute } from '../../const';
 import { addBookmarkAction } from '../../api/bookmarks';
+import { AvatarBlock } from '../avatar-block/avatar-block';
 
 export const TestDescriptionContent = () => {
   const navigate = useNavigate();
@@ -57,26 +58,29 @@ export const TestDescriptionContent = () => {
   return (
     <main className={styles.main}>
       <div className={styles.title}>
-        <h1 className={styles.title__testName}>{testInfo.title}</h1>
-        <p className={styles.title__testDescription}>{testInfo.shortAbstract}</p>
-        <div className={styles.feedback}>
-          <div className={styles.score}>
-            <div className={styles.stars}>
-              <img src="star_icon.svg" alt="" className={styles.stars__item} />
-              <img src="star_icon.svg" alt="" className={styles.stars__item} />
-              <img src="star_icon.svg" alt="" className={styles.stars__item} />
-              <img src="star_icon.svg" alt="" className={styles.stars__item} />
-              <img
-                src="star_icon-gray.svg"
-                alt=""
-                className={styles.stars__item}
-              />
+        <div className={styles.descriptionWrapper}>
+          <h1 className={styles.title__testName}>{testInfo.title}</h1>
+          <p className={styles.title__testDescription}>{testInfo.shortAbstract}</p>
+          <div className={styles.feedback}>
+            <div className={styles.score}>
+              <div className={styles.stars}>
+                <img src="star_icon.svg" alt="" className={styles.stars__item} />
+                <img src="star_icon.svg" alt="" className={styles.stars__item} />
+                <img src="star_icon.svg" alt="" className={styles.stars__item} />
+                <img src="star_icon.svg" alt="" className={styles.stars__item} />
+                <img
+                  src="star_icon-gray.svg"
+                  alt=""
+                  className={styles.stars__item}
+                />
+              </div>
+              <span className={styles.rating}>{testInfo.rating}</span>
             </div>
-            <span className={styles.rating}>{testInfo.rating}</span>
+            <a href="#reviews" className={styles.feedback__count}>{testInfo.ratingCounter}</a>
+            <div className={styles.feedback__users}>{testInfo.completitionCounter} прохождений</div>
           </div>
-          <a href="#reviews" className={styles.feedback__count}>{testInfo.ratingCounter}</a>
-          <div className={styles.feedback__users}>{testInfo.completitionCounter} прохождений</div>
         </div>
+        <AvatarBlock src={testInfo.testAvatar} size={168} />
       </div>
       <section className={styles.information}>
         <section className={styles.fullDescription}>
@@ -87,9 +91,7 @@ export const TestDescriptionContent = () => {
           <div className={styles.author}>
             <h2 className={styles.information__title}>Автор</h2>
             <div className={styles.authorContent}>
-              <div className={styles.authorContent__img}>
-                <img src={testInfo.userAvatar} alt="avatar" />
-              </div>
+              <AvatarBlock src={testInfo.userAvatar} size={82} />
               <div className={styles.author__data}>
                 <h3 className={styles.author__name}>{testInfo.username}</h3>
                 <p className={styles.author__info}>{testInfo.userBio}</p>
