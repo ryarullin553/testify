@@ -57,11 +57,14 @@ class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Destr
         serializer = self.get_serializer(page, many=True, fields=serializer_fields)
         return self.get_paginated_response(serializer.data)
 
-    @action(detail=False, url_path='user/(?P<user_pk>[^/.]+)', url_name='user', ordering='-created',
+    @action(detail=False, url_path='user/(?P<user>[^/.]+)', url_name='user', ordering='-created',
             search_fields=['title'])
     def get_user_tests(self, request, **kwargs):
         """Возвращает список тестов, которые пользователь прошел или еще проходит"""
-        user_tests = self.queryset.filter(results__user=kwargs['user_pk'])
+        user = kwargs.get('user')
+        if user == 'me':
+            user = request.user
+        user_tests = self.queryset.filter(results__user=user)
         is_finished = self.request.query_params.get('is_finished')
         if is_finished == 'True':
             user_tests = user_tests.filter(results__total__isnull=False)
