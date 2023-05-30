@@ -36,7 +36,7 @@ export const DropdownMenu = ({actionCloseMenu}) => {
             <Link to={AppRoute.Profile}>Профиль</Link>
           </li>
           <li>
-            <Link to={AppRoute.ProfileTests}>Тесты</Link>
+            <Link to={AppRoute.History}>Тесты</Link>
           </li>
           <li>
             <Link to={AppRoute.MyTests}>Мои тесты</Link>

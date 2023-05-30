@@ -48,8 +48,7 @@
     transition: all 0.2s ease-in-out;
   }
 
-
-  .feedback {
+  .catalog {
     padding: 9px 34px;
     border: 2px solid #A38FFD;
     background: #A38FFD;
@@ -65,28 +64,6 @@
       border: 2px solid #A38FFD;
 
       color: #A38FFD;
-
-      &::after {
-        border: solid 1px #A38FFD;
-        border-width: 0 2px 2px 0;
-      }
-    }
-  }
-
-  .catalog {
-    padding: 9px 34px;
-    border: 2px solid #A38FFD;
-
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
-    background: #FFFFFF;
-    color: #A38FFD;
-
-    &:hover {
-      background: #A38FFD;
-      border: 2px solid #A38FFD;
-      color: #ffffff;
 
       &::after {
         border: solid 1px #A38FFD;

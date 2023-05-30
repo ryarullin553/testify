@@ -1,0 +1,44 @@
+.review {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  border-top: 1px solid #CCCCCC;
+  padding: 20px 0;
+}
+
+.review__stars {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+}
+
+.review__info {
+  display: flex;
+  gap: 20px;
+}
+
+.review__text {
+  font-size: 16px;
+  line-height: 19px;
+
+  color: #222222;
+}
+
+.name {
+  color: #4485ED;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.data {
+  font-size: 14px;
+  line-height: 17px;
+
+  color: #999999;
+}
+
+.name:hover {
+  color: #1466C6;
+  text-decoration: underline;
+}

@@ -36,3 +36,8 @@ export const fetchResultsAction = async (testID) => {
   const {data} = await api.get(`${BASE_REQUEST}${testID}/results/`);
   return data;
 }
+
+export const fetchTestFeedbackAction = async (testID) => {
+  const {data} = await api.get(`${BASE_REQUEST}${testID}/feedbacks/`);
+  return data;
+}

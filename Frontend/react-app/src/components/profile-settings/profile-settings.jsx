@@ -2,7 +2,8 @@ import styles from './profile-settings.module.scss';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { ResetPasswordComponent } from "../reset-passord-content/reset-password-component/reset-password-component";
 import { useEffect, useState } from 'react';
-import { api } from '../../store';
+import { api, store } from '../../store';
+import { checkAuthAction } from '../../store/api-actions';
 
 export const ProfileSettings = () => {
     const userID = 1;
@@ -33,6 +34,7 @@ export const ProfileSettings = () => {
             };
         }
         await api.patch(`/users/${userID}/`, formData, config);
+        store.dispatch(checkAuthAction());
     }
 
     const fetchUserData = async () => {

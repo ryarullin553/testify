@@ -31,7 +31,7 @@ export const CatalogTile = ({id, title, avatar, shortAbstract, isFavorite, ratin
             <p className={styles.card__description}>{shortAbstract}</p>
             <div className={styles.card__stats}>
               <div className={styles.card__feedback}>
-                <FeedbackStars width={'87px'} height={'15px'} rating={rating} fill={'#FFFFFF'}/>
+                <FeedbackStars width={'87px'} height={'15px'} rating={rating} fill={'#FFFFFF'} id={`catalog-${id}`}/>
                 <span className={styles.card__feedback__value}>{rating} ({ratingCounter})</span>
               </div>
               <div className={styles.card__users}>
