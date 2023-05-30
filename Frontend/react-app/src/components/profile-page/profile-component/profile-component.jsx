@@ -22,7 +22,7 @@ export const ProfileComponent = ({userInfo}) => {
             <section className={styles.tests}>
                 <section className={styles.info}>
                     <div className={styles.container}>
-                        <AvatarBlock additionalStyle={styles.logo} src={userInfo.userAvatar} size={99}/>
+                        <AvatarBlock additionalStyle={styles.logo} src={userInfo.avatar} size={99}/>
                         <div className={styles.content}>
                             <h3 className={styles.name}>{userInfo.username}</h3>
                             <p className={styles.about}>{userInfo.bio}</p>

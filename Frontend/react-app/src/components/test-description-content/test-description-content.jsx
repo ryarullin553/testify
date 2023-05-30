@@ -4,21 +4,23 @@ import { useNavigate, useParams } from 'react-router';
 import { fetchTestInfoAction } from '../../api/tests';
 import { createAttemptAction } from '../../api/results';
 import { AppRoute } from '../../const';
-import { addBookmarkAction } from '../../api/bookmarks';
+import { addBookmarkAction, deleteBookmarkAction } from '../../api/bookmarks';
 import { AvatarBlock } from '../avatar-block/avatar-block';
+import { FeedbackStars } from '../feedback-stars/feedback-stars';
 
 export const TestDescriptionContent = () => {
   const navigate = useNavigate();
   const { testID } = useParams();
   const [testInfo, setTestInfo] = useState();
-  const [favoriteState, setFavoriteState] = useState('♡');
+  const [isMouseOver, setIsMouseOver] = useState(false);
 
   const fetchTestInfo = async (testID) => {
     const data = await fetchTestInfoAction(testID);
     const testData = convertTestDataStC(data);
     setTestInfo(testData);
-    setFavoriteState(testData.isFavorite ? '♥' : '♡');
   }
+
+  const getFavoriteContent = () => (testInfo.isFavorite || isMouseOver) ? '♥' : '♡';
 
   const convertTestDataStC = (data) => {
     const modifiedData = {
@@ -45,8 +47,13 @@ export const TestDescriptionContent = () => {
 
   const handleFavoriteClick = async (evt) => {
     evt.preventDefault();
-    await addBookmarkAction(testID);
-    setTestInfo({...testInfo, isFavorite: true});
+    if (!testInfo.isFavorite) {
+      await addBookmarkAction(testID);
+      setTestInfo({...testInfo, isFavorite: true});
+    } else {
+      await deleteBookmarkAction(testID);
+      setTestInfo({...testInfo, isFavorite: false});
+    }
   }
 
   useEffect(() => {
@@ -63,20 +70,10 @@ export const TestDescriptionContent = () => {
           <p className={styles.title__testDescription}>{testInfo.shortAbstract}</p>
           <div className={styles.feedback}>
             <div className={styles.score}>
-              <div className={styles.stars}>
-                <img src="star_icon.svg" alt="" className={styles.stars__item} />
-                <img src="star_icon.svg" alt="" className={styles.stars__item} />
-                <img src="star_icon.svg" alt="" className={styles.stars__item} />
-                <img src="star_icon.svg" alt="" className={styles.stars__item} />
-                <img
-                  src="star_icon-gray.svg"
-                  alt=""
-                  className={styles.stars__item}
-                />
-              </div>
-              <span className={styles.rating}>{testInfo.rating}</span>
+              <FeedbackStars width={104.4} height={18} rating={testInfo.rating} fill={'#282B41'}/>
+              <span className={styles.rating}>{testInfo.rating ?? '0.0'}</span>
             </div>
-            <a href="#reviews" className={styles.feedback__count}>{testInfo.ratingCounter}</a>
+            <a href="#reviews" className={styles.feedback__count}>{testInfo.ratingCounter} отзывов</a>
             <div className={styles.feedback__users}>{testInfo.completitionCounter} прохождений</div>
           </div>
         </div>
@@ -104,9 +101,9 @@ export const TestDescriptionContent = () => {
           <button
             className={`${styles.button} ${styles.button_inversed}`}
             onClick={handleFavoriteClick}
-            onMouseEnter={() => setFavoriteState('♥')}
-            onMouseLeave={() => setFavoriteState(testInfo.isFavorite ? '♥' : '♡')}>
-              <span className={styles.heart}>{favoriteState}</span>Хочу пройти
+            onMouseEnter={() => setIsMouseOver(true)}
+            onMouseLeave={() => setIsMouseOver(false)}>
+              <span className={styles.heart}>{getFavoriteContent()}</span>Хочу пройти
           </button>
         </div>
           {/* <div className={styles.reviews}>

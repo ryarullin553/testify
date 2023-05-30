@@ -14,7 +14,7 @@ export const ResetPasswordComponent = () => {
     const navigate = useNavigate();
 
     const resetPassword = async (uid, token, password) => {
-        await api.post('api/auth/users/reset_password_confirm/', { token, uid, new_password: password });
+        await api.post('auth/users/reset_password_confirm/', { token, uid, new_password: password });
     }
 
     const handleFormSubmit = async (evt) => {

@@ -30,13 +30,7 @@
     .container {
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    img {
-        margin: 0 auto;
-        width: 80px;
-        height: 80px;
+        justify-content: flex-start;
     }
 
     .name {

@@ -17,7 +17,7 @@ export const ProfilePageComponent = () => {
     }
 
     useEffect(() => {
-        fetchUserInfo(userID);
+        fetchUserInfo(userID || 'me');
     }, []);
 
     return (

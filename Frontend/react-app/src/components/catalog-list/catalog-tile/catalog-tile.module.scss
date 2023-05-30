@@ -106,9 +106,13 @@
   border: none;
   background: none;
   cursor: pointer;
+
+  font-size: 22px;
+  color: #ABABAB;
 }
 
-.bookmark__button.active .bookmark__icon-path,
-.bookmark__button.active .bookmark__icon-fill {
-  fill: #a38ffd;
+.buttonActive {
+
+  color: #a38ffd;
+
 }

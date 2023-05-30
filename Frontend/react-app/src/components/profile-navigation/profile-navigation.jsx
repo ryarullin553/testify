@@ -7,19 +7,19 @@ export const ProfileNavigation = () => {
     <section className={styles.profileNavigation}>
       <ul>
         <li>
-          <NavLink to={AppRoute.Profile} className={({isActive}) => isActive && styles.activeLink}>Профиль</NavLink>
+          <NavLink to={AppRoute.Profile} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Профиль</NavLink>
         </li>
         <li>
-          <NavLink to={AppRoute.ProfileTests} className={({isActive}) => isActive && styles.activeLink}>Тесты</NavLink>
+          <NavLink to={AppRoute.History} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Тесты</NavLink>
         </li>
         <li>
-          <NavLink to={AppRoute.MyTests} className={({isActive}) => isActive && styles.activeLink}>Мои тесты</NavLink>
+          <NavLink to={AppRoute.MyTests} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Мои тесты</NavLink>
         </li>
         <li>
-          <NavLink to={AppRoute.ProfileBookmark} className={({isActive}) => isActive && styles.activeLink}>Избранное</NavLink>
+          <NavLink to={AppRoute.ProfileBookmark} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Избранное</NavLink>
         </li>
         <li>
-          <NavLink to={AppRoute.ProfileSetting} className={({isActive}) => isActive && styles.activeLink}>Настройки</NavLink>
+          <NavLink to={AppRoute.ProfileSetting} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Настройки</NavLink>
         </li>
       </ul>
     </section>
