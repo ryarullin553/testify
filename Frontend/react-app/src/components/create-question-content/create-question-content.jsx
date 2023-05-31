@@ -3,15 +3,17 @@ import { useImmer } from 'use-immer';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import styles from './create-question-content.module.scss';
 import { CreateQuestionManager } from './create-question-manager/create-question-manager';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button.jsx';
-import { editTestAction, fetchTestQuestionsAction } from '../../api/tests.js';
+import { changeTestVisibilityAction, editTestAction, fetchTestQuestionsAction } from '../../api/tests.js';
 import { createQuestionAction, deleteQuestionAction, updateQuestionAction } from '../../api/questions.js';
+import { AppRoute } from '../../const';
 
 export const CreateQuestionContent = () => {
   const { testID } = useParams();
-  let [testState, setTestState] = useImmer();
-  let [currentQuestionID, setCurrentQuestionID] = useState(1);
+  const navigate = useNavigate();
+  const [testState, setTestState] = useImmer();
+  const [currentQuestionID, setCurrentQuestionID] = useState(1);
   
   const getCurrentQuestionData = (state, currentQuestionID) => state.questionList
     .find(question => (question.questionID === currentQuestionID));
@@ -75,10 +77,8 @@ export const CreateQuestionContent = () => {
   }
 
   const actionTestPublish = async () => {
-    await editTestAction(testID, {is_published: true});
-    setTestState(draft => {
-      draft.isPublished = true;
-    });
+    await changeTestVisibilityAction(testID, (true));
+    navigate(`${AppRoute.TestDescription}/${testID}`);
   }
 
   const actionQuestionDelete = async () => {
