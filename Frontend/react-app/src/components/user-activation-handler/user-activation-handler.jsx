@@ -9,7 +9,7 @@ export const UserActivationHandler = () => {
   const navigate = useNavigate();
   
   const activateUser = async (uid, token) => {
-    await api.post('api/auth/users/activation/', {token, uid});
+    await api.post('auth/users/activation/', {token, uid});
   }
   
   activateUser(uid, token);

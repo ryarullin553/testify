@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { fetchAttemptAction } from '../../api/results';
 import { QUESTION_STATES } from '../test-content/test-content';
 import { ResultsArea } from './results-area/results-area';
+import { CommentBlock } from '../comment-block/comment-block';
+import { ReviewsBlock } from '../reviews-block/reviews-block';
 
 export const ResultsContent = () => {
   const { attemptID } = useParams();
@@ -21,7 +23,6 @@ export const ResultsContent = () => {
     const data = await fetchAttemptAction(attemptID);
     const convertedData = convertDataStC(data);
     setResults(convertedData);
-    console.log(convertedData);
     setCurrentQuestionID(-1);
   }
 
@@ -33,6 +34,7 @@ export const ResultsContent = () => {
 
   const convertDataStC = (data) => {
     const convertedData = {
+      testID: data.test,
       testTitle: data.passage.title,
       attemptID: data.id,
       questionList: data.passage.question_set.map(q => ({
@@ -58,6 +60,7 @@ export const ResultsContent = () => {
       answersCorrect: data.total.correct_answers,
       questionsAmount: data.total.questions_count,
       score: data.total.score,
+      averageScore: data.total.average_score,
       time: data.total.time,
       answersTotal: data.total.total_answers,
     }
@@ -81,9 +84,12 @@ export const ResultsContent = () => {
         />
       </QuestionListSidebar>
       {(currentQuestionID === -1)
-      ? <ResultsArea
-        results={results}
-      />
+      ? <div>
+          <ResultsArea
+            results={results}
+          />
+          <ReviewsBlock testID={results.testID} isCommentingAvailiable/>
+        </div>
       : <QuestionArea
         questionData={getCurrentQuestionData(results, currentQuestionID)}
         questionIndex={getCurrentQuestionIndex(results, currentQuestionID)}

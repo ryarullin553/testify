@@ -5,9 +5,10 @@ import styles from './user-block.module.scss';
 import { LoginWindow } from '../../login-window/login-window';
 import { DropdownMenu } from '../../dropdown-menu/dropdown-menu';
 import { PaleButton } from '../../pale-button/pale-button';
+import { AvatarBlock } from '../../avatar-block/avatar-block';
 
 export const UserBlock = () => {
-  let {avatar} = useSelector(selectUserInfo);
+  const {avatar} = useSelector(selectUserInfo);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isAuthorized = useSelector(selectAuthorizationStatus);
@@ -43,7 +44,7 @@ export const UserBlock = () => {
   return (
     <div className={styles.userBlock}>
       <button onClick={handleMenuClick}>
-        <img src={avatar} />
+        <AvatarBlock src={avatar} size={41} additionalStyle={styles.userAvatar}/>
       </button>
       {isMenuOpen && <DropdownMenu actionCloseMenu={actionCloseMenu} />}
     </div>

@@ -37,11 +37,11 @@ export const LoginTabManager = ({handleCloseModal}) => {
   }
 
   const actionRegister = async (username, email, password) => {
-    await api.post('api/auth/users/', {username, email, password});
+    await api.post('auth/users/', {username, email, password});
   }
 
   const actionResetPassword = async (email) => {
-    await api.post('api/auth/users/reset_password/', {email});
+    await api.post('auth/users/reset_password/', {email});
   }
 
   return (

@@ -1,5 +1,5 @@
 import { Footer } from '../components/footer/footer';
-import { ProfileBookmarkPageComponent } from '../components/profile-bookmarks-page/profile-bookmark-page-component'
+import { ProfileBookmarkContent } from '../components/profile-bookmark-content/profile-bookmark-content'
 import { Header } from '../components/header/header';
 
 export const ProfileBookmarkPage = () => {
@@ -7,7 +7,7 @@ export const ProfileBookmarkPage = () => {
     return (
         <>
             <Header />
-            <ProfileBookmarkPageComponent  />
+            <ProfileBookmarkContent  />
             <Footer />
         </>
     );

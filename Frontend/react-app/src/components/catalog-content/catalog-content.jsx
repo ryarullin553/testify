@@ -16,7 +16,7 @@ export const CatalogContent = () => {
           <div className={styles.catalog__options}>
             <div className={styles.search}>
               <div className={styles.search__input}>
-                <img src="img/loupe.svg" alt="Loupe" />
+                <img src="img/loupe.svg" alt="Поиск" />
                 <input type="text" placeholder="Название теста" />
               </div>
               <button className={styles.search__button}>Поиск</button>

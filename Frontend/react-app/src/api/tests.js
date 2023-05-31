@@ -2,8 +2,8 @@ import { api } from '../store';
 
 const BASE_REQUEST = 'tests/';
 
-export const fetchUserTests = async () => {
-  const {data} = await api.get(BASE_REQUEST);
+export const fetchUserCreatedTests = async () => {
+  const {data} = await api.get(`${BASE_REQUEST}/created/`);
   return data;
 }
 
@@ -15,6 +15,10 @@ export const createTestAction = async (newTestData, config) => {
 
 export const editTestAction = async (testID, newTestData, config) => {
   await api.patch(`${BASE_REQUEST}${testID}/`, newTestData, config);
+}
+
+export const changeTestVisibilityAction = async (testID, isPublished) => {
+  await api.patch(`${BASE_REQUEST}${testID}/`, {is_published: isPublished});
 }
 
 export const fetchTestInfoAction = async (testID) => {
@@ -34,5 +38,10 @@ export const fetchTestQuestionsAction = async (testID) => {
 
 export const fetchResultsAction = async (testID) => {
   const {data} = await api.get(`${BASE_REQUEST}${testID}/results/`);
+  return data;
+}
+
+export const fetchTestFeedbackAction = async (testID) => {
+  const {data} = await api.get(`${BASE_REQUEST}${testID}/feedbacks/`);
   return data;
 }

@@ -9,7 +9,7 @@ import { useScroll } from '../../hooks';
 
 export const MyTestsPageContent = () => {
   const [testList, setTestList] = useState([]);
-  const [baseRequest, setBaseRequest] = useState('tests/');
+  const [baseRequest, setBaseRequest] = useState('tests/created/');
 
   useScroll(baseRequest, setTestList);
 
@@ -31,7 +31,7 @@ export const MyTestsPageContent = () => {
           />
           <Link to={AppRoute.CreateTest} className={styles.createTestLink}>Создать тест</Link>
         </div>
-        <TestListProfile testList={testList} linkList={linkList}/>
+        <TestListProfile testList={testList} linkList={linkList} isEditable/>
       </section>
     </main>
   );

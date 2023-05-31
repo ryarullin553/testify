@@ -28,22 +28,25 @@ export const DropdownMenu = ({actionCloseMenu}) => {
   const wrapperRef = useRef(null);
   useOutsideHandler(wrapperRef);
 
+  const linkList = [
+    { id: 1, link: AppRoute.Profile, label: 'Профиль'},
+    { id: 2, link: AppRoute.History, label: 'История'},
+    { id: 3, link: AppRoute.MyTests, label: 'Мои тесты'},
+    { id: 4, link: AppRoute.ProfileBookmark, label: 'Избранное'},
+    { id: 5, link: AppRoute.ProfileSetting, label: 'Настройки'},
+  ];
+
   return (
     <div ref={wrapperRef}>
       <div className={styles.userMenu}>
         <ul>
-          <li>
-            <Link to={AppRoute.Profile}>Профиль</Link>
-          </li>
-          <li>
-            <Link to={AppRoute.ProfileTests}>Тесты</Link>
-          </li>
-          <li>
-            <Link to={AppRoute.MyTests}>Мои тесты</Link>
-          </li>
-          <li>
-            <Link to={AppRoute.ProfileSetting}>Настройки</Link>
-          </li>
+          {
+            linkList.map(linkItem => (
+              <li key={linkItem.id}>
+                <Link to={linkItem.link}>{linkItem.label}</Link>
+              </li>
+            ))
+          }
           <li>
             <button onClick={handleLogoutClick}>Выход</button>
           </li>

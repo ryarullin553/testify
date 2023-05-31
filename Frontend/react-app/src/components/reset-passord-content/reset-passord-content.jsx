@@ -5,7 +5,7 @@ export const ResetPasswordContent = () => {
 
   return (
     <div className={styles.main}>
-      < ResetPasswordComponent />
+      <ResetPasswordComponent />
     </div>
   );
 }
