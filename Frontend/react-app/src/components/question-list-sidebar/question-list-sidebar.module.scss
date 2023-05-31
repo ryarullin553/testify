@@ -1,7 +1,10 @@
-.questionListSection {  
+.questionListSection {
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   width: 238px;
   height: fit-content;
+  max-height: 437px;
 
   padding: 21px 18px;
 
@@ -17,7 +20,27 @@
   }
 
   ol {
+    height: min-content;
     margin: 21px 0;
+    overflow-y: scroll;
+  
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: #FAF9FF;
+      border-radius: 5px;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: #010851;
+      border-radius: 5px;
+    }
+  
+    &::-webkit-scrollbar-thumb:hover {
+      background: #A38FFD;
+    }
   }
 
   li {
