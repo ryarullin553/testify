@@ -122,6 +122,17 @@
     height: 100%;
     opacity: 0;
   }
+
+  &:hover,
+  &.active {
+    border: 1px solid #A38FFD;
+
+    background: url(./img/test-logo-icon-hovered.svg) center 10px no-repeat;
+
+    p {
+      color: #A38FFD;
+    }
+  }
 }
 
 .controls {
