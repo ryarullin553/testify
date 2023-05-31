@@ -17,6 +17,10 @@ export const editTestAction = async (testID, newTestData, config) => {
   await api.patch(`${BASE_REQUEST}${testID}/`, newTestData, config);
 }
 
+export const changeTestVisibilityAction = async (testID, isPublished) => {
+  await api.patch(`${BASE_REQUEST}${testID}/`, {is_published: isPublished});
+}
+
 export const fetchTestInfoAction = async (testID) => {
   const {data} = await api.get(`${BASE_REQUEST}${testID}/`);
   return data;

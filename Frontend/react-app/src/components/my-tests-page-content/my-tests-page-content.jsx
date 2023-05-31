@@ -31,7 +31,7 @@ export const MyTestsPageContent = () => {
           />
           <Link to={AppRoute.CreateTest} className={styles.createTestLink}>Создать тест</Link>
         </div>
-        <TestListProfile testList={testList} linkList={linkList}/>
+        <TestListProfile testList={testList} linkList={linkList} isEditable/>
       </section>
     </main>
   );

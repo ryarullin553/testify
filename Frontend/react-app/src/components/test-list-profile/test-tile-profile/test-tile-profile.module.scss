@@ -31,35 +31,28 @@
     line-height: 19px;
     color: #000000;
   }
+}
 
-  button {
-    position: relative;
-    bottom: 13px;
-    left: 17px;
-    grid-area: button;
+.buttonMore {
+  position: relative;
+  bottom: 13px;
+  left: 17px;
+  grid-area: button;
 
-    color: #A5A5A5;
+  color: #A5A5A5;
 
-    transform: rotate(90deg) scale(1.15);
+  transform: rotate(90deg) scale(1.15);
 
-    transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 
-    &:hover {
-      color: #000000;
-    }
+  &:hover {
+    color: #000000;
   }
 }
 
 .titleWrapper {
   grid-area: title;
   display: flex;
-}
-
-.isPublishedIcon {
-  height: 16px;
-  width: 16px;
-  margin-left: 11px;
-  margin-top: 2px;
 }
 
 .logo {
