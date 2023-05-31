@@ -1,7 +1,7 @@
 import styles from './results-area.module.scss';
 
 export const ResultsArea = ({results}) => {
-  const {testTitle, answersTotal, answersCorrect, questionsAmount, score, time} = results;
+  const {testTitle, answersTotal, answersCorrect, questionsAmount, score, time, averageScore} = results;
 
   return (
     <section className={styles.resultContent}>
@@ -11,7 +11,7 @@ export const ResultsArea = ({results}) => {
         <div className={styles.allResults}>
           <p>Вы ответили на <span>{answersTotal}</span> вопросов из <span>{questionsAmount}</span></p>
           <p>Ответили верно на <span>{answersCorrect}</span> вопросов</p>
-          <p>Прошли тест лучше чем <span>???</span> пользователей</p>
+          <p>Средний результат теста <span>{parseInt(averageScore)}%</span></p>
           <p>Время прохождения теста: <span>{time}</span></p>
         </div>
         <div className={styles.progressBar}>

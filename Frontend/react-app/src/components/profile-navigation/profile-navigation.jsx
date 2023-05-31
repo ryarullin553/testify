@@ -3,24 +3,29 @@ import { AppRoute } from '../../const';
 import { NavLink } from 'react-router-dom';
 
 export const ProfileNavigation = () => {
+  const linkList = [
+    { id: 1, link: AppRoute.Profile, label: 'Профиль'},
+    { id: 2, link: AppRoute.History, label: 'История'},
+    { id: 3, link: AppRoute.MyTests, label: 'Мои тесты'},
+    { id: 4, link: AppRoute.ProfileBookmark, label: 'Избранное'},
+    { id: 5, link: AppRoute.ProfileSetting, label: 'Настройки'},
+  ];
+
   return (
     <section className={styles.profileNavigation}>
       <ul>
-        <li>
-          <NavLink to={AppRoute.Profile} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Профиль</NavLink>
-        </li>
-        <li>
-          <NavLink to={AppRoute.History} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Тесты</NavLink>
-        </li>
-        <li>
-          <NavLink to={AppRoute.MyTests} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Мои тесты</NavLink>
-        </li>
-        <li>
-          <NavLink to={AppRoute.ProfileBookmark} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Избранное</NavLink>
-        </li>
-        <li>
-          <NavLink to={AppRoute.ProfileSetting} className={({isActive}) => (isActive ? styles.activeLink : undefined)}>Настройки</NavLink>
-        </li>
+        {
+          linkList.map(linkItem => (
+            <li key={linkItem.id}>
+              <NavLink
+                to={linkItem.link}
+                className={({isActive}) => (isActive ? styles.activeLink : undefined)}
+              >
+                {linkItem.label}
+              </NavLink>
+            </li>
+          ))
+        }
       </ul>
     </section>
   );

@@ -60,6 +60,7 @@ export const ResultsContent = () => {
       answersCorrect: data.total.correct_answers,
       questionsAmount: data.total.questions_count,
       score: data.total.score,
+      averageScore: data.total.average_score,
       time: data.total.time,
       answersTotal: data.total.total_answers,
     }
