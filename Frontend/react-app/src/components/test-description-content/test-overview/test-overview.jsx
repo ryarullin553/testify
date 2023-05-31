@@ -6,6 +6,7 @@ import { AppRoute } from '../../../const';
 import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks';
 import { FeedbackStars } from '../../feedback-stars/feedback-stars';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
+import { fetchResultsAction } from '../../../api/tests';
 
 export const TestOverview = ({testInfo, setIsFavorite, children}) => {
   const navigate = useNavigate();
@@ -15,7 +16,11 @@ export const TestOverview = ({testInfo, setIsFavorite, children}) => {
 
   const handleStartTestClick = async (evt) => {
     evt.preventDefault();
-    await createAttemptAction(testInfo.testID);
+    const attemptList = await fetchResultsAction(testInfo.testID);
+    const activeAttempt = attemptList.results.find(a => (!a.total));
+    if (!activeAttempt) {
+      await createAttemptAction(testInfo.testID);
+    }
     navigate(`${AppRoute.TestMain}/${testInfo.testID}`);
   }
 
