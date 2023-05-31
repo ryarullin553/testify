@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { AvatarBlock } from '../avatar-block/avatar-block';
 import styles from './comment-block.module.scss';
 import { submitReviewAction } from '../../api/reviews';
+import { RateBlock } from './rate-block/rate-block';
 
 export const CommentBlock = ({testID, reloadTestFeedback}) => {
   const [formState, setFormState] = useState({
-    rating: null,
     review: '',
   });
 
@@ -27,24 +27,7 @@ export const CommentBlock = ({testID, reloadTestFeedback}) => {
 
   return (
     <form className={styles.commentForm} name='review-test-form'>
-      <fieldset className={styles.ratingField}>
-        <h2 className={styles.legend}>Оцените тест</h2>
-        {
-          [...Array(5).keys()].map(num => (
-            <input
-              key={num + 1}
-              className={styles.ratingInput}
-              type='radio'
-              name='rating'
-              value={num + 1}
-              id={`rate-${num + 1}-star`}
-              checked={formState.rating == num + 1}
-              onChange={handleFieldChange}
-            />
-          ))
-        }
-        {/* <FeedbackStars width={137.62} height={23.73} rating={2.2} fill={'#FFFFFF'} id={'rate-test'} additionalStyles={styles.feedbackStars}/> */}
-      </fieldset>
+      <RateBlock rating={formState.rating} handleFieldChange={handleFieldChange}/>
       <div className={styles.reviewBlock}>
         <AvatarBlock size={50}/>
         <textarea

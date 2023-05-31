@@ -23,7 +23,7 @@ export const ReviewsBlock = ({testID}) => {
       id: i,
       username: r.user_name,
       content: r.content,
-      date: r.created,
+      date: new Date(Date.parse(r.created)),
       rating: r.rate,
     }))
     return modifiedData;

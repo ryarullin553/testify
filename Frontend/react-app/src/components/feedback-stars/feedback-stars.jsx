@@ -3,7 +3,7 @@ export const FeedbackStars = ({width, height, rating, fill, id, additionalStyles
 
   return (
     <svg width={width} height={height} className={additionalStyles} viewBox="0 0 87 15" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100%" height="100%" fill={`url(#${id}-gradient)`}/>
+      <rect width="103.44%" height="100%" fill={`url(#${id}-gradient)`} transform='translate(-1.72)'/>
       <rect width="100%" height="100%" fill={fill} mask={`url(#${id}-reverse)`}/>
       <defs>
         <mask id={`${id}-reverse`}>

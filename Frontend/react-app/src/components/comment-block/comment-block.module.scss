@@ -2,34 +2,6 @@
   border-top: 2px solid rgba(69, 72, 104, 0.3);
 }
 
-.ratingField {
-  padding-top: 22px;
-  padding-bottom: 24px;
-  
-  display: flex;
-  flex-direction: row;
-}
-
-.ratingInput {
-  display: block;
-  height: 23.73px;
-  width: 23.73px;
-  margin: 0;
-  margin-right: 4.75px;
-}
-
-.legend {
-  z-index: -10;
-  display: inline;
-  margin-right: 20px;
-
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-
-  color: #222222;
-}
-
 .reviewBlock {
   display: flex;
   margin-bottom: 24px;
