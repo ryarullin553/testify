@@ -46,10 +46,11 @@ export const TestDescriptionContent = () => {
 
   return (
     <main className={styles.main}>
-      <TestOverview testInfo={testInfo} setIsFavorite={setIsFavorite}/>
-      <ReviewsBlock testID={testID}>
-        <TestReview rating={testInfo.rating} ratingCounter={testInfo.ratingCounter} />
-      </ReviewsBlock>
+      <TestOverview testInfo={testInfo} setIsFavorite={setIsFavorite}>
+        <ReviewsBlock testID={testID}>
+          <TestReview rating={testInfo.rating} ratingCounter={testInfo.ratingCounter} />
+        </ReviewsBlock>
+      </TestOverview>
     </main>
   );
 }

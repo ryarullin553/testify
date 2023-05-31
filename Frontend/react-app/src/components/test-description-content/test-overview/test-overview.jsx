@@ -1,6 +1,5 @@
 import styles from './test-overview.module.scss';
-import { useEffect, useState } from 'react';
-import { fetchTestInfoAction } from '../../../api/tests';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { createAttemptAction } from '../../../api/results';
 import { AppRoute } from '../../../const';
@@ -8,7 +7,7 @@ import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks'
 import { FeedbackStars } from '../../feedback-stars/feedback-stars';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
 
-export const TestOverview = ({testInfo, setIsFavorite}) => {
+export const TestOverview = ({testInfo, setIsFavorite, children}) => {
   const navigate = useNavigate();
   const [isMouseOver, setIsMouseOver] = useState(false);
 
@@ -64,6 +63,7 @@ export const TestOverview = ({testInfo, setIsFavorite}) => {
               </div>
             </div>
           </div>
+        {children}
         </section>
         <div className={styles.sidebar}>
           <button className={styles.button} onClick={handleStartTestClick}>Начать</button>

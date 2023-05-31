@@ -4,7 +4,7 @@ import styles from './rewiew-list.module.scss';
 export const ReviewList = ({reviewList}) => {
   return (
     <>
-      <ul>
+      <ul className={styles.reviewList}>
         <li>
           {
             reviewList.map(reviewItem => {

@@ -19,6 +19,7 @@
     display: flex;
     align-items: center;
     height: 40px;
+    width: 100%;
 
     &:nth-child(1) >a::before {
       background-image: url(./img/profile-icon.svg);
