@@ -8,56 +8,26 @@ import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks'
 import { FeedbackStars } from '../../feedback-stars/feedback-stars';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
 
-export const TestOverview = ({testID}) => {
+export const TestOverview = ({testInfo, setIsFavorite}) => {
   const navigate = useNavigate();
   const [isMouseOver, setIsMouseOver] = useState(false);
-  const [testInfo, setTestInfo] = useState();
-
-  const fetchTestInfo = async (testID) => {
-    const data = await fetchTestInfoAction(testID);
-    const testData = convertTestDataStC(data);
-    setTestInfo(testData);
-  }
-
-  const convertTestDataStC = (data) => {
-    const modifiedData = {
-      title: data.title,
-      shortAbstract: data.description,
-      abstract: data.full_description,
-      testAvatar: data.avatar,
-      isFavorite: data.in_bookmarks,
-      rating: data.rating,
-      ratingCounter: data.feedbacks_count,
-      completitionCounter: data.results_count,
-      userAvatar: data.user_avatar,
-      userBio: data.user_bio,
-      username: data.user_name,
-    }
-    return modifiedData;
-  }
-
-  useEffect(() => {
-    fetchTestInfo(testID);
-  }, []);
-
-  if (!testInfo) return <></>;
 
   const getFavoriteContent = () => (testInfo.isFavorite || isMouseOver) ? '♥' : '♡';
 
   const handleStartTestClick = async (evt) => {
     evt.preventDefault();
-    await createAttemptAction(testID);
-    navigate(`${AppRoute.TestMain}/${testID}`);
+    await createAttemptAction(testInfo.testID);
+    navigate(`${AppRoute.TestMain}/${testInfo.testID}`);
   }
 
   const handleFavoriteClick = async (evt) => {
     evt.preventDefault();
     if (!testInfo.isFavorite) {
-      await addBookmarkAction(testID);
-      setTestInfo({...testInfo, isFavorite: true});
+      await addBookmarkAction(testInfo.testID);
+      setIsFavorite(true);
     } else {
-      await deleteBookmarkAction(testID);
-      setTestInfo({...testInfo, isFavorite: false});
+      await deleteBookmarkAction(testInfo.testID);
+      setIsFavorite(false);
     }
   }
 

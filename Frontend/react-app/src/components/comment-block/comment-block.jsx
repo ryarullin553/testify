@@ -3,8 +3,11 @@ import { AvatarBlock } from '../avatar-block/avatar-block';
 import styles from './comment-block.module.scss';
 import { submitReviewAction } from '../../api/reviews';
 import { RateBlock } from './rate-block/rate-block';
+import { useSelector } from 'react-redux';
+import { selectUserInfo } from '../../store/selectors';
 
-export const CommentBlock = ({testID, reloadTestFeedback}) => {
+export const CommentBlock = ({testID, reloadFeedback}) => {
+  const {avatar} = useSelector(selectUserInfo);
   const [formState, setFormState] = useState({
     review: '',
   });
@@ -22,14 +25,14 @@ export const CommentBlock = ({testID, reloadTestFeedback}) => {
       rate: formState.rating,
     }
     await submitReviewAction(newReviewData);
-    await reloadTestFeedback();
+    await reloadFeedback();
   }
 
   return (
     <form className={styles.commentForm} name='review-test-form'>
       <RateBlock rating={formState.rating} handleFieldChange={handleFieldChange}/>
       <div className={styles.reviewBlock}>
-        <AvatarBlock size={50}/>
+        <AvatarBlock size={50} src={avatar}/>
         <textarea
           name='review'
           placeholder='Напишите что думаете'

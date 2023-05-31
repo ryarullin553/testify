@@ -2,10 +2,9 @@ import styles from './reviews-block.module.scss';
 import { fetchTestFeedbackAction } from '../../api/tests';
 import { useEffect, useState } from 'react';
 import { ReviewList } from '../rewiew-list/rewiew-list';
-import { TestReview } from './test-review/test-review';
 import { CommentBlock } from '../comment-block/comment-block';
 
-export const ReviewsBlock = ({testID}) => {
+export const ReviewsBlock = ({testID, isCommentingAvailiable, children}) => {
   const [testFeedback, setTestFeedback] = useState();
 
   const fetchTestFeedback = async (testID) => {
@@ -37,8 +36,8 @@ export const ReviewsBlock = ({testID}) => {
 
   return (
     <section className={styles.reviews}>
-      {/* <TestReview /> */}
-      <CommentBlock testID={testID} reloadTestFeedback={reloadTestFeedback}/>
+      { children }
+      { isCommentingAvailiable && <CommentBlock testID={testID} reloadFeedback={reloadTestFeedback}/>}
       <ReviewList reviewList={testFeedback}/>
     </section>
   );

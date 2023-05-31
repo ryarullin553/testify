@@ -122,27 +122,38 @@
     border-radius: 5px;
     width: 128px;
     height: 128px;
-
+  
     background: url(./img/test-logo-icon.svg) center 10px no-repeat;
-
+  
     p {
-        position: absolute;
-        display: block;
-        width: 128px;
-        margin-bottom: 10px;
-
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 15px;
-        text-align: center;
-        color: #848492;
+      position: absolute;
+      display: block;
+      width: 128px;
+      margin-bottom: 10px;
+  
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 15px;
+      text-align: center;
+      color: #848492;
     }
-
+  
     input {
-        cursor: pointer;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+  
+    &:hover,
+    &.active {
+      border: 1px solid #A38FFD;
+  
+      background: url(./img/test-logo-icon-hovered.svg) center 10px no-repeat;
+  
+      p {
+        color: #A38FFD;
+      }
     }
 }
 

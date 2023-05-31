@@ -8,7 +8,7 @@ import { PaleButton } from '../../pale-button/pale-button';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
 
 export const UserBlock = () => {
-  let {avatar} = useSelector(selectUserInfo);
+  const {avatar} = useSelector(selectUserInfo);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isAuthorized = useSelector(selectAuthorizationStatus);
