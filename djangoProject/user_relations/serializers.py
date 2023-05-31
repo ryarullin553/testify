@@ -15,10 +15,11 @@ class BookmarkSerializer(serializers.ModelSerializer):
 class FeedbackSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     user_name = serializers.CharField(source='user.username', read_only=True)
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
 
     class Meta:
         model = Feedback
-        fields = ['user', 'test', 'rate', 'content', 'user_name', 'created']
+        fields = ['user', 'test', 'rate', 'content', 'user_id', 'user_name', 'created']
         extra_kwargs = {'test': {'write_only': True}}
 
 

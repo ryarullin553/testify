@@ -21,6 +21,7 @@ class Feedback(models.Model):
 
     class Meta:
         db_table = 'feedbacks'
+        unique_together = ('user', 'test')
 
 
 class Comment(models.Model):
