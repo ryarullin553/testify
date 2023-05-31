@@ -39,7 +39,7 @@ export const TestOverview = ({testInfo, setIsFavorite, children}) => {
           <div className={styles.feedback}>
             <div className={styles.score}>
               <FeedbackStars width={104.4} height={18} rating={testInfo.rating} fill={'#282B41'} id={'test-description'}/>
-              <span className={styles.rating}>{testInfo.rating ?? '0.0'}</span>
+              <span className={styles.rating}>{testInfo.rating ?? '?'}/5</span>
             </div>
             <a href="#reviews" className={styles.feedback__count}>{testInfo.ratingCounter} отзывов</a>
             <div className={styles.feedback__users}>{testInfo.completitionCounter} прохождений</div>
