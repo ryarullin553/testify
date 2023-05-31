@@ -118,7 +118,7 @@ export const TestDescriptionForm = ({testID}) => {
       <fieldset className={styles.testLogo}>
         <label>Логотип</label>
         <div
-          className={styles.dropZone}
+          className={`${styles.dropZone} ${formData.avatar && styles.active}`}
         >
         <p>png-файл с прозрачностью 230х230px</p>
         <input
