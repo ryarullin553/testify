@@ -118,11 +118,9 @@ class QuestionAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.D
     @action(detail=True, url_path='likes', url_name='likes')
     def get_question_likes(self, request, **kwargs):
         question = self.get_object()
-        likes = question.likes.filter(is_like=True).count()
-        dislikes = question.likes.filter(is_like=False).count()
-        is_like = LikeDislike.objects.filter(question=question, user=self.request.user)
-        serializer = LikeDislikeSerializer(*is_like)
-        return JsonResponse({'likes': likes, 'dislikes': dislikes, 'is_like': serializer.data.get('is_like')})
+        fields = ('likes', 'dislikes', 'is_like')
+        serializer = self.get_serializer(question, fields=fields)
+        return Response(serializer.data)
 
     @action(detail=True, url_path='comments', url_name='comments')
     def get_question_comments(self, request, **kwargs):

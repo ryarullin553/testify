@@ -26,10 +26,13 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(DynamicFieldsModelSerializer):
     answer_set = AnswerSerializer(many=True)
+    likes = serializers.SerializerMethodField()
+    dislikes = serializers.SerializerMethodField()
+    is_like = serializers.SerializerMethodField(method_name='check_like')
 
     class Meta:
         model = Question
-        fields = ['id', 'content', 'test', 'answer_set']
+        fields = ['id', 'content', 'test', 'answer_set', 'likes', 'dislikes', 'is_like']
 
     def create(self, validated_data):
         """Создает вопрос и связанные с ним ответы"""
@@ -48,6 +51,24 @@ class QuestionSerializer(DynamicFieldsModelSerializer):
             Answer.objects.create(question=question, **answer_data)
         question.save()
         return question
+
+    @staticmethod
+    def get_likes(question):
+        likes = question.likes.filter(is_like=True).count()
+        return likes
+
+    @staticmethod
+    def get_dislikes(question):
+        dislikes = question.likes.filter(is_like=False).count()
+        return dislikes
+
+    def check_like(self, question):
+        user = self.context['request'].user
+        likes = question.likes.filter(user=user)   # найти способ получать объект или None
+        try:
+            return likes[0].is_like
+        except IndexError:
+            return None
 
 
 class TestSerializer(DynamicFieldsModelSerializer):
