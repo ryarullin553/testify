@@ -126,7 +126,7 @@ class QuestionAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.D
     def get_question_comments(self, request, **kwargs):
         question = self.get_object()
         page = self.paginate_queryset(question.comments)
-        serializer = CommentSerializer(page, many=True)
+        serializer = CommentSerializer(page, many=True, context={'request': request})
         return self.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=['POST'], url_path='generated', url_name='generated',
