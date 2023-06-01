@@ -15,18 +15,27 @@ class UserSerializer(DynamicFieldsModelSerializer):
     def get_finished_tests(user):
         tests = Test.objects.filter(results__user=user, results__total__isnull=False).distinct()[0:3]
         serializer = TestSerializer(tests, many=True, read_only=True, fields=('id', 'title', 'avatar'))
+        for test in serializer.data:
+            if test['avatar']:
+                test['avatar'] = "http://127.0.0.1:8000" + test['avatar']
         return serializer.data
 
     @staticmethod
     def get_unfinished_tests(user):
         tests = Test.objects.filter(~Q(results__total__isnull=False), results__user=user).distinct()[0:2]
         serializer = TestSerializer(tests, many=True, read_only=True, fields=('id', 'title', 'avatar'))
+        for test in serializer.data:
+            if test['avatar']:
+                test['avatar'] = "http://127.0.0.1:8000" + test['avatar']
         return serializer.data
 
     @staticmethod
     def get_created_tests(user):
         tests = user.created_tests.order_by('-created')[0:3]
         serializer = TestSerializer(tests, many=True, read_only=True, fields=('id', 'title', 'avatar'))
+        for test in serializer.data:
+            if test['avatar']:
+                test['avatar'] = "http://127.0.0.1:8000" + test['avatar']
         return serializer.data
 
     class Meta:
