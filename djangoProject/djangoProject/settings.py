@@ -93,8 +93,12 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'testify_db',
+        'USER': 'testify_user',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -157,7 +161,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
     'PAGE_SIZE': 15,
 
-    #'DATETIME_FORMAT': "%d.%m.%Y %H:%M:%S"
+    # 'DATETIME_FORMAT': "%d.%m.%Y %H:%M:%S"
 
 }
 
