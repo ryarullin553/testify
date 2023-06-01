@@ -1,6 +1,6 @@
 import styles from './profile-settings.module.scss';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
-import { ResetPasswordComponent } from "../reset-passord-content/reset-password-component/reset-password-component";
+// import { ResetPasswordComponent } from "../reset-passord-content/reset-password-component/reset-password-component";
 import { useEffect, useState } from 'react';
 import { api, store } from '../../store';
 import { checkAuthAction } from '../../store/api-actions';
@@ -12,6 +12,26 @@ export const ProfileSettings = () => {
         username: '',
         bio: '',
     });
+    const [formState, setFormState] = useState({
+        passwordCurrent: '',
+        password: '',
+        passwordRepeat: '',
+    });
+    const [type, setType] = useState('password');
+
+    // const togglePassInput = (e) => {
+    //     if (type === 'password') {
+    //         setType('text');
+
+    //     } else {
+    //         setType('password');
+    //     }
+    // };
+
+    const handleFieldChange = (evt) => {
+        const { name, value } = evt.target;
+        setFormState({ ...formState, [name]: value });
+    }
 
     const handleOnFormChange = (evt) => {
         const { name, value } = evt.target;
@@ -22,6 +42,10 @@ export const ProfileSettings = () => {
         const { files } = evt.target;
         setFormData({ ...formData, avatar: files[0] });
     }
+
+    const handleFormSubmit = async (evt) => {
+        evt.preventDefault()
+        }
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
@@ -39,8 +63,8 @@ export const ProfileSettings = () => {
 
     const fetchUserData = async () => {
         const { data } = await api.get(`/users/${userID}/`);
-        const {username, bio} = data;
-        setFormData({username, bio});
+        const { username, bio } = data;
+        setFormData({ username, bio });
     }
 
     useEffect(() => {
@@ -88,8 +112,21 @@ export const ProfileSettings = () => {
                 <div className={styles.controls}>
                     <button className={styles.createButton} onClick={handleSubmit}>Сохранить</button>
                 </div>
+
+                <hr />
+
+            <div className={styles.container}>
+            <h1>Изменение пароля</h1>
+            <form>
+                <input type='text' name='passwordCurrent' id='passwordCurrent' placeholder='Текущий пароль' value={formState.passwordCurrent} onChange={handleFieldChange} />
+                <input type='text' name='password' id='password' placeholder='Новый пароль' value={formState.password} onChange={handleFieldChange} />
+                <input type='text' name='passwordRepeat' id='passwordRepeat' placeholder='Подтвердите новый пароль' value={formState.passwordRepeat} onChange={handleFieldChange} />
+                <button onClick={handleFormSubmit}>Изменить пароль</button>
+            </form>
+        </div>
             </form >
-            {/* <ResetPasswordComponent /> */}
+
+            
         </main>
     );
 }
