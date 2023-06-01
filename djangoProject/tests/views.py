@@ -1,14 +1,17 @@
 from django.db.models import Count, Avg, Q
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins
+from rest_framework import mixins, pagination
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import viewsets
 
-from user_relations.serializers import FeedbackSerializer, CommentSerializer
+from user_relations.models import LikeDislike
+from user_relations.serializers import FeedbackSerializer, CommentSerializer, LikeDislikeSerializer
 from .models import Test, Question
 from .permissions import IsTestAuthor, IsQuestionAuthor
 from .serializers import TestSerializer, QuestionSerializer
@@ -26,8 +29,9 @@ class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Destr
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['title', 'description']
     ordering_fields = ['rating', 'results_count', 'created']
-    ordering = '-rating'
+    ordering = '-created'
     filterset_fields = ['is_published', 'user']
+    pagination_class = pagination.PageNumberPagination
 
     def list(self, request, *args, **kwargs):
         """Возвращает каталог тестов"""
@@ -41,13 +45,16 @@ class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Destr
 
     def retrieve(self, request, *args, **kwargs):
         """Возвращает страницу теста"""
-        instance = self.get_object()
+        queryset = self.filter_queryset(self.queryset.filter(is_published=True))
+        instance = get_object_or_404(queryset, pk=self.kwargs['pk'])
         serializer_fields = ('id', 'title', 'description', 'avatar', 'full_description', 'rating', 'feedbacks_count',
-                             'results_count', 'in_bookmarks', 'user_name', 'user_avatar', 'user_bio', 'feedbacks')
+                             'results_count', 'in_bookmarks', 'user_name', 'user_avatar', 'user_bio', 'feedbacks',
+                             'is_passage')
         serializer = self.get_serializer(instance, fields=serializer_fields)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='created', url_name='created', ordering='-created', search_fields=['title'])
+    @action(detail=False, url_path='created', url_name='created', ordering='-created', search_fields=['title'],
+            pagination_class=pagination.CursorPagination)
     def get_created_tests(self, request):
         """Возвращает список тестов, которые создал пользователь"""
         user_tests = self.queryset.filter(user=request.user)
@@ -58,7 +65,7 @@ class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Destr
         return self.get_paginated_response(serializer.data)
 
     @action(detail=False, url_path='user/(?P<user>[^/.]+)', url_name='user', ordering='-created',
-            search_fields=['title'])
+            search_fields=['title'], pagination_class=pagination.CursorPagination)
     def get_user_tests(self, request, **kwargs):
         """Возвращает список тестов, которые пользователь прошел или еще проходит"""
         user = kwargs.get('user')
@@ -92,7 +99,8 @@ class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Destr
         serializer = self.get_serializer(test, fields=serializer_fields)
         return Response(serializer.data)
 
-    @action(detail=True, url_path='feedbacks', url_name='feedbacks', ordering='-created', ordering_fields=['created'])
+    @action(detail=True, url_path='feedbacks', url_name='feedbacks', ordering='-created', ordering_fields=['created'],
+            pagination_class=pagination.CursorPagination)
     def get_test_feedbacks(self, request, **kwargs):
         """Возвращает отзывы теста"""
         test = self.get_object()
@@ -112,7 +120,9 @@ class QuestionAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.D
         question = self.get_object()
         likes = question.likes.filter(is_like=True).count()
         dislikes = question.likes.filter(is_like=False).count()
-        return JsonResponse({'likes': likes, 'dislikes': dislikes})
+        is_like = LikeDislike.objects.filter(question=question, user=self.request.user)
+        serializer = LikeDislikeSerializer(*is_like)
+        return JsonResponse({'likes': likes, 'dislikes': dislikes, 'is_like': serializer.data.get('is_like')})
 
     @action(detail=True, url_path='comments', url_name='comments')
     def get_question_comments(self, request, **kwargs):

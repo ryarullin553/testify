@@ -2,6 +2,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import OrderingFilter
+from rest_framework.response import Response
 
 from .models import Bookmark, Feedback, Comment, LikeDislike
 from .permissions import IsOwner
@@ -16,7 +17,7 @@ class BookmarkAPIView(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewset
     ordering = 'id'
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.queryset.filter(user=request.user))
+        queryset = self.filter_queryset(self.queryset.filter(user=request.user, test__is_published=True))
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)

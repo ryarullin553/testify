@@ -37,7 +37,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class LikeDislikeSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    is_like = serializers.BooleanField(default=None)
 
     class Meta:
         model = LikeDislike
         fields = ['id', 'user', 'question', 'is_like']
+        extra_kwargs = {'question': {'write_only': True}}
