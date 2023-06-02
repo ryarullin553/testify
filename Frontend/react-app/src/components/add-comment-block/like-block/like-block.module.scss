@@ -25,5 +25,8 @@
   input {
     display: none;
   }
-}
 
+  .input:checked + .span {
+    color: black;
+  }
+}

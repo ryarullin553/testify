@@ -22,16 +22,12 @@ export const MainPageContent = () => {
       <section className={styles.advantagesSection}>
         <div className={styles.advantagesTextBlock}>
           <h2>Почему выбирают Testify?</h2>
-          <p>
-            В настоящий момент на нашей платформе зарегистрировано 137 980
-            пользователей
-          </p>
         </div>
         <div className={styles.advantagesCard}>
           <p>Большой ассортимент тестов</p>
         </div>
         <div className={styles.advantagesCard}>
-          <p>Отсутствие ограничений при создании</p>
+          <p>Генерация вариантов ответов</p>
         </div>
         <div className={styles.advantagesCard}>
           <p>Удобный интерфейс</p>
