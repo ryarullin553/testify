@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './filter-form.module.scss';
 
-export const FilterForm = ({setBaseRequest}) => {
+export const FilterForm = ({defaultRequest, setBaseRequest}) => {
   const [searchField, setSearchField] = useState('');
   const [filter, setFilter] = useState('all');
 
@@ -22,21 +22,14 @@ export const FilterForm = ({setBaseRequest}) => {
   }
 
   const composeRequest = () => {
-    let request = 'tests/created/?';
+    let request = `${defaultRequest}?`;
     if (searchField) {
       request = request.concat(`search=${searchField}`);
       if (filter !== 'all') {
         request = request.concat('&');
       }
     }
-    switch (filter) {
-      case 'published':
-        request = request.concat('is_published=True');
-        break;
-      case 'unpublished':
-        request = request.concat('is_published=False');
-        break;
-    }
+    request = request.concat(filterValues.find(i => i.value === filter).appendValue);
     return request;
   }
 
@@ -45,12 +38,18 @@ export const FilterForm = ({setBaseRequest}) => {
     setBaseRequest(newRequest);
   }, [filter])
 
+  const filterValues = [
+    { value: 'all', label: 'Все', appendValue: ''},
+    { value: 'published', label: 'Опубликованные', appendValue: 'is_published=True'},
+    { value: 'unpublished', label: 'Неопубликованные', appendValue: 'is_published=False'},
+  ];
+
   return (
     <form className={styles.filterForm}>
       <select name="filter" id="filter" value={filter} onChange={handleFilterChange}>
-        <option value="all">Все</option>
-        <option value="published">Опубликованные</option>
-        <option value="unpublished">Неопубликованные</option>
+        {
+          filterValues.map(filterItem => <option key={filterItem.value} value={filterItem.value}>{filterItem.label}</option>)
+        }
       </select>
       <input
         type='search'

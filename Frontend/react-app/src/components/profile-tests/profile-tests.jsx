@@ -5,6 +5,7 @@ import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { useState } from 'react';
 import { useScroll } from '../../reusable/hooks';
 import { useParams } from 'react-router';
+import { FilterForm } from '../my-tests-page-content/filter-form/filter-form';
 
 export const ProfileTestsComponent = () => {
     const {userID} = useParams();
@@ -25,6 +26,12 @@ export const ProfileTestsComponent = () => {
                 <ProfileNavigation />
                 <section className={styles.sectionMain}>
                     <h1>Пройденные</h1>
+                    <div className={styles.listControls}>
+                        <FilterForm
+                            setBaseRequest={setBaseRequest}
+                            // defaultRequest={}
+                        />
+                    </div>
                     <TestListProfile testList={testList} linkList={linkList} />
                 </section>
             </main>

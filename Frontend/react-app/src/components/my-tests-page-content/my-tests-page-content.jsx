@@ -8,16 +8,16 @@ import { useState } from 'react';
 import { useScroll } from '../../reusable/hooks';
 
 export const MyTestsPageContent = () => {
+  const defaultRequest = 'tests/created/';
   const [testList, setTestList] = useState([]);
-  const [baseRequest, setBaseRequest] = useState('tests/created/');
+  const [baseRequest, setBaseRequest] = useState(defaultRequest);
 
   useScroll(baseRequest, setTestList);
 
   // Список ссылок в подвале плашке
-  const linkList = (id) => ([
-    {key: 1, link: `${AppRoute.EditTestDescription}/${id}`, label: 'Описание'},
-    {key: 2, link: `${AppRoute.EditTest}/${id}`, label: 'Редактировать'},
-    {key: 3, link: '#', label: 'Статистика'},
+  const linkList = (testID) => ([
+    {key: 1, link: `${AppRoute.EditTestDescription}/${testID}`, label: 'Описание'},
+    {key: 2, link: `${AppRoute.EditTest}/${testID}`, label: 'Редактировать'},
   ]);
 
   return (
@@ -27,6 +27,7 @@ export const MyTestsPageContent = () => {
         <h1>Мои тесты</h1>
         <div className={styles.listControls}>
           <FilterForm
+            defaultRequest={defaultRequest}
             setBaseRequest={setBaseRequest}
           />
           <Link to={AppRoute.CreateTest} className={styles.createTestLink}>Создать тест</Link>
