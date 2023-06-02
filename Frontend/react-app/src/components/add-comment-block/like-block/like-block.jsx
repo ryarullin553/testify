@@ -46,7 +46,7 @@ export const LikeBlock = ({questionID}) => {
 
   useEffect(() => {
     fetchQuestionLikes();
-  }, [])
+  }, [questionID])
 
   return (
     <fieldset className={styles.likeField}>
