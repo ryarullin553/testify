@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './filter-form.module.scss';
 
-export const FilterForm = ({defaultRequest, setBaseRequest}) => {
+export const FilterForm = ({defaultRequest, setBaseRequest, filterValues}) => {
   const [searchField, setSearchField] = useState('');
   const [filter, setFilter] = useState('all');
 
@@ -37,12 +37,6 @@ export const FilterForm = ({defaultRequest, setBaseRequest}) => {
     const newRequest = composeRequest();
     setBaseRequest(newRequest);
   }, [filter])
-
-  const filterValues = [
-    { value: 'all', label: 'Все', appendValue: ''},
-    { value: 'published', label: 'Опубликованные', appendValue: 'is_published=True'},
-    { value: 'unpublished', label: 'Неопубликованные', appendValue: 'is_published=False'},
-  ];
 
   return (
     <form className={styles.filterForm}>

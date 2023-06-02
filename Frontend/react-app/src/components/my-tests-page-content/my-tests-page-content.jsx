@@ -1,7 +1,7 @@
 import { AppRoute } from '../../reusable/const';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
-import { FilterForm } from './filter-form/filter-form';
+import { FilterForm } from '../filter-form/filter-form';
 import { Link } from 'react-router-dom';
 import styles from './my-tests-page-content.module.scss';
 import { useState } from 'react';
@@ -20,6 +20,12 @@ export const MyTestsPageContent = () => {
     {key: 2, link: `${AppRoute.EditTest}/${testID}`, label: 'Редактировать'},
   ]);
 
+  const filterValues = [
+    { value: 'all', label: 'Все', appendValue: ''},
+    { value: 'published', label: 'Опубликованные', appendValue: 'is_published=True'},
+    { value: 'unpublished', label: 'Неопубликованные', appendValue: 'is_published=False'},
+  ];
+
   return (
     <main className={styles.pageMain}>
       <ProfileNavigation />
@@ -29,6 +35,7 @@ export const MyTestsPageContent = () => {
           <FilterForm
             defaultRequest={defaultRequest}
             setBaseRequest={setBaseRequest}
+            filterValues={filterValues}
           />
           <Link to={AppRoute.CreateTest} className={styles.createTestLink}>Создать тест</Link>
         </div>
