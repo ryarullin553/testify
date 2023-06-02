@@ -7,7 +7,7 @@ from .permissions import IsOwnerOrReadOnly
 from .serializers import UserSerializer
 
 
-class UserAPIView(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class UserAPIView(viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsOwnerOrReadOnly]
@@ -24,6 +24,20 @@ class UserAPIView(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         """Возвращает профиль текущего пользователя"""
         fields = ['username', 'avatar', 'bio', 'finished_tests', 'unfinished_tests']
         serializer = self.get_serializer(request.user, fields=fields)
+        return Response(serializer.data)
+
+    @get_current_user_profile.mapping.patch
+    def update_profile(self, request, *args, **kwargs):
+        instance = request.user
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
         return Response(serializer.data)
 
 
