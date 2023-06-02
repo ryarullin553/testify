@@ -7,25 +7,40 @@ import { fetchUserInfoAction } from '../../api/user';
 
 
 export const ProfilePageComponent = () => {
-    const [userInfo, setUserInfo] = useState();
+  const [userInfo, setUserInfo] = useState();
 
-    const {userID} = useParams();
+  let {userID} = useParams();
 
-    const fetchUserInfo = async (userID) => {
-        const userData = await fetchUserInfoAction(userID);
-        setUserInfo(userData);
+  userID ||= 'me';
+
+  const fetchUserInfo = async (userID) => {
+    const userData = await fetchUserInfoAction(userID);
+    const convertedData = convertDataStC(userData);
+    setUserInfo(convertedData);
+  }
+
+  const convertDataStC = (data) => {
+    const modifiedData = {
+      username: data.user_name,
+      bio: data.bio,
+      avatar: data.avatar,
+      finishedTestList: data.finished_tests,
+      unfinishedTestList: data.unfinished_tests,
+      createdTestList: data.created_tests,
     }
+    return modifiedData;
+  }
 
-    useEffect(() => {
-        fetchUserInfo(userID || 'me');
-    }, []);
+  useEffect(() => {
+    fetchUserInfo(userID);
+  }, []);
 
-    return (
-        <>
-            <main className={styles.pageMain}>
-                <ProfileNavigation />
-                <ProfileComponent userInfo={userInfo}/>
-            </main>
-        </>
-    );
+  return (
+    <>
+      <main className={styles.pageMain}>
+        <ProfileNavigation />
+        <ProfileComponent userInfo={userInfo}/>
+      </main>
+    </>
+  );
 }
