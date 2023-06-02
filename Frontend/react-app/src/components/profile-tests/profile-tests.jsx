@@ -40,7 +40,7 @@ export const ProfileTestsComponent = () => {
                             filterValues={filterValues}
                         />
                     </div>
-                    <TestListProfile testList={testList} linkList={linkList} />
+                    <TestListProfile testList={testList} linkList={linkList} isAttemptsAvailiable />
                 </section>
             </main>
         </>
