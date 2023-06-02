@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from './catalog-tile.module.scss';
-import { AppRoute } from '../../../const';
+import { AppRoute } from '../../../reusable/const';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
 import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks';
 import { useState } from 'react';

@@ -22,7 +22,7 @@
   ol {
     height: min-content;
     margin: 21px 0;
-    overflow-y: scroll;
+    overflow-y: auto;
   
     &::-webkit-scrollbar {
       width: 5px;

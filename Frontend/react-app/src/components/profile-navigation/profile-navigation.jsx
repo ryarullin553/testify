@@ -1,5 +1,5 @@
 import styles from './profile-navigation.module.scss';
-import { AppRoute } from '../../const';
+import { AppRoute } from '../../reusable/const';
 import { NavLink } from 'react-router-dom';
 
 export const ProfileNavigation = () => {

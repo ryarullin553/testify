@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router";
-import { AppRoute } from "../../const";
 import { api } from "../../store";
 import { useEffect } from "react";
+import { AppRoute } from "../../reusable/const";
 
 export const UserActivationHandler = () => {
 

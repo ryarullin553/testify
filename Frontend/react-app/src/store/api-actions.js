@@ -2,7 +2,7 @@ import { dropToken, saveToken } from '../services/token';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setAuthorizationStatus, setError, setUserInfo } from './actions';
 import { store } from '.';
-import { TIMEOUT_SHOW_ERROR } from '../const';
+import { TIMEOUT_SHOW_ERROR } from '../reusable/const';
 
 export const clearErrorAction = createAsyncThunk(
   'app/clearError',

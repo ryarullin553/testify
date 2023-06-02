@@ -1,9 +1,9 @@
 import styles from './profile-tests.module.scss';
-import { AppRoute } from '../../const';
+import { AppRoute } from '../../reusable/const';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { useState } from 'react';
-import { useScroll } from '../../hooks';
+import { useScroll } from '../../reusable/hooks';
 import { useParams } from 'react-router';
 
 export const ProfileTestsComponent = () => {
@@ -15,8 +15,8 @@ export const ProfileTestsComponent = () => {
     useScroll(baseRequest, setTestList);
     
     // Список ссылок в подвале плашке
-    const linkList = (id) => ([
-        { key: 1, link: `${AppRoute.TestDescription}/${id}`, label: 'Описание' },
+    const linkList = (testID) => ([
+        { key: 1, link: `${AppRoute.TestDescription}/${testID}`, label: 'Описание' },
     ]);
 
     return (
