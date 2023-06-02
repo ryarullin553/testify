@@ -37,9 +37,9 @@ export const LikeBlock = ({questionID}) => {
     if (value === likeState) {
       await deleteLikeAction(questionID);
     } else if (likeState === LIKE_STATES.None) {
-      await addLikeAction({ question: questionID, is_like: (!!likeState)});
+      await addLikeAction({ question: questionID, is_like: (value === LIKE_STATES.Like)});
     } else {
-      await changeLikeAction(questionID, {is_like: (!!likeState)});
+      await changeLikeAction(questionID, {is_like: (value === LIKE_STATES.Like)});
     }
     fetchQuestionLikes();
   }
@@ -59,7 +59,7 @@ export const LikeBlock = ({questionID}) => {
           id='like'
           value={LIKE_STATES.Like}
           checked={likeState === LIKE_STATES.Like}
-          onChange={handleLikeClick}
+          onClick={handleLikeClick}
         />
       </label>
       <label>
@@ -71,7 +71,7 @@ export const LikeBlock = ({questionID}) => {
           id='dislike'
           value={LIKE_STATES.Dislike}
           checked={likeState === LIKE_STATES.Dislike}
-          onChange={handleLikeClick}
+          onClick={handleLikeClick}
         />
       </label>
     </fieldset>
