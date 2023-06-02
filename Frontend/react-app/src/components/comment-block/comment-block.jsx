@@ -41,7 +41,7 @@ export const CommentsBlock = ({questionID}) => {
 
   useEffect(() => {
     fetchFeedback(questionID);
-  }, [])
+  }, [questionID])
 
   return (
     <section className={styles.commentsSection}>
