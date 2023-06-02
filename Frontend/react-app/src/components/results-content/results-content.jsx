@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { fetchAttemptAction } from '../../api/results';
 import { QUESTION_STATES } from '../test-content/test-content';
 import { ResultsArea } from './results-area/results-area';
-import { CommentBlock } from '../comment-block/comment-block';
 import { ReviewsBlock } from '../reviews-block/reviews-block';
 
 export const ResultsContent = () => {
