@@ -6,7 +6,6 @@ import { AppRoute } from '../../../reusable/const';
 import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks';
 import { FeedbackStars } from '../../feedback-stars/feedback-stars';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
-import { fetchAttemptsAction } from '../../../api/tests';
 
 export const TestOverview = ({testInfo, setIsFavorite, children}) => {
   const navigate = useNavigate();
@@ -16,8 +15,7 @@ export const TestOverview = ({testInfo, setIsFavorite, children}) => {
 
   const handleStartTestClick = async (evt) => {
     evt.preventDefault();
-    const isInProgress = await fetchAttemptsAction(testInfo.testID).then(attemptList => attemptList.results.some(a => (!a.total)));
-    if (!isInProgress) {
+    if (!testInfo.isInProgress) {
       await createAttemptAction(testInfo.testID);
     }
     navigate(`${AppRoute.TestMain}/${testInfo.testID}`);
@@ -70,7 +68,7 @@ export const TestOverview = ({testInfo, setIsFavorite, children}) => {
         {children}
         </section>
         <div className={styles.sidebar}>
-          <button className={styles.button} onClick={handleStartTestClick}>{'Начать'}</button>
+          <button className={styles.button} onClick={handleStartTestClick}>{testInfo.isInProgress ? 'Продолжить' : 'Начать'}</button>
           <button
             className={`${styles.button} ${styles.button_inversed}`}
             onClick={handleFavoriteClick}

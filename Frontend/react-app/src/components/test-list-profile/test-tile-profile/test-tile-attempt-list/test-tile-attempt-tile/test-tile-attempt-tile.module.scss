@@ -1,0 +1,42 @@
+.result {
+  box-sizing: border-box;
+  width: 620px;
+  min-height: 50px;
+
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    border-color: #a38ffd;
+    box-shadow: 1px 1px 9px 0px rgba(146, 154, 159, 0.17);
+  }
+}
+
+.date {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+
+  color: #222222;
+}
+
+.score {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+
+  color: #8C7BD8;
+}
+
+.linkWrapper {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  padding: 15px 20px 16px 20px;
+  
+  cursor: pointer;
+}
