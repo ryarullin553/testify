@@ -4,9 +4,12 @@ import { ResetPasswordComponent } from "../reset-passord-content/reset-password-
 import { useEffect, useState } from 'react';
 import { api, store } from '../../store';
 import { checkAuthAction } from '../../store/api-actions';
+import { useParams } from 'react-router';
 
 export const ProfileSettings = () => {
-    const userID = 1;
+    let {userID} = useParams();
+
+    userID ||= 'me';
 
     const [formData, setFormData] = useState({
         username: '',
