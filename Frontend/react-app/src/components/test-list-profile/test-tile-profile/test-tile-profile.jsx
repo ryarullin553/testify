@@ -12,7 +12,7 @@ export const TestTileProfile = ({testID, title, avatar, isPublished, linkList, i
 
   const handleShowAttemptsClick = async (evt) => {
     evt.preventDefault();
-    if (!attemptList) {
+    if (!attemptList && isAttemptsAvailiable) {
       await fetchTestAttempts();
     }
     setIsAttemptsShown(!isAttemptsShown);
