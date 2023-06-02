@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router";
-import { AppRoute } from "../../../const";
+import { AppRoute } from "../../../reusable/const";
 import { api } from "../../../store";
 import styles from './reset-password-component.module.scss';
 import { useState } from "react";

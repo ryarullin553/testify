@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router';
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button.jsx';
 import { changeTestVisibilityAction, editTestAction, fetchTestQuestionsAction } from '../../api/tests.js';
 import { createQuestionAction, deleteQuestionAction, updateQuestionAction } from '../../api/questions.js';
-import { AppRoute } from '../../const';
+import { AppRoute } from '../../reusable/const';
 
 export const CreateQuestionContent = () => {
   const { testID } = useParams();

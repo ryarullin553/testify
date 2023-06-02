@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CatalogList } from '../catalog-list/catalog-list';
 import styles from './catalog-content.module.scss';
-import { useScroll } from '../../hooks';
+import { useScroll } from '../../reusable/hooks';
 
 export const CatalogContent = () => {
   const [testList, setTestList] = useState([]);

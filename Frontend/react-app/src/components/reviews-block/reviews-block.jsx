@@ -2,14 +2,15 @@ import styles from './reviews-block.module.scss';
 import { fetchTestFeedbackAction } from '../../api/tests';
 import { useEffect, useState } from 'react';
 import { ReviewList } from '../rewiew-list/rewiew-list';
-import { CommentBlock } from '../comment-block/comment-block';
+import { AddCommentBlock } from '../add-comment-block/add-comment-block';
+import { submitReviewAction } from '../../api/reviews';
 
-export const ReviewsBlock = ({testID, isCommentingAvailiable, children}) => {
-  const [testFeedback, setTestFeedback] = useState();
+export const ReviewsBlock = ({testID, hasCommentBlock, children}) => {
+  const [testFeedback, setTestFeedback] = useState([]);
 
   const fetchTestFeedback = async (testID) => {
     const data = await fetchTestFeedbackAction(testID);
-    const testData = convertTestDataStC(data);
+    const testData = convertDataStC(data);
     setTestFeedback(testData);
   }
 
@@ -17,14 +18,24 @@ export const ReviewsBlock = ({testID, isCommentingAvailiable, children}) => {
     fetchTestFeedback(testID);
   }
 
-  const convertTestDataStC = (data) => {
+  const convertDataStC = (data) => {
     const modifiedData = data.results.map((r, i) => ({
       id: i,
+      userID: r.user_id,
       username: r.user_name,
       content: r.content,
       date: new Date(Date.parse(r.created)),
       rating: r.rate,
     }))
+    return modifiedData;
+  }
+
+  const convertDataCtS = (data) => {
+    const modifiedData = {
+      test: testID,
+      content: data.review,
+      rate: data.rating,
+    }
     return modifiedData;
   }
 
@@ -37,7 +48,13 @@ export const ReviewsBlock = ({testID, isCommentingAvailiable, children}) => {
   return (
     <section className={styles.reviews}>
       { children }
-      { isCommentingAvailiable && <CommentBlock testID={testID} reloadFeedback={reloadTestFeedback}/>}
+      { 
+        hasCommentBlock
+        && <AddCommentBlock
+              reloadFeedback={reloadTestFeedback}
+              submitAction={submitReviewAction}
+              convertAction={convertDataCtS}
+              hasRateBlock />}
       <ReviewList reviewList={testFeedback}/>
     </section>
   );

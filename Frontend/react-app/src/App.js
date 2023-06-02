@@ -2,7 +2,6 @@ import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import { CreateQuestionPage } from './pages/create-question-page';
 import { CreateTestPage } from './pages/create-test-page';
 import { MainPage } from "./pages/main-page";
-import { AppRoute } from './const';
 import { MyTestsPage } from './pages/my-tests-page';
 import { ProfilePage } from './pages/profile-page';
 import { ProfileSettingPage } from './pages/profile-settings-page'
@@ -16,6 +15,7 @@ import { ErrorPage } from './pages/error-page';
 import { ResultsPage } from './pages/results-page';
 import { CatalogPage } from './pages/catalog-page';
 import { TestDescriptionPage } from './pages/test-description-page';
+import { AppRoute } from './reusable/const';
 
 function App() {
   return (

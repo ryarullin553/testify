@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './test-description-form.module.scss';
-import { AppRoute } from '../../const';
+import { AppRoute } from '../../reusable/const';
 import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests';
 
 export const TestDescriptionForm = ({testID}) => {

@@ -1,5 +1,5 @@
 import styles from './results-area.module.scss';
-import { AppRoute } from '../../../const';
+import { AppRoute } from '../../../reusable/const';
 import { Link } from 'react-router-dom';
 
 export const ResultsArea = ({results}) => {

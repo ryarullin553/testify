@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { ContrastButton } from '../contrast-button/contrast-button';
 import { PaleButton } from '../pale-button/pale-button';
 import styles from './main-page-content.module.scss';
-import { AppRoute } from '../../const';
+import { AppRoute } from '../../reusable/const';
 
 export const MainPageContent = () => {
   const navigate = useNavigate();

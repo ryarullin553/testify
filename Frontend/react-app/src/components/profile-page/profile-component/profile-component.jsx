@@ -2,7 +2,7 @@ import styles from './profile-component.module.scss';
 import { TestListProfile } from '../../test-list-profile/test-list-profile';
 import { ShowMoreButton } from '../show-more-button/show-more-button';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
-import { AppRoute } from '../../../const';
+import { AppRoute } from '../../../reusable/const';
 
 export const ProfileComponent = ({userInfo}) => {
 

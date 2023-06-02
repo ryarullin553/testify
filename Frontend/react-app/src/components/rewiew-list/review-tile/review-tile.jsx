@@ -1,31 +1,11 @@
 import styles from './review-tile.module.scss';
 import { FeedbackStars } from '../../feedback-stars/feedback-stars';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../../reusable/const';
+import { formatDate } from '../../../reusable/functions';
 
-export const ReviewTile = ({id, content, username, date, rating}) => {
-  const formattedDate = (date) => {
-    const now = Date.now();
-    const timePassed = (now - date)/1000;
-    if (timePassed < 1) {
-      return 'только что';
-    } else if (timePassed < 60) {
-      return `${parseInt(timePassed)} секунд назад`;
-    } else if (timePassed < 3600) {
-      return `${parseInt(timePassed / 60)} минут назад`;
-    } else if (timePassed < 86400) {
-      return `${parseInt(timePassed / 3600)} часов назад`;
-    } else if (timePassed < 172800) {
-      return 'вчера';
-    } else return (
-      date.toLocaleDateString(
-        'ru-Ru',
-        {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        }
-      )
-    );
-  }
+export const ReviewTile = ({reviewItem}) => {
+  const {id, username, content, date, rating, userID} = reviewItem;
 
   return (
     <div className={styles.review}>
@@ -34,8 +14,8 @@ export const ReviewTile = ({id, content, username, date, rating}) => {
       </div>
       <p className={styles.review__text}>{content}</p>
       <div className={styles.review__info}>
-        <a href="#" className={styles.name}>{username}</a>
-        <span className={styles.data}>{formattedDate(date)}</span>
+        <Link to={`${AppRoute.Profile}/${userID}`} className={styles.name}>{username}</Link>
+        <span className={styles.data}>{formatDate(date)}</span>
       </div>
     </div>
   );

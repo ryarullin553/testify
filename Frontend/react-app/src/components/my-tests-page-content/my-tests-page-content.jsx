@@ -1,11 +1,11 @@
-import { AppRoute } from '../../const';
+import { AppRoute } from '../../reusable/const';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { FilterForm } from './filter-form/filter-form';
 import { Link } from 'react-router-dom';
 import styles from './my-tests-page-content.module.scss';
 import { useState } from 'react';
-import { useScroll } from '../../hooks';
+import { useScroll } from '../../reusable/hooks';
 
 export const MyTestsPageContent = () => {
   const [testList, setTestList] = useState([]);
