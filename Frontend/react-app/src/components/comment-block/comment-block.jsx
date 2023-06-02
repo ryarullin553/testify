@@ -1,46 +1,60 @@
-import { useState } from 'react';
-import { AvatarBlock } from '../avatar-block/avatar-block';
+import { useEffect, useState } from 'react';
+import { fetchQuestionCommentsAction } from '../../api/questions';
+import { LikeBlock } from '../add-comment-block/like-block/like-block';
 import styles from './comment-block.module.scss';
-import { submitReviewAction } from '../../api/reviews';
-import { RateBlock } from './rate-block/rate-block';
-import { useSelector } from 'react-redux';
-import { selectUserInfo } from '../../store/selectors';
+import { submitCommentAction } from '../../api/comments';
+import { AddCommentBlock } from '../add-comment-block/add-comment-block';
+import { CommentList } from './comment-list/comment-list';
 
-export const CommentBlock = ({testID, reloadFeedback}) => {
-  const {avatar} = useSelector(selectUserInfo);
-  const [formState, setFormState] = useState({
-    review: '',
-  });
+export const CommentsBlock = ({questionID}) => {
+  const [questionFeedback, setQuestionFeedback] = useState([]);
 
-  const handleFieldChange = (evt) => {
-    const {name, value} = evt.target;
-    setFormState({...formState, [name]: value});
+  const fetchFeedback = async (questionID) => {
+    const data = await fetchQuestionCommentsAction(questionID);
+    const questionData = convertDataStC(data);
+    setQuestionFeedback(questionData);
   }
 
-  const handleSubmitClick = async (evt) => {
-    evt.preventDefault();
-    const newReviewData = {
-      test: testID,
-      content: formState.review,
-      rate: formState.rating,
+  const reloadFeedback = async () => {
+    fetchFeedback(questionID);
+  }
+
+  const convertDataStC = (data) => {
+    const modifiedData = data.results.map((r, i) => ({
+      id: r.id,
+      userID: r.user_id,
+      username: r.user_name,
+      userAvatar: r.user_avatar,
+      content: r.content,
+      date: new Date(Date.parse(r.created)),
+    }))
+    return modifiedData;
+  }
+
+  const convertDataCtS = (data) => {
+    const modifiedData = {
+      question: questionID,
+      content: data.review,
     }
-    await submitReviewAction(newReviewData);
-    await reloadFeedback();
+    return modifiedData;
   }
+
+  useEffect(() => {
+    fetchFeedback(questionID);
+  }, [questionID])
 
   return (
-    <form className={styles.commentForm} name='review-test-form'>
-      <RateBlock rating={formState.rating} handleFieldChange={handleFieldChange}/>
-      <div className={styles.reviewBlock}>
-        <AvatarBlock size={50} src={avatar}/>
-        <textarea
-          name='review'
-          placeholder='Напишите что думаете'
-          onChange={handleFieldChange}
-          value={formState.review}
-        /> 
+    <section className={styles.commentsSection}>
+      <div className={styles.topPanel}>
+        <p className={styles.commentCount}>{questionFeedback.length} комментариев</p>
+        <LikeBlock questionID={questionID} />
       </div>
-      <button className={styles.submitButton} onClick={handleSubmitClick}>Оставить отзыв</button>
-    </form>
+      <AddCommentBlock
+        reloadFeedback={reloadFeedback}
+        submitAction={submitCommentAction}
+        convertAction={convertDataCtS}
+      />
+      <CommentList commentList={questionFeedback} />
+    </section>
   );
 }

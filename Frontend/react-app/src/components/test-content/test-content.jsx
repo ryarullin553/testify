@@ -2,11 +2,11 @@ import { useNavigate, useParams } from 'react-router';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import styles from './test-content.module.scss';
 import { useEffect, useState } from 'react';
-import { AppRoute } from '../../const';
+import { AppRoute } from '../../reusable/const';
 import { QuestionArea } from './question-area/question-area';
 import { useImmer } from 'use-immer';
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button';
-import { fetchResultsAction } from '../../api/tests';
+import { fetchAttemptsAction } from '../../api/tests';
 import { fetchAttemptAction, submitAttemptAction } from '../../api/results';
 import { submitAnswerAction, updateAnswerAction } from '../../api/answers';
 import { QuestionControls } from '../question-controls/question-controls';
@@ -36,7 +36,7 @@ export const TestContent = () => {
     .findIndex(question => (question.questionID === currentQuestionID));
 
   const fetchActiveAttempt = async (testID) => {
-    const attemptList = await fetchResultsAction(testID);
+    const attemptList = await fetchAttemptsAction(testID);
     const activeAttempt = attemptList.results.find(a => (!a.total));
     return activeAttempt;
   }

@@ -1,4 +1,6 @@
 import styles from './results-area.module.scss';
+import { AppRoute } from '../../../reusable/const';
+import { Link } from 'react-router-dom';
 
 export const ResultsArea = ({results}) => {
   const {testTitle, answersTotal, answersCorrect, questionsAmount, score, time, averageScore} = results;
@@ -25,7 +27,7 @@ export const ResultsArea = ({results}) => {
         </div>
       </div>
       <div className={styles.controls}>
-          <button className={styles.catalog}>В каталог</button>
+          <Link to={AppRoute.Catalog} className={styles.catalog}>В каталог</Link>
       </div>
     </section>
   );

@@ -1,4 +1,4 @@
-import { AppRoute } from '../../const';
+import { AppRoute } from '../../reusable/const';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LogoIcon } from './img/logo.svg';
 import styles from './logo.module.scss'

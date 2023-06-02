@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { api } from './store';
+import { api } from '../store';
 
 export const useScroll = (baseRequest, setTestList) => {
   let nextPage = useRef();

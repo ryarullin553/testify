@@ -10,7 +10,6 @@ export const AppRoute = {
   UserActivation: '/activate/:uid/:token',
   PasswordReset: '/password/reset/confirm/:uid/:token',
   History: '/history',
-  ProfileSetting: '/settings',
   TestMain: '/test',
   Results: '/results',
   Catalog: '/catalog',

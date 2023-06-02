@@ -20,3 +20,13 @@ export const generateAnswersAction = async (request) => {
   const {data} = await api.post(`${BASE_REQUEST}generated/`, request);
   return data;
 }
+
+export const fetchQuestionLikesAction = async (questionID) => {
+  const {data} = await api.get(`${BASE_REQUEST}${questionID}/likes/`);
+  return data;
+}
+
+export const fetchQuestionCommentsAction = async (questionID) => {
+  const {data} = await api.get(`${BASE_REQUEST}${questionID}/comments/`);
+  return data;
+}

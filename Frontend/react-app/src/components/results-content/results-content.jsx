@@ -87,7 +87,7 @@ export const ResultsContent = () => {
           <ResultsArea
             results={results}
           />
-          <ReviewsBlock testID={results.testID} isCommentingAvailiable/>
+          <ReviewsBlock testID={results.testID} hasCommentBlock/>
         </div>
       : <QuestionArea
         questionData={getCurrentQuestionData(results, currentQuestionID)}

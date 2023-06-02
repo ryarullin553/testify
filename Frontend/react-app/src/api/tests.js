@@ -36,7 +36,7 @@ export const fetchTestQuestionsAction = async (testID) => {
   return data;
 }
 
-export const fetchResultsAction = async (testID) => {
+export const fetchAttemptsAction = async (testID) => {
   const {data} = await api.get(`${BASE_REQUEST}${testID}/results/`);
   return data;
 }

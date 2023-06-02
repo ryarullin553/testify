@@ -2,7 +2,7 @@ import styles from './profile-bookmark-content.module.scss';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { useState } from 'react';
-import { useScroll } from '../../hooks';
+import { useScroll } from '../../reusable/hooks';
 
 export const ProfileBookmarkContent = () => {
     const [testList, setTestList] = useState([]);

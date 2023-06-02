@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { logoutAction } from '../../store/api-actions';
 import { store } from '../../store/index.js';
 import styles from './dropdown-menu.module.scss';
-import { AppRoute } from '../../const';
+import { AppRoute } from '../../reusable/const';
 
 export const DropdownMenu = ({actionCloseMenu}) => {
   const handleLogoutClick = async () => {

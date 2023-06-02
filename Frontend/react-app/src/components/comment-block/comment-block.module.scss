@@ -1,72 +1,19 @@
-.commentForm {
+.commentsSection {
   border-top: 2px solid rgba(69, 72, 104, 0.3);
 }
 
-.reviewBlock {
+.topPanel {
   display: flex;
-  margin-bottom: 24px;
-
-  textarea {
-    resize: none;
-
-    margin-left: 10px;
-    padding: 7px 10px;
-    width: 932px;
-    height: 90px;
-
-    border: 1px solid #CCCCCC;
-    border-radius: 5px;
-
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    color: #222222;
-
-    &::placeholder {
-      font-family: 'Inter';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 17px;
-      color: #A5A5A5;
-    }
-  }
 }
 
-.submitButton {
-  box-sizing: border-box;
-  border-radius: 5px;
-
-  transition: all 0.2s ease-in-out;
-
-  padding: 9px 34px;
-  border: 2px solid #A38FFD;
-  background: #A38FFD;
-  color: #FFFFFF;
-  margin-right: 20px;
-  margin-bottom: 23px;
+.commentCount {
+  padding-top: 25px;
+  padding-bottom: 28px;
+  margin-right: 50px;
 
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
 
-  &:hover {
-    background: #FFFFFF;
-    border: 2px solid #A38FFD;
-
-    color: #A38FFD;
-
-    &::after {
-      border: solid 1px #A38FFD;
-      border-width: 0 2px 2px 0;
-    }
-  }
+  color: #222222;
 }
-
-// .feedbackStars {
-//   opacity: 50%;
-//   position: relative;
-//   right: 142.37px;
-// }
