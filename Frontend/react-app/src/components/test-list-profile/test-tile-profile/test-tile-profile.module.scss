@@ -1,13 +1,17 @@
 .testTile {
-  width: 100%;
-  height: 100%;
+  width: 640px;
+  min-height: 100px;
+  margin-bottom: 15px;
+  
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-top: none;
+  border-radius: 10px;
 }
 
 .linkWrapper {
   box-sizing: border-box;
-  width: 640px;
-  height: 100px;
-  margin-bottom: 15px;
+  width: 100%;
+  height: 100%;
   padding: 20px;
 
   display: grid;
@@ -18,14 +22,14 @@
     "logo controls controls";
   column-gap: 20px;
   
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  outline: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   cursor: pointer;
 
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    border-color: #a38ffd;
+    outline-color: #a38ffd;
     box-shadow: 1px 1px 9px 0px rgba(146, 154, 159, 0.17);
   }
 

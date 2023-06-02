@@ -28,6 +28,7 @@ export const TestDescriptionContent = () => {
       abstract: data.full_description,
       testAvatar: data.avatar,
       isFavorite: data.in_bookmarks,
+      isInProgress: data.is_passage,
       rating: data.rating,
       ratingCounter: data.feedbacks_count,
       completitionCounter: data.results_count,
