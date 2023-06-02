@@ -31,9 +31,9 @@ export const ProfileComponent = ({userInfo}) => {
                 </section>
             </section>
             <h1>Прохожу сейчас</h1>
-            <TestListProfile testList={userInfo.unfinished_tests} linkList={linkListUnfinished} />
+            <TestListProfile testList={userInfo.unfinished_tests} linkList={linkListUnfinished} isAttemptsAvailiable />
             <h1>Пройденные</h1>
-            <TestListProfile testList={userInfo.finished_tests} linkList={linkListFinished} />
+            <TestListProfile testList={userInfo.finished_tests} linkList={linkListFinished} isAttemptsAvailiable />
             <ShowMoreButton />
         </section>
     );
