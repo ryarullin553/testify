@@ -76,7 +76,7 @@ class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Destr
         if is_finished == 'True':
             user_tests = user_tests.filter(results__total__isnull=False)
         elif is_finished == 'False':
-            user_tests = user_tests.filter(~Q(results__total__isnull=False))
+            user_tests = user_tests.filter(results__total__isnull=True)
         queryset = self.filter_queryset(user_tests)
         page = self.paginate_queryset(queryset)
         serializer_fields = ('id', 'title', 'avatar')

@@ -20,7 +20,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
     def get_unfinished_tests(self, user):
         request = self.context['request']
-        tests = Test.objects.filter(~Q(results__total__isnull=False), results__user=user).distinct()[0:2]
+        tests = Test.objects.filter(results__user=user, results__total__isnull=True).distinct()
         serializer = TestSerializer(tests, many=True, read_only=True, fields=('id', 'title', 'avatar'),
                                     context={'request': request})
         return serializer.data
