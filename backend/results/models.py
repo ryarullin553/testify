@@ -17,7 +17,7 @@ class Result(models.Model):
 
 class ChoicedAnswer(models.Model):
     result = models.ForeignKey(Result, on_delete=models.CASCADE)
-    answer = models.ForeignKey('tests.Answer', on_delete=models.CASCADE)
+    answer = models.ForeignKey('questions.Answer', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'choiced_answers'

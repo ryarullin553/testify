@@ -1,21 +1,17 @@
-from django.db.models import Count, Avg, Q
-from django.http import JsonResponse
+from django.db.models import Count, Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, pagination
+from rest_framework import mixins, pagination, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from rest_framework import viewsets
 
-from user_relations.models import LikeDislike
-from user_relations.serializers import FeedbackSerializer, CommentSerializer, LikeDislikeSerializer
-from .models import Test, Question
-from .permissions import IsTestAuthor, IsQuestionAuthor
-from .serializers import TestSerializer, QuestionSerializer
-from .services import get_wrong_answers
+from user_relations.serializers import FeedbackSerializer
+from .models import Test
+from .permissions import IsTestAuthor
+from .serializers import TestSerializer
 
 
 class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
@@ -108,29 +104,3 @@ class TestAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Destr
         serializer = FeedbackSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
-
-class QuestionAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
-                      viewsets.GenericViewSet):
-    queryset = Question.objects
-    serializer_class = QuestionSerializer
-    permission_classes = [IsAuthenticated, IsQuestionAuthor]
-
-    @action(detail=True, url_path='likes', url_name='likes')
-    def get_question_likes(self, request, **kwargs):
-        question = self.get_object()
-        fields = ('likes', 'dislikes', 'is_like')
-        serializer = self.get_serializer(question, fields=fields)
-        return Response(serializer.data)
-
-    @action(detail=True, url_path='comments', url_name='comments')
-    def get_question_comments(self, request, **kwargs):
-        question = self.get_object()
-        page = self.paginate_queryset(question.comments)
-        serializer = CommentSerializer(page, many=True, context={'request': request})
-        return self.get_paginated_response(serializer.data)
-
-    @action(detail=False, methods=['POST'], url_path='generated', url_name='generated',
-            permission_classes=[IsAuthenticated])
-    def generate_wrong_answers(self, request):
-        wrong_answers = get_wrong_answers(request.data)
-        return JsonResponse({"answer_set": wrong_answers})

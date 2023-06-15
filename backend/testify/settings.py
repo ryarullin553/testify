@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'tests.apps.TestsConfig',
+    'questions.apps.QuestionsConfig',
     'results.apps.ResultsConfig',
     'user_relations.apps.UserRelationsConfig',
 ]

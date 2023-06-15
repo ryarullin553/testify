@@ -12,24 +12,24 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ChoicedAnswer',
+            name='Answer',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('content', models.TextField()),
+                ('is_true', models.BooleanField(default=None)),
             ],
             options={
-                'db_table': 'choiced_answers',
+                'db_table': 'answers',
             },
         ),
         migrations.CreateModel(
-            name='Result',
+            name='Question',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('time_create', models.DateTimeField(auto_now_add=True)),
-                ('passage', models.JSONField(null=True)),
-                ('total', models.JSONField(null=True)),
+                ('content', models.TextField()),
             ],
             options={
-                'db_table': 'results',
+                'db_table': 'questions',
             },
         ),
     ]
