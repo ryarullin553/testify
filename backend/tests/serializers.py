@@ -1,22 +1,11 @@
 from django.contrib.auth.models import AnonymousUser
 from rest_framework import serializers
 
+from utils.serializers import DynamicFieldsModelSerializer
 from questions.serializers import QuestionSerializer
 from results.models import Result
 from user_relations.models import Bookmark
 from .models import Test
-
-
-class DynamicFieldsModelSerializer(serializers.ModelSerializer):
-    def __init__(self, *args, **kwargs):
-        fields = kwargs.pop('fields', None)
-        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
-
-        if fields is not None:
-            allowed = set(fields)
-            existing = set(self.fields)
-            for field_name in existing - allowed:
-                self.fields.pop(field_name)
 
 
 class TestSerializer(DynamicFieldsModelSerializer):

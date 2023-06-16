@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from django.db.models import Q
+from utils.serializers import DynamicFieldsModelSerializer
 from tests.models import Test
-from tests.serializers import TestSerializer, DynamicFieldsModelSerializer
+from tests.serializers import TestSerializer
 from .models import User
 
 

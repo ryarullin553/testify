@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from tests.serializers import DynamicFieldsModelSerializer
+
+from utils.serializers import DynamicFieldsModelSerializer
 from .models import Result, ChoicedAnswer
 
 
