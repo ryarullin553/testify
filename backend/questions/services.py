@@ -1,4 +1,4 @@
-from testify.settings import OPENAI_API_KEY
+from config.settings import OPENAI_API_KEY
 import openai
 
 
