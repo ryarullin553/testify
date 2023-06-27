@@ -4,12 +4,12 @@ from rest_framework.response import Response
 
 from .models import User
 from .permissions import IsOwnerOrReadOnly
-from .serializers import UserSerializer
+from .serializers import CustomUserSerializer
 
 
 class UserAPIView(viewsets.GenericViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = CustomUserSerializer
     permission_classes = [IsOwnerOrReadOnly]
 
     def retrieve(self, request, *args, **kwargs):

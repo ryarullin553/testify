@@ -6,7 +6,7 @@ from tests.serializers import TestSerializer
 from .models import User
 
 
-class UserSerializer(DynamicFieldsModelSerializer):
+class CustomUserSerializer(DynamicFieldsModelSerializer):
     created_tests = serializers.SerializerMethodField()
     finished_tests = serializers.SerializerMethodField()
     unfinished_tests = serializers.SerializerMethodField()
