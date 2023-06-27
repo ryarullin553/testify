@@ -11,7 +11,8 @@ class Test(models.Model):
         max_length=512
     )
     description = models.TextField(
-        verbose_name='Описание'
+        verbose_name='Описание',
+        blank=True
     )
     image = models.ImageField(
         verbose_name='Логотип',
@@ -31,16 +32,20 @@ class Test(models.Model):
         default=False
     )
     has_points = models.BooleanField(
-        verbose_name='Добавить баллы к вопросам'
+        verbose_name='Добавить баллы к вопросам',
+        default=True
     )
     has_comments = models.BooleanField(
-        verbose_name='Открыть комментарии к вопросам'
+        verbose_name='Открыть комментарии к вопросам',
+        default=True
     )
     has_right_answers = models.BooleanField(
-        verbose_name='Показывать правильные ответы после прохождения теста'
+        verbose_name='Показывать правильные ответы после прохождения теста',
+        default=True
     )
     has_questions_explanation = models.BooleanField(
-        verbose_name='Показывать пояснения к вопросам после прохождения теста'
+        verbose_name='Добавить пояснения к вопросам, которые появятся после прохождения теста',
+        default=False
     )
     user = models.ForeignKey(
         verbose_name='Автор',

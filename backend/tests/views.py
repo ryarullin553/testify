@@ -1,8 +1,7 @@
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import Count, Avg, Exists, OuterRef
-from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import pagination, viewsets
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import get_object_or_404
@@ -22,7 +21,7 @@ class TestAPIView(viewsets.ModelViewSet):
     serializer_class = TestSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsTestAuthor]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
-    search_fields = ['title', 'description', 'user__username']
+    search_fields = ['title', 'short_description', 'user__username']
     filterset_fields = ['is_published', 'user']
     ordering_fields = ['rating', 'results_count', 'created']
     ordering = '-created'
@@ -52,6 +51,9 @@ class TestAPIView(viewsets.ModelViewSet):
             ) \
             .only(*fields)
         return queryset
+
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -85,15 +87,15 @@ class TestAPIView(viewsets.ModelViewSet):
     def get_created_tests(self, request):
         """Возвращает список тестов, которые создал пользователь"""
         fields = ('id', 'title', 'image', 'is_published', 'created')
-        queryset = self.get_queryset()\
-            .filter(user=request.user)\
+        queryset = self.get_queryset() \
+            .filter(user=request.user) \
             .only(*fields)
         queryset = self.filter_queryset(queryset)
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, fields=fields)
         return self.get_paginated_response(serializer.data)
 
-    @action(detail=False, url_path='user/(?P<user>[^/.]+)', url_name='user', search_fields=['title'])   # Old
+    @action(detail=False, url_path='user/(?P<user>[^/.]+)', url_name='user', search_fields=['title'])  # Old
     def get_user_tests(self, request, **kwargs):
         """Возвращает список тестов, которые пользователь прошел или еще проходит"""
         user = kwargs.get('user')
