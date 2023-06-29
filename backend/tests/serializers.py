@@ -6,10 +6,11 @@ from .models import Test
 
 
 class TestSerializer(DynamicFieldsModelSerializer):
-    question_set = QuestionSerializer(
+    questions = QuestionSerializer(
         required=False,
         many=True,
-        fields=('id', 'content', 'answer_set')
+        fields=('id', 'type', 'content', 'answer_choices', 'points', 'explanation', 'image'),
+        read_only=True
     )
     rating = serializers.DecimalField(
         max_digits=2,

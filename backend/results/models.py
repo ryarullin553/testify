@@ -13,15 +13,3 @@ class Result(models.Model):
 
     def __str__(self):
         return f"Результат теста {self.test} пользователя {self.user.username}"
-
-
-class ChoicedAnswer(models.Model):
-    result = models.ForeignKey(Result, on_delete=models.CASCADE)
-    answer = models.ForeignKey('questions.Answer', on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'choiced_answers'
-        unique_together = ['result', 'answer']
-
-    def __str__(self):
-        return f"{self.result} ответ №{self.pk}"

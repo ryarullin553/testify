@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import Count, Avg, Exists, OuterRef
+from django.db.models import Count, Avg, Exists, OuterRef, Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -8,6 +8,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
+from questions.models import Question
 from results.models import Result
 from user_relations.models import Bookmark
 from user_relations.serializers import FeedbackSerializer
@@ -84,7 +85,7 @@ class TestAPIView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=False, url_path='created', url_name='created', search_fields=['title'])
-    def get_created_tests(self, request):
+    def created(self, request):
         """Возвращает список тестов, которые создал пользователь"""
         fields = ('id', 'title', 'image', 'is_published', 'created')
         queryset = self.get_queryset() \
@@ -113,8 +114,8 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer = self.get_serializer(page, many=True, fields=serializer_fields)
         return self.get_paginated_response(serializer.data)
 
-    @action(detail=True, url_path='settings', url_name='settings')
-    def get_test_settings(self, request, **kwargs):
+    @action(detail=True, url_path='config', url_name='config')
+    def config(self, request, **kwargs):
         """Возвращает настройки теста"""
         fields = ('id', 'title', 'short_description', 'description', 'image', 'is_published',
                   'has_points', 'has_comments', 'has_right_answers', 'has_questions_explanation')
@@ -124,12 +125,18 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, fields=fields)
         return Response(serializer.data)
 
-    @action(detail=True, url_path='questions', url_name='questions')  # Old
-    def get_test_questions(self, request, **kwargs):
-        """Возвращает название теста, публикацию и список вопросов с ответами"""
-        test = self.get_object()
-        serializer_fields = ('title', 'is_published', 'question_set')
-        serializer = self.get_serializer(test, fields=serializer_fields)
+    @action(detail=True, url_path='questions', url_name='questions')
+    def questions(self, request, **kwargs):
+        """Возвращает название теста, статус публикации, настройки и список вопросов"""
+        fields = ['id', 'title', 'is_published', 'has_points', 'has_comments',
+                  'has_right_answers', 'has_questions_explanation']
+        queryset = self.get_queryset()\
+            .prefetch_related(
+                Prefetch('questions', queryset=Question.objects.all().defer('created', 'updated'))
+            )\
+            .only(*fields)
+        instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
+        serializer = self.get_serializer(instance, fields=fields + ['questions'])
         return Response(serializer.data)
 
     @action(detail=True, url_path='feedbacks', url_name='feedbacks', ordering_fields=['created'])  # Old

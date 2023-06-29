@@ -10,6 +10,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from questions.models import Question
 from tests.models import Test
 from users.models import User
 
@@ -62,6 +63,58 @@ class TestAPITestCase(APITestCase):
             user=self.user,
             image=self.image,
             is_published=True
+        )
+
+        self.question_1 = Question.objects.create(
+            test_id=self.test_with_image.id,
+            type='Single choice',
+            content='Содержание первого вопроса',
+            answer_choices=[
+                {
+                    "content": "Первый ответ",
+                    "is_true": True
+                },
+                {
+                    "content": "Второй ответ",
+                    "is_true": False
+                },
+                {
+                    "content": "Третий ответ",
+                    "is_true": False
+                },
+                {
+                    "content": "Четвертый ответ",
+                    "is_true": False
+                }
+            ],
+            points=2,
+            explanation='Пояснение к вопросу',
+            image=self.image
+        )
+
+        self.question_2 = Question.objects.create(
+            test_id=self.test_with_image.id,
+            type='Single choice',
+            content='Содержание второго вопроса',
+            answer_choices=[
+                {
+                    "content": "Первый ответ",
+                    "is_true": False
+                },
+                {
+                    "content": "Второй ответ",
+                    "is_true": False
+                },
+                {
+                    "content": "Третий ответ",
+                    "is_true": True
+                },
+                {
+                    "content": "Четвертый ответ",
+                    "is_true": False
+                }
+            ],
+            points=5
         )
 
     def test_list(self):
@@ -344,8 +397,8 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_test_with_image)
 
-    def test_test_settings(self):
-        url = f'/api/tests/{self.test_with_image.id}/settings/'
+    def test_config(self):
+        url = f'/api/tests/{self.test_with_image.id}/config/'
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.get(url)
@@ -365,7 +418,7 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_test_with_image)
 
-    def test_created_tests(self):
+    def test_created(self):
         url = f'/api/tests/created/'
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
@@ -393,7 +446,7 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response_data, expected_data)
 
-    def test_created_tests_search(self):
+    def test_created_search(self):
         url = f'/api/tests/created/?search=аватар'
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
@@ -413,7 +466,7 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response_data, expected_data)
 
-    def test_created_tests_filter(self):
+    def test_created_filter(self):
         url = f'/api/tests/created/?is_published=False'
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
@@ -424,5 +477,78 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response_data, expected_data)
 
+    def test_questions(self):
+        url = f'/api/tests/{self.test_with_image.id}/questions/'
+        self.client.force_login(self.user)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.get(url)
+            self.assertEqual(4, len(queries))
+        expected_test_with_image = {
+            'id': self.test_with_image.id,
+            'questions': [
+                {
+                    'id': self.question_1.id,
+                    'type': 'Single choice',
+                    'content': 'Содержание первого вопроса',
+                    'answer_choices': [
+                        {
+                            'content': 'Первый ответ',
+                            'is_true': True
+                        },
+                        {
+                            'content': 'Второй ответ',
+                            'is_true': False
+                        },
+                        {
+                            'content': 'Третий ответ',
+                            'is_true': False
+                        },
+                        {
+                            'content': 'Четвертый ответ',
+                            'is_true': False
+                        }
+                    ],
+                    'points': 2,
+                    'explanation': 'Пояснение к вопросу',
+                    'image': f'http://testserver/media/{self.question_1.image}'
+                },
+                {
+                    'id': self.question_2.id,
+                    'type': 'Single choice',
+                    'content': 'Содержание второго вопроса',
+                    'answer_choices': [
+                        {
+                            'content': 'Первый ответ',
+                            'is_true': False
+                        },
+                        {
+                            'content': 'Второй ответ',
+                            'is_true': False
+                        },
+                        {
+                            'content': 'Третий ответ',
+                            'is_true': True
+                        },
+                        {
+                            'content': 'Четвертый ответ',
+                            'is_true': False
+                        }
+                    ],
+                    'points': 5,
+                    'explanation': '',
+                    'image': None
+                }
+            ],
+            'title': 'Тест с аватаркой',
+            'is_published': True,
+            'has_points': True,
+            'has_comments': True,
+            'has_right_answers': True,
+            'has_questions_explanation': False
+        }
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, expected_test_with_image)
+
     def tearDown(self):
         self.test_with_image.image.delete()
+        self.question_1.image.delete()
