@@ -5,7 +5,6 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from questions.models import Question
@@ -13,14 +12,14 @@ from results.models import Result
 from user_relations.models import Bookmark
 from user_relations.serializers import FeedbackSerializer
 from .models import Test
-from .permissions import IsTestAuthor
+from .permissions import TestPermission
 from .serializers import TestSerializer
 
 
 class TestAPIView(viewsets.ModelViewSet):
     queryset = Test.objects
     serializer_class = TestSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsTestAuthor]
+    permission_classes = [TestPermission]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['title', 'short_description', 'user__username']
     filterset_fields = ['is_published', 'user']

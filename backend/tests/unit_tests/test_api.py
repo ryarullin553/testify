@@ -1,13 +1,13 @@
 import json
 from pathlib import Path
 import time
+from pytz import timezone
 
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
-from pytz import timezone
-
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
+from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 
 from questions.models import Question
@@ -340,9 +340,11 @@ class TestAPITestCase(APITestCase):
         }
         self.client.force_login(self.user)
         response = self.client.post(url, data=data)
-        Test.objects.get(id=response.data['id']).image.delete()
+        instance = Test.objects.first()
+        instance.image.delete()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(6, Test.objects.count())
+        self.assertEqual(self.user, instance.user)
 
     def test_update(self):
         url = f'/api/tests/{self.test_with_image.id}/'
@@ -364,6 +366,34 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(True, self.test_with_image.has_points)
         self.assertEqual(True, self.test_with_image.has_comments)
 
+    def test_update_not_user(self):
+        self.user_2 = User.objects.create_user(
+            username='user2',
+            email='user2@mail.ru',
+            password='123'
+        )
+        url = f'/api/tests/{self.test_with_image.id}/'
+        data = {
+            'title': 'Обновленный тест',
+            'description': 'Новое описание теста',
+            'is_published': True,
+            'has_point': True,
+            'has_comments': True
+        }
+        json_data = json.dumps(data)
+        self.client.force_login(self.user_2)
+        response = self.client.patch(url, data=json_data, content_type='application/json')
+        expected_detail = {
+            'detail': ErrorDetail(
+                string='У вас недостаточно прав для выполнения данного действия.',
+                code='permission_denied'
+            )
+        }
+        self.assertEqual(expected_detail, response.data)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        self.test_with_image.refresh_from_db()
+        self.assertEqual('Тест с аватаркой', self.test_with_image.title)
+
     def test_delete(self):
         self.assertEqual(5, Test.objects.count())
         url = f'/api/tests/{self.test_with_image.id}/'
@@ -371,6 +401,26 @@ class TestAPITestCase(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
         self.assertEqual(4, Test.objects.count())
+
+    def test_delete_not_user(self):
+        self.user_2 = User.objects.create_user(
+            username='user2',
+            email='user2@mail.ru',
+            password='123'
+        )
+        self.assertEqual(5, Test.objects.count())
+        url = f'/api/tests/{self.test_with_image.id}/'
+        self.client.force_login(self.user_2)
+        response = self.client.delete(url)
+        expected_detail = {
+            'detail': ErrorDetail(
+                string='У вас недостаточно прав для выполнения данного действия.',
+                code='permission_denied'
+            )
+        }
+        self.assertEqual(expected_detail, response.data)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(5, Test.objects.count())
 
     def test_retrieve(self):
         url = f'/api/tests/{self.test_with_image.id}/'

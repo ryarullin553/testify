@@ -5,6 +5,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
 from rest_framework import status
+from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 
 from questions.models import Question
@@ -262,6 +263,43 @@ class QuestionAPITestCase(APITestCase):
         self.assertEqual(5, self.question_1.points)
         self.assertEqual('Новое пояснение к вопросу', self.question_1.explanation)
 
+    def test_update_not_user(self):
+        self.user_2 = User.objects.create_user(
+            username='user2',
+            email='user2@mail.ru',
+            password='123'
+        )
+        url = f'/api/questions/{self.question_1.id}/'
+        data = {
+            'type': 'Sequencing',
+            'content': 'Новое содержание вопроса',
+            'answer_choices': [
+                'Первый ответ',
+                'Второй ответ',
+                'Третий ответ',
+                'Четвертый ответ'
+            ],
+            'points': 5,
+            'explanation': 'Новое пояснение к вопросу',
+        }
+        json_data = json.dumps(data)
+        self.client.force_login(self.user_2)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.patch(url, data=json_data, content_type='application/json')
+            self.assertEqual(5, len(queries))
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        expected_detail = {
+            'detail': ErrorDetail(
+                string='У вас недостаточно прав для выполнения данного действия.',
+                code='permission_denied'
+            )
+        }
+        self.assertEqual(expected_detail, response.data)
+        self.question_1.refresh_from_db()
+        self.assertEqual('Single choice', self.question_1.type)
+        self.assertEqual('Содержание первого вопроса', self.question_1.content)
+        self.assertEqual(2, self.question_1.points)
+
     def test_delete(self):
         self.assertEqual(2, Question.objects.count())
         url = f'/api/questions/{self.question_1.id}/'
@@ -271,6 +309,28 @@ class QuestionAPITestCase(APITestCase):
             self.assertEqual(8, len(queries))
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
         self.assertEqual(1, Question.objects.count())
+
+    def test_delete_not_user(self):
+        self.user_2 = User.objects.create_user(
+            username='user2',
+            email='user2@mail.ru',
+            password='123'
+        )
+        self.assertEqual(2, Question.objects.count())
+        url = f'/api/questions/{self.question_1.id}/'
+        self.client.force_login(self.user_2)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.delete(url)
+            self.assertEqual(5, len(queries))
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        expected_detail = {
+            'detail': ErrorDetail(
+                string='У вас недостаточно прав для выполнения данного действия.',
+                code='permission_denied'
+            )
+        }
+        self.assertEqual(expected_detail, response.data)
+        self.assertEqual(2, Question.objects.count())
 
     def tearDown(self):
         self.test_with_image.image.delete()

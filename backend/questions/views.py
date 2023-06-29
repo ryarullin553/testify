@@ -1,8 +1,7 @@
 from rest_framework import mixins, viewsets
-from rest_framework.permissions import IsAuthenticated
 
 from .models import Question
-from .permissions import IsQuestionAuthor
+from .permissions import QuestionPermission
 from .serializers import QuestionSerializer
 
 
@@ -12,7 +11,7 @@ class QuestionAPIView(mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
     queryset = Question.objects
     serializer_class = QuestionSerializer
-    permission_classes = (IsAuthenticated, IsQuestionAuthor)
+    permission_classes = [QuestionPermission]
 
     # @action(detail=True, url_path='likes', url_name='likes')
     # def get_question_likes(self, request, **kwargs):
