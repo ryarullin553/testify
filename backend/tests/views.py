@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from questions.models import Question
-from results.models import Result
+from results.models import Passage
 from user_relations.models import Bookmark
 from user_relations.serializers import FeedbackSerializer
 from .models import Test
@@ -30,10 +30,10 @@ class TestAPIView(viewsets.ModelViewSet):
         user = self.request.user
         if isinstance(user, AnonymousUser):
             user = 0
-        result = Result.objects.filter(
+        passage = Passage.objects.filter(
             test=OuterRef(self.lookup_field),
             user=user,
-            total__isnull=True
+            result__isnull=True
         )
         bookmark = Bookmark.objects.filter(
             test=OuterRef(self.lookup_field),
@@ -43,11 +43,11 @@ class TestAPIView(viewsets.ModelViewSet):
             .filter(is_published=True) \
             .select_related('user') \
             .annotate(
-                results_count=Count('results', distinct=True),
+                results_count=Count('passages', distinct=True),
                 feedbacks_count=Count('feedbacks', distinct=True),
                 rating=Avg('feedbacks__rate'),
                 in_bookmarks=Exists(bookmark),
-                has_passage=Exists(result)
+                has_passage=Exists(passage)
             ) \
             .only(*fields)
         return queryset

@@ -1,9 +1,32 @@
-# from rest_framework import serializers
-#
-# from utils.serializers import DynamicFieldsModelSerializer
-# from .models import Result, ChoicedAnswer
-#
-#
+from rest_framework import serializers
+
+from tests.serializers import TestSerializer
+from utils.serializers import DynamicFieldsModelSerializer
+from .models import Passage
+
+
+class PassageSerializer(DynamicFieldsModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+    test = TestSerializer(
+        read_only=True,
+        required=False,
+        fields=('title', 'has_comments', 'has_right_answers', 'has_questions_explanation', 'questions',
+                'has_points')
+    )
+    test_id = serializers.IntegerField(required=True)
+
+    class Meta:
+        model = Passage
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+        """Проверяет завершенность теста, чтобы исключить изменение результата"""
+        if instance.result:
+            raise serializers.ValidationError({'error': 'Тест уже завершен'})
+        return super().update(instance, validated_data)
+
 # class ChoicedAnswerSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = ChoicedAnswer
@@ -28,16 +51,3 @@
 #             raise serializers.ValidationError({'non_field_errors': ['Поле answer должно относится к текущему вопросу.']})
 #         return super().update(instance, validated_data)
 #
-#
-# class ResultSerializer(DynamicFieldsModelSerializer):
-#     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-#
-#     class Meta:
-#         model = Result
-#         fields = ['id', 'test', 'user', 'passage', 'total']
-#
-#     def update(self, instance, validated_data):
-#         """Проверяет завершенность теста, чтобы исключить изменение результата"""
-#         if instance.total:
-#             raise serializers.ValidationError({'error': 'Тест уже завершен.'})
-#         return super().update(instance, validated_data)

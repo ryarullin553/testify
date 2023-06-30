@@ -46,11 +46,11 @@ class Question(models.Model):
         blank=True
     )
     created = models.DateTimeField(
-        verbose_name='Дата создания',
+        verbose_name='Создано',
         auto_now_add=True
     )
     updated = models.DateTimeField(
-        verbose_name='Дата изменения',
+        verbose_name='Изменено',
         auto_now=True
     )
 
@@ -58,6 +58,7 @@ class Question(models.Model):
         verbose_name = 'Вопрос'
         verbose_name_plural = 'Вопросы'
         db_table = 'questions'
+        ordering = ['created']
 
     def __str__(self):
         return f"Тест '{self.test}' id вопроса {self.id}"

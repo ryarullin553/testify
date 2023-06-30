@@ -6,12 +6,7 @@ from .models import Test
 
 
 class TestSerializer(DynamicFieldsModelSerializer):
-    questions = QuestionSerializer(
-        required=False,
-        many=True,
-        fields=('id', 'type', 'content', 'answer_choices', 'points', 'explanation', 'image'),
-        read_only=True
-    )
+    questions = serializers.SerializerMethodField()
     rating = serializers.DecimalField(
         max_digits=2,
         decimal_places=1,
@@ -42,6 +37,22 @@ class TestSerializer(DynamicFieldsModelSerializer):
         read_only=True
     )
 
+    def get_questions(self, test):
+        fields = ['id', 'type', 'content', 'answer_choices', 'image']
+        if test.has_points:
+            fields.append('points')
+        if test.has_questions_explanation:
+            fields.append('explanation')
+        questions = test.questions.all()
+        serializer = QuestionSerializer(
+            instance=questions,
+            many=True,
+            read_only=True,
+            fields=fields
+        )
+        return serializer.data
+
     class Meta:
         model = Test
         fields = '__all__'
+
