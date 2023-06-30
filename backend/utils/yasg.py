@@ -11,7 +11,7 @@ schema_view = get_schema_view(
       description="Бесплатная платформа для создания и прохождения тестов",
    ),
    public=True,
-   permission_classes=(permissions.AllowAny,),
+   permission_classes=[permissions.AllowAny],
 )
 
 urlpatterns = [

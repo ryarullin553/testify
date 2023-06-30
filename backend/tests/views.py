@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from questions.models import Question
-from results.models import Passage
+from passages.models import Passage
 from user_relations.models import Bookmark
 from user_relations.serializers import FeedbackSerializer
 from .models import Test
