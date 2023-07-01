@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from tests.serializers import TestSerializer
+from tests.models import Test
 from utils.serializers import DynamicFieldsModelSerializer
+from tests.serializers import TestSerializer
 from .models import Passage
 
 
@@ -9,22 +10,35 @@ class PassageSerializer(DynamicFieldsModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
-    test = TestSerializer(
-        read_only=True,
-        required=False,
-        fields=('title', 'has_comments', 'has_right_answers', 'has_questions_explanation', 'questions',
-                'has_points')
+    test_data = serializers.SerializerMethodField(read_only=True)
+    test = serializers.PrimaryKeyRelatedField(
+        queryset=Test.objects
+        .filter(is_published=True)
+        .only('id', 'title', 'user_id', 'has_points', 'has_questions_explanation', 'has_right_answers')
     )
-    test_id = serializers.IntegerField(required=True)
 
     class Meta:
         model = Passage
-        fields = '__all__'
+        exclude = ['created', 'updated']
+
+    def get_test_data(self, passage):
+        test = passage.test
+        test.__dict__['is_finished_passage'] = bool(passage.result)
+        serializer = TestSerializer(
+            instance=test,
+            read_only=True,
+            required=False,
+            fields=('title', 'questions'),
+            context={'request': self.context['request']}
+        )
+        return serializer.data
 
     def update(self, instance, validated_data):
-        """Проверяет завершенность теста, чтобы исключить изменение результата"""
+        """Проверяет завершенность теста, чтобы исключить изменение результата. Исключает изменение теста"""
+        if validated_data.get('test'):
+            raise serializers.ValidationError({'detail': 'Тест уже завершен'})
         if instance.result:
-            raise serializers.ValidationError({'error': 'Тест уже завершен'})
+            raise serializers.ValidationError({'detail': 'Тест уже завершен'})
         return super().update(instance, validated_data)
 
 # class ChoicedAnswerSerializer(serializers.ModelSerializer):

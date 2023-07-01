@@ -38,12 +38,15 @@ class TestSerializer(DynamicFieldsModelSerializer):
     )
 
     def get_questions(self, test):
+        current_user = self.context['request'].user
         fields = ['id', 'type', 'content', 'answer_choices', 'image']
         if test.has_points:
             fields.append('points')
-        if test.has_questions_explanation:
+        if test.has_questions_explanation and (current_user.id == test.user_id or test.is_finished_passage):
             fields.append('explanation')
-        questions = test.questions.all()
+        if current_user.id == test.user_id or (test.has_right_answers and test.is_finished_passage):
+            fields.append('right_answers')
+        questions = test.questions.only(*fields, 'test_id')
         serializer = QuestionSerializer(
             instance=questions,
             many=True,
@@ -55,4 +58,3 @@ class TestSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Test
         fields = '__all__'
-

@@ -28,7 +28,12 @@ class Question(models.Model):
     )
     answer_choices = ArrayField(
         verbose_name='Варианты ответов',
-        base_field=models.JSONField(),
+        base_field=models.TextField(),
+        size=20
+    )
+    right_answers = ArrayField(
+        verbose_name='Правильные ответы',
+        base_field=models.TextField(),
         size=20
     )
     points = models.PositiveSmallIntegerField(

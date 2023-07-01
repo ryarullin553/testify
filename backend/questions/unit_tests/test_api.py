@@ -39,22 +39,13 @@ class QuestionAPITestCase(APITestCase):
             type='Single choice',
             content='Содержание первого вопроса',
             answer_choices=[
-                {
-                    "content": "Первый ответ",
-                    "is_true": True
-                },
-                {
-                    "content": "Второй ответ",
-                    "is_true": False
-                },
-                {
-                    "content": "Третий ответ",
-                    "is_true": False
-                },
-                {
-                    "content": "Четвертый ответ",
-                    "is_true": False
-                }
+                'Первый ответ',
+                'Второй ответ',
+                'Третий ответ',
+                'Четвертый ответ'
+            ],
+            right_answers=[
+                'Первый ответ'
             ],
             points=2,
             explanation='Пояснение к вопросу',
@@ -66,22 +57,13 @@ class QuestionAPITestCase(APITestCase):
             type='Single choice',
             content='Содержание второго вопроса',
             answer_choices=[
-                {
-                    "content": "Первый ответ",
-                    "is_true": False
-                },
-                {
-                    "content": "Второй ответ",
-                    "is_true": False
-                },
-                {
-                    "content": "Третий ответ",
-                    "is_true": True
-                },
-                {
-                    "content": "Четвертый ответ",
-                    "is_true": False
-                }
+                'Первый ответ',
+                'Второй ответ',
+                'Третий ответ',
+                'Четвертый ответ'
+            ],
+            right_answers=[
+                'Третий ответ'
             ],
             points=5
         )
@@ -93,22 +75,13 @@ class QuestionAPITestCase(APITestCase):
             'type': 'Single choice',
             'content': 'Содержание вопроса',
             'answer_choices': [
-                {
-                    'content': 'Первый ответ',
-                    'is_true': True
-                },
-                {
-                    'content': 'Второй ответ',
-                    'is_true': False
-                },
-                {
-                    'content': 'Третий ответ',
-                    'is_true': False
-                },
-                {
-                    'content': 'Четвертый ответ',
-                    'is_true': False
-                }
+                'Первый ответ',
+                'Второй ответ',
+                'Третий ответ',
+                'Четвертый ответ'
+            ],
+            'right_answers': [
+                'Третий ответ'
             ],
             'points': 2,
             'explanation': 'Пояснение к вопросу',
@@ -131,22 +104,15 @@ class QuestionAPITestCase(APITestCase):
             'type': 'Multiple choice',
             'content': 'Содержание вопроса',
             'answer_choices': [
-                {
-                    'content': 'Первый ответ',
-                    'is_true': True
-                },
-                {
-                    'content': 'Второй ответ',
-                    'is_true': True
-                },
-                {
-                    'content': 'Третий ответ',
-                    'is_true': True
-                },
-                {
-                    'content': 'Четвертый ответ',
-                    'is_true': False
-                }
+                'Первый ответ',
+                'Второй ответ',
+                'Третий ответ',
+                'Четвертый ответ'
+            ],
+            'right_answers': [
+                'Первый ответ',
+                'Второй ответ',
+                'Третий ответ'
             ],
             'points': 20,
             'explanation': 'Пояснение к вопросу',
@@ -169,6 +135,9 @@ class QuestionAPITestCase(APITestCase):
             'type': 'Text input',
             'content': 'Содержание вопроса',
             'answer_choices': [
+                'Правильный ответ'
+            ],
+            'right_answers': [
                 'Правильный ответ'
             ],
             'points': 30,
@@ -209,7 +178,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(5, len(queries))
+            self.assertEqual(3, len(queries))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(3, Question.objects.count())
 
@@ -232,7 +201,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(5, len(queries))
+            self.assertEqual(3, len(queries))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(3, Question.objects.count())
 

@@ -9,5 +9,6 @@ router.register(r'passages', PassageAPIView)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('tests/<int:pk>/passages/', PassageAPIView.as_view({'get': 'passages'}))
 ]
 

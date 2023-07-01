@@ -24,16 +24,13 @@ class Passage(models.Model):
         verbose_name='Тест',
         to='tests.Test',
         on_delete=models.CASCADE,
-        limit_choices_to={
-            'is_published': True
-        },
         related_name='passages'
     )
 
     class Meta:
         verbose_name = 'Прохождение'
         verbose_name_plural = 'Прохождения'
-        db_table = 'results'
+        db_table = 'passages'
         ordering = ['-created']
 
     def __str__(self):

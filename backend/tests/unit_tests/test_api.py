@@ -10,6 +10,7 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 
+from passages.models import Passage
 from questions.models import Question
 from tests.models import Test
 from users.models import User
@@ -26,7 +27,11 @@ class TestAPITestCase(APITestCase):
             email='user@mail.ru',
             password='123'
         )
-
+        self.user_3 = User.objects.create_user(
+            username='user3',
+            email='user3@mail.ru',
+            password='123'
+        )
         self.simple_test = Test.objects.create(
             title='Простой тест',
             short_description='Тест только с необходимыми полями для создания',
@@ -62,7 +67,8 @@ class TestAPITestCase(APITestCase):
             description='Описание теста',
             user=self.user,
             image=self.image,
-            is_published=True
+            is_published=True,
+            has_questions_explanation=True
         )
 
         self.question_1 = Question.objects.create(
@@ -70,22 +76,13 @@ class TestAPITestCase(APITestCase):
             type='Single choice',
             content='Содержание первого вопроса',
             answer_choices=[
-                {
-                    "content": "Первый ответ",
-                    "is_true": True
-                },
-                {
-                    "content": "Второй ответ",
-                    "is_true": False
-                },
-                {
-                    "content": "Третий ответ",
-                    "is_true": False
-                },
-                {
-                    "content": "Четвертый ответ",
-                    "is_true": False
-                }
+                'Первый ответ',
+                'Второй ответ',
+                'Третий ответ',
+                'Четвертый ответ'
+            ],
+            right_answers=[
+                'Первый ответ'
             ],
             points=2,
             explanation='Пояснение к вопросу',
@@ -97,31 +94,41 @@ class TestAPITestCase(APITestCase):
             type='Single choice',
             content='Содержание второго вопроса',
             answer_choices=[
-                {
-                    "content": "Первый ответ",
-                    "is_true": False
-                },
-                {
-                    "content": "Второй ответ",
-                    "is_true": False
-                },
-                {
-                    "content": "Третий ответ",
-                    "is_true": True
-                },
-                {
-                    "content": "Четвертый ответ",
-                    "is_true": False
-                }
+                'Первый ответ',
+                'Второй ответ',
+                'Третий ответ',
+                'Четвертый ответ'
+            ],
+            right_answers=[
+                'Третий ответ'
             ],
             points=5
         )
+        self.passage = Passage.objects.create(
+            test=self.test_with_image,
+            user=self.user
+        )
+        self.finished_passage = Passage.objects.create(
+            test=self.test_with_image,
+            user=self.user,
+            result={
+                'questions_count': 2,
+                'total_answers': 2,
+                'correct_answers': 1,
+                'time': '00:00:00',
+                'score': 50,
+            }
+        )
+
+    def get_response_and_check_queries(self, url, expected_queries):
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.get(url)
+            self.assertEqual(expected_queries, len(queries))
+        return response
 
     def test_list(self):
         url = '/api/tests/'
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(1, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=1)
         response_data = response.data['results']
         expected_simple_published_test = {
             'id': self.simple_published_test.id,
@@ -164,7 +171,7 @@ class TestAPITestCase(APITestCase):
             'id': self.test_with_image.id,
             'rating': None,
             'feedbacks_count': 0,
-            'results_count': 0,
+            'results_count': 2,
             'user_name': 'user',
             'in_bookmarks': False,
             'has_passage': False,
@@ -184,9 +191,7 @@ class TestAPITestCase(APITestCase):
 
     def test_list_search(self):
         url = '/api/tests/?search=user'
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(1, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=1)
         response_data = response.data['results']
         expected_test_with_user = {
             'id': self.test_with_user.id,
@@ -205,7 +210,7 @@ class TestAPITestCase(APITestCase):
             'id': self.test_with_image.id,
             'rating': None,
             'feedbacks_count': 0,
-            'results_count': 0,
+            'results_count': 2,
             'user_name': 'user',
             'in_bookmarks': False,
             'has_passage': False,
@@ -223,9 +228,7 @@ class TestAPITestCase(APITestCase):
 
     def test_list_ordering_created(self):
         url = '/api/tests/?ordering=created'
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(1, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=1)
         response_data = response.data['results']
         expected_simple_published_test = {
             'id': self.simple_published_test.id,
@@ -268,7 +271,7 @@ class TestAPITestCase(APITestCase):
             'id': self.test_with_image.id,
             'rating': None,
             'feedbacks_count': 0,
-            'results_count': 0,
+            'results_count': 2,
             'user_name': 'user',
             'in_bookmarks': False,
             'has_passage': False,
@@ -288,9 +291,7 @@ class TestAPITestCase(APITestCase):
 
     def test_list_filter(self):
         url = f'/api/tests/?user={self.user.id}'
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(2, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=2)
         response_data = response.data['results']
         expected_test_with_user = {
             'id': self.test_with_user.id,
@@ -309,7 +310,7 @@ class TestAPITestCase(APITestCase):
             'id': self.test_with_image.id,
             'rating': None,
             'feedbacks_count': 0,
-            'results_count': 0,
+            'results_count': 2,
             'user_name': 'user',
             'in_bookmarks': False,
             'has_passage': False,
@@ -333,10 +334,7 @@ class TestAPITestCase(APITestCase):
             'short_description': 'Краткое описание теста',
             'description': 'Описание теста',
             'image': self.image.open(),
-            'is_published': True,
-            'has_point': True,
-            'has_comments': True,
-            'has_right_answers': True,
+            'has_questions_explanation': True
         }
         self.client.force_login(self.user)
         response = self.client.post(url, data=data)
@@ -351,9 +349,6 @@ class TestAPITestCase(APITestCase):
         data = {
             'title': 'Обновленный тест',
             'description': 'Новое описание теста',
-            'is_published': True,
-            'has_point': True,
-            'has_comments': True
         }
         json_data = json.dumps(data)
         self.client.force_login(self.user)
@@ -425,19 +420,17 @@ class TestAPITestCase(APITestCase):
     def test_retrieve(self):
         url = f'/api/tests/{self.test_with_image.id}/'
         self.client.force_login(self.user)
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(3, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=3)
         expected_test_with_image = {
             'id': self.test_with_image.id,
             'rating': None,
             'feedbacks_count': 0,
-            'results_count': 0,
+            'results_count': 2,
             'user_name': 'user',
             'user_avatar': None,
             'user_bio': None,
             'in_bookmarks': False,
-            'has_passage': False,
+            'has_passage': True,
             'title': 'Тест с аватаркой',
             'short_description': 'Опубликованный тест с описанием и аватаркой от пользователя',
             'description': 'Описание теста',
@@ -450,9 +443,7 @@ class TestAPITestCase(APITestCase):
     def test_config(self):
         url = f'/api/tests/{self.test_with_image.id}/config/'
         self.client.force_login(self.user)
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(3, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=3)
         expected_test_with_image = {
             'id': self.test_with_image.id,
             'title': 'Тест с аватаркой',
@@ -463,7 +454,7 @@ class TestAPITestCase(APITestCase):
             'has_points': True,
             'has_comments': True,
             'has_right_answers': True,
-            'has_questions_explanation': False
+            'has_questions_explanation': True
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_test_with_image)
@@ -471,9 +462,7 @@ class TestAPITestCase(APITestCase):
     def test_created(self):
         url = f'/api/tests/created/'
         self.client.force_login(self.user)
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(3, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=3)
         response_data = response.data['results']
         expected_test_with_user = {
             'id': self.test_with_user.id,
@@ -499,9 +488,7 @@ class TestAPITestCase(APITestCase):
     def test_created_search(self):
         url = f'/api/tests/created/?search=аватар'
         self.client.force_login(self.user)
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(3, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=3)
         response_data = response.data['results']
         expected_test_with_image = {
             'id': self.test_with_image.id,
@@ -519,9 +506,7 @@ class TestAPITestCase(APITestCase):
     def test_created_filter(self):
         url = f'/api/tests/created/?is_published=False'
         self.client.force_login(self.user)
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(3, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=3)
         response_data = response.data['results']
         expected_data = []
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -530,9 +515,7 @@ class TestAPITestCase(APITestCase):
     def test_questions(self):
         url = f'/api/tests/{self.test_with_image.id}/questions/'
         self.client.force_login(self.user)
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.get(url)
-            self.assertEqual(4, len(queries))
+        response = self.get_response_and_check_queries(url, expected_queries=4)
         expected_test_with_image = {
             'id': self.test_with_image.id,
             'questions': [
@@ -541,48 +524,30 @@ class TestAPITestCase(APITestCase):
                     'type': 'Single choice',
                     'content': 'Содержание первого вопроса',
                     'answer_choices': [
-                        {
-                            'content': 'Первый ответ',
-                            'is_true': True
-                        },
-                        {
-                            'content': 'Второй ответ',
-                            'is_true': False
-                        },
-                        {
-                            'content': 'Третий ответ',
-                            'is_true': False
-                        },
-                        {
-                            'content': 'Четвертый ответ',
-                            'is_true': False
-                        }
+                        'Первый ответ',
+                        'Второй ответ',
+                        'Третий ответ',
+                        'Четвертый ответ'
+                    ],
+                    'right_answers': [
+                        'Первый ответ'
                     ],
                     'points': 2,
                     'explanation': 'Пояснение к вопросу',
-                    'image': f'http://testserver/media/{self.question_1.image}'
+                    'image': f'/media/{self.question_1.image}'
                 },
                 {
                     'id': self.question_2.id,
                     'type': 'Single choice',
                     'content': 'Содержание второго вопроса',
                     'answer_choices': [
-                        {
-                            'content': 'Первый ответ',
-                            'is_true': False
-                        },
-                        {
-                            'content': 'Второй ответ',
-                            'is_true': False
-                        },
-                        {
-                            'content': 'Третий ответ',
-                            'is_true': True
-                        },
-                        {
-                            'content': 'Четвертый ответ',
-                            'is_true': False
-                        }
+                        'Первый ответ',
+                        'Второй ответ',
+                        'Третий ответ',
+                        'Четвертый ответ'
+                    ],
+                    'right_answers': [
+                        'Третий ответ'
                     ],
                     'points': 5,
                     'explanation': '',
@@ -592,8 +557,61 @@ class TestAPITestCase(APITestCase):
             'title': 'Тест с аватаркой',
             'is_published': True,
             'has_points': True,
-            'has_comments': True,
-            'has_right_answers': True,
+            'has_questions_explanation': True
+        }
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, expected_test_with_image)
+
+    def test_questions_without_explanation_and_points(self):
+        self.client.force_login(self.user)
+        patch_url = f'/api/tests/{self.test_with_image.id}/'
+        data = {
+            'has_questions_explanation': False,
+            'has_points': False,
+            'has_right_answers': False
+        }
+        json_data = json.dumps(data)
+        self.client.patch(patch_url, data=json_data, content_type='application/json')
+
+        url = f'/api/tests/{self.test_with_image.id}/questions/'
+        response = self.get_response_and_check_queries(url, expected_queries=4)
+        expected_test_with_image = {
+            'id': self.test_with_image.id,
+            'questions': [
+                {
+                    'id': self.question_1.id,
+                    'type': 'Single choice',
+                    'content': 'Содержание первого вопроса',
+                    'answer_choices': [
+                        'Первый ответ',
+                        'Второй ответ',
+                        'Третий ответ',
+                        'Четвертый ответ'
+                    ],
+                    'right_answers': [
+                        'Первый ответ'
+                    ],
+                    'image': f'/media/{self.question_1.image}'
+                },
+                {
+                    'id': self.question_2.id,
+                    'type': 'Single choice',
+                    'content': 'Содержание второго вопроса',
+                    'answer_choices': [
+                        'Первый ответ',
+                        'Второй ответ',
+                        'Третий ответ',
+                        'Четвертый ответ'
+                    ],
+                    'right_answers': [
+                        'Третий ответ'
+                    ],
+                    'image': None
+                }
+            ],
+            'title': 'Тест с аватаркой',
+            'is_published': True,
+            'has_points': False,
             'has_questions_explanation': False
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
