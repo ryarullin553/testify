@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/', include('tests.urls')),
     path('api/', include('questions.urls')),
     path('api/', include('passages.urls')),
+    path('api/', include('answers.urls')),
     path('api/', include('user_relations.urls')),
 ]
 

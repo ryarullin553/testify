@@ -158,18 +158,16 @@ class QuestionAPITestCase(APITestCase):
             'type': 'Matching',
             'content': 'Содержание вопроса',
             'answer_choices': [
-                {
-                    'Первый ответ': 'Первый ответ'
-                },
-                {
-                    'Второй ответ': 'Второй ответ'
-                },
-                {
-                    'Третий ответ': 'Третий ответ'
-                },
-                {
-                    'Четвертый ответ': 'Четвертый ответ'
-                }
+                ('Первый ответ', 'Первый ответ'),
+                ('Второй ответ', 'Второй ответ'),
+                ('Третий ответ', 'Третий ответ'),
+                ('Четвертый ответ', 'Четвертый ответ')
+            ],
+            'right_answers': [
+                ('Первый ответ', 'Первый ответ'),
+                ('Второй ответ', 'Второй ответ'),
+                ('Третий ответ', 'Третий ответ'),
+                ('Четвертый ответ', 'Четвертый ответ')
             ],
             'points': 15,
             'explanation': 'Пояснение к вопросу',
@@ -178,7 +176,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(3, len(queries))
+            self.assertEqual(5, len(queries))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(3, Question.objects.count())
 
@@ -194,6 +192,12 @@ class QuestionAPITestCase(APITestCase):
                 'Третий ответ',
                 'Четвертый ответ'
             ],
+            'right_answers': [
+                'Первый ответ',
+                'Второй ответ',
+                'Третий ответ',
+                'Четвертый ответ'
+            ],
             'points': 5,
             'explanation': 'Пояснение к вопросу',
             'test': self.test_with_image.id
@@ -201,7 +205,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(3, len(queries))
+            self.assertEqual(5, len(queries))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(3, Question.objects.count())
 
@@ -275,7 +279,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.delete(url)
-            self.assertEqual(8, len(queries))
+            self.assertEqual(9, len(queries))
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
         self.assertEqual(1, Question.objects.count())
 

@@ -14,8 +14,8 @@ class QuestionSerializer(DynamicFieldsModelSerializer):
         """Проверяет, что текущий пользователь является автором теста и может создавать к нему вопросы"""
         if self.context['request'].method == 'POST':
             test = attrs.get('test')
-            user = self.context['request'].user
-            if test.user != user:
+            current_user = self.context['request'].user
+            if test.user != current_user:
                 raise serializers.ValidationError('Текущий пользователь не является автором теста')
         return attrs
 

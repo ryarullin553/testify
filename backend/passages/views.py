@@ -18,11 +18,11 @@ class PassageAPIView(mixins.CreateModelMixin,
     ordering = '-created'
 
     def get_object(self):
-        fields = ['id', 'test', 'result', 'user__id',
+        fields = ['id', 'test', 'result', 'user_id',
                   'test__title', 'test__has_points', 'test__has_questions_explanation',
                   'test__has_right_answers', 'test__user_id']
         queryset = self.get_queryset()\
-            .select_related('test', 'user', 'test__user')\
+            .select_related('test')\
             .only(*fields)
         instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
         self.check_object_permissions(self.request, instance)
@@ -49,21 +49,3 @@ class PassageAPIView(mixins.CreateModelMixin,
     #     serializer = self.get_saved_serializer({'total': total}, result, partial=True)
     #     return Response(serializer.data)
 
-# class ChoicedAnswerAPIView(viewsets.GenericViewSet, APIViewMixin):
-#     queryset = ChoicedAnswer.objects
-#     serializer_class = ChoicedAnswerSerializer
-#     permission_classes = (IsAuthenticated, IsUserAnswer)
-#
-#     def add_answer(self, request):
-#         """Добавляет выбранный ответ при прохождении теста"""
-#         serializer = self.get_saved_serializer(request.data)
-#         choiced_answer = serializer.instance
-#         update_result_passage(choiced_answer)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#
-#     def update_answer(self, request, **kwargs):
-#         """Изменяет выбранный ответ при прохождении теста"""
-#         choiced_answer = self.get_object()
-#         serializer = self.get_saved_serializer(request.data, choiced_answer, partial=True)
-#         update_result_passage(choiced_answer)
-#         return Response(serializer.data)

@@ -1,4 +1,5 @@
 import json
+import time
 
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
@@ -49,6 +50,7 @@ class PassageAPITestCase(APITestCase):
             test=self.test,
             user=self.user_2
         )
+        time.sleep(0.1)
         self.finished_passage = Passage.objects.create(
             test=self.test,
             user=self.user_2,
@@ -365,8 +367,8 @@ class PassageAPITestCase(APITestCase):
             }
         }
         expected_data = [
-            expected_passage,
-            expected_finished_passage
+            expected_finished_passage,
+            expected_passage
         ]
         response_data = response.data['results']
         self.assertEqual(status.HTTP_200_OK, response.status_code)

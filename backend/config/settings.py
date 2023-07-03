@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'tests.apps.TestsConfig',
     'questions.apps.QuestionsConfig',
     'passages.apps.PassagesConfig',
+    'answers.apps.AnswersConfig',
     'user_relations.apps.UserRelationsConfig',
 ]
 

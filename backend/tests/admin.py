@@ -6,4 +6,8 @@ from .models import Test
 
 @admin.register(Test)
 class TestAdmin(ModelAdmin):
-    pass
+    list_display = ('id', 'title', 'is_published')
+    list_display_links = ('id', 'title')
+    list_editable = ('is_published',)
+    list_filter = ('is_published',)
+    search_fields = ('id', 'title')
