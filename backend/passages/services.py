@@ -1,10 +1,67 @@
-# from django.db.models import Avg, FloatField
-# from django.db.models.functions import Cast
-# from pytz import timezone
-# from datetime import datetime
-# from .serializers import ChoicedAnswerSerializer
-#
-#
+from django.db.models import Avg, FloatField, Sum
+from django.db.models.functions import Cast
+from pytz import timezone
+from datetime import datetime
+
+
+def get_result(passage):
+    """Возвращает результат прохождения теста"""
+    test = passage.test
+    answers = passage.answers
+    questions = test.questions
+
+    questions_count = questions.count()
+    answers_count = answers.count()
+    correct_answers_count = get_correct_answers_count(answers)
+    passage_time = get_passage_time(passage)
+
+    total_data = {
+        'questions_count': questions_count,
+        'answers_count': answers_count,
+        'correct_answers_count': correct_answers_count,
+        'passage_time': passage_time,
+        'finished_time': datetime.now().isoformat(),
+    }
+
+    if test.has_points:
+        total_data.update(get_total_points(questions))
+        total_data.update(get_user_points(answers))
+
+    return total_data
+
+
+def get_correct_answers_count(answers):
+    correct_answers_count = 0
+    for answer in answers:
+        if answer.content == answer.question.right_answers:
+            correct_answers_count += 1
+    return correct_answers_count
+
+
+def get_passage_time(passage):
+    return datetime.now(timezone('UTC')) - passage.created
+
+
+def get_total_points(questions):
+    return questions.aggregate(total_points=Sum('points'))
+
+
+def get_user_points(answers):
+    user_points = 0
+    for answer in answers:
+        if answer.content == answer.question.right_answers:
+            user_points += answer.question.points
+    return {'user_points': user_points}
+
+
+def get_score(correct_answers_count, questions_count):
+    """Вычисляет процент прохождения теста"""
+    try:
+        score = round(correct_answers_count / questions_count * 100)
+    except ZeroDivisionError:
+        score = 0
+    return score
+
 # def get_total_data(result):
 #     """Возвращает результат прохождения теста"""
 #     choiced_answers = result.choicedanswer_set
@@ -27,10 +84,9 @@
 #
 #     return total_data
 #
-#
-# def get_formatted_time(result):
+# def get_passage_time(passage):
 #     """Вычисляет время прохождения теста и приводит его в формат %H:%M:%S"""
-#     time = datetime.now(timezone('UTC')) - result.time_create
+#     time = datetime.now(timezone('UTC')) - passage.created
 #     dt = datetime(1900, 1, 1) + time
 #     formatted_time = dt.strftime('%H:%M:%S')
 #     return formatted_time
@@ -53,13 +109,3 @@
 #     average_score = total_scores.aggregate(average_score=Avg('total_score'))
 #     return average_score
 #
-#
-# def update_result_passage(choiced_answer):
-#     """Добавляет или обновляет поле с выбранным ответом в прохождении теста"""
-#     result = choiced_answer.result
-#     questions = result.passage['question_set']
-#     for question in questions:
-#         for answer in question['answer_set']:
-#             if answer['id'] == choiced_answer.answer.pk:
-#                 question['choiced_answer'] = ChoicedAnswerSerializer(choiced_answer).data
-#     result.save()

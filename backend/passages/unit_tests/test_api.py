@@ -119,7 +119,7 @@ class PassageAPITestCase(APITestCase):
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.get(url)
-            self.assertEqual(4, len(queries))
+            self.assertEqual(5, len(queries))
         expected_passage = {
             'id': self.passage.id,
             'test': self.test.id,
@@ -154,6 +154,7 @@ class PassageAPITestCase(APITestCase):
                 ],
                 'title': 'Тест от пользователя',
             },
+            'answers': [],
             'result': None
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -164,7 +165,7 @@ class PassageAPITestCase(APITestCase):
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.get(url)
-            self.assertEqual(4, len(queries))
+            self.assertEqual(5, len(queries))
         expected_passage = {
             'id': self.passage_test_without_points.id,
             'test': self.test_without_points.id,
@@ -185,6 +186,7 @@ class PassageAPITestCase(APITestCase):
                 ],
                 'title': 'Тест от пользователя',
             },
+            'answers': [],
             'result': None
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -195,7 +197,7 @@ class PassageAPITestCase(APITestCase):
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.get(url)
-            self.assertEqual(4, len(queries))
+            self.assertEqual(5, len(queries))
         expected_passage = {
             'id': self.finished_passage.id,
             'test': self.test.id,
@@ -238,6 +240,7 @@ class PassageAPITestCase(APITestCase):
                 ],
                 'title': 'Тест от пользователя',
             },
+            'answers': [],
             'result': {
                 'time': '00:00:00',
                 'score': 50,
@@ -258,7 +261,7 @@ class PassageAPITestCase(APITestCase):
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(5, len(queries))
+            self.assertEqual(6, len(queries))
         instance = Passage.objects.first()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(4, Passage.objects.count())
@@ -293,7 +296,7 @@ class PassageAPITestCase(APITestCase):
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.patch(url, data=json_data, content_type='application/json')
-            self.assertEqual(5, len(queries))
+            self.assertEqual(6, len(queries))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.test.refresh_from_db()
         self.assertEqual(data['result'], response.data['result'])

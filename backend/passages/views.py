@@ -5,6 +5,7 @@ from rest_framework.generics import get_object_or_404
 from .models import Passage
 from .permissions import PassagePermission
 from .serializers import PassageSerializer
+from .services import get_result
 
 
 class PassageAPIView(mixins.CreateModelMixin,
@@ -41,6 +42,10 @@ class PassageAPIView(mixins.CreateModelMixin,
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, fields=fields)
         return self.get_paginated_response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save(result=get_result(self.get_object()))
+
 
     # def update_result(self, request, **kwargs):
     #     """Завершает прохождение теста, добавляя total результата"""

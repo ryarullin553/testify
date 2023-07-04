@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from answers.serializers import AnswerSerializer
 from tests.models import Test
 from utils.serializers import DynamicFieldsModelSerializer
 from tests.serializers import TestSerializer
@@ -10,12 +11,13 @@ class PassageSerializer(DynamicFieldsModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
-    test_data = serializers.SerializerMethodField(read_only=True)
     test = serializers.PrimaryKeyRelatedField(
         queryset=Test.objects
         .filter(is_published=True)
         .only('id', 'title', 'user_id', 'has_points', 'has_questions_explanation', 'has_right_answers')
     )
+    test_data = serializers.SerializerMethodField()
+    answers = serializers.SerializerMethodField()
 
     class Meta:
         model = Passage
@@ -30,6 +32,16 @@ class PassageSerializer(DynamicFieldsModelSerializer):
             required=False,
             fields=('title', 'questions'),
             context={'request': self.context['request']}
+        )
+        return serializer.data
+
+    @staticmethod
+    def get_answers(passage):
+        serializer = AnswerSerializer(
+            instance=passage.answers.only('id', 'question_id', 'passage_id', 'content'),
+            many=True,
+            read_only=True,
+            fields=('id', 'question', 'content')
         )
         return serializer.data
 
