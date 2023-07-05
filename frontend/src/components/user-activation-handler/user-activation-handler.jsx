@@ -20,4 +20,5 @@ export const UserActivationHandler = () => {
     navigate(AppRoute.Root);
   }, []);
 
+  return null;
 }

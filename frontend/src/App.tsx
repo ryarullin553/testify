@@ -16,6 +16,7 @@ import { ResultsPage } from './pages/results-page';
 import { CatalogPage } from './pages/catalog-page';
 import { TestDescriptionPage } from './pages/test-description-page';
 import { AppRoute } from './reusable/const';
+import React from 'react';
 
 function App() {
   return (
@@ -45,7 +46,7 @@ function App() {
           <Route path={AppRoute.ProfileSetting} element={<ProfileSettingPage />} />
           <Route path={AppRoute.UserActivation} element={<UserActivationPage />} />
           <Route path={AppRoute.PasswordReset} element={<ResetPasswordPage />} />
-          <Route path='*' element={<ErrorPage />} />
+          <Route path='*' element={<ErrorPage errorCode={404}/>} />
         </Route>
       </Routes>
     </BrowserRouter>
