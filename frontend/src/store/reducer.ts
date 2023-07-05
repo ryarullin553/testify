@@ -1,15 +1,17 @@
+import { State } from '../types/State';
 import { setAuthorizationStatus, setUserInfo, setError } from './actions';
 import { createReducer } from '@reduxjs/toolkit';
 
-const initialState = {
+const initialState: State = {
   error: null,
   authorizationStatus: false,
   userInfo: {
     id: '',
     username: '',
     email: '',
+    avatar: '',
   },
-};
+}
 
 export const reducer = createReducer(initialState, (builder) => {
   builder

@@ -1,11 +1,24 @@
-import { useState } from 'react';
+import { FC, PropsWithChildren, useState } from 'react';
 import { AvatarBlock } from '../avatar-block/avatar-block';
 import styles from './add-comment-block.module.scss';
 import { RateBlock } from './rate-block/rate-block';
 import { useSelector } from 'react-redux';
 import { selectUserInfo } from '../../store/selectors';
 
-export const AddCommentBlock = ({reloadFeedback, hasRateBlock, children, submitAction, convertAction}) => {
+interface Props extends PropsWithChildren {
+  reloadFeedback: () => void,
+  hasRateBlock: boolean,
+  submitAction: (convertedData: any) => void,
+  convertAction: (formState: any) => void,
+}
+
+export const AddCommentBlock: FC<Props> = ({
+  reloadFeedback,
+  hasRateBlock,
+  children,
+  submitAction,
+  convertAction
+}) => {
   const {avatar} = useSelector(selectUserInfo);
   const [formState, setFormState] = useState({
     review: '',
