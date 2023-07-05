@@ -44,11 +44,3 @@ class PassageSerializer(DynamicFieldsModelSerializer):
             fields=('id', 'question', 'content')
         )
         return serializer.data
-
-    def update(self, instance, validated_data):
-        """Проверяет завершенность теста, чтобы исключить изменение результата. Исключает изменение теста"""
-        if validated_data.get('test'):
-            raise serializers.ValidationError({'detail': 'Тест уже завершен'})
-        if instance.result:
-            raise serializers.ValidationError({'detail': 'Тест уже завершен'})
-        return super().update(instance, validated_data)

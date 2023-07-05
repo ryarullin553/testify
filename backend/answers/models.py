@@ -33,7 +33,6 @@ class Answer(models.Model):
         verbose_name = 'Ответ'
         verbose_name_plural = 'Ответы'
         db_table = 'answers'
-        ordering = ['-created']
         unique_together = ['passage', 'question']
         # Заменить, когда DRF обновится до 3.15 и сможет поддерживать UniqueConstraint
         #

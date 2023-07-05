@@ -11,7 +11,6 @@ class PassagePermission(permissions.BasePermission):
         )
 
     def has_object_permission(self, request, view, obj):
-        if request.method not in SAFE_METHODS:
-            return obj.user_id == request.user.id
-        else:
+        if request.method in SAFE_METHODS:
             return obj.test.user_id == request.user.id or obj.user_id == request.user.id
+        return obj.user_id == request.user.id and not obj.result

@@ -63,7 +63,6 @@ class Question(models.Model):
         verbose_name = 'Вопрос'
         verbose_name_plural = 'Вопросы'
         db_table = 'questions'
-        ordering = ['created']
 
     def __str__(self):
         return f"Тест '{self.test}' id вопроса {self.id}"

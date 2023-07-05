@@ -1,106 +1,49 @@
-from django.db.models import Avg, FloatField, Sum
-from django.db.models.functions import Cast
 from pytz import timezone
 from datetime import datetime
 
 
 def get_result(passage):
-    """Возвращает результат прохождения теста"""
-    test = passage.test
-    answers = passage.answers
-    questions = test.questions
+    """Высчитывает результат прохождения теста"""
 
-    questions_count = questions.count()
-    answers_count = answers.count()
-    correct_answers_count = get_correct_answers_count(answers)
-    passage_time = get_passage_time(passage)
-
-    total_data = {
-        'questions_count': questions_count,
-        'answers_count': answers_count,
-        'correct_answers_count': correct_answers_count,
-        'passage_time': passage_time,
-        'finished_time': datetime.now().isoformat(),
+    result = {
+        'questions_count': passage.questions_count,
+        'answers_count': passage.answers_count,
+        'correct_answers_count': passage.correct_answers_count,
+        'passage_time': get_passage_time(passage),
+        'finished_time': datetime.now().isoformat(timespec='minutes'),
     }
 
-    if test.has_points:
-        total_data.update(get_total_points(questions))
-        total_data.update(get_user_points(answers))
+    if passage.test.has_points:
+        total_points = passage.total_points
+        user_points = passage.user_points
+        points_score = get_score(user_points, total_points)
+        result.update(
+            {
+                'total_points': total_points,
+                'user_points': user_points,
+                'points_score': points_score
+            }
+        )
+    else:
+        result['answers_score'] = get_score(passage.correct_answers_count, passage.questions_count)
 
-    return total_data
-
-
-def get_correct_answers_count(answers):
-    correct_answers_count = 0
-    for answer in answers:
-        if answer.content == answer.question.right_answers:
-            correct_answers_count += 1
-    return correct_answers_count
+    return result
 
 
 def get_passage_time(passage):
-    return datetime.now(timezone('UTC')) - passage.created
+    time = datetime.now(timezone('UTC')) - passage.created
+    dt = datetime(1900, 1, 1) + time
+    formatted_time = dt.strftime('%H:%M:%S')
+    return formatted_time
 
 
-def get_total_points(questions):
-    return questions.aggregate(total_points=Sum('points'))
-
-
-def get_user_points(answers):
-    user_points = 0
-    for answer in answers:
-        if answer.content == answer.question.right_answers:
-            user_points += answer.question.points
-    return {'user_points': user_points}
-
-
-def get_score(correct_answers_count, questions_count):
-    """Вычисляет процент прохождения теста"""
+def get_score(desired_number, original_number):
     try:
-        score = round(correct_answers_count / questions_count * 100)
+        score = round(desired_number / original_number * 100)
     except ZeroDivisionError:
         score = 0
     return score
 
-# def get_total_data(result):
-#     """Возвращает результат прохождения теста"""
-#     choiced_answers = result.choicedanswer_set
-#     questions_count = result.test.question_set.count()
-#     total_answers = choiced_answers.count()
-#     correct_answers = choiced_answers.filter(answer__is_true=True).count()
-#     time = get_formatted_time(result)
-#     score = get_score(correct_answers, questions_count)
-#
-#     total_data = {
-#         'questions_count': questions_count,
-#         'total_answers': total_answers,
-#         'correct_answers': correct_answers,
-#         'time': time,
-#         'score': score,
-#         'finished': datetime.now().isoformat(),
-#     }
-#
-#     total_data.update(get_average_score(result))
-#
-#     return total_data
-#
-# def get_passage_time(passage):
-#     """Вычисляет время прохождения теста и приводит его в формат %H:%M:%S"""
-#     time = datetime.now(timezone('UTC')) - passage.created
-#     dt = datetime(1900, 1, 1) + time
-#     formatted_time = dt.strftime('%H:%M:%S')
-#     return formatted_time
-#
-#
-# def get_score(correct_answers, questions_count):
-#     """Вычисляет процент прохождения теста"""
-#     try:
-#         score = round(correct_answers / questions_count * 100)
-#     except ZeroDivisionError:
-#         score = 0
-#     return score
-#
-#
 # def get_average_score(result):
 #     """Вычисляет средний процент прохождения теста всех пользователей"""
 #     test = result.test

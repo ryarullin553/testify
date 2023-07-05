@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import time
 
@@ -7,6 +8,7 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 
+from answers.models import Answer
 from passages.models import Passage
 from questions.models import Question
 from tests.models import Test
@@ -113,6 +115,27 @@ class PassageAPITestCase(APITestCase):
             ],
             points=5,
         )
+        self.answer_1 = Answer.objects.create(
+            passage_id=self.passage.id,
+            question_id=self.question_1.id,
+            content=[
+                'Первый ответ'
+            ]
+        )
+        self.answer_2 = Answer.objects.create(
+            passage_id=self.passage.id,
+            question_id=self.question_2.id,
+            content=[
+                'Второй ответ'
+            ]
+        )
+        self.answer_3 = Answer.objects.create(
+            passage_id=self.passage_test_without_points.id,
+            question_id=self.question_3.id,
+            content=[
+                'Третий ответ'
+            ]
+        )
 
     def test_retrieve(self):
         url = f'/api/passages/{self.passage.id}/'
@@ -154,7 +177,22 @@ class PassageAPITestCase(APITestCase):
                 ],
                 'title': 'Тест от пользователя',
             },
-            'answers': [],
+            'answers': [
+                {
+                    'id': self.answer_1.id,
+                    'question': self.question_1.id,
+                    'content': [
+                        'Первый ответ'
+                    ]
+                },
+                {
+                    'id': self.answer_2.id,
+                    'question': self.question_2.id,
+                    'content': [
+                        'Второй ответ'
+                    ]
+                }
+            ],
             'result': None
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -186,7 +224,15 @@ class PassageAPITestCase(APITestCase):
                 ],
                 'title': 'Тест от пользователя',
             },
-            'answers': [],
+            'answers': [
+                {
+                    'id': self.answer_3.id,
+                    'question': self.question_3.id,
+                    'content': [
+                        'Третий ответ'
+                    ]
+                }
+            ],
             'result': None
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -258,15 +304,12 @@ class PassageAPITestCase(APITestCase):
         data = {
             'test': self.test.id
         }
-        self.client.force_login(self.user_2)
+        self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
             self.assertEqual(6, len(queries))
-        instance = Passage.objects.first()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(4, Passage.objects.count())
-        self.assertEqual(self.user_2, instance.user)
-        self.assertEqual(None, instance.result)
 
     def test_create_not_published(self):
         self.assertEqual(3, Passage.objects.count())
@@ -281,41 +324,57 @@ class PassageAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(3, Passage.objects.count())
 
-    def test_update(self):
+    def test_partial_update(self):
         url = f'/api/passages/{self.passage.id}/'
-        data = {
-            'result': {
-                'questions_count': self.passage.test.questions.count(),
-                'total_answers': 2,
-                'correct_answers': 1,
-                'time': '00:00:00',
-                'score': 50,
-            }
+        expected_result = {
+            'questions_count': 2,
+            'answers_count': 2,
+            'correct_answers_count': 1,
+            'passage_time': '00:00:00',
+            'finished_time': datetime.now().isoformat(timespec='minutes'),
+            'total_points': 7,
+            'user_points': 2,
+            'points_score': 29
         }
-        json_data = json.dumps(data)
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:
-            response = self.client.patch(url, data=json_data, content_type='application/json')
-            self.assertEqual(6, len(queries))
+            response = self.client.patch(url)
+            self.assertEqual(4, len(queries))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.test.refresh_from_db()
-        self.assertEqual(data['result'], response.data['result'])
+        self.passage.refresh_from_db()
+        self.assertEqual(expected_result, self.passage.result)
 
-    def test_update_not_user(self):
-        url = f'/api/passages/{self.passage.id}/'
-        data = {
-            'result': {
-                'questions_count': self.passage.test.questions.count(),
-                'total_answers': 2,
-                'correct_answers': 1,
-                'time': '00:00:00',
-                'score': 50,
-            }
+    def test_partial_update_without_points(self):
+        url = f'/api/passages/{self.passage_test_without_points.id}/'
+        expected_result = {
+            'questions_count': 1,
+            'answers_count': 1,
+            'correct_answers_count': 1,
+            'passage_time': '00:00:00',
+            'finished_time': datetime.now().isoformat(timespec='minutes'),
+            'answers_score': 100
         }
-        json_data = json.dumps(data)
+        self.client.force_login(self.user_2)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.patch(url)
+            self.assertEqual(4, len(queries))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.passage_test_without_points.refresh_from_db()
+        self.assertEqual(expected_result, self.passage_test_without_points.result)
+
+    def test_partial_update_has_result(self):
+        url = f'/api/passages/{self.finished_passage.id}/'
+        self.client.force_login(self.user_2)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.patch(url)
+            self.assertEqual(3, len(queries))
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_partial_update_not_user(self):
+        url = f'/api/passages/{self.passage.id}/'
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
-            response = self.client.patch(url, data=json_data, content_type='application/json')
+            response = self.client.patch(url)
             self.assertEqual(3, len(queries))
         expected_detail = {
             'detail': ErrorDetail(
@@ -327,27 +386,6 @@ class PassageAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.test.refresh_from_db()
         self.assertEqual(None, self.passage.result)
-
-    def test_update_test(self):
-        url = f'/api/passages/{self.passage.id}/'
-        data = {
-            'test': self.test_without_points.id
-        }
-        json_data = json.dumps(data)
-        self.client.force_login(self.user_2)
-        with CaptureQueriesContext(connection) as queries:
-            response = self.client.patch(url, data=json_data, content_type='application/json')
-            self.assertEqual(4, len(queries))
-        expected_detail = {
-            'detail': ErrorDetail(
-                string='Тест уже завершен',
-                code='invalid'
-            )
-        }
-        self.assertEqual(expected_detail, response.data)
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.test.refresh_from_db()
-        self.assertEqual(self.test, self.passage.test)
 
     def test_passages(self):
         url = f'/api/tests/{self.test.id}/passages/'
