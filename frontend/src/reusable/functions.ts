@@ -1,14 +1,14 @@
-export const formatDate = (date) => {
+export const formatDate = (date: Date) => {
   const now = Date.now();
-  const timePassed = (now - date)/1000;
+  const timePassed = (now - date.getTime())/1000;
   if (timePassed < 1) {
     return 'только что';
   } else if (timePassed < 60) {
-    return `${parseInt(timePassed)} секунд назад`;
+    return `${timePassed} секунд назад`;
   } else if (timePassed < 3600) {
-    return `${parseInt(timePassed / 60)} минут назад`;
+    return `${timePassed / 60} минут назад`;
   } else if (timePassed < 86400) {
-    return `${parseInt(timePassed / 3600)} часов назад`;
+    return `${timePassed / 3600} часов назад`;
   } else if (timePassed < 172800) {
     return 'вчера';
   } else return (

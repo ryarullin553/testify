@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { api } from '../store';
+import { Test } from '../types/Test';
 
-export const useScroll = (baseRequest, setTestList) => {
-  let nextPage = useRef();
+export const useScroll = (baseRequest: string, setTestList: React.Dispatch<React.SetStateAction<Test[]>>) => {
+  let nextPage = useRef<string | null>();
   let isLoading = useRef(false);
 
   const fetchTestListData = async () => {

@@ -1,18 +1,18 @@
-import { getToken } from '../services/token';
-import axios from 'axios';
+import { getToken } from './token';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { StatusCodes } from 'http-status-codes';
 import { processErrorHandle } from './process-error-handler';
 
 const BACKEND_URL = 'http://127.0.0.1:8000/api/'
 const REQUEST_TIMEOUT = 5000;
 
-const StatusCodeMapping = {
+const StatusCodeMapping: Record<number, boolean> = {
   [StatusCodes.BAD_REQUEST]: true,
   [StatusCodes.UNAUTHORIZED]: true,
   [StatusCodes.NOT_FOUND]: true,
 }
 
-const shouldDisplayError = (response) => !!StatusCodeMapping[response.status];
+const shouldDisplayError = (response: AxiosResponse) => !!StatusCodeMapping[response.status];
 
 export const createAPI = () => {
   const api = axios.create({
@@ -36,7 +36,7 @@ export const createAPI = () => {
     (response) => response,
     (error) => {
       if (error.response && shouldDisplayError(error.response)) {
-        processErrorHandle(Object.entries(error.response.data)[0]);
+        processErrorHandle(Object.entries(error.response.data)[0].toString());
       }
 
       throw error;

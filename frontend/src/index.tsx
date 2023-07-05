@@ -2,7 +2,7 @@ import './fonts/Montserrat/Montserrat-Medium.ttf'
 import './fonts/Jost/Jost-Medium.ttf'
 import './fonts/Inter/Inter-VariableFont_slnt,wght.ttf'
 import { Provider } from 'react-redux';
-import { store } from '../src/store';
+import { store } from './store';
 import { checkAuthAction } from './store/api-actions';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
