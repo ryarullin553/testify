@@ -1,15 +1,15 @@
 from rest_framework import serializers
-from .models import Bookmark, Feedback, Comment, LikeDislike
+from .models import Bookmark, Feedback, Comment, Like
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     title = serializers.CharField(source='test.title', read_only=True)
-    avatar = serializers.ImageField(source='test.avatar', read_only=True)
+    image = serializers.ImageField(source='test.image', read_only=True)
 
     class Meta:
         model = Bookmark
-        fields = ['user', 'test', 'title', 'avatar']
+        fields = ['user', 'test', 'title', 'image']
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
@@ -35,11 +35,11 @@ class CommentSerializer(serializers.ModelSerializer):
         extra_kwargs = {'question': {'write_only': True}}
 
 
-class LikeDislikeSerializer(serializers.ModelSerializer):
+class LikeSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     is_like = serializers.BooleanField(default=None)
 
     class Meta:
-        model = LikeDislike
+        model = Like
         fields = ['id', 'user', 'question', 'is_like']
         extra_kwargs = {'question': {'write_only': True}}
