@@ -40,10 +40,21 @@ class BookmarkAPIView(mixins.CreateModelMixin,
 class FeedbackAPIView(mixins.CreateModelMixin,
                       mixins.UpdateModelMixin,
                       mixins.DestroyModelMixin,
+                      mixins.ListModelMixin,
                       viewsets.GenericViewSet):
     queryset = Feedback.objects
     serializer_class = FeedbackSerializer
     permission_classes = [UserRelationPermission]
+    filter_backends = [OrderingFilter]
+    ordering = '-created'
+
+    def get_queryset(self):
+        queryset = self.queryset\
+            .annotate(
+                user_name=F('user__username')
+            )\
+            .defer('updated')
+        return queryset
 
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())

@@ -117,14 +117,6 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, fields=fields[:5] + ['questions'])
         return Response(serializer.data)
 
-    # @action(detail=True, url_path='feedbacks', url_name='feedbacks', ordering_fields=['created'])  # Old
-    # def get_test_feedbacks(self, request, **kwargs):
-    #     """Возвращает отзывы теста"""
-    #     test = self.get_object()
-    #     page = self.paginate_queryset(test.feedbacks)
-    #     serializer = FeedbackSerializer(page, many=True)
-    #     return self.get_paginated_response(serializer.data)
-    #
     # @action(detail=False, url_path='user/(?P<user>[^/.]+)', url_name='user', search_fields=['title'])  # Old
     # def get_user_tests(self, request, **kwargs):
     #     """Возвращает список тестов, которые пользователь прошел или еще проходит"""

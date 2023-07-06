@@ -9,5 +9,6 @@ router.register(r'comments', CommentAPIView)
 router.register(r'likes', LikeAPIView)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('tests/<int:pk>/feedbacks/', FeedbackAPIView.as_view({'get': 'list'}))
 ]
