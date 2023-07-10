@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 
-from user_relations.models import Bookmark, Feedback
+from user_relations.models import Feedback
 from users.models import User
 from tests.models import Test
 
@@ -58,7 +58,7 @@ class BookmarkAPITestCase(APITestCase):
             content='Второй отзыв от тесте'
         )
 
-    def test_list(self):
+    def test_feedbacks(self):
         url = f'/api/tests/{self.test_with_user.id}/feedbacks/'
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:

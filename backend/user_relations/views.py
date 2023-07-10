@@ -1,5 +1,6 @@
 from django.db.models import F, ExpressionWrapper
 from rest_framework import viewsets, mixins
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
@@ -40,7 +41,6 @@ class BookmarkAPIView(mixins.CreateModelMixin,
 class FeedbackAPIView(mixins.CreateModelMixin,
                       mixins.UpdateModelMixin,
                       mixins.DestroyModelMixin,
-                      mixins.ListModelMixin,
                       viewsets.GenericViewSet):
     queryset = Feedback.objects
     serializer_class = FeedbackSerializer
@@ -49,10 +49,10 @@ class FeedbackAPIView(mixins.CreateModelMixin,
     ordering = '-created'
 
     def get_queryset(self):
-        queryset = self.queryset\
+        queryset = self.queryset \
             .annotate(
                 user_name=F('user__username')
-            )\
+            ) \
             .defer('updated')
         return queryset
 
@@ -63,12 +63,56 @@ class FeedbackAPIView(mixins.CreateModelMixin,
         self.check_object_permissions(self.request, instance)
         return instance
 
+    def feedbacks(self, request, *args, **kwargs):
+        test_id = kwargs.get('pk')
+        queryset = self.get_queryset() \
+            .filter(
+                test__id=test_id,
+            )
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
-class CommentAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+
+class CommentAPIView(mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
                      viewsets.GenericViewSet):
     queryset = Comment.objects
     serializer_class = CommentSerializer
     permission_classes = [UserRelationPermission]
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['created']
+    ordering = '-created'
+
+    def get_queryset(self):
+        queryset = self.queryset \
+            .select_related('user') \
+            .only('user_id', 'question_id', 'user__username', 'user__avatar', 'created', 'content')
+        return queryset
+
+    def comments(self, request, *args, **kwargs):
+        question_id = kwargs.get('pk')
+        queryset = self.get_queryset() \
+            .filter(
+                question_id=question_id,
+            )
+        queryset = self.filter_queryset(queryset)
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    @action(detail=True)
+    def replies(self, request, *args, **kwargs):
+        comment_id = kwargs.get('pk')
+        queryset = self.get_queryset() \
+            .filter(
+            comment_id=comment_id,
+        )
+        queryset = self.filter_queryset(queryset)
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
 
 class LikeAPIView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,

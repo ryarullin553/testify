@@ -45,7 +45,7 @@ class PassageAPIView(mixins.CreateModelMixin,
         serializer = self.get_serializer(page, many=True, fields=fields)
         return self.get_paginated_response(serializer.data)
 
-    def partial_update(self, request, *args, **kwargs):   # Исключить возможность менять результат заверенного прохождения
+    def partial_update(self, request, *args, **kwargs):
         fields = ['id', 'result', 'created', 'user_id', 'test_id',
                   'test__id', 'test__has_points']
         queryset = self.get_queryset()\

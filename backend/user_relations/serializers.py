@@ -29,19 +29,20 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    user_name = serializers.CharField(read_only=True, source='user.username')
-    user_avatar = serializers.ImageField(read_only=True, source='user.avatar')
-    user_id = serializers.IntegerField(read_only=True, source='user.id')
+    user_name = serializers.CharField(source='user.username', read_only=True)
+    user_avatar = serializers.ImageField(source='user.avatar', read_only=True)
 
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'question', 'user_id', 'user_name', 'user_avatar', 'created', 'content']
-        extra_kwargs = {'question': {'write_only': True}}
+        fields = ['id', 'user', 'question', 'comment', 'user_id', 'user_name', 'user_avatar', 'created', 'content']
+        extra_kwargs = {
+            'question': {'write_only': True},
+            'comment': {'write_only': True}
+        }
 
 
 class LikeSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    is_like = serializers.BooleanField(default=None)
 
     class Meta:
         model = Like
