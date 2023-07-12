@@ -13,20 +13,6 @@ class QuestionAPIView(mixins.CreateModelMixin,
     serializer_class = QuestionSerializer
     permission_classes = [QuestionPermission]
 
-    # @action(detail=True, url_path='likes', url_name='likes')
-    # def get_question_likes(self, request, **kwargs):
-    #     question = self.get_object()
-    #     fields = ('likes', 'dislikes', 'is_like')
-    #     serializer = self.get_serializer(question, fields=fields)
-    #     return Response(serializer.data)
-
-    # @action(detail=True, url_path='comments', url_name='comments')
-    # def get_question_comments(self, request, **kwargs):
-    #     question = self.get_object()
-    #     page = self.paginate_queryset(question.comments)
-    #     serializer = CommentSerializer(page, many=True, context={'request': request})
-    #     return self.get_paginated_response(serializer.data)
-
     # @action(detail=False, methods=['POST'], url_path='generated', url_name='generated',
     #         permission_classes=[IsAuthenticated])
     # def generate_wrong_answers(self, request):

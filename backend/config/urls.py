@@ -12,7 +12,10 @@ urlpatterns = [
     path('api/', include('questions.urls')),
     path('api/', include('passages.urls')),
     path('api/', include('answers.urls')),
-    path('api/', include('user_relations.urls')),
+    path('api/', include('bookmarks.urls')),
+    path('api/', include('feedbacks.urls')),
+    path('api/', include('comments.urls')),
+    path('api/', include('likes.urls')),
 ]
 
 urlpatterns += doc_api

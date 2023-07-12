@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 
-from user_relations.models import Bookmark
+from bookmarks.models import Bookmark
 from users.models import User
 from tests.models import Test
 

@@ -56,7 +56,10 @@ INSTALLED_APPS = [
     'questions.apps.QuestionsConfig',
     'passages.apps.PassagesConfig',
     'answers.apps.AnswersConfig',
-    'user_relations.apps.UserRelationsConfig',
+    'bookmarks.apps.BookmarksConfig',
+    'feedbacks.apps.FeedbacksConfig',
+    'comments.apps.CommentsConfig',
+    'likes.apps.LikesConfig',
 ]
 
 MIDDLEWARE = [

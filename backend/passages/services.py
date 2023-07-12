@@ -43,12 +43,3 @@ def get_score(desired_number, original_number):
     except ZeroDivisionError:
         score = 0
     return score
-
-# def get_average_score(result):
-#     """Вычисляет средний процент прохождения теста всех пользователей"""
-#     test = result.test
-#     finished_results = test.results.exclude(total=None)
-#     total_scores = finished_results.annotate(total_score=Cast('total__score', output_field=FloatField()))
-#     average_score = total_scores.aggregate(average_score=Avg('total_score'))
-#     return average_score
-#

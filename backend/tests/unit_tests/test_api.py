@@ -88,7 +88,7 @@ class TestAPITestCase(APITestCase):
             explanation='Пояснение к вопросу',
             image=self.image
         )
-
+        time.sleep(0.1)
         self.question_2 = Question.objects.create(
             test_id=self.test_with_image.id,
             type='Single choice',

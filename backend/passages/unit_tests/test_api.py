@@ -1,5 +1,4 @@
 from datetime import datetime
-import json
 import time
 
 from django.db import connection
@@ -9,6 +8,7 @@ from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 
 from answers.models import Answer
+from likes.models import Like
 from passages.models import Passage
 from questions.models import Question
 from tests.models import Test
@@ -136,6 +136,16 @@ class PassageAPITestCase(APITestCase):
                 'Третий ответ'
             ]
         )
+        self.like_1 = Like.objects.create(
+            user_id=self.user.id,
+            question_id=self.question_1.id,
+            is_like=True
+        )
+        self.like_2 = Like.objects.create(
+            user_id=self.user_2.id,
+            question_id=self.question_1.id,
+            is_like=False
+        )
 
     def test_retrieve(self):
         url = f'/api/passages/{self.passage.id}/'
@@ -150,6 +160,9 @@ class PassageAPITestCase(APITestCase):
                 'questions': [
                     {
                         'id': self.question_1.id,
+                        'likes_count': 1,
+                        'dislikes_count': 1,
+                        'has_like': True,
                         'type': 'Single choice',
                         'content': 'Содержание первого вопроса',
                         'answer_choices': [
@@ -163,6 +176,9 @@ class PassageAPITestCase(APITestCase):
                     },
                     {
                         'id': self.question_2.id,
+                        'likes_count': 0,
+                        'dislikes_count': 0,
+                        'has_like': False,
                         'type': 'Single choice',
                         'content': 'Содержание второго вопроса',
                         'answer_choices': [
@@ -211,6 +227,9 @@ class PassageAPITestCase(APITestCase):
                 'questions': [
                     {
                         'id': self.question_3.id,
+                        'likes_count': 0,
+                        'dislikes_count': 0,
+                        'has_like': False,
                         'type': 'Single choice',
                         'content': 'Содержание второго вопроса',
                         'answer_choices': [
@@ -251,6 +270,9 @@ class PassageAPITestCase(APITestCase):
                 'questions': [
                     {
                         'id': self.question_1.id,
+                        'likes_count': 1,
+                        'dislikes_count': 1,
+                        'has_like': True,
                         'type': 'Single choice',
                         'content': 'Содержание первого вопроса',
                         'answer_choices': [
@@ -268,6 +290,9 @@ class PassageAPITestCase(APITestCase):
                     },
                     {
                         'id': self.question_2.id,
+                        'likes_count': 0,
+                        'dislikes_count': 0,
+                        'has_like': False,
                         'type': 'Single choice',
                         'content': 'Содержание второго вопроса',
                         'answer_choices': [

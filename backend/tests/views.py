@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import Count, Avg, Exists, OuterRef, Prefetch, F
+from django.db.models import Count, Avg, Exists, OuterRef
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -7,10 +7,8 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from questions.models import Question
+from bookmarks.models import Bookmark
 from passages.models import Passage
-from user_relations.models import Bookmark
-from user_relations.serializers import FeedbackSerializer
 from .models import Test
 from .permissions import TestPermission
 from .serializers import TestSerializer
@@ -27,17 +25,15 @@ class TestAPIView(viewsets.ModelViewSet):
     ordering = '-created'
 
     def get_catalog_queryset(self, fields):
-        user = self.request.user
-        if isinstance(user, AnonymousUser):
-            user = 0
+        current_user_id = self.request.user.id
         passage = Passage.objects.filter(
-            test=OuterRef(self.lookup_field),
-            user=user,
+            test_id=OuterRef(self.lookup_field),
+            user_id=current_user_id,
             result__isnull=True
         )
         bookmark = Bookmark.objects.filter(
-            test=OuterRef(self.lookup_field),
-            user=user
+            test_id=OuterRef(self.lookup_field),
+            user_id=current_user_id
         )
         queryset = self.queryset \
             .filter(is_published=True) \

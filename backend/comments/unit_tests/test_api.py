@@ -7,11 +7,10 @@ from django.test.utils import CaptureQueriesContext
 from django.core.files.uploadedfile import SimpleUploadedFile
 from pytz import timezone
 from rest_framework import status
-from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 
+from comments.models import Comment
 from questions.models import Question
-from user_relations.models import Comment
 from users.models import User
 from tests.models import Test
 

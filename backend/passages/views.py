@@ -1,6 +1,5 @@
 from django.db.models import Count, Sum, Q, F
 from rest_framework import viewsets, mixins
-from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
