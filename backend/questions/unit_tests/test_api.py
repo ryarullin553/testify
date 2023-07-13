@@ -305,6 +305,16 @@ class QuestionAPITestCase(APITestCase):
         self.assertEqual(expected_detail, response.data)
         self.assertEqual(2, Question.objects.count())
 
+    def test_copy(self):
+        self.assertEqual(2, Question.objects.count())
+        url = f'/api/questions/{self.question_1.id}/copy/'
+        self.client.force_login(self.user)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.post(url)
+            self.assertEqual(4, len(queries))
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertEqual(3, Question.objects.count())
+
     def tearDown(self):
         self.test_with_image.image.delete()
         self.question_1.image.delete()

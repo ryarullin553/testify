@@ -21,7 +21,7 @@ class CommentAPIView(mixins.CreateModelMixin,
     def get_queryset(self):
         queryset = self.queryset \
             .select_related('user') \
-            .only('user_id', 'question_id', 'user__username', 'user__avatar', 'created', 'content')
+            .only('user_id', 'question_id', 'user__username', 'user__image', 'created', 'content')
         return queryset
 
     def comments(self, request, *args, **kwargs):

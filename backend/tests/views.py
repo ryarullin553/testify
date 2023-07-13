@@ -1,4 +1,3 @@
-from django.contrib.auth.models import AnonymousUser
 from django.db.models import Count, Avg, Exists, OuterRef
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
@@ -69,12 +68,12 @@ class TestAPIView(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         """Возвращает страницу теста"""
-        fields = ('title', 'short_description', 'image', 'description', 'user__username', 'user__avatar', 'user__bio')
+        fields = ('title', 'short_description', 'image', 'description', 'user__username', 'user__image', 'user__info')
         queryset = self.get_catalog_queryset(fields)
         instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
         serializer_fields = ('id', 'title', 'short_description', 'image', 'description',
                              'rating', 'feedbacks_count', 'results_count',
-                             'user', 'user_name', 'user_avatar', 'user_bio',
+                             'user', 'user_name', 'user_image', 'user_info',
                              'in_bookmarks', 'has_passage')
         serializer = self.get_serializer(instance, fields=serializer_fields)
         return Response(serializer.data)
@@ -113,20 +112,24 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, fields=fields[:5] + ['questions'])
         return Response(serializer.data)
 
-    # @action(detail=False, url_path='user/(?P<user>[^/.]+)', url_name='user', search_fields=['title'])  # Old
-    # def get_user_tests(self, request, **kwargs):
-    #     """Возвращает список тестов, которые пользователь прошел или еще проходит"""
-    #     user = kwargs.get('user')
-    #     if user == 'me':
-    #         user = request.user
-    #     user_tests = self.queryset.filter(results__user=user)
-    #     is_finished = self.request.query_params.get('is_finished')
-    #     if is_finished == 'True':
-    #         user_tests = user_tests.filter(results__total__isnull=False)
-    #     elif is_finished == 'False':
-    #         user_tests = user_tests.filter(results__total__isnull=True)
-    #     queryset = self.filter_queryset(user_tests)
-    #     page = self.paginate_queryset(queryset)
-    #     serializer_fields = ('id', 'title', 'avatar')
-    #     serializer = self.get_serializer(page, many=True, fields=serializer_fields)
-    #     return self.get_paginated_response(serializer.data)
+    def passed_tests(self, request):
+        current_user = request.user
+        fields = ('id', 'title', 'image')
+        queryset = self.get_queryset()\
+            .filter(passages__user_id=current_user.id)\
+            .only(*fields)\
+            .distinct()
+        queryset = self.filter_queryset(queryset)
+        queryset = self.filter_passed_tests(queryset)
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True, fields=fields)
+        return self.get_paginated_response(serializer.data)
+
+    def filter_passed_tests(self, queryset):
+        value = self.request.query_params.get('is_finished')
+        if value == 'True':
+            return queryset.filter(passages__result__isnull=False)
+        elif value == 'False':
+            return queryset.filter(passages__result__isnull=True)
+        return queryset
+

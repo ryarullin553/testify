@@ -15,7 +15,7 @@ from users.models import User
 from tests.models import Test
 
 
-class BookmarkAPITestCase(APITestCase):
+class FeedbackAPITestCase(APITestCase):
     def setUp(self):
         path = Path('media', 'tests', 'logo.png')
         with open(path, "rb") as f:
@@ -25,7 +25,7 @@ class BookmarkAPITestCase(APITestCase):
             username='user',
             email='user@mail.ru',
             password='123',
-            avatar=self.image
+            image=self.image
         )
         self.user_2 = User.objects.create_user(
             username='user2',
@@ -209,4 +209,4 @@ class BookmarkAPITestCase(APITestCase):
         self.assertEqual(2, Feedback.objects.count())
 
     def tearDown(self):
-        self.user.avatar.delete()
+        self.user.image.delete()

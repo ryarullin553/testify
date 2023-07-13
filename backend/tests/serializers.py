@@ -24,13 +24,13 @@ class TestSerializer(DynamicFieldsModelSerializer):
         read_only=True,
         source='user.username'
     )
-    user_avatar = serializers.ImageField(
+    user_image = serializers.ImageField(
         read_only=True,
-        source='user.avatar'
+        source='user.image'
     )
-    user_bio = serializers.CharField(
+    user_info = serializers.CharField(
         read_only=True,
-        source='user.bio'
+        source='user.info'
     )
     in_bookmarks = serializers.BooleanField(
         read_only=True

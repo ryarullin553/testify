@@ -119,6 +119,10 @@ class TestAPITestCase(APITestCase):
                 'score': 50,
             }
         )
+        self.passage_2 = Passage.objects.create(
+            test=self.test_with_description,
+            user=self.user
+        )
 
     def get_response_and_check_queries(self, url, expected_queries):
         with CaptureQueriesContext(connection) as queries:
@@ -146,7 +150,7 @@ class TestAPITestCase(APITestCase):
             'id': self.test_with_description.id,
             'rating': None,
             'feedbacks_count': 0,
-            'results_count': 0,
+            'results_count': 1,
             'in_bookmarks': False,
             'has_passage': False,
             'title': 'Тест с описанием',
@@ -246,7 +250,7 @@ class TestAPITestCase(APITestCase):
             'id': self.test_with_description.id,
             'rating': None,
             'feedbacks_count': 0,
-            'results_count': 0,
+            'results_count': 1,
             'in_bookmarks': False,
             'has_passage': False,
             'title': 'Тест с описанием',
@@ -427,8 +431,8 @@ class TestAPITestCase(APITestCase):
             'feedbacks_count': 0,
             'results_count': 2,
             'user_name': 'user',
-            'user_avatar': None,
-            'user_bio': None,
+            'user_image': None,
+            'user_info': '',
             'in_bookmarks': False,
             'has_passage': True,
             'title': 'Тест с аватаркой',
@@ -616,6 +620,28 @@ class TestAPITestCase(APITestCase):
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_test_with_image)
+
+    def test_passed_tests(self):
+        url = f'/api/auth/users/me/passed_tests/'
+        self.client.force_login(self.user)
+        response = self.get_response_and_check_queries(url, expected_queries=3)
+        response_data = response.data.get('results')
+        expected_test_with_description = {
+            'id': self.test_with_description.id,
+            'title': 'Тест с описанием',
+            'image': None
+        }
+        expected_test_with_image = {
+            'id': self.test_with_image.id,
+            'title': 'Тест с аватаркой',
+            'image': f'http://testserver/media/{self.test_with_image.image}'
+        }
+        expected_data = [
+            expected_test_with_image,
+            expected_test_with_description
+        ]
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response_data, expected_data)
 
     def tearDown(self):
         self.test_with_image.image.delete()

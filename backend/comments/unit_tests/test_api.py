@@ -25,7 +25,7 @@ class CommentAPITestCase(APITestCase):
             username='user',
             email='user@mail.ru',
             password='123',
-            avatar=self.image
+            image=self.image
         )
         self.user_2 = User.objects.create_user(
             username='user2',
@@ -91,7 +91,7 @@ class CommentAPITestCase(APITestCase):
             'id': self.comment_1.id,
             'user_id': self.user.id,
             'user_name': 'user',
-            'user_avatar': f'http://testserver/media/{self.user.avatar}',
+            'user_image': f'http://testserver/media/{self.user.image}',
             'created': self.comment_1.created.astimezone(timezone('Europe/Moscow')).isoformat(),
             'content': 'Первый комментарий к вопросу'
         }
@@ -99,7 +99,7 @@ class CommentAPITestCase(APITestCase):
             'id': self.comment_2.id,
             'user_id': self.user_2.id,
             'user_name': 'user2',
-            'user_avatar': None,
+            'user_image': None,
             'created': self.comment_2.created.astimezone(timezone('Europe/Moscow')).isoformat(),
             'content': 'Второй комментарий к вопросу'
         }
@@ -121,7 +121,7 @@ class CommentAPITestCase(APITestCase):
             'id': self.comment_3.id,
             'user_id': self.user.id,
             'user_name': 'user',
-            'user_avatar': f'http://testserver/media/{self.user.avatar}',
+            'user_image': f'http://testserver/media/{self.user.image}',
             'created': self.comment_3.created.astimezone(timezone('Europe/Moscow')).isoformat(),
             'content': 'Первый комментарий к комментарию'
         }
@@ -129,7 +129,7 @@ class CommentAPITestCase(APITestCase):
             'id': self.comment_4.id,
             'user_id': self.user_2.id,
             'user_name': 'user2',
-            'user_avatar': None,
+            'user_image': None,
             'created': self.comment_4.created.astimezone(timezone('Europe/Moscow')).isoformat(),
             'content': 'Второй комментарий к комментарию'
         }
@@ -219,4 +219,4 @@ class CommentAPITestCase(APITestCase):
     def tearDown(self):
         self.test_with_image.image.delete()
         self.question_1.image.delete()
-        self.user.avatar.delete()
+        self.user.image.delete()

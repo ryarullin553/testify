@@ -6,6 +6,13 @@ class Passage(models.Model):
         verbose_name='Результат',
         null=True
     )
+    codeword = models.CharField(
+        verbose_name='Кодовое слово',
+        max_length=40,
+        unique=True,
+        blank=True,
+        null=True
+    )
     created = models.DateTimeField(
         verbose_name='Создано',
         auto_now_add=True

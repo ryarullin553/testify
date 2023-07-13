@@ -22,6 +22,7 @@ class PassageSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Passage
         exclude = ['created', 'updated']
+        extra_kwargs = {'codeword': {'write_only': True}}
 
     def get_test_data(self, passage):
         test = passage.test

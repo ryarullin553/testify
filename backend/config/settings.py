@@ -177,8 +177,12 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'EMAIL': {
         'activation': 'users.email.ActivationEmail',
-        'password_reset': 'users.email.PasswordResetEmail',
+        'password_reset': 'users.email.PasswordResetEmail'
     },
+    'SERIALIZERS': {
+        'user': 'users.serializers.CustomUserSerializer',
+        'current_user': 'users.serializers.CustomUserSerializer',
+    }
 }
 
 # LOGGING = {

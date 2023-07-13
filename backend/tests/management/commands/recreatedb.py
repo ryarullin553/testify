@@ -31,5 +31,9 @@ class Command(BaseCommand):
         username = 'admin'
         email = 'admin@mail.ru'
         password = '123'
-        User.objects.create_superuser(username=username, email=email, password=password)
+        User.objects.create_superuser(
+            username=username,
+            email=email,
+            password=password
+        )
         print(f"Логин: {email}. Пароль: {password}")
