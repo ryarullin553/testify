@@ -6,11 +6,12 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from bookmarks.models import Bookmark
-from passages.models import Passage
+
 from .models import Test
 from .permissions import TestPermission
 from .serializers import TestSerializer
+from bookmarks.models import Bookmark
+from passages.models import Passage
 
 
 class TestAPIView(viewsets.ModelViewSet):
@@ -120,12 +121,12 @@ class TestAPIView(viewsets.ModelViewSet):
             .only(*fields)\
             .distinct()
         queryset = self.filter_queryset(queryset)
-        queryset = self.filter_passed_tests(queryset)
+        queryset = self.__filter_passed_tests(queryset)
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, fields=fields)
         return self.get_paginated_response(serializer.data)
 
-    def filter_passed_tests(self, queryset):
+    def __filter_passed_tests(self, queryset):
         value = self.request.query_params.get('is_finished')
         if value == 'True':
             return queryset.filter(passages__result__isnull=False)

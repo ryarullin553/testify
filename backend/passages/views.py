@@ -1,6 +1,6 @@
 from django.db.models import Count, Sum, Q, F
 from rest_framework import viewsets, mixins
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
@@ -16,8 +16,11 @@ class PassageAPIView(mixins.CreateModelMixin,
     queryset = Passage.objects
     serializer_class = PassageSerializer
     permission_classes = [PassagePermission]
-    filter_backends = [OrderingFilter]
-    ordering = '-created'
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['codeword', 'user__username']
+    ordering_fields = ['result__score', 'result__finished_time', 'result__answers_count',
+                       'result__correct_answers_count', 'result__passage_time']
+    ordering = '-updated'
 
     def get_object(self):
         fields = ['id', 'test', 'result', 'user_id', 'codeword',
@@ -31,15 +34,46 @@ class PassageAPIView(mixins.CreateModelMixin,
         return instance
 
     def passages(self, request, *args, **kwargs):
+        """
+        Возвращает завершенные прохождения теста
+
+        Поля для поиска: user_name, codeword
+        Поля для сортировки: result__score, result__finished_time, result__answers_count,
+        result__correct_answers_count, result__passage_time
+        """
+        test_id = kwargs.get('pk')
+        fields = ['id', 'user_id', 'result', 'codeword']
+        queryset = self.get_queryset() \
+            .filter(
+                test__id=test_id,
+                result__isnull=False
+            ) \
+            .annotate(
+                user_name=F('user__username')
+            ) \
+            .only(*fields)
+        queryset = self.filter_queryset(queryset)
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True, fields=fields + ['user_name'])
+        return self.get_paginated_response(serializer.data)
+
+    def current_user(self, request, *args, **kwargs):
+        """
+        Возвращает прохождения теста текущего пользователя
+
+        Поля для сортировки: result__score, result__finished_time, result__answers_count,
+        result__correct_answers_count, result__passage_time
+        """
         test_id = kwargs.get('pk')
         current_user = self.request.user
         fields = ['id', 'result']
         queryset = self.get_queryset() \
             .filter(
-            test__id=test_id,
-            user=current_user
-        ) \
+                test__id=test_id,
+                user=current_user
+            ) \
             .only(*fields)
+        queryset = self.filter_queryset(queryset)
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, fields=fields)
         return self.get_paginated_response(serializer.data)

@@ -58,11 +58,25 @@ class PassageAPITestCase(APITestCase):
             user=self.user_2,
             result={
                 'questions_count': 2,
-                'total_answers': 2,
-                'correct_answers': 1,
-                'time': '00:00:00',
-                'score': 50,
+                'answers_count': 2,
+                'correct_answers_count': 1,
+                'passage_time': '00:00:00',
+                'finished_time': datetime.now().isoformat(timespec='minutes'),
+                'score': 50
             }
+        )
+        self.finished_passage_2 = Passage.objects.create(
+            test=self.test,
+            user=self.user,
+            result={
+                'questions_count': 2,
+                'answers_count': 2,
+                'correct_answers_count': 2,
+                'passage_time': '00:00:00',
+                'finished_time': datetime.now().isoformat(timespec='minutes'),
+                'score': 100
+            },
+            codeword='11Б'
         )
         self.passage_test_without_points = Passage.objects.create(
             test=self.test_without_points,
@@ -155,6 +169,7 @@ class PassageAPITestCase(APITestCase):
             self.assertEqual(5, len(queries))
         expected_passage = {
             'id': self.passage.id,
+            'user_id': self.user_2.id,
             'test': self.test.id,
             'test_data': {
                 'questions': [
@@ -209,7 +224,8 @@ class PassageAPITestCase(APITestCase):
                     ]
                 }
             ],
-            'result': None
+            'result': None,
+            'codeword': None
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_passage)
@@ -222,6 +238,7 @@ class PassageAPITestCase(APITestCase):
             self.assertEqual(5, len(queries))
         expected_passage = {
             'id': self.passage_test_without_points.id,
+            'user_id': self.user_2.id,
             'test': self.test_without_points.id,
             'test_data': {
                 'questions': [
@@ -252,7 +269,8 @@ class PassageAPITestCase(APITestCase):
                     ]
                 }
             ],
-            'result': None
+            'result': None,
+            'codeword': None
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_passage)
@@ -265,6 +283,7 @@ class PassageAPITestCase(APITestCase):
             self.assertEqual(5, len(queries))
         expected_passage = {
             'id': self.finished_passage.id,
+            'user_id': self.user_2.id,
             'test': self.test.id,
             'test_data': {
                 'questions': [
@@ -313,18 +332,20 @@ class PassageAPITestCase(APITestCase):
             },
             'answers': [],
             'result': {
-                'time': '00:00:00',
-                'score': 50,
-                'total_answers': 2,
-                'correct_answers': 1,
-                'questions_count': 2
-            }
+                'questions_count': 2,
+                'answers_count': 2,
+                'correct_answers_count': 1,
+                'passage_time': '00:00:00',
+                'finished_time': self.finished_passage.result['finished_time'],
+                'score': 50
+            },
+            'codeword': None
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_passage)
 
     def test_create(self):
-        self.assertEqual(3, Passage.objects.count())
+        self.assertEqual(4, Passage.objects.count())
         url = '/api/passages/'
         data = {
             'test': self.test.id
@@ -334,10 +355,10 @@ class PassageAPITestCase(APITestCase):
             response = self.client.post(url, data=data)
             self.assertEqual(6, len(queries))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-        self.assertEqual(4, Passage.objects.count())
+        self.assertEqual(5, Passage.objects.count())
 
     def test_create_not_published(self):
-        self.assertEqual(3, Passage.objects.count())
+        self.assertEqual(4, Passage.objects.count())
         url = '/api/passages/'
         data = {
             'test': self.test_not_published.id
@@ -347,7 +368,7 @@ class PassageAPITestCase(APITestCase):
             response = self.client.post(url, data=data)
             self.assertEqual(3, len(queries))
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(3, Passage.objects.count())
+        self.assertEqual(4, Passage.objects.count())
 
     def test_partial_update(self):
         url = f'/api/passages/{self.passage.id}/'
@@ -359,7 +380,7 @@ class PassageAPITestCase(APITestCase):
             'finished_time': datetime.now().isoformat(timespec='minutes'),
             'total_points': 7,
             'user_points': 2,
-            'points_score': 29
+            'score': 29
         }
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:
@@ -377,7 +398,7 @@ class PassageAPITestCase(APITestCase):
             'correct_answers_count': 1,
             'passage_time': '00:00:00',
             'finished_time': datetime.now().isoformat(timespec='minutes'),
-            'answers_score': 100
+            'score': 100
         }
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:
@@ -412,8 +433,8 @@ class PassageAPITestCase(APITestCase):
         self.test.refresh_from_db()
         self.assertEqual(None, self.passage.result)
 
-    def test_passages(self):
-        url = f'/api/tests/{self.test.id}/passages/'
+    def test_current_user(self):
+        url = f'/api/tests/{self.test.id}/passages/my/'
         self.client.force_login(self.user_2)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.get(url)
@@ -426,15 +447,127 @@ class PassageAPITestCase(APITestCase):
             'id': self.finished_passage.id,
             'result': {
                 'questions_count': 2,
-                'total_answers': 2,
-                'correct_answers': 1,
-                'time': '00:00:00',
-                'score': 50,
+                'answers_count': 2,
+                'correct_answers_count': 1,
+                'passage_time': '00:00:00',
+                'finished_time': self.finished_passage.result['finished_time'],
+                'score': 50
             }
         }
         expected_data = [
             expected_finished_passage,
             expected_passage
+        ]
+        response_data = response.data['results']
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(expected_data, response_data)
+
+    def test_passages(self):
+        url = f'/api/tests/{self.test.id}/passages/'
+        self.client.force_login(self.user_2)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.get(url)
+            self.assertEqual(3, len(queries))
+        expected_finished_passage_2 = {
+            'id': self.finished_passage_2.id,
+            'user_id': self.user.id,
+            'user_name': self.user.username,
+            'result': {
+                'questions_count': 2,
+                'answers_count': 2,
+                'correct_answers_count': 2,
+                'passage_time': '00:00:00',
+                'finished_time': self.finished_passage_2.result['finished_time'],
+                'score': 100
+            },
+            'codeword': '11Б'
+        }
+        expected_finished_passage = {
+            'id': self.finished_passage.id,
+            'user_id': self.user_2.id,
+            'user_name': self.user_2.username,
+            'result': {
+                'questions_count': 2,
+                'answers_count': 2,
+                'correct_answers_count': 1,
+                'passage_time': '00:00:00',
+                'finished_time': self.finished_passage.result['finished_time'],
+                'score': 50
+            },
+            'codeword': None
+        }
+        expected_data = [
+            expected_finished_passage_2,
+            expected_finished_passage
+        ]
+        response_data = response.data['results']
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(expected_data, response_data)
+
+    def test_search_passages(self):
+        url = f'/api/tests/{self.test.id}/passages/?search={self.user_2.username}'
+        self.client.force_login(self.user_2)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.get(url)
+            self.assertEqual(3, len(queries))
+        expected_finished_passage = {
+            'id': self.finished_passage.id,
+            'user_id': self.user_2.id,
+            'user_name': self.user_2.username,
+            'result': {
+                'questions_count': 2,
+                'answers_count': 2,
+                'correct_answers_count': 1,
+                'passage_time': '00:00:00',
+                'finished_time': self.finished_passage.result['finished_time'],
+                'score': 50
+            },
+            'codeword': None
+        }
+        expected_data = [
+            expected_finished_passage
+        ]
+        response_data = response.data['results']
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(expected_data, response_data)
+
+    def test_ordering_passages(self):
+        url = f'/api/tests/{self.test.id}/passages/?ordering=result__score'
+        self.client.force_login(self.user_2)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.get(url)
+            self.assertEqual(3, len(queries))
+        expected_finished_passage_2 = {
+            'id': self.finished_passage_2.id,
+            'user_id': self.user.id,
+            'user_name': self.user.username,
+            'result': {
+                'questions_count': 2,
+                'answers_count': 2,
+                'correct_answers_count': 2,
+                'passage_time': '00:00:00',
+                'finished_time': self.finished_passage_2.result['finished_time'],
+                'score': 100
+            },
+            'codeword': '11Б'
+        }
+        expected_finished_passage = {
+            'id': self.finished_passage.id,
+            'user_id': self.user_2.id,
+            'user_name': self.user_2.username,
+            'result': {
+                'questions_count': 2,
+                'answers_count': 2,
+                'correct_answers_count': 1,
+                'passage_time': '00:00:00',
+                'finished_time': self.finished_passage.result['finished_time'],
+                'score': 50
+            },
+            'codeword': None
+        }
+        expected_data = [
+            expected_finished_passage,
+            expected_finished_passage_2
         ]
         response_data = response.data['results']
         self.assertEqual(status.HTTP_200_OK, response.status_code)

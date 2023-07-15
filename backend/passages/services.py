@@ -21,11 +21,12 @@ def get_result(passage):
             {
                 'total_points': total_points,
                 'user_points': user_points,
-                'points_score': points_score
+                'score': points_score
             }
         )
     else:
-        result['answers_score'] = get_score(passage.correct_answers_count, passage.questions_count)
+        answers_score = get_score(passage.correct_answers_count, passage.questions_count)
+        result['score'] = answers_score
 
     return result
 

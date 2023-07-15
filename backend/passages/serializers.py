@@ -11,6 +11,12 @@ class PassageSerializer(DynamicFieldsModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
+    user_id = serializers.IntegerField(
+        read_only=True
+    )
+    user_name = serializers.CharField(
+        read_only=True
+    )
     test = serializers.PrimaryKeyRelatedField(
         queryset=Test.objects
         .filter(is_published=True)
@@ -22,7 +28,6 @@ class PassageSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Passage
         exclude = ['created', 'updated']
-        extra_kwargs = {'codeword': {'write_only': True}}
 
     def get_test_data(self, passage):
         test = passage.test
