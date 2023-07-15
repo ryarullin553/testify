@@ -184,6 +184,8 @@ DJOSER = {
     }
 }
 
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+
 # LOGGING = {
 #     'version': 1,
 #     'handlers': {

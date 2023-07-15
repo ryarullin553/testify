@@ -25,3 +25,19 @@ services:
       - POSTGRES_DB=testify_db
       - POSTGRES_USER=testify_db_user
       - POSTGRES_PASSWORD=123
+
+  redis:
+    image: redis:7.2-rc-alpine3.18
+    hostname: redis
+
+  worker:
+    build: backend/
+    hostname: worker
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    volumes:
+      - ./backend:/app/backend
+    links:
+      - redis
+    depends_on:
+      - redis
