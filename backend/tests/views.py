@@ -39,9 +39,9 @@ class TestAPIView(viewsets.ModelViewSet):
             .filter(is_published=True) \
             .select_related('user') \
             .annotate(
-                results_count=Count('passages', distinct=True),
-                feedbacks_count=Count('feedbacks', distinct=True),
-                rating=Avg('feedbacks__rate'),
+                # results_count=Count('passages', distinct=True),
+                # feedbacks_count=Count('feedbacks', distinct=True),
+                # rating=Avg('feedbacks__rate'),
                 in_bookmarks=Exists(bookmark),
                 has_passage=Exists(passage)
             ) \

@@ -54,6 +54,20 @@ class Test(models.Model):
         null=True,
         related_name='tests'
     )
+    rating = models.DecimalField(
+        verbose_name='Рейтинг',
+        max_digits=2,
+        decimal_places=1,
+        default=0
+    )
+    feedbacks_count = models.IntegerField(
+        verbose_name='Количество отзывов',
+        default=0
+    )
+    results_count = models.IntegerField(
+        verbose_name='Количество результатов',
+        default=0
+    )
 
     class Meta:
         verbose_name = 'Тест'

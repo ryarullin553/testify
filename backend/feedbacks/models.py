@@ -1,5 +1,7 @@
 from django.db import models
 
+from tests.tasks import update_test_rating
+
 
 class Feedback(models.Model):
     RATE_CHOICES = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
@@ -9,7 +11,8 @@ class Feedback(models.Model):
         choices=RATE_CHOICES
     )
     content = models.TextField(
-        verbose_name='Содержание'
+        verbose_name='Содержание',
+        blank=True
     )
     created = models.DateTimeField(
         verbose_name='Создано',
@@ -31,6 +34,14 @@ class Feedback(models.Model):
         on_delete=models.CASCADE,
         related_name='feedbacks'
     )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        update_test_rating.delay(self.test_id)
+
+    def delete(self, *args, **kwargs):
+        update_test_rating.delay(self.test_id)
+        super().delete(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Отзыв'

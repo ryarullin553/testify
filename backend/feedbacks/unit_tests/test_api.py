@@ -100,6 +100,9 @@ class FeedbackAPITestCase(APITestCase):
             self.assertEqual(5, len(queries))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(3, Feedback.objects.count())
+        new_feedback = Feedback.objects.last()
+        self.assertEqual(data['rate'], new_feedback.rate)
+        self.assertEqual(data['content'], new_feedback.content)
 
     def test_create_not_unique_test_and_user(self):
         self.assertEqual(2, Feedback.objects.count())

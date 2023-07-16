@@ -2,7 +2,6 @@ services:
 
   backend:
     build: backend/
-    restart: always
     ports:
       - 8000:8000
     volumes:
@@ -41,3 +40,23 @@ services:
       - redis
     depends_on:
       - redis
+      - database
+    environment:
+      - DB_HOST=database
+      - DB_NAME=testify_db
+      - DB_USER=testify_db_user
+      - DB_PASS=123
+
+  flower:
+    build: backend/
+    hostname: flower
+    entrypoint: celery
+    command: -A celery_app.app flower
+    volumes:
+      - ./backend:/app/backend
+    links:
+      - redis
+    depends_on:
+      - redis
+    ports:
+      - "5555:5555"
