@@ -136,7 +136,7 @@ class TestAPITestCase(APITestCase):
         response_data = response.data['results']
         expected_simple_published_test = {
             'id': self.simple_published_test.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
             'results_count': 0,
             'in_bookmarks': False,
@@ -148,9 +148,9 @@ class TestAPITestCase(APITestCase):
         }
         expected_test_with_description = {
             'id': self.test_with_description.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
-            'results_count': 1,
+            'results_count': 0,
             'in_bookmarks': False,
             'has_passage': False,
             'title': 'Тест с описанием',
@@ -160,7 +160,7 @@ class TestAPITestCase(APITestCase):
         }
         expected_test_with_user = {
             'id': self.test_with_user.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
             'results_count': 0,
             'user_name': 'user',
@@ -173,9 +173,9 @@ class TestAPITestCase(APITestCase):
         }
         expected_test_with_image = {
             'id': self.test_with_image.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
-            'results_count': 2,
+            'results_count': 0,
             'user_name': 'user',
             'in_bookmarks': False,
             'has_passage': False,
@@ -199,7 +199,7 @@ class TestAPITestCase(APITestCase):
         response_data = response.data['results']
         expected_test_with_user = {
             'id': self.test_with_user.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
             'results_count': 0,
             'user_name': 'user',
@@ -212,9 +212,9 @@ class TestAPITestCase(APITestCase):
         }
         expected_test_with_image = {
             'id': self.test_with_image.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
-            'results_count': 2,
+            'results_count': 0,
             'user_name': 'user',
             'in_bookmarks': False,
             'has_passage': False,
@@ -236,7 +236,7 @@ class TestAPITestCase(APITestCase):
         response_data = response.data['results']
         expected_simple_published_test = {
             'id': self.simple_published_test.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
             'results_count': 0,
             'in_bookmarks': False,
@@ -248,9 +248,9 @@ class TestAPITestCase(APITestCase):
         }
         expected_test_with_description = {
             'id': self.test_with_description.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
-            'results_count': 1,
+            'results_count': 0,
             'in_bookmarks': False,
             'has_passage': False,
             'title': 'Тест с описанием',
@@ -260,7 +260,7 @@ class TestAPITestCase(APITestCase):
         }
         expected_test_with_user = {
             'id': self.test_with_user.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
             'results_count': 0,
             'user_name': 'user',
@@ -273,9 +273,9 @@ class TestAPITestCase(APITestCase):
         }
         expected_test_with_image = {
             'id': self.test_with_image.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
-            'results_count': 2,
+            'results_count': 0,
             'user_name': 'user',
             'in_bookmarks': False,
             'has_passage': False,
@@ -299,7 +299,7 @@ class TestAPITestCase(APITestCase):
         response_data = response.data['results']
         expected_test_with_user = {
             'id': self.test_with_user.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
             'results_count': 0,
             'user_name': 'user',
@@ -312,9 +312,9 @@ class TestAPITestCase(APITestCase):
         }
         expected_test_with_image = {
             'id': self.test_with_image.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
-            'results_count': 2,
+            'results_count': 0,
             'user_name': 'user',
             'in_bookmarks': False,
             'has_passage': False,
@@ -427,9 +427,9 @@ class TestAPITestCase(APITestCase):
         response = self.get_response_and_check_queries(url, expected_queries=3)
         expected_test_with_image = {
             'id': self.test_with_image.id,
-            'rating': None,
+            'rating': '0.0',
             'feedbacks_count': 0,
-            'results_count': 2,
+            'results_count': 0,
             'user_name': 'user',
             'user_image': None,
             'user_info': '',

@@ -41,6 +41,6 @@ def get_passage_time(passage):
 def get_score(desired_number, original_number):
     try:
         score = round(desired_number / original_number * 100)
-    except ZeroDivisionError:
+    except (ZeroDivisionError, TypeError):
         score = 0
     return score

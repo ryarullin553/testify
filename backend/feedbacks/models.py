@@ -1,6 +1,6 @@
 from django.db import models
 
-from tests.tasks import update_test_rating
+from tests.tasks import update_test_feedback_metrics
 
 
 class Feedback(models.Model):
@@ -37,10 +37,10 @@ class Feedback(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        update_test_rating.delay(self.test_id)
+        update_test_feedback_metrics.delay(self.test_id)
 
     def delete(self, *args, **kwargs):
-        update_test_rating.delay(self.test_id)
+        update_test_feedback_metrics.delay(self.test_id)
         super().delete(*args, **kwargs)
 
     class Meta:

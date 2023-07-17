@@ -1,11 +1,10 @@
-from django.db.models import Count, Avg, Exists, OuterRef
+from django.db.models import Exists, OuterRef
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-
 
 from .models import Test
 from .permissions import TestPermission
@@ -39,9 +38,6 @@ class TestAPIView(viewsets.ModelViewSet):
             .filter(is_published=True) \
             .select_related('user') \
             .annotate(
-                # results_count=Count('passages', distinct=True),
-                # feedbacks_count=Count('feedbacks', distinct=True),
-                # rating=Avg('feedbacks__rate'),
                 in_bookmarks=Exists(bookmark),
                 has_passage=Exists(passage)
             ) \
@@ -56,7 +52,8 @@ class TestAPIView(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         """Возвращает каталог тестов"""
-        fields = ('title', 'short_description', 'image', 'user__username')
+        fields = ('title', 'short_description', 'image', 'user__username',
+                  'rating', 'feedbacks_count', 'results_count')
         queryset = self.get_catalog_queryset(fields)
         queryset = self.filter_queryset(queryset)
         page = self.paginate_queryset(queryset)
@@ -69,7 +66,8 @@ class TestAPIView(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         """Возвращает страницу теста"""
-        fields = ('title', 'short_description', 'image', 'description', 'user__username', 'user__image', 'user__info')
+        fields = ('title', 'short_description', 'image', 'description', 'user__username', 'user__image', 'user__info',
+                  'rating', 'feedbacks_count', 'results_count')
         queryset = self.get_catalog_queryset(fields)
         instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
         serializer_fields = ('id', 'title', 'short_description', 'image', 'description',
@@ -133,4 +131,3 @@ class TestAPIView(viewsets.ModelViewSet):
         elif value == 'False':
             return queryset.filter(passages__result__isnull=True)
         return queryset
-

@@ -4,6 +4,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
+from tests.tasks import update_test_results_count
 from .models import Passage
 from .permissions import PassagePermission
 from .serializers import PassageSerializer
@@ -114,6 +115,7 @@ class PassageAPIView(mixins.CreateModelMixin,
             .only(*fields)
         instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
         self.check_object_permissions(self.request, instance)
-        setattr(instance, 'result', get_result(instance))
+        update_test_results_count.delay(instance.test_id)
+        instance.result = get_result(instance)
         instance.save()
         return Response()

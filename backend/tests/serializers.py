@@ -9,17 +9,6 @@ from .models import Test
 
 class TestSerializer(DynamicFieldsModelSerializer):
     questions = serializers.SerializerMethodField()
-    rating = serializers.DecimalField(
-        max_digits=2,
-        decimal_places=1,
-        read_only=True
-    )
-    feedbacks_count = serializers.IntegerField(
-        read_only=True
-    )
-    results_count = serializers.IntegerField(
-        read_only=True
-    )
     user_name = serializers.CharField(
         read_only=True,
         source='user.username'
@@ -78,3 +67,4 @@ class TestSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Test
         fields = '__all__'
+        read_only_fields = ['rating', 'feedbacks_count', 'results_count']
