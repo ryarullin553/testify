@@ -6,11 +6,8 @@ services:
       - 8000:8000
     volumes:
       - ./backend:/app/backend
-    environment:
-      - DB_HOST=database
-      - DB_NAME=testify_db
-      - DB_USER=testify_db_user
-      - DB_PASS=123
+    env_file:
+      - ./backend/.env
 
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
@@ -20,10 +17,8 @@ services:
 
   database:
     image: postgres:15.3-alpine3.18
-    environment:
-      - POSTGRES_DB=testify_db
-      - POSTGRES_USER=testify_db_user
-      - POSTGRES_PASSWORD=123
+    env_file:
+      - ./backend/.env
 
   redis:
     image: redis:7.2-rc-alpine3.18

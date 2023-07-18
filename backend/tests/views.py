@@ -1,4 +1,5 @@
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef, Avg, DecimalField, DateTimeField
+from django.db.models.functions import Cast
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -111,7 +112,22 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, fields=fields[:5] + ['questions'])
         return Response(serializer.data)
 
+    @action(detail=True, url_path='metrics', url_name='metrics')
+    def metrics(self, request, **kwargs):
+        fields = ['id', 'title', 'created', 'rating', 'feedbacks_count', 'results_count',
+                  'avg_score', 'avg_answers_count', 'avg_correct_answers_count']
+        queryset = self.get_queryset()\
+            .only(*fields)
+        instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
+        serializer = self.get_serializer(instance, fields=fields)
+        return Response(serializer.data)
+
     def passed_tests(self, request):
+        """
+        Возвращает тесты, которые пользователь прошел или еще проходит
+
+        Параметры для фильтрации: is_finished=True, is_finished=False
+        """
         current_user = request.user
         fields = ('id', 'title', 'image')
         queryset = self.get_queryset()\

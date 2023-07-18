@@ -1,10 +1,15 @@
 from pytz import timezone
 from datetime import datetime
+from tests.tasks import update_test_results_metrics
+
+
+def complete_passage(instance):
+    instance.result = get_result(instance)
+    instance.save()
+    update_test_results_metrics.delay(instance.test_id)
 
 
 def get_result(passage):
-    """Высчитывает результат прохождения теста"""
-
     result = {
         'questions_count': passage.questions_count,
         'answers_count': passage.answers_count,
@@ -12,7 +17,6 @@ def get_result(passage):
         'passage_time': get_passage_time(passage),
         'finished_time': datetime.now().isoformat(timespec='minutes'),
     }
-
     if passage.test.has_points:
         total_points = passage.total_points
         user_points = passage.user_points
@@ -27,7 +31,6 @@ def get_result(passage):
     else:
         answers_score = get_score(passage.correct_answers_count, passage.questions_count)
         result['score'] = answers_score
-
     return result
 
 

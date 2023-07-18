@@ -79,6 +79,24 @@ class BookmarkAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(expected_data, response_data)
 
+    def test_list_search(self):
+        url = '/api/bookmarks/?search=аватаркой'
+        self.client.force_login(self.user_2)
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.get(url)
+            self.assertEqual(3, len(queries))
+        response_data = response.data['results']
+        expected_bookmark_1 = {
+            'test': self.test_with_image.id,
+            'title': 'Тест с аватаркой',
+            'image': f'http://testserver/media/{self.test_with_image.image}'
+        }
+        expected_data = [
+            expected_bookmark_1
+        ]
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(expected_data, response_data)
+
     def test_create(self):
         self.simple_published_test = Test.objects.create(
             title='Простой тест',

@@ -643,6 +643,24 @@ class TestAPITestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response_data, expected_data)
 
+    def test_metrics(self):
+        url = f'/api/tests/{self.test_with_image.id}/metrics/'
+        self.client.force_login(self.user)
+        response = self.get_response_and_check_queries(url, expected_queries=3)
+        expected_test_metrics = {
+            'id': self.test_with_image.id,
+            'title': 'Тест с аватаркой',
+            'created': self.test_with_image.created.astimezone(timezone('Europe/Moscow')).isoformat(),
+            'rating': '0.0',
+            'feedbacks_count': 0,
+            'results_count': 0,
+            'avg_score': '0.0',
+            'avg_answers_count': '0.0',
+            'avg_correct_answers_count': '0.0'
+        }
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, expected_test_metrics)
+
     def tearDown(self):
         self.test_with_image.image.delete()
         self.question_1.image.delete()

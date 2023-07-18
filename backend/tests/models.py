@@ -68,6 +68,24 @@ class Test(models.Model):
         verbose_name='Количество результатов',
         default=0
     )
+    avg_score = models.DecimalField(
+        verbose_name='Средний результат',
+        max_digits=10,
+        decimal_places=1,
+        default=0
+    )
+    avg_answers_count = models.DecimalField(
+        verbose_name='Среднее количество ответов',
+        max_digits=10,
+        decimal_places=1,
+        default=0
+    )
+    avg_correct_answers_count = models.DecimalField(
+        verbose_name='Среднее количество правильных ответов',
+        max_digits=10,
+        decimal_places=1,
+        default=0
+    )
 
     class Meta:
         verbose_name = 'Тест'

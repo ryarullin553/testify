@@ -4,11 +4,10 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from tests.tasks import update_test_results_count
 from .models import Passage
 from .permissions import PassagePermission
 from .serializers import PassageSerializer
-from .services import get_result
+from .services import complete_passage
 
 
 class PassageAPIView(mixins.CreateModelMixin,
@@ -21,7 +20,7 @@ class PassageAPIView(mixins.CreateModelMixin,
     search_fields = ['codeword', 'user__username']
     ordering_fields = ['result__score', 'result__finished_time', 'result__answers_count',
                        'result__correct_answers_count', 'result__passage_time']
-    ordering = '-updated'
+    ordering = '-created'
 
     def get_object(self):
         fields = ['id', 'test', 'result', 'user_id', 'codeword',
@@ -80,6 +79,11 @@ class PassageAPIView(mixins.CreateModelMixin,
         return self.get_paginated_response(serializer.data)
 
     def partial_update(self, request, *args, **kwargs):
+        """
+        Завершает прохождение теста
+
+        Тело запроса должно быть пустым
+        """
         fields = ['id', 'result', 'created', 'user_id', 'test_id',
                   'test__id', 'test__has_points']
         queryset = self.get_queryset()\
@@ -115,7 +119,5 @@ class PassageAPIView(mixins.CreateModelMixin,
             .only(*fields)
         instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
         self.check_object_permissions(self.request, instance)
-        update_test_results_count.delay(instance.test_id)
-        instance.result = get_result(instance)
-        instance.save()
+        complete_passage(instance)
         return Response()

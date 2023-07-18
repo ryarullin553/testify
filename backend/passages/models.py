@@ -9,9 +9,7 @@ class Passage(models.Model):
     codeword = models.CharField(
         verbose_name='Кодовое слово',
         max_length=40,
-        unique=True,
-        blank=True,
-        null=True
+        blank=True
     )
     created = models.DateTimeField(
         verbose_name='Создано',

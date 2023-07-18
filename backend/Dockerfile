@@ -1,10 +1,9 @@
-FROM python:3.11-alpine3.18
+FROM python:3.11.4-slim
 
 COPY . /app/backend/
 WORKDIR /app/backend/
 
 EXPOSE 8000
 
-RUN apk add postgresql-client build-base postgresql-dev
-
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get -y install libpq-dev gcc
+RUN pip install -r requirements.txt

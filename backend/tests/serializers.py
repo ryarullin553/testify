@@ -67,4 +67,5 @@ class TestSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Test
         fields = '__all__'
-        read_only_fields = ['rating', 'feedbacks_count', 'results_count']
+        read_only_fields = ['rating', 'feedbacks_count', 'created',
+                            'results_count', 'avg_score', 'avg_answers_count', 'avg_correct_answers_count']

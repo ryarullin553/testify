@@ -225,7 +225,7 @@ class PassageAPITestCase(APITestCase):
                 }
             ],
             'result': None,
-            'codeword': None
+            'codeword': ''
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_passage)
@@ -270,7 +270,7 @@ class PassageAPITestCase(APITestCase):
                 }
             ],
             'result': None,
-            'codeword': None
+            'codeword': ''
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_passage)
@@ -339,7 +339,7 @@ class PassageAPITestCase(APITestCase):
                 'finished_time': self.finished_passage.result['finished_time'],
                 'score': 50
             },
-            'codeword': None
+            'codeword': ''
         }
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_passage)
@@ -494,7 +494,7 @@ class PassageAPITestCase(APITestCase):
                 'finished_time': self.finished_passage.result['finished_time'],
                 'score': 50
             },
-            'codeword': None
+            'codeword': ''
         }
         expected_data = [
             expected_finished_passage_2,
@@ -522,7 +522,7 @@ class PassageAPITestCase(APITestCase):
                 'finished_time': self.finished_passage.result['finished_time'],
                 'score': 50
             },
-            'codeword': None
+            'codeword': ''
         }
         expected_data = [
             expected_finished_passage
@@ -563,7 +563,7 @@ class PassageAPITestCase(APITestCase):
                 'finished_time': self.finished_passage.result['finished_time'],
                 'score': 50
             },
-            'codeword': None
+            'codeword': ''
         }
         expected_data = [
             expected_finished_passage,
