@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
+from questions.managers import QuestionManager
+
 
 class Question(models.Model):
     QUESTION_TYPES = [
@@ -66,6 +68,8 @@ class Question(models.Model):
         on_delete=models.CASCADE,
         related_name='questions'
     )
+
+    objects = QuestionManager()
 
     class Meta:
         verbose_name = 'Вопрос'
