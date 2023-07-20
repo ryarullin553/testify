@@ -1,5 +1,8 @@
 from django.db import models
 
+from comments.tasks import update_comment_metrics
+from questions.tasks import update_question_metrics
+
 
 class Like(models.Model):
     is_like = models.BooleanField(
@@ -35,6 +38,20 @@ class Like(models.Model):
         related_name='likes'
     )
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.__update_metrics()
+
+    def delete(self, *args, **kwargs):
+        self.__update_metrics()
+        super().delete(*args, **kwargs)
+
+    def __update_metrics(self):
+        if self.question_id:
+            update_question_metrics.delay(self.question_id)
+        elif self.comment_id:
+            update_comment_metrics.delay(self.comment_id)
+
     class Meta:
         verbose_name = 'Лайк'
         verbose_name_plural = 'Лайки'
@@ -52,4 +69,3 @@ class Like(models.Model):
         #         name='unique_user_and_comment'
         #     )
         # ]
-

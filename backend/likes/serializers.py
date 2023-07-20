@@ -7,5 +7,14 @@ class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Like
-        fields = ['id', 'user', 'question', 'is_like']
-        extra_kwargs = {'question': {'write_only': True}}
+        exclude = ['created', 'updated']
+        extra_kwargs = {
+            'question': {
+                'required': False,
+                'default': None
+            },
+            'comment': {
+                'required': False,
+                'default': None
+            }
+        }
