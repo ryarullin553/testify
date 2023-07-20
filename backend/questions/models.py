@@ -11,12 +11,6 @@ class Question(models.Model):
         ('Sequencing', 'Установление последовательности'),
         ('Tabular task', 'Табличная задача')
     ]
-    test = models.ForeignKey(
-        verbose_name='Тест',
-        to='tests.Test',
-        on_delete=models.CASCADE,
-        related_name='questions'
-    )
     type = models.CharField(
         verbose_name='Тип',
         max_length=30,
@@ -57,6 +51,20 @@ class Question(models.Model):
     updated = models.DateTimeField(
         verbose_name='Изменено',
         auto_now=True
+    )
+    likes_count = models.IntegerField(
+        verbose_name='Количество лайков',
+        default=0
+    )
+    dislikes_count = models.IntegerField(
+        verbose_name='Количество дизлайков',
+        default=0
+    )
+    test = models.ForeignKey(
+        verbose_name='Тест',
+        to='tests.Test',
+        on_delete=models.CASCADE,
+        related_name='questions'
     )
 
     class Meta:

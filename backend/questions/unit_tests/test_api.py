@@ -91,7 +91,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(5, len(queries))
+            self.assertEqual(4, len(queries))
         instance = Question.objects.get(id=response.data['id'])
         instance.image.delete()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -122,7 +122,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(5, len(queries))
+            self.assertEqual(4, len(queries))
         instance = Question.objects.get(id=response.data['id'])
         instance.image.delete()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -147,7 +147,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(5, len(queries))
+            self.assertEqual(4, len(queries))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(3, Question.objects.count())
 
@@ -176,7 +176,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(5, len(queries))
+            self.assertEqual(4, len(queries))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(3, Question.objects.count())
 
@@ -205,7 +205,7 @@ class QuestionAPITestCase(APITestCase):
         self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             response = self.client.post(url, data=data)
-            self.assertEqual(5, len(queries))
+            self.assertEqual(4, len(queries))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(3, Question.objects.count())
 

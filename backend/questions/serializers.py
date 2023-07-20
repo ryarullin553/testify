@@ -5,20 +5,19 @@ from .models import Question
 
 
 class QuestionSerializer(DynamicFieldsModelSerializer):
-    likes_count = serializers.IntegerField(read_only=True)
-    dislikes_count = serializers.IntegerField(read_only=True)
     has_like = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Question
-        fields = '__all__'
+        exclude = ['created', 'updated']
+        read_only_fields = ['likes_count', 'dislikes_count']
 
     def validate(self, attrs):
         """Проверяет, что текущий пользователь является автором теста и может создавать к нему вопросы"""
         if self.context['request'].method == 'POST':
             test = attrs.get('test')
             current_user = self.context['request'].user
-            if test.user != current_user:
+            if test.user_id != current_user.id:
                 raise serializers.ValidationError('Текущий пользователь не является автором теста')
         return attrs
 
