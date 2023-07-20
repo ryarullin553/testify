@@ -1,5 +1,7 @@
 from django.db import models
 
+from passages.managers import PassageManager
+
 
 class Passage(models.Model):
     result = models.JSONField(
@@ -31,6 +33,8 @@ class Passage(models.Model):
         on_delete=models.CASCADE,
         related_name='passages'
     )
+
+    objects = PassageManager()
 
     class Meta:
         verbose_name = 'Прохождение'
