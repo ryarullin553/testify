@@ -19,6 +19,14 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comments'
     )
+    likes_count = models.IntegerField(
+        verbose_name='Количество лайков',
+        default=0
+    )
+    dislikes_count = models.IntegerField(
+        verbose_name='Количество дизлайков',
+        default=0
+    )
     question = models.ForeignKey(
         verbose_name='Вопрос',
         to='questions.Question',
@@ -38,5 +46,3 @@ class Comment(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
         db_table = 'comments'
-
-
