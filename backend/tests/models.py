@@ -1,5 +1,7 @@
 from django.db import models
 
+from tests.managers import TestManager
+
 
 class Test(models.Model):
     title = models.CharField(
@@ -86,6 +88,8 @@ class Test(models.Model):
         decimal_places=1,
         default=0
     )
+
+    objects = TestManager()
 
     class Meta:
         verbose_name = 'Тест'
