@@ -28,7 +28,7 @@ class CommentAPIView(mixins.CreateModelMixin,
         question_id = kwargs.get('pk')
         queryset = self.get_queryset() \
             .filter(
-                question_id=question_id,
+                question_id=question_id
             )
         queryset = self.filter_queryset(queryset)
         page = self.paginate_queryset(queryset)
@@ -40,8 +40,8 @@ class CommentAPIView(mixins.CreateModelMixin,
         comment_id = kwargs.get('pk')
         queryset = self.get_queryset() \
             .filter(
-            comment_id=comment_id,
-        )
+                comment_id=comment_id
+            )
         queryset = self.filter_queryset(queryset)
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True)

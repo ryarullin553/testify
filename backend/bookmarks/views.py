@@ -19,14 +19,8 @@ class BookmarkAPIView(mixins.CreateModelMixin,
     ordering = '-created'
 
     def get_queryset(self):
-        queryset = self.queryset \
-            .filter(
-                user_id=self.request.user.id,
-                test__is_published=True
-            ) \
-            .select_related('test') \
-            .only('user_id', 'test_id', 'test__title', 'test__image')
-        return queryset
+        current_user_id = self.request.user.id
+        return self.queryset.for_current_user(current_user_id)
 
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())

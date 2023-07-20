@@ -1,5 +1,7 @@
 from django.db import models
 
+from bookmarks.manager import BookmarkManager
+
 
 class Bookmark(models.Model):
     created = models.DateTimeField(
@@ -18,6 +20,8 @@ class Bookmark(models.Model):
         on_delete=models.CASCADE,
         related_name='bookmarks'
     )
+
+    objects = BookmarkManager()
 
     class Meta:
         verbose_name = 'Закладка'
