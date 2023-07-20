@@ -38,11 +38,11 @@ class TestSerializer(DynamicFieldsModelSerializer):
             fields.append('explanation')
         if current_user.id == test.user_id or (test.has_right_answers and test.is_finished_passage):
             fields.append('right_answers')
+        if current_user.id != test.user_id:
+            fields += ['likes_count', 'dislikes_count']
 
         questions = test.questions\
             .annotate(
-                likes_count=Count('likes', filter=Q(likes__is_like=True)),
-                dislikes_count=Count('likes', filter=Q(likes__is_like=False)),
                 has_like=Exists(
                     Like.objects.filter(
                         user_id=current_user.id,
@@ -54,7 +54,7 @@ class TestSerializer(DynamicFieldsModelSerializer):
             .order_by('id')
 
         if current_user.id != test.user_id:
-            fields += ['likes_count', 'dislikes_count', 'has_like']
+            fields.append('has_like')
 
         serializer = QuestionSerializer(
             instance=questions,

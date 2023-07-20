@@ -175,8 +175,8 @@ class PassageAPITestCase(APITestCase):
                 'questions': [
                     {
                         'id': self.question_1.id,
-                        'likes_count': 1,
-                        'dislikes_count': 1,
+                        'likes_count': 0,
+                        'dislikes_count': 0,
                         'has_like': True,
                         'type': 'Single choice',
                         'content': 'Содержание первого вопроса',
@@ -289,8 +289,8 @@ class PassageAPITestCase(APITestCase):
                 'questions': [
                     {
                         'id': self.question_1.id,
-                        'likes_count': 1,
-                        'dislikes_count': 1,
+                        'likes_count': 0,
+                        'dislikes_count': 0,
                         'has_like': True,
                         'type': 'Single choice',
                         'content': 'Содержание первого вопроса',

@@ -9,4 +9,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 app = Celery('backend')
 app.config_from_object('django.conf:settings')
 app.conf.broker_url = settings.CELERY_BROKER_URL
+app.conf.task_routes = {
+    'tests.tasks.*': {
+        'queue': 'tests'
+    }
+}
 app.autodiscover_tasks()
+

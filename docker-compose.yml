@@ -36,11 +36,23 @@ services:
     depends_on:
       - redis
       - database
-    environment:
-      - DB_HOST=database
-      - DB_NAME=testify_db
-      - DB_USER=testify_db_user
-      - DB_PASS=123
+    env_file:
+      - ./backend/.env
+
+  worker2:
+    build: backend/
+    hostname: worker2
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info -Q tests
+    volumes:
+      - ./backend:/app/backend
+    links:
+      - redis
+    depends_on:
+      - redis
+      - database
+    env_file:
+      - ./backend/.env
 
   flower:
     build: backend/
