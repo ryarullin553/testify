@@ -67,3 +67,13 @@ services:
       - redis
     ports:
       - "5555:5555"
+
+  gpt:
+    build: gpt/
+    ports:
+      - 8501:8501
+    volumes:
+      - ./gpt:/app/gpt
+
+    command: >
+      sh -c "uvicorn main:app --reload --host 0.0.0.0 --port 8501"
