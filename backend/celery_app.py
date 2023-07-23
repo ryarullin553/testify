@@ -14,5 +14,6 @@ app.conf.task_routes = {
         'queue': 'tests'
     }
 }
+app.conf.broker_connection_retry_on_startup = True
 app.autodiscover_tasks()
 

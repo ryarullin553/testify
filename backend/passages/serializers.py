@@ -11,7 +11,7 @@ class PassageSerializer(DynamicFieldsModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
-    user_id = serializers.IntegerField(
+    user_id = serializers.UUIDField(
         read_only=True
     )
     user_name = serializers.CharField(

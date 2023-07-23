@@ -169,7 +169,7 @@ class PassageAPITestCase(APITestCase):
             self.assertEqual(5, len(queries))
         expected_passage = {
             'id': self.passage.id,
-            'user_id': self.user_2.id,
+            'user_id': str(self.user_2.id),
             'test': self.test.id,
             'test_data': {
                 'questions': [
@@ -238,7 +238,7 @@ class PassageAPITestCase(APITestCase):
             self.assertEqual(5, len(queries))
         expected_passage = {
             'id': self.passage_test_without_points.id,
-            'user_id': self.user_2.id,
+            'user_id': str(self.user_2.id),
             'test': self.test_without_points.id,
             'test_data': {
                 'questions': [
@@ -283,7 +283,7 @@ class PassageAPITestCase(APITestCase):
             self.assertEqual(5, len(queries))
         expected_passage = {
             'id': self.finished_passage.id,
-            'user_id': self.user_2.id,
+            'user_id': str(self.user_2.id),
             'test': self.test.id,
             'test_data': {
                 'questions': [
@@ -470,7 +470,7 @@ class PassageAPITestCase(APITestCase):
             self.assertEqual(3, len(queries))
         expected_finished_passage_2 = {
             'id': self.finished_passage_2.id,
-            'user_id': self.user.id,
+            'user_id': str(self.user.id),
             'user_name': self.user.username,
             'result': {
                 'questions_count': 2,
@@ -484,7 +484,7 @@ class PassageAPITestCase(APITestCase):
         }
         expected_finished_passage = {
             'id': self.finished_passage.id,
-            'user_id': self.user_2.id,
+            'user_id': str(self.user_2.id),
             'user_name': self.user_2.username,
             'result': {
                 'questions_count': 2,
@@ -512,7 +512,7 @@ class PassageAPITestCase(APITestCase):
             self.assertEqual(3, len(queries))
         expected_finished_passage = {
             'id': self.finished_passage.id,
-            'user_id': self.user_2.id,
+            'user_id': str(self.user_2.id),
             'user_name': self.user_2.username,
             'result': {
                 'questions_count': 2,
@@ -539,7 +539,7 @@ class PassageAPITestCase(APITestCase):
             self.assertEqual(3, len(queries))
         expected_finished_passage_2 = {
             'id': self.finished_passage_2.id,
-            'user_id': self.user.id,
+            'user_id': str(self.user.id),
             'user_name': self.user.username,
             'result': {
                 'questions_count': 2,
@@ -553,7 +553,7 @@ class PassageAPITestCase(APITestCase):
         }
         expected_finished_passage = {
             'id': self.finished_passage.id,
-            'user_id': self.user_2.id,
+            'user_id': str(self.user_2.id),
             'user_name': self.user_2.username,
             'result': {
                 'questions_count': 2,
