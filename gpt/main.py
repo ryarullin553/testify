@@ -7,7 +7,7 @@ app = FastAPI()
 
 
 @app.post('/api/questions/generate')
-def create_answer_choices(data: QuestionData):
+async def create_answer_choices(data: QuestionData):
     """
     Example:
 
@@ -18,4 +18,5 @@ def create_answer_choices(data: QuestionData):
         "answer_choices": ["Южная Америка", "Австралия"]
     }
     """
-    return {'answer_choices': generate_wrong_answer_choices(data)}
+    answer_choices = await generate_wrong_answer_choices(data)
+    return {'answer_choices': answer_choices}
