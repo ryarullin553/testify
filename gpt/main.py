@@ -3,10 +3,13 @@ from fastapi import FastAPI
 from app.schemas import QuestionData
 from app.services import generate_wrong_answer_choices
 
-app = FastAPI()
+app = FastAPI(
+    title='Testify',
+    version='0.2.0'
+)
 
 
-@app.post('/api/questions/generate')
+@app.post('/create_answer_choices')
 async def create_answer_choices(data: QuestionData):
     """
     Example:
