@@ -1,4 +1,4 @@
-import { FORM_TABS } from '../../login-tab-manager';
+import { FORM_TABS } from '../../../login-window';
 import styles from './login-form-input.module.scss'
 
 export const LoginFormInput = ({type, id, placeholder, formTab, value, handleFieldChange}) => {

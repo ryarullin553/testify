@@ -6,10 +6,10 @@ const initialState: State = {
   error: null,
   authorizationStatus: false,
   userInfo: {
-    id: '',
-    username: '',
+    userID: '',
+    userName: '',
     email: '',
-    avatar: '',
+    userAvatar: '',
   },
 }
 

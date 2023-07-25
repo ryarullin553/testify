@@ -1,8 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { api } from '../store';
-import { Test } from '../types/Test';
+import { Test, TestWithAvatar } from '../types/Test';
 
-export const useScroll = (baseRequest: string, setTestList: React.Dispatch<React.SetStateAction<Test[]>>) => {
+export const useScroll = (
+    baseRequest: string,
+    setTestList: React.Dispatch<React.SetStateAction<any>>
+  ) => {
   let nextPage = useRef<string | null>();
   let isLoading = useRef(false);
 
@@ -15,7 +18,7 @@ export const useScroll = (baseRequest: string, setTestList: React.Dispatch<React
 
     try {
       const {data} = await api.get(nextPage.current);
-      setTestList(prevData => [...prevData, ...data.results]);
+      setTestList((prevState: any) => [...prevState, ...data.results]);
       nextPage.current = (data.next ? data.next.slice(22) : null);
     } finally {
       isLoading.current = false;

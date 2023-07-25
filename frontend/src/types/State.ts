@@ -4,10 +4,10 @@ export type State = {
   error: string | null,
   authorizationStatus: boolean,
   userInfo: {
-    id: string,
-    username: string,
+    userID: string,
+    userName: string,
     email: string,
-    avatar: string,
+    userAvatar: string,
   },
 }
 

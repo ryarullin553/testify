@@ -4,7 +4,7 @@
       "strict": true,   
       "module": "es6",
       "jsx": "react",
-      "target": "es5",
+      "target": "ESNext",
       "allowJs": true,
       "esModuleInterop": true,
       "moduleResolution": "Node",

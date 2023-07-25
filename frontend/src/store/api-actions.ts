@@ -58,10 +58,10 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     dropToken();
     dispatch(setAuthorizationStatus(false));
     dispatch(setUserInfo({
-      id: '',
-      username: '',
+      userID: '',
+      userName: '',
       email: '',
-      avatar: '',
+      userAvatar: '',
     }));
   },
 );
