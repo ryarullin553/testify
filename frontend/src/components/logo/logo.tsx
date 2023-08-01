@@ -1,9 +1,9 @@
 import { AppRoute } from '../../reusable/const';
-import { Link } from 'react-router-dom';
-import { ReactComponent as LogoIcon } from './img/logo.svg';
+import LogoIcon from './img/logo.svg';
 import styles from './logo.module.scss'
 import React, { FC } from 'react';
 import { HEX } from '../../types/HEX';
+import Link from 'next/link';
 
 interface Props {
   color: HEX,
@@ -11,8 +11,8 @@ interface Props {
 
 export const Logo: FC<Props> = ({ color }) => {
   return (
-    <Link to={AppRoute.Root} className={styles.logo}>
-      <LogoIcon fill={color}/>
+    <Link href={AppRoute.Root} className={styles.logo}>
+      <LogoIcon color={color}/>
       Testify
     </Link>
   );

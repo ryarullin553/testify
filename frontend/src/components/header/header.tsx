@@ -2,9 +2,9 @@ import styles from './header.module.scss';
 import { Logo } from '../logo/logo';
 import { MainMenu } from '../main-menu/main-menu';
 import { UserBlock } from './user-block/user-block';
-import React from 'react';
+import React, { FC } from 'react';
 
-export const Header = () => {
+export const Header: FC = () => {
 
   return (
     <header className={styles.pageHeader}>

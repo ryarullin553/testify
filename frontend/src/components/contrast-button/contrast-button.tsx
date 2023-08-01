@@ -1,14 +1,16 @@
 import React, { FC } from 'react';
 import styles from './contrast-button.module.scss';
+import Link from 'next/link';
 
 interface Props {
   type: string,
   label: string,
   inversed: boolean,
-  onClick: () => void,
+  onClick?: () => void,
+  link?: string,
 }
 
-export const ContrastButton: FC<Props> = ({ type, label, inversed, onClick }) => {
+export const ContrastButton: FC<Props> = ({ type, label, inversed, onClick, link }) => {
   let elem = <></>;
   let buttonStyle = styles.contrastButton;
   if (inversed) {
@@ -17,7 +19,7 @@ export const ContrastButton: FC<Props> = ({ type, label, inversed, onClick }) =>
   if (type === 'button') {
     elem = <button className={buttonStyle} onClick={onClick}>{label}</button>;
   } else if (type === 'link') {
-    elem = <a className={buttonStyle} onClick={onClick}>{label}</a>;
+    elem = <Link className={buttonStyle} href={link || '#'}>{label}</Link>;
   }
 
   return elem;

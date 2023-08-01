@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { FC, useEffect, useRef, RefObject, MouseEvent } from 'react';
 import { logoutAction } from '../../store/api-actions';
 import { store } from '../../store';
@@ -50,7 +50,7 @@ export const DropdownMenu: FC<Props> = ({ actionCloseMenu }) => {
           {
             linkList.map(linkItem => (
               <li key={linkItem.id}>
-                <Link to={linkItem.link}>{linkItem.label}</Link>
+                <Link href={linkItem.link}>{linkItem.label}</Link>
               </li>
             ))
           }

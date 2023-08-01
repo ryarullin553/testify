@@ -1,12 +1,10 @@
-import { useNavigate } from 'react-router';
-import { ContrastButton } from '../contrast-button/contrast-button';
+ import { ContrastButton } from '../contrast-button/contrast-button';
 import { PaleButton } from '../pale-button/pale-button';
 import styles from './main-page-content.module.scss';
 import { AppRoute } from '../../reusable/const';
 import React, { FC } from 'react';
 
 export const MainPageContent: FC = () => {
-  const navigate = useNavigate();
 
   return (
     <main className={styles.pageMain}>
@@ -16,8 +14,8 @@ export const MainPageContent: FC = () => {
             Testify — бесплатная платформа для создания и прохождения тестов
           </h1>
           <p>Попробуйте воспользоваться нашим онлайн-конструктором</p>
-          <ContrastButton type={'link'} label={'Создать тест'} onClick={() => navigate(AppRoute.CreateTest)} inversed={false}/>
-          <ContrastButton type={'link'} label={'Найти тест'} onClick={() => navigate(AppRoute.Catalog)} inversed/>
+          <ContrastButton type={'link'} label={'Создать тест'} link={AppRoute.CreateTest} inversed={false}/>
+          <ContrastButton type={'link'} label={'Найти тест'} link={AppRoute.Catalog} inversed/>
         </div>
       </section>
       <section className={styles.advantagesSection}>

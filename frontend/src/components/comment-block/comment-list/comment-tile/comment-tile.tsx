@@ -1,5 +1,5 @@
 import styles from './comment-tile.module.scss';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { formatDate } from '../../../../reusable/functions';
 import { AppRoute } from '../../../../reusable/const';
 import { AvatarBlock } from '../../../avatar-block/avatar-block';
@@ -18,7 +18,7 @@ export const CommentTile: FC<Props> = ({ commentItem }) => {
       <AvatarBlock size={50} src={userAvatar} />
       <div>
         <div className={styles.comment__info}>
-          <Link to={`${AppRoute.Profile}/${userID}`} className={styles.name}>{userName}</Link>
+          <Link href={`${AppRoute.Profile}/${userID}`} className={styles.name}>{userName}</Link>
           <span className={styles.date}>{formatDate(date)}</span>
         </div>
         <p className={styles.comment__text}>{content}</p>

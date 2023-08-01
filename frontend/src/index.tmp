@@ -7,7 +7,7 @@ import { checkAuthAction } from './store/api-actions';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import App from './App.tmp';
 // import reportWebVitals from './reportWebVitals';
 import { ErrorMessage } from './components/error-message/error-message';
 

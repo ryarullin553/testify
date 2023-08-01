@@ -1,6 +1,6 @@
 import styles from './results-area.module.scss';
 import { AppRoute } from '../../../reusable/const';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { AttemptComplete } from '../../../types/Test';
 import React, { FC } from 'react';
 
@@ -41,7 +41,7 @@ export const ResultsArea: FC<Props> = ({ results }) => {
         </div>
       </div>
       <div className={styles.controls}>
-          <Link to={AppRoute.Catalog} className={styles.catalog}>В каталог</Link>
+          <Link href={AppRoute.Catalog} className={styles.catalog}>В каталог</Link>
       </div>
     </section>
   );

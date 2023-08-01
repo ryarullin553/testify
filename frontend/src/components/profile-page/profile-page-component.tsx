@@ -1,4 +1,4 @@
-import { useParams } from 'react-router';
+import { useParams } from 'next/navigation';
 import styles from './profile-page-component.module.scss';
 import { ProfileComponent } from './profile-component/profile-component';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';

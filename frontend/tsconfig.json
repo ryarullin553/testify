@@ -1,16 +1,38 @@
 {
   "compilerOptions": {
-      "outDir": "./dist",
-      "strict": true,   
-      "module": "es6",
-      "jsx": "react",
-      "target": "ESNext",
-      "allowJs": true,
-      "esModuleInterop": true,
-      "moduleResolution": "Node",
-      "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "outDir": "./dist",
+    "strict": true,
+    "module": "esnext",
+    "jsx": "preserve",
+    "target": "ESNext",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
   "include": [
-      "./src/"
+    "./src/",
+    "pages"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

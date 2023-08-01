@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import styles from './catalog-tile.module.scss';
 import { AppRoute } from '../../../reusable/const';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
@@ -39,7 +39,7 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
 
   return (
     <li className={styles.card}>
-      <Link to={`${AppRoute.TestDescription}/${testID}`} className={styles.linkWrapper}>
+      <Link href={`${AppRoute.TestDescription}/${testID}`} className={styles.linkWrapper}>
         <AvatarBlock src={testAvatar} size={107} />
         <div className={styles.card__info}>
           <div className={styles.card__link}>

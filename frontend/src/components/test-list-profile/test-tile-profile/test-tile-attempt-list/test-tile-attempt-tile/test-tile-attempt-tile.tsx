@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { AppRoute } from '../../../../../reusable/const';
 import styles from './test-tile-attempt-tile.module.scss';
 import { FC } from 'react';
@@ -25,7 +25,7 @@ export const TestTileAttemptTile: FC<Props> = ({ attemptItem }) => {
 
   return (
     <li className={styles.result}>
-      <Link to={link} className={styles.linkWrapper}>
+      <Link href={link} className={styles.linkWrapper}>
         <span className={styles.date}>{date}</span><span className={styles.score}>{score}</span>
       </Link>
     </li>

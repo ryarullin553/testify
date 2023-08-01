@@ -4,7 +4,7 @@ import { ResetPasswordComponent } from "../reset-passord-content/reset-password-
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { api, store } from '../../store';
 import { checkAuthAction } from '../../store/api-actions';
-import { useParams } from 'react-router';
+import { useParams } from 'next/navigation';
 import React from 'react';
 
 interface FormData {

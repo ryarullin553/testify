@@ -1,4 +1,4 @@
-import { useParams } from 'react-router';
+import { useParams } from 'next/navigation';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button';
 import { QuestionArea } from '../test-content/question-area/question-area';

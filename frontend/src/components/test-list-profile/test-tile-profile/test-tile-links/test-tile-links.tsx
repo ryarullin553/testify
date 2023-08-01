@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import styles from './test-tile-links.module.scss';
 import { FC } from 'react';
 import { Test } from '../../../../types/Test';

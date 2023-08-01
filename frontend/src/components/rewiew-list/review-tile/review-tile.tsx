@@ -1,6 +1,6 @@
 import styles from './review-tile.module.scss';
 import { FeedbackStars } from '../../feedback-stars/feedback-stars';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { AppRoute } from '../../../reusable/const';
 import { formatDate } from '../../../reusable/functions';
 import { TestReview } from '../../../types/TestReview';
@@ -27,7 +27,7 @@ export const ReviewTile: FC<Props> = ({ reviewItem }) => {
       </div>
       <p className={styles.review__text}>{reviewContent}</p>
       <div className={styles.review__info}>
-        <Link to={`${AppRoute.Profile}/${authorID}`} className={styles.name}>{authorName}</Link>
+        <Link href={`${AppRoute.Profile}/${authorID}`} className={styles.name}>{authorName}</Link>
         <span className={styles.data}>{formatDate(date)}</span>
       </div>
     </div>
