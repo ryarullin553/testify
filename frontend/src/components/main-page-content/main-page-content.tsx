@@ -2,7 +2,7 @@
 import { PaleButton } from '../pale-button/pale-button';
 import styles from './main-page-content.module.scss';
 import { AppRoute } from '../../reusable/const';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 export const MainPageContent: FC = () => {
 
@@ -42,7 +42,7 @@ export const MainPageContent: FC = () => {
               Вам доступен список пройденных тестов с результатами, а также все
               взаимодействия с ними
             </p>
-            <ContrastButton type={'link'} label={'Войти'} inversed={false} onClick={() => {}}/>
+            <ContrastButton type={'link'} label={'Войти'} inversed={false} />
           </div>
         </div>
         <div className={styles.userProfileBlock}>
@@ -54,7 +54,7 @@ export const MainPageContent: FC = () => {
               В личном кабинете в разделе “Мои тесты” вам доступны статистические
               данные по вашим авторским тестам
             </p>
-            <ContrastButton type={'link'} label={'Войти'} inversed={false} onClick={() => {}}/>
+            <ContrastButton type={'link'} label={'Войти'} inversed={false} />
           </div>
         </div>
       </section>
@@ -68,7 +68,7 @@ export const MainPageContent: FC = () => {
               placeholder="Напишите нам"
               defaultValue=""
             />
-            <PaleButton label={'Отправить'} action={() => {}}/>
+            <PaleButton label={'Отправить'} />
           </form>
           <a className={styles.mailLink} href="mailto:testify.project.info@gmail.com">
             testify.project.info@gmail.com

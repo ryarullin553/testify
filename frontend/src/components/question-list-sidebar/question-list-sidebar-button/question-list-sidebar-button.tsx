@@ -1,6 +1,5 @@
 import { FC, MouseEvent } from 'react';
 import styles from './question-list-sidebar-button.module.scss';
-import React from 'react';
 
 interface Props {
   onClickAction: () => void,

@@ -1,10 +1,11 @@
+'use client'
+
 import styles from './profile-bookmark-content.module.scss';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { useState } from 'react';
 import { useScroll } from '../../reusable/hooks';
 import { AppRoute } from '../../reusable/const';
-import React from 'react';
 import { Test, TestWithAvatar } from '../../types/Test';
 
 export const ProfileBookmarkContent = () => {

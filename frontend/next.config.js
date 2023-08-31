@@ -18,7 +18,7 @@ module.exports = {
       // Convert all other *.svg imports to React components
       {
         test: /\.svg$/i,
-        issuer: /\.[jt]sx?$/,
+        issuer: { not: /\.scss$/},
         resourceQuery: { not: /url/ }, // exclude if *.svg?url
         use: ['@svgr/webpack'],
       },

@@ -4,7 +4,6 @@ import { logoutAction } from '../../store/api-actions';
 import { store } from '../../store';
 import styles from './dropdown-menu.module.scss';
 import { AppRoute } from '../../reusable/const';
-import React from 'react';
 
 interface Props {
   actionCloseMenu: () => void,

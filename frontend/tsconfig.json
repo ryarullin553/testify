@@ -9,11 +9,16 @@
     "esModuleInterop": true,
     "moduleResolution": "Node",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
     "plugins": [
       {
         "name": "typescript-plugin-css-modules"
+      },
+      {
+        "name": "next"
       }
     ],
     "lib": [
@@ -30,7 +35,8 @@
   },
   "include": [
     "./src/",
-    "pages"
+    "pages",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

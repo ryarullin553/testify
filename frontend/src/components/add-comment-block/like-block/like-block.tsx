@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import styles from './like-block.module.scss';
 import { fetchQuestionLikesAction } from '../../../api/questions';
-import likeImage from './img/like.svg';
-import likeImageActive from './img/like-active.svg';
+import LikeImage from './img/like.svg';
+import LikeImageActive from './img/like-active.svg';
 import { addLikeAction, changeLikeAction, deleteLikeAction } from '../../../api/likes';
-import React, { MouseEvent } from 'react';
 
-enum LikeStates {
+const enum LikeStates {
   Like = 'like',
   Dislike = 'dislike',
   None = 'none',
@@ -57,7 +56,7 @@ export const LikeBlock: FC<Props> = ({ questionID }) => {
   return (
     <fieldset className={styles.likeField}>
       <label>
-        <img src={likeState === LikeStates.Like ? likeImageActive : likeImage} alt='Нравится' />
+        {likeState === LikeStates.Like ? <LikeImageActive /> : <LikeImage />}
         {likeCount.likes}
         <input
           type='radio'
@@ -69,7 +68,7 @@ export const LikeBlock: FC<Props> = ({ questionID }) => {
         />
       </label>
       <label>
-        <img src={likeState === LikeStates.Dislike ? likeImageActive : likeImage} alt='Не нравится' style={{transform: 'rotate(180deg)'}}/>
+      {likeState === LikeStates.Like ? <LikeImageActive style={{transform: 'rotate(180deg)'}} /> : <LikeImage style={{transform: 'rotate(180deg)'}} />}
         {likeCount.dislikes}
         <input
           type='radio'

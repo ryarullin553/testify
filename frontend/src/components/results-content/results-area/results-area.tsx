@@ -2,7 +2,7 @@ import styles from './results-area.module.scss';
 import { AppRoute } from '../../../reusable/const';
 import Link from 'next/link';
 import { AttemptComplete } from '../../../types/Test';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 interface Props {
   results: AttemptComplete,

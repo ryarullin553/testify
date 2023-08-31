@@ -1,9 +1,12 @@
 import styles from './profile-navigation.module.scss';
 import { AppRoute } from '../../reusable/const';
-import { NavLink } from 'react-router-dom';
-import React, { FC } from 'react';
+import { FC } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export const ProfileNavigation: FC = () => {
+  const pathname = usePathname();
+
   const linkList = [
     { id: 1, link: AppRoute.Profile, label: 'Профиль'},
     { id: 2, link: AppRoute.History, label: 'История'},
@@ -16,19 +19,21 @@ export const ProfileNavigation: FC = () => {
     <section className={styles.profileNavigation}>
       <ul>
         {
-          linkList.map(linkItem => (
-            <li key={linkItem.id}>
-              <NavLink
-                to={linkItem.link}
-                className={({isActive}) => (isActive ? styles.activeLink : undefined)}
-              >
-                {linkItem.label}
-              </NavLink>
-            </li>
-          ))
+          linkList.map(linkItem => {
+            const isActive = pathname === linkItem.link
+            return(
+              <li key={linkItem.id}>
+                <Link
+                  href={linkItem.link}
+                  className={isActive ? styles.activeLink : undefined}
+                >
+                  {linkItem.label}
+                </Link>
+              </li>
+            )
+          })
         }
       </ul>
     </section>
   );
 }
-

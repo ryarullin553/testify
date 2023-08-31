@@ -1,3 +1,5 @@
+'use client'
+
 import styles from './profile-settings.module.scss';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { ResetPasswordComponent } from "../reset-passord-content/reset-password-component/reset-password-component";
@@ -5,7 +7,6 @@ import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { api, store } from '../../store';
 import { checkAuthAction } from '../../store/api-actions';
 import { useParams } from 'next/navigation';
-import React from 'react';
 
 interface FormData {
   userName: string,

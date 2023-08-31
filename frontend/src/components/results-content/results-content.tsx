@@ -1,3 +1,5 @@
+'use client'
+
 import { useParams } from 'next/navigation';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button';
@@ -7,7 +9,6 @@ import { FC, useEffect, useState } from 'react';
 import { fetchAttemptAction } from '../../api/results';
 import { ResultsArea } from './results-area/results-area';
 import { ReviewsBlock } from '../reviews-block/reviews-block';
-import React from 'react';
 import { Attempt, AttemptComplete, Question, QuestionState, QuestionWithSelectedAnswer } from '../../types/Test';
 
 export const ResultsContent: FC = () => {

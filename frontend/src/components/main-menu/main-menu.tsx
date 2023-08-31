@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { AppRoute } from '../../reusable/const';
 import Link from 'next/link';
 

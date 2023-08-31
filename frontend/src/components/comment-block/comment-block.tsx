@@ -5,7 +5,6 @@ import styles from './comment-block.module.scss';
 import { submitCommentAction } from '../../api/comments';
 import { AddCommentBlock } from '../add-comment-block/add-comment-block';
 import { CommentList } from './comment-list/comment-list';
-import React from 'react';
 
 interface Props {
   questionID: number,

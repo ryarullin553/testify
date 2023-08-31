@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { Question, QuestionState, Test } from '../../types/Test';
 import styles from './question-list-sidebar.module.scss';
 

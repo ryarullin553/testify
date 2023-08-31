@@ -2,7 +2,7 @@ import styles from './header.module.scss';
 import { Logo } from '../logo/logo';
 import { MainMenu } from '../main-menu/main-menu';
 import { UserBlock } from './user-block/user-block';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 export const Header: FC = () => {
 

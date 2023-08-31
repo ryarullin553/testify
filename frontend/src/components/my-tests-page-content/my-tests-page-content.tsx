@@ -1,3 +1,5 @@
+'use client'
+
 import { AppRoute } from '../../reusable/const';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
@@ -6,7 +8,6 @@ import Link from 'next/link';
 import styles from './my-tests-page-content.module.scss';
 import { FC, useState } from 'react';
 import { useScroll } from '../../reusable/hooks';
-import React from 'react';
 import { Test, TestWithAvatar } from '../../types/Test';
 
 export const MyTestsPageContent: FC = () => {

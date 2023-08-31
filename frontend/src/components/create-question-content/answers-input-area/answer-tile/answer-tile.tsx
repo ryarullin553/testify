@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, MouseEvent } from 'react';
+import { FC, ChangeEvent, MouseEvent } from 'react';
 import { Answer, QuestionWithCorrectAnswer } from '../../../../types/Test';
 
 interface Props {

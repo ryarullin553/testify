@@ -1,7 +1,7 @@
 import { AppRoute } from '../../reusable/const';
 import LogoIcon from './img/logo.svg';
 import styles from './logo.module.scss'
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { HEX } from '../../types/HEX';
 import Link from 'next/link';
 

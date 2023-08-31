@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { formatDate } from '../../../../reusable/functions';
 import { AppRoute } from '../../../../reusable/const';
 import { AvatarBlock } from '../../../avatar-block/avatar-block';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Comment } from '../../../../types/Comment';
 
 interface Props {

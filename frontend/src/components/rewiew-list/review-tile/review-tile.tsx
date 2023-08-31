@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { AppRoute } from '../../../reusable/const';
 import { formatDate } from '../../../reusable/functions';
 import { TestReview } from '../../../types/TestReview';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 interface Props {
   reviewItem: TestReview;

@@ -1,27 +1,29 @@
+'use client'
+
 import { useParams } from 'next/navigation';
 import styles from './profile-page-component.module.scss';
 import { ProfileComponent } from './profile-component/profile-component';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { FC, useEffect, useState } from 'react';
 import { fetchUserInfoAction } from '../../api/user';
-import React from 'react';
 import { UserInfo, UserInfoExtended } from '../../types/UserInfo';
 
 
 export const ProfilePageComponent: FC = () => {
-  const [userInfo, setUserInfo] = useState<UserInfoExtended>();
+  const [userInfo, setUserInfo] = useState<UserInfoExtended>()
 
-  let { userID } = useParams();
+  const params = useParams()
+  const userID = String(params?.userID ?? 'me')
 
   const fetchUserInfo = async (userID: UserInfo['userID']) => {
-    const userData = await fetchUserInfoAction(userID);
-    const convertedData = convertDataStC(userData);
-    setUserInfo(convertedData);
+    const userData = await fetchUserInfoAction(userID)
+    const convertedData = convertDataStC(userData)
+    setUserInfo(convertedData)
   }
 
   const convertDataStC = (data: any) => {
     const modifiedData: UserInfoExtended = {
-      userID: userID ?? 'me',
+      userID: userID,
       userName: data.user_name,
       userBio: data.bio,
       userAvatar: data.avatar,
@@ -29,15 +31,15 @@ export const ProfilePageComponent: FC = () => {
       unfinishedTestList: data.unfinished_tests,
       createdTestList: data.created_tests,
     }
-    return modifiedData;
+    return modifiedData
   }
 
   useEffect(() => {
-    fetchUserInfo(userID ?? 'me');
+    fetchUserInfo(userID)
   }, []);
 
   // ???
-  if (!userInfo) return null;
+  if (!userInfo) return null
 
   return (
     <>

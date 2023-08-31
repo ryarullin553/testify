@@ -1,9 +1,8 @@
 import styles from './visibility-button.module.scss';
-import hiddenIcon from './img/unpublished.svg';
-import visibleIcon from './img/published.svg';
+import HiddenIcon from './img/unpublished.svg';
+import VisibleIcon from './img/published.svg';
 import { changeTestVisibilityAction } from '../../../../api/tests';
 import { FC, useState, MouseEvent } from 'react';
-import React from 'react';
 import { Test } from '../../../../types/Test';
 
 interface Props {
@@ -26,11 +25,10 @@ export const VisibilityButton: FC<Props> = ({ isPublished, testID }) => {
 
   return (
     <button className={styles.visibilityButton} onClick={toggleIsPublished}>
-      <img
-        className={styles.visibilityIcon}
-        src={currentPublishedState ? visibleIcon : hiddenIcon}
-        alt=""
-      />
+      {currentPublishedState
+        ? <VisibleIcon className={styles.visibilityIcon}/>
+        : <HiddenIcon className={styles.visibilityIcon}/>
+      }
     </button>
   );
 }

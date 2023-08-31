@@ -4,7 +4,6 @@ import { LoginTabs } from './login-tabs/login-tabs';
 import { LoginForm } from './login-form/login-form';
 import { api, store } from '../../../store';
 import { loginAction, checkAuthAction } from '../../../store/api-actions';
-import React from 'react';
 import { FORM_TABS, LoginFormState } from '../login-window';
 
 interface Props {
@@ -14,7 +13,7 @@ interface Props {
 export const LoginTabManager: FC<Props> = ({ handleCloseModal }) => {
   const [formTab, setFormTab] = useState(FORM_TABS.SIGN_IN);
 
-  const handleFormSubmit = async (evt: FormEvent<HTMLButtonElement>, formTab: FORM_TABS, formState: LoginFormState) => {
+  const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>, formTab: FORM_TABS, formState: LoginFormState) => {
     const {username, email, password} = formState;
     evt.preventDefault();
     switch (formTab) {

@@ -2,7 +2,6 @@ import { FC, ChangeEvent, MouseEvent } from 'react';
 import { AnswerTile } from './answer-tile/answer-tile';
 import styles from './answers-input-area.module.scss';
 import { Answer, QuestionWithCorrectAnswer } from '../../../types/Test';
-import React from 'react';
 
 interface Props {
   answerList: Answer[],

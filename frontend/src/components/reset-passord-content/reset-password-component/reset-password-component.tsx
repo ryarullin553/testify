@@ -1,9 +1,10 @@
-import { useNavigate, useParams } from "react-router";
-import { AppRoute } from "../../../reusable/const";
-import { api } from "../../../store";
+'use client'
+
+import { useParams, useRouter } from 'next/navigation';
+import { AppRoute } from '../../../reusable/const';
+import { api } from '../../../store';
 import styles from './reset-password-component.module.scss';
-import { ChangeEvent, FC, FormEvent, useState } from "react";
-import React from "react";
+import { ChangeEvent, FC, FormEvent, useState } from 'react';
 
 export const ResetPasswordComponent: FC = () => {
   const [formState, setFormState] = useState({
@@ -11,8 +12,9 @@ export const ResetPasswordComponent: FC = () => {
     passwordRepeat: '',
   });
 
-  const { uid, token } = useParams();
-  const navigate = useNavigate();
+  const uid = String(useParams().uid);
+  const token = String(useParams().token);
+  const router = useRouter();
 
   const resetPassword = async (uid: string, token: string, password: string) => {
     await api.post('auth/users/reset_password_confirm/', { token, uid, new_password: password });
@@ -23,7 +25,7 @@ export const ResetPasswordComponent: FC = () => {
     if (!!uid && !!token) {
       try {
         await resetPassword(uid, token, formState.password);
-        navigate(AppRoute.Root);
+        router.push(AppRoute.Root);
       }
       catch {
         return;
