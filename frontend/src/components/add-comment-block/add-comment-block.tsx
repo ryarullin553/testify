@@ -4,7 +4,6 @@ import styles from './add-comment-block.module.scss';
 import { RateBlock } from './rate-block/rate-block';
 import { useSelector } from 'react-redux';
 import { selectUserInfo } from '../../store/selectors';
-import React from 'react';
 
 interface Props extends PropsWithChildren {
   reloadFeedback: () => Promise<void>,

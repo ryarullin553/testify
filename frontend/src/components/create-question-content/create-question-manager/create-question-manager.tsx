@@ -5,7 +5,6 @@ import styles from './create-question-manager.module.scss';
 import { FC, useEffect, useState, MouseEvent, ChangeEvent } from 'react';
 import { generateAnswersAction } from '../../../api/questions';
 import { Answer, Question } from '../../../types/Test';
-import React from 'react';
 
 interface Props {
   defaultQuestionData: Question,

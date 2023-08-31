@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styles from './show-more-button.module.scss';
 
 export const ShowMoreButton: FC = () => {

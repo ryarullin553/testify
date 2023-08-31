@@ -1,4 +1,5 @@
-import { useNavigate, useParams } from 'react-router';
+'use client'
+
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import styles from './test-content.module.scss';
 import { useEffect, useState } from 'react';
@@ -10,13 +11,13 @@ import { fetchAttemptsAction } from '../../api/tests';
 import { fetchAttemptAction, submitAttemptAction } from '../../api/results';
 import { submitAnswerAction, updateAnswerAction } from '../../api/answers';
 import { QuestionControls } from '../question-controls/question-controls';
-import React from 'react';
 import { Answer, Attempt, AttemptComplete, Question, QuestionState, Test, TestWithQuestions } from '../../types/Test';
+import { useParams, useRouter } from 'next/navigation';
 
 // Тут жесть, надо разбить на компоненты, пересмотреть типы
 
 export const TestContent = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const testID = Number(useParams().testID);
   const [testState, setTestState] = useImmer<Attempt | null>(null);
   const [currentQuestionID, setCurrentQuestionID] = useState(0);
@@ -42,7 +43,7 @@ export const TestContent = () => {
   const getActiveAttempt = async (testID: Test['testID']) => {
     let attempt = await fetchActiveAttempt(testID);
     if (!attempt) {
-      navigate(`${AppRoute.TestDescription}/${testID}`)
+      router.push(`${AppRoute.TestDescription}/${testID}`)
     }
     const rawData = await fetchAttemptAction(attempt.id);
     const testData = convertDataStC(rawData);
@@ -95,7 +96,7 @@ export const TestContent = () => {
 
   const submitAttempt = async () => {
     await submitAttemptAction(testState.attemptID);
-    navigate(`${AppRoute.Results}/${testState.attemptID}`);
+    router.push(`${AppRoute.Results}/${testState.attemptID}`);
   }
 
   const convertDataStC = (data: any): Attempt => {

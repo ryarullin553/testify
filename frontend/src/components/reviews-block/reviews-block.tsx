@@ -5,7 +5,6 @@ import { ReviewList } from '../rewiew-list/rewiew-list';
 import { AddCommentBlock } from '../add-comment-block/add-comment-block';
 import { submitReviewAction } from '../../api/reviews';
 import { Test } from '../../types/Test';
-import React from 'react';
 
 interface Props extends PropsWithChildren {
   testID: Test['testID'],

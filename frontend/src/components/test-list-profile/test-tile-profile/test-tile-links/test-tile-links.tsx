@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import styles from './test-tile-links.module.scss';
 import { FC } from 'react';
 import { Test } from '../../../../types/Test';
 import { LinkItem } from '../../../../types/LinkList';
-import React from 'react';
 
 interface Props {
   testID: Test['testID'],
@@ -15,8 +14,8 @@ export const TestTileLinks: FC<Props> = ({ testID, linkList }) => {
   return (
     <div className={styles.testTileLinks}>
       {linkList(testID).map(linkitem => {
-        const {key, link, label} = linkitem;
-        return <Link key={key} to={link}>{label}</Link>;
+        const { key, link, label } = linkitem;
+        return <Link key={key} href={link}>{label}</Link>;
       })}
     </div>
   );

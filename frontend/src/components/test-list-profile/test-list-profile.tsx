@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { TestTileProfile } from './test-tile-profile/test-tile-profile';
 import { Test, TestWithAvatar } from '../../types/Test';
 import { LinkItem } from '../../types/LinkList';

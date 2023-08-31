@@ -1,19 +1,21 @@
+'use client'
+
 import { FC, useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar';
 import styles from './create-question-content.module.scss';
 import { CreateQuestionManager } from './create-question-manager/create-question-manager';
-import { useNavigate, useParams } from 'react-router';
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button';
 import { changeTestVisibilityAction, editTestAction, fetchTestQuestionsAction } from '../../api/tests.js';
 import { createQuestionAction, deleteQuestionAction, updateQuestionAction } from '../../api/questions.js';
 import { AppRoute } from '../../reusable/const';
-import React from 'react';
 import { Question, TestWithQuestions } from '../../types/Test';
+import { useParams, useRouter } from 'next/navigation';
 
 export const CreateQuestionContent: FC = () => {
-  const testID = Number(useParams().testID);
-  const navigate = useNavigate();
+  const params = useParams()
+  const testID = Number(params.testID)
+  const router = useRouter()
   const [testState, setTestState] = useImmer<TestWithQuestions | null>(null);
   const [currentQuestionID, setCurrentQuestionID] = useState(1);
   
@@ -43,7 +45,7 @@ export const CreateQuestionContent: FC = () => {
     if (convertedData.questionList.length === 0) {
       actionQuestionAdd();
     }
-    setCurrentQuestionID(convertedData.questionList[0].questionID);
+    setCurrentQuestionID(convertedData.questionList[0]?.questionID || 0);
   }
 
   const actionQuestionUpdate = async (updatedQuestionData: Question) => {
@@ -87,7 +89,7 @@ export const CreateQuestionContent: FC = () => {
 
   const actionTestPublish = async () => {
     await changeTestVisibilityAction(testID, (true));
-    navigate(`${AppRoute.TestDescription}/${testID}`);
+    router.push(`${AppRoute.TestDescription}/${testID}`);
   }
 
   const actionQuestionDelete = async () => {
@@ -110,14 +112,14 @@ export const CreateQuestionContent: FC = () => {
       testID: testID,
       testTitle: data.title,
       isPublished: data.is_published,
-      questionList: data.question_set.map((q: any) => ({
+      questionList: data.questions.map((q: any) => ({
         questionID: q.id,
         questionDescription: q.content,
-        answerList: q.answer_set.map((a: any, i: string) => ({
+        answerList: q.answer_choices.map((a: any, i: string) => ({
           answerID: i,
-          answerDescription: a.content,
+          answerDescription: a,
         })),
-        correctAnswerID: q.answer_set.findIndex((a: any) => (a.is_true === true)),
+        correctAnswerID: q.answer_choices.findIndex((a: any) => (a === true)),
       })),
     }
     return convertedData;
@@ -126,12 +128,10 @@ export const CreateQuestionContent: FC = () => {
   const convertQuestionDataCtS = (data: Question) => {
     const convertedData = {
       content: data.questionDescription,
-      answer_set: data.answerList.map(a => ({
-        content: a.answerDescription,
-        is_true: (a.answerID === data.correctAnswerID),
-      }))
+      answer_choices: data.answerList.map(a => a.answerDescription),
+      right_answers: [data.answerList.find(a => a.answerID === data.correctAnswerID)?.answerDescription]
     }
-    return convertedData;
+    return convertedData
   }
 
   if (!testState) return <></>;

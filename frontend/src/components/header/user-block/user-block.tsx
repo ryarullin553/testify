@@ -1,4 +1,6 @@
-import { useState } from 'react';
+'use client'
+
+import { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuthorizationStatus, selectUserInfo } from '../../../store/selectors';
 import styles from './user-block.module.scss';
@@ -6,9 +8,8 @@ import { LoginWindow } from '../../login-window/login-window';
 import { DropdownMenu } from '../../dropdown-menu/dropdown-menu';
 import { PaleButton } from '../../pale-button/pale-button';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
-import React from 'react';
 
-export const UserBlock = () => {
+export const UserBlock: FC = () => {
   const {userAvatar} = useSelector(selectUserInfo);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Logo } from '../logo/logo'
 import { MainMenu } from '../main-menu/main-menu'
 import styles from './footer.module.scss'

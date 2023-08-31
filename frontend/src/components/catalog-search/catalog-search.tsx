@@ -1,6 +1,5 @@
 import { ChangeEvent, MouseEvent, FC, useEffect, useState } from 'react';
 import styles from './catalog-search.module.scss';
-import React from 'react';
 
 interface Props {
   defaultRequest: string,

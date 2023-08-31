@@ -1,12 +1,11 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import styles from './catalog-tile.module.scss';
 import { AppRoute } from '../../../reusable/const';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
 import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks';
 import { FC, useState, MouseEvent } from 'react';
 import { FeedbackStars } from '../../feedback-stars/feedback-stars';
-import userIcon from './img/user-icon.svg'
-import React from 'react';
+import UserIcon from './img/user-icon.svg';
 import { TestWithDescription } from '../../../types/Test';
 
 interface Props {
@@ -39,7 +38,7 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
 
   return (
     <li className={styles.card}>
-      <Link to={`${AppRoute.TestDescription}/${testID}`} className={styles.linkWrapper}>
+      <Link href={`${AppRoute.TestDescription}/${testID}`} className={styles.linkWrapper}>
         <AvatarBlock src={testAvatar} size={107} />
         <div className={styles.card__info}>
           <div className={styles.card__link}>
@@ -58,7 +57,7 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
                 <span className={styles.card__feedback__value}>{testRating} ({testVotesCounter})</span>
               </div>
               <div className={styles.card__users}>
-                <img src={userIcon} alt="Пользователи" />
+                <UserIcon />
                 <span className={styles.card__users__count}>{testCompletionCounter}</span>
               </div>
             </div>

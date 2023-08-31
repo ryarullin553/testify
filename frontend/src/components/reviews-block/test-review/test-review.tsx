@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { FeedbackStars } from '../../feedback-stars/feedback-stars';
 import styles from './test-review.module.scss';
 

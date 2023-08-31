@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styles from './error-page-content.module.scss';
 
 export const ErrorPageContent: FC = () => {

@@ -1,10 +1,11 @@
+'use client'
+
 import { FC, useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './test-description-form.module.scss';
 import { AppRoute } from '../../reusable/const';
 import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests';
-import React from 'react';
 import { Test } from '../../types/Test';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   testID: Test['testID'],
@@ -18,7 +19,7 @@ interface FormData {
 }
 
 export const TestDescriptionForm: FC<Props> = ({ testID }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   let [formData, setFormData] = useState<FormData>({
     title: '',
     shortAbstract: '',
@@ -52,7 +53,7 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
       await editTestAction(testID, convertedFormData, config);
     } else try {
       const newTestID = await createTestAction(convertedFormData, config);
-      navigate(`${AppRoute.EditTest}/${newTestID}`);
+      router.push(`${AppRoute.EditTest}/${newTestID}`);
     } catch (err) {
       return;
     }
@@ -61,8 +62,8 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
   const convertTestDataCtS = (data: any) => {
     const modifiedData = {
       title: data.title,
-      description: data.shortAbstract,
-      full_description: data.abstract,
+      short_description: data.shortAbstract,
+      description: data.abstract,
       avatar: data.avatar,
     }
     return modifiedData;

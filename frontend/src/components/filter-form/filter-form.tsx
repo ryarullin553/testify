@@ -1,6 +1,5 @@
 import { ChangeEvent, MouseEvent, FC, useEffect, useState } from 'react';
 import styles from './filter-form.module.scss';
-import React from 'react';
 import { FilterValue } from '../../types/Filter';
 
 interface Props {

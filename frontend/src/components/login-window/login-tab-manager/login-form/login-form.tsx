@@ -1,12 +1,18 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { LoginFormInput } from './login-form-input/login-form-input';
 import styles from './login-form.module.scss';
-import React from 'react';
 import { FORM_TABS, LoginFormState } from '../../login-window';
+
+export interface InputProps {
+  type: string
+  id: string
+  placeholder: string
+  value: string
+}
 
 interface Props {
   formTab: FORM_TABS,
-  handleFormSubmit: (evt: FormEvent<HTMLButtonElement>, formTab: FORM_TABS, formState: LoginFormState) => void,
+  handleFormSubmit: (evt: FormEvent<HTMLFormElement>, formTab: FORM_TABS, formState: LoginFormState) => void,
 }
 
 export const LoginForm: FC<Props> = ({ formTab, handleFormSubmit }) => {
@@ -17,12 +23,12 @@ export const LoginForm: FC<Props> = ({ formTab, handleFormSubmit }) => {
     passwordRepeat: '',
   });
 
-  const INPUT_LIST = [
+  const INPUT_LIST: InputProps[] = [
     {type: 'email', id: 'email', placeholder: 'E-mail', value: formState.email},
     {type: 'text', id: 'username', placeholder: 'Имя и фамилия', value: formState.username},
     {type: 'password', id: 'password', placeholder: 'Пароль', value: formState.password},
     {type: 'password', id: 'passwordRepeat', placeholder: 'Подтвердите пароль', value: formState.passwordRepeat},
-  ];
+  ]
 
   const handleFieldChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const {value, name} = evt.target;
@@ -43,13 +49,15 @@ export const LoginForm: FC<Props> = ({ formTab, handleFormSubmit }) => {
   };
 
   return (
-  <form className={styles.signForm} action="#">
-    {INPUT_LIST.map(props => <LoginFormInput
-      formTab={formTab}
-      handleFieldChange={handleFieldChange}
-      {...props}
-    />)}
-    <button onSubmit={(evt) => handleFormSubmit(evt, formTab, formState)}>{submitButtonValue()}</button>
+  <form className={styles.signForm} action="#" onSubmit={(evt) => handleFormSubmit(evt, formTab, formState)}>
+    {
+      INPUT_LIST.map(props => <LoginFormInput
+        formTab={formTab}
+        handleFieldChange={handleFieldChange}
+        inputProps={props}
+      />)
+    }
+    <button type={'submit'}>{submitButtonValue()}</button>
   </form>
   );
 }

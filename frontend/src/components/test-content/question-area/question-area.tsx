@@ -1,7 +1,6 @@
 import { ChangeEvent, FC, PropsWithChildren } from 'react';
 import { CommentsBlock } from '../../comment-block/comment-block';
 import styles from './question-area.module.scss';
-import React from 'react';
 import { Answer, Question, QuestionState, QuestionWithSelectedAnswer } from '../../../types/Test';
 
 interface Props extends PropsWithChildren {
