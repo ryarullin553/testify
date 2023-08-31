@@ -49,12 +49,12 @@ export const DropdownMenu: FC<Props> = ({ actionCloseMenu }) => {
           {
             linkList.map(linkItem => (
               <li key={linkItem.id}>
-                <Link href={linkItem.link}>{linkItem.label}</Link>
+                <Link href={linkItem.link} className={styles.dropdownMenuButton}>{linkItem.label}</Link>
               </li>
             ))
           }
           <li>
-            <button onClick={handleLogoutClick}>Выход</button>
+            <button onClick={handleLogoutClick} className={styles.dropdownMenuButton}>Выход</button>
           </li>
         </ul>
       </div>

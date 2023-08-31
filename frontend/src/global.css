@@ -45,6 +45,11 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 
+html {
+  
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: 'Inter';
   font-style: normal;
