@@ -1,7 +1,9 @@
+'use client'
+
 import { useSelector } from 'react-redux';
 import { selectErrorMessage } from '../../store/selectors';
 import styles from './error-message.module.scss';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 export const ErrorMessage: FC = () => {
   const error = useSelector(selectErrorMessage);

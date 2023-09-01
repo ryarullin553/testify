@@ -1,7 +1,7 @@
 import ReactModal from 'react-modal';
 import styles from './login-window.module.scss';
 import { LoginTabManager } from './login-tab-manager/login-tab-manager';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 interface Props {
   isOpen: boolean,

@@ -7,7 +7,6 @@ import { FC, useState, MouseEvent } from 'react';
 import { fetchAttemptsAction } from '../../../api/tests';
 import { Attempt, Test, TestWithAvatar } from '../../../types/Test';
 import { LinkItem } from '../../../types/LinkList';
-import React from 'react';
 
 interface Props {
   testItem: TestWithAvatar,

@@ -2,7 +2,7 @@ import styles from './profile-component.module.scss';
 import { TestListProfile } from '../../test-list-profile/test-list-profile';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
 import { AppRoute } from '../../../reusable/const';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { UserInfoExtended } from '../../../types/UserInfo';
 
 interface Props {

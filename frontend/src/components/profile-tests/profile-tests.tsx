@@ -1,12 +1,13 @@
+'use client'
+
 import styles from './profile-tests.module.scss';
 import { AppRoute } from '../../reusable/const';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { useState } from 'react';
 import { useScroll } from '../../reusable/hooks';
-import { useParams } from 'react-router';
+import { useParams } from 'next/navigation';
 import { FilterForm } from '../filter-form/filter-form';
-import React from 'react';
 import { Test, TestWithAvatar } from '../../types/Test';
 import { FilterValue } from '../../types/Filter';
 import { LinkItem } from '../../types/LinkList';

@@ -1,13 +1,12 @@
 import styles from './test-overview.module.scss';
 import { FC, PropsWithChildren, useState, MouseEvent } from 'react';
-import { useNavigate } from 'react-router';
 import { createAttemptAction } from '../../../api/results';
 import { AppRoute } from '../../../reusable/const';
 import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks';
 import { FeedbackStars } from '../../feedback-stars/feedback-stars';
 import { AvatarBlock } from '../../avatar-block/avatar-block';
 import { TestWithDescription } from '../../../types/Test';
-import React from 'react';
+import { useRouter } from 'next/navigation';
 
 interface Props extends PropsWithChildren{
   testInfo: TestWithDescription,
@@ -15,7 +14,7 @@ interface Props extends PropsWithChildren{
 }
 
 export const TestOverview: FC<Props> = ({ testInfo, setIsFavorite, children }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isMouseOver, setIsMouseOver] = useState(false);
   const {
     testAvatar,
@@ -37,7 +36,7 @@ export const TestOverview: FC<Props> = ({ testInfo, setIsFavorite, children }) =
     if (!testInfo.isInProgress) {
       await createAttemptAction(testInfo.testID);
     }
-    navigate(`${AppRoute.TestMain}/${testInfo.testID}`);
+    router.push(`${AppRoute.TestMain}/${testInfo.testID}`);
   }
 
   const handleFavoriteClick = async (evt: MouseEvent<HTMLButtonElement>) => {

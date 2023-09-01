@@ -1,10 +1,9 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { FC, useEffect, useRef, RefObject, MouseEvent } from 'react';
 import { logoutAction } from '../../store/api-actions';
 import { store } from '../../store';
 import styles from './dropdown-menu.module.scss';
 import { AppRoute } from '../../reusable/const';
-import React from 'react';
 
 interface Props {
   actionCloseMenu: () => void,
@@ -50,7 +49,7 @@ export const DropdownMenu: FC<Props> = ({ actionCloseMenu }) => {
           {
             linkList.map(linkItem => (
               <li key={linkItem.id}>
-                <Link to={linkItem.link}>{linkItem.label}</Link>
+                <Link href={linkItem.link}>{linkItem.label}</Link>
               </li>
             ))
           }

@@ -1,7 +1,7 @@
 import styles from './rate-block.module.scss';
-import starChecked from './img/star-checked.svg';
-import starUnchecked from './img/star-unchecked.svg';
-import React, { ChangeEvent, FC } from 'react';
+import StarChecked from './img/star-checked.svg';
+import StarUnchecked from './img/star-unchecked.svg';
+import { ChangeEvent, FC } from 'react';
 import { RatingValues } from '../add-comment-block';
 
 interface Props {
@@ -16,7 +16,7 @@ export const RateBlock: FC<Props> = ({ handleFieldChange, rating }) => {
       {
         [...Array(5).keys()].map(num => (
           <label key={num + 1}>
-            <img src={(!!rating && rating >= num + 1) ? starChecked : starUnchecked} alt={`${num + 1} звёзд`}/>
+            {(!!rating && rating >= num + 1) ? <StarChecked /> : <StarUnchecked />}
             <input
               key={num + 1}
               className={styles.ratingInput}

@@ -1,12 +1,13 @@
+'use client'
+
 import { AppRoute } from '../../reusable/const';
 import { ProfileNavigation } from '../profile-navigation/profile-navigation';
 import { TestListProfile } from '../test-list-profile/test-list-profile';
 import { FilterForm } from '../filter-form/filter-form';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import styles from './my-tests-page-content.module.scss';
 import { FC, useState } from 'react';
 import { useScroll } from '../../reusable/hooks';
-import React from 'react';
 import { Test, TestWithAvatar } from '../../types/Test';
 
 export const MyTestsPageContent: FC = () => {
@@ -39,7 +40,7 @@ export const MyTestsPageContent: FC = () => {
             setBaseRequest={setBaseRequest}
             filterValues={filterValues}
           />
-          <Link to={AppRoute.CreateTest} className={styles.createTestLink}>Создать тест</Link>
+          <Link href={AppRoute.CreateTest} className={styles.createTestLink}>Создать тест</Link>
         </div>
         <TestListProfile testList={testList} linkList={linkList} isEditable isAttemptsAvailiable={false}/>
       </section>

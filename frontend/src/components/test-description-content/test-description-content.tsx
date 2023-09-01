@@ -1,12 +1,13 @@
+'use client'
+
 import styles from './test-description-content.module.scss';
-import { useParams } from 'react-router';
+import { useParams } from 'next/navigation';
 import { TestOverview } from './test-overview/test-overview';
 import { ReviewsBlock } from '../reviews-block/reviews-block';
 import { TestReview } from '../reviews-block/test-review/test-review';
 import { fetchTestInfoAction } from '../../api/tests';
 import { FC, useEffect, useState } from 'react';
 import { Test, TestWithDescription } from '../../types/Test';
-import React from 'react';
 
 export const TestDescriptionContent: FC = () => {
   const testID = Number(useParams().testID);
