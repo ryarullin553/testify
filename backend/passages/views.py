@@ -29,10 +29,10 @@ class PassageAPIView(mixins.CreateModelMixin,
 
     def passages(self, request, *args, **kwargs):
         """
-        Возвращает завершенные прохождения теста
+        Таблица с завершенными прохождениями теста
 
-        Поля для поиска: user_name, codeword
-        Поля для сортировки: result__score, result__finished_time, result__answers_count,
+        Параметры для поиска: user_name, codeword
+        Параметры для сортировки: result__score, result__finished_time, result__answers_count,
         result__correct_answers_count, result__passage_time
         """
         test_id = kwargs.get('pk')
@@ -45,9 +45,10 @@ class PassageAPIView(mixins.CreateModelMixin,
 
     def current_user(self, request, *args, **kwargs):
         """
-        Возвращает прохождения теста текущего пользователя
+        Прохождения теста текущего пользователя
 
-        Поля для сортировки: result__score, result__finished_time, result__answers_count,
+        На странице "Тесты" по нажатию на тест выпадает список с его прохождениями.
+        Параметры для сортировки: result__score, result__finished_time, result__answers_count,
         result__correct_answers_count, result__passage_time
         """
         test_id = kwargs.get('pk')

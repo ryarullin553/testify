@@ -27,7 +27,13 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def list(self, request, *args, **kwargs):
-        """Возвращает каталог тестов"""
+        """
+        Каталог тестов
+
+        Параметры для поиска: title, short_description, username
+        Параметры для сортировки: rating, results_count, created, -created
+        Параметры для фильтрации: user={user_id}
+        """
         fields = ['id', 'title', 'short_description', 'image', 'rating', 'feedbacks_count', 'results_count']
         current_user_id = request.user.id
         queryset = self.get_queryset().for_catalog(fields + ['user__username'], current_user_id)
@@ -41,7 +47,11 @@ class TestAPIView(viewsets.ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
-        """Возвращает страницу теста"""
+        """
+        Страница теста
+
+        Основная информация о тесте доступная всем пользователям
+        """
         fields = ['id', 'title', 'short_description', 'image', 'description',
                   'rating', 'feedbacks_count', 'results_count']
         current_user_id = request.user.id
@@ -57,7 +67,14 @@ class TestAPIView(viewsets.ModelViewSet):
 
     @action(detail=False, url_path='created', url_name='created', search_fields=['title'])
     def created(self, request):
-        """Возвращает список тестов, которые создал пользователь"""
+        """
+        Созданные тесты
+
+        Список всех тестов, которые создал пользователь. Открывается по разделу "Мои тесты" в профиле
+        или автоматически после создания теста.
+        Параметры для поиска: title, short_description
+        Параметры для фильтрации: is_published={Bool}
+        """
         fields = ['id', 'title', 'image', 'is_published', 'created']
         current_user_id = request.user.id
         queryset = self.get_queryset() \
@@ -70,7 +87,27 @@ class TestAPIView(viewsets.ModelViewSet):
 
     @action(detail=True, url_path='config', url_name='config')
     def config(self, request, **kwargs):
-        """Возвращает настройки теста"""
+        """
+        Настройки теста
+
+        Позволяет создать тест по кнопке "Создать тест" в шапке или на главной странице.
+        Позволяет изменить настройки созданного теста по кнопке "Настройки" на странице "Созданные тесты".
+        Обязательные поля для заполнения: "Название", "Краткое описание"
+        Опциональные поля: "Полное описание", "Логотип" - PNG или JPG изображение
+        Кнопки переключения (с всплывающими подсказками):
+        1. Статус публикации (Показать/скрыть тест в каталоге)
+        2. Баллы (Добавить систему баллов к вопросам)
+          - Добавит поле с вводом числа на странице "Создание вопросов"
+          - На странице "Результат" появится строка с количеством полученных баллов после прохождения
+          - На странице "Статистика" появится столбец "Баллы", отображающий баллы полученные пользователями
+        3. Комментарии (Открыть комментарии к вопросам при прохождении)
+          - Добавит форму для ввода комментария и отобразит комментарии пользователей на странице "Вопросы"
+        4. Правильные ответы (Показать правильные ответы после прохождения теста)
+          - После завершения теста на странице "Результат", на каждом вопросе отобразится правильный ответ(ы)
+        5. Пояснения к вопросам (Показывать пояснения к вопросам после прохождения теста)
+          - Добавит текстовое поле для добавления пояснения на странице "Создание вопросов"
+          - После прохождения теста на странице "Результат" появятся пояснения к вопросам
+        """
         fields = ['id', 'title', 'short_description', 'description', 'image', 'is_published',
                   'has_points', 'has_comments', 'has_right_answers', 'has_questions_explanation']
         queryset = self.get_queryset().only(*fields)
@@ -80,7 +117,11 @@ class TestAPIView(viewsets.ModelViewSet):
 
     @action(detail=True, url_path='questions', url_name='questions')
     def questions(self, request, **kwargs):
-        """Возвращает название теста, статус публикации, настройки и список вопросов"""
+        """
+        Данные для страницы "Создание вопросов"
+
+        Возвращает список вопросов, название теста и его настройки
+        """
         fields = ['id', 'title', 'is_published', 'has_points', 'has_questions_explanation',
                   'has_right_answers', 'has_comments', 'user']
         queryset = self.get_queryset().only(*fields)
@@ -90,6 +131,12 @@ class TestAPIView(viewsets.ModelViewSet):
 
     @action(detail=True, url_path='metrics', url_name='metrics')
     def metrics(self, request, **kwargs):
+        """
+        Статистика
+
+        Возвращает дату создания теста, рейтинг, количество отзывов и прохождений, средний результат,
+        среднее количество ответов, среднее количество верных ответов
+        """
         fields = ['id', 'title', 'created', 'rating', 'feedbacks_count', 'results_count',
                   'avg_score', 'avg_answers_count', 'avg_correct_answers_count']
         queryset = self.get_queryset().only(*fields)
@@ -99,9 +146,11 @@ class TestAPIView(viewsets.ModelViewSet):
 
     def passed_tests(self, request):
         """
-        Возвращает тесты, которые пользователь прошел или еще проходит
+        Тесты, которые пользователь прошел или еще проходит
 
-        Параметры для фильтрации: is_finished=True, is_finished=False
+        Список тестов для страницы "Тесты"
+        Параметры для поиска: title
+        Параметры для фильтрации: is_finished={Bool}
         """
         current_user_id = request.user.id
         queryset = self.get_queryset().passed(current_user_id)
@@ -112,6 +161,12 @@ class TestAPIView(viewsets.ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
     def __filter_passed_tests(self, queryset):
+        """
+        Фильтрация тестов, которые пользователь прошел или еще проходит
+
+        Пройденные - is_finished=True
+        Прохожу сейчас - is_finished=False
+        """
         value = self.request.query_params.get('is_finished')
         if value == 'True':
             return queryset.filter(passages__result__isnull=False)
