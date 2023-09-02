@@ -34,6 +34,12 @@ class FeedbackAPIView(mixins.CreateModelMixin,
         return instance
 
     def feedbacks(self, request, *args, **kwargs):
+        """
+        Отзывы к тесту
+
+        Возвращает список отзывов к тесту с пагинацией по 15 элементов
+        Параметры для сортировки: created, -created
+        """
         test_id = kwargs.get('pk')
         queryset = self.get_queryset() \
             .filter(
