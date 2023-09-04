@@ -3,7 +3,7 @@
   justify-content: space-between;
 
   padding: 50px 169px 40px 150px;
-  background: #282B41;
+  background: #282b41;
   border-radius: 10px;
 }
 
@@ -17,14 +17,14 @@
   font-weight: 500;
   font-size: 36px;
   line-height: 1em;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .title__testDescription {
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .score {
@@ -44,7 +44,7 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 22px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .feedback {
@@ -57,19 +57,19 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 22px;
-  color: #4485ED;
+  color: #4485ed;
   text-decoration: underline;
 }
 
 .feedback__count:hover {
-  color: #1466C6;
+  color: #1466c6;
 }
 
 .feedback__users {
   font-weight: 500;
   font-size: 18px;
   line-height: 22px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .test {
@@ -114,7 +114,7 @@
 
 .authorContent {
   display: flex;
-  gap: 15px
+  gap: 15px;
 }
 
 .authorContent__img {
@@ -123,7 +123,7 @@
   align-items: center;
   width: 82px;
   height: 82px;
-  border: 1px solid #BCBCC3;
+  border: 1px solid #bcbcc3;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -149,32 +149,35 @@
 .button {
   display: inline-block;
   box-sizing: border-box;
-  border: 2px solid #A38FFD;
+  border: 2px solid #a38ffd;
   width: 300px;
   height: 48px;
   padding: 13px 38px;
   cursor: pointer;
   text-align: center;
-  background-color: #A38FFD;
+  background-color: #a38ffd;
   border-radius: 15px;
-  transition: color 0.2s ease-out, background-color 0.2s ease-out, border 0.2s ease-out;
+  transition:
+    color 0.2s ease-out,
+    background-color 0.2s ease-out,
+    border 0.2s ease-out;
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .button:hover {
-  background-color: #FFFFFF;
-  border: 2px solid #A38FFD;
-  color: #A38FFD;
+  background-color: #ffffff;
+  border: 2px solid #a38ffd;
+  color: #a38ffd;
 }
 
 .button_inversed {
   position: relative;
-  background-color: #FFFFFF;
-  border: 2px solid #A38FFD;
-  color: #A38FFD;
+  background-color: #ffffff;
+  border: 2px solid #a38ffd;
+  color: #a38ffd;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -191,6 +194,6 @@
 }
 
 .button_inversed:hover {
-  border: 2px solid #8C7BD8;
-  color: #8C7BD8;
+  border: 2px solid #8c7bd8;
+  color: #8c7bd8;
 }

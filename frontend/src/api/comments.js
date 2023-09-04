@@ -1,7 +1,7 @@
-import { api } from '../store';
+import { api } from '../store'
 
-const BASE_REQUEST = 'comments/';
+const BASE_REQUEST = 'comments/'
 
 export const submitCommentAction = async (newCommentData) => {
-  await api.post(BASE_REQUEST, newCommentData);
+  await api.post(BASE_REQUEST, newCommentData)
 }

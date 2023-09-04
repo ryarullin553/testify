@@ -1,12 +1,12 @@
-import { FC } from 'react';
-import styles from './show-more-button.module.scss';
+import { FC } from 'react'
+import styles from './show-more-button.module.scss'
 
 export const ShowMoreButton: FC = () => {
-  return(
+  return (
     <>
       <div className={styles.controls}>
         <button className={styles.button}>Показать все</button>
       </div>
     </>
-  );
+  )
 }

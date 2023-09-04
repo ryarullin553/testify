@@ -1,9 +1,9 @@
-import { FC } from 'react';
-import { AppRoute } from '../../reusable/const';
-import Link from 'next/link';
+import { FC } from 'react'
+import { AppRoute } from '../../reusable/const'
+import Link from 'next/link'
 
 interface Props {
-  styles: string,
+  styles: string
 }
 
 export const MainMenu: FC<Props> = ({ styles }) => {
@@ -16,11 +16,11 @@ export const MainMenu: FC<Props> = ({ styles }) => {
         <Link href={AppRoute.CreateTest}>Создать тест</Link>
       </li>
       <li>
-        <a href="#">О нас</a>
+        <a href='#'>О нас</a>
       </li>
       <li>
-        <a href="#">Контакты</a>
+        <a href='#'>Контакты</a>
       </li>
     </ul>
-  );
+  )
 }

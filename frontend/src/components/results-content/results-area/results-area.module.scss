@@ -1,7 +1,7 @@
 .resultContent {
   box-sizing: border-box;
   width: 992px;
-  
+
   h1 {
     width: 640px;
     height: 61px;
@@ -35,7 +35,7 @@
     font-weight: 600;
     font-size: 22px;
     line-height: 27px;
-    color: #A38FFD;
+    color: #a38ffd;
   }
 }
 
@@ -53,9 +53,9 @@
 
   .catalog {
     padding: 9px 34px;
-    border: 2px solid #A38FFD;
-    background: #A38FFD;
-    color: #FFFFFF;
+    border: 2px solid #a38ffd;
+    background: #a38ffd;
+    color: #ffffff;
     margin-right: 20px;
 
     font-weight: 600;
@@ -63,13 +63,13 @@
     line-height: 19px;
 
     &:hover {
-      background: #FFFFFF;
-      border: 2px solid #A38FFD;
+      background: #ffffff;
+      border: 2px solid #a38ffd;
 
-      color: #A38FFD;
+      color: #a38ffd;
 
       &::after {
-        border: solid 1px #A38FFD;
+        border: solid 1px #a38ffd;
         border-width: 0 2px 2px 0;
       }
     }
@@ -84,7 +84,6 @@
     line-height: 24px;
     color: #222222;
     text-align: center;
-
   }
 
   .container {
@@ -103,14 +102,14 @@
     height: 190px;
     width: 190px;
     border-radius: 50%;
-    background: conic-gradient(#A38FFD 3.6deg, #ffffff 0deg);
+    background: conic-gradient(#a38ffd 3.6deg, #ffffff 0deg);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .circularProgress::before {
-    content: "";
+    content: '';
     position: absolute;
     height: 140px;
     width: 140px;
@@ -122,6 +121,6 @@
     position: relative;
     font-size: 50px;
     font-weight: 800;
-    color: #A38FFD;
+    color: #a38ffd;
   }
 }

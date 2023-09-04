@@ -1,27 +1,27 @@
-import styles from './reviews-block.module.scss';
-import { fetchTestFeedbackAction } from '../../api/tests';
-import { FC, PropsWithChildren, useEffect, useState } from 'react';
-import { ReviewList } from '../rewiew-list/rewiew-list';
-import { AddCommentBlock } from '../add-comment-block/add-comment-block';
-import { submitReviewAction } from '../../api/reviews';
-import { Test } from '../../types/Test';
+import styles from './reviews-block.module.scss'
+import { fetchTestFeedbackAction } from '../../api/tests'
+import { FC, PropsWithChildren, useEffect, useState } from 'react'
+import { ReviewList } from '../rewiew-list/rewiew-list'
+import { AddCommentBlock } from '../add-comment-block/add-comment-block'
+import { submitReviewAction } from '../../api/reviews'
+import { Test } from '../../types/Test'
 
 interface Props extends PropsWithChildren {
-  testID: Test['testID'],
-  hasCommentBlock?: boolean,
+  testID: Test['testID']
+  hasCommentBlock?: boolean
 }
 
 export const ReviewsBlock: FC<Props> = ({ testID, hasCommentBlock, children }) => {
-  const [testFeedback, setTestFeedback] = useState([]);
+  const [testFeedback, setTestFeedback] = useState([])
 
   const fetchTestFeedback = async (testID: Test['testID']) => {
-    const data = await fetchTestFeedbackAction(testID);
-    const testData = convertDataStC(data);
-    setTestFeedback(testData);
+    const data = await fetchTestFeedbackAction(testID)
+    const testData = convertDataStC(data)
+    setTestFeedback(testData)
   }
 
   const reloadTestFeedback = async () => {
-    fetchTestFeedback(testID);
+    fetchTestFeedback(testID)
   }
 
   const convertDataStC = (data: any) => {
@@ -33,7 +33,7 @@ export const ReviewsBlock: FC<Props> = ({ testID, hasCommentBlock, children }) =
       date: new Date(Date.parse(r.created)),
       rating: r.rate,
     }))
-    return modifiedData;
+    return modifiedData
   }
 
   const convertDataCtS = (data: any) => {
@@ -42,26 +42,27 @@ export const ReviewsBlock: FC<Props> = ({ testID, hasCommentBlock, children }) =
       content: data.review,
       rate: data.rating,
     }
-    return modifiedData;
+    return modifiedData
   }
 
   useEffect(() => {
-    fetchTestFeedback(testID);
-  }, []);
+    fetchTestFeedback(testID)
+  }, [])
 
-  if (!testFeedback) return <></>;
+  if (!testFeedback) return <></>
 
   return (
     <section className={styles.reviews}>
-      { children }
-      { 
-        hasCommentBlock
-        && <AddCommentBlock
-              reloadFeedback={reloadTestFeedback}
-              submitAction={submitReviewAction}
-              convertAction={convertDataCtS}
-              hasRateBlock />}
-      <ReviewList reviewList={testFeedback}/>
+      {children}
+      {hasCommentBlock && (
+        <AddCommentBlock
+          reloadFeedback={reloadTestFeedback}
+          submitAction={submitReviewAction}
+          convertAction={convertDataCtS}
+          hasRateBlock
+        />
+      )}
+      <ReviewList reviewList={testFeedback} />
     </section>
-  );
+  )
 }

@@ -10,9 +10,5 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
     store.dispatch(checkAuthAction())
   }, [])
 
-  return (
-    <Provider store={store}>
-      {children}
-    </Provider>
-  )
+  return <Provider store={store}>{children}</Provider>
 }

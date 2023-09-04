@@ -1,1 +1,1 @@
-export type HEX = `#${string}`;
+export type HEX = `#${string}`

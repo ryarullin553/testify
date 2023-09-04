@@ -1,62 +1,63 @@
 'use client'
 
-import { FC, useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import styles from './test-description-form.module.scss';
-import { AppRoute } from '../../reusable/const';
-import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests';
-import { Test } from '../../types/Test';
-import { useRouter } from 'next/navigation';
+import { FC, useEffect, useState, ChangeEvent, FormEvent } from 'react'
+import styles from './test-description-form.module.scss'
+import { AppRoute } from '../../reusable/const'
+import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests'
+import { Test } from '../../types/Test'
+import { useRouter } from 'next/navigation'
 
 interface Props {
-  testID: Test['testID'],
+  testID: Test['testID']
 }
 
 interface FormData {
-  title: string,
-  shortAbstract: string,
-  abstract: string,
-  avatar: File | null,
+  title: string
+  shortAbstract: string
+  abstract: string
+  avatar: File | null
 }
 
 export const TestDescriptionForm: FC<Props> = ({ testID }) => {
-  const router = useRouter();
+  const router = useRouter()
   let [formData, setFormData] = useState<FormData>({
     title: '',
     shortAbstract: '',
     abstract: '',
     avatar: null,
-  });
+  })
 
   const handleOnFormChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
-    let {name, value} = evt.target;
-      setFormData({...formData, [name]: value});
+    let { name, value } = evt.target
+    setFormData({ ...formData, [name]: value })
   }
 
   const handleAvatarUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-    let {files} = evt.target;
+    let { files } = evt.target
     // разобраться
-    setFormData({...formData, avatar: (files ? files[0] : null)});
+    setFormData({ ...formData, avatar: files ? files[0] : null })
   }
 
   const handleSubmit = async (evt: FormEvent<HTMLButtonElement>) => {
-    evt.preventDefault();
-    let config;
-    const convertedFormData = convertTestDataCtS(formData);
+    evt.preventDefault()
+    let config
+    const convertedFormData = convertTestDataCtS(formData)
     if (formData.avatar) {
       config = {
         headers: {
           'content-type': 'multipart/form-data',
         },
-      };
+      }
     }
     if (testID) {
-      await editTestAction(testID, convertedFormData, config);
-    } else try {
-      const newTestID = await createTestAction(convertedFormData, config);
-      router.push(`${AppRoute.EditTest}/${newTestID}`);
-    } catch (err) {
-      return;
-    }
+      await editTestAction(testID, convertedFormData, config)
+    } else
+      try {
+        const newTestID = await createTestAction(convertedFormData, config)
+        router.push(`${AppRoute.EditTest}/${newTestID}`)
+      } catch (err) {
+        return
+      }
   }
 
   const convertTestDataCtS = (data: any) => {
@@ -66,7 +67,7 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
       description: data.abstract,
       avatar: data.avatar,
     }
-    return modifiedData;
+    return modifiedData
   }
 
   const convertTestDataStC = (data: any) => {
@@ -76,28 +77,28 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
       abstract: data.full_description,
       avatar: null,
     }
-    return modifiedData;
+    return modifiedData
   }
 
   const fetchTestData = async () => {
-    const data = await fetchTestDescriptionAction(testID);
-    const convertedData = convertTestDataStC(data);
-    setFormData(convertedData);
+    const data = await fetchTestDescriptionAction(testID)
+    const convertedData = convertTestDataStC(data)
+    setFormData(convertedData)
   }
 
-  const pageTitle = testID ? 'Редактировать описание теста' : 'Создать новый тест';
-  const buttonLabel = testID ? 'Сохранить' : 'Создать тест';
+  const pageTitle = testID ? 'Редактировать описание теста' : 'Создать новый тест'
+  const buttonLabel = testID ? 'Сохранить' : 'Создать тест'
 
   useEffect(() => {
-    if (testID) fetchTestData();
-  }, []);
+    if (testID) fetchTestData()
+  }, [])
 
   return (
-    <form className={styles.contentForm} action="#" name="create-test-form">
+    <form className={styles.contentForm} action='#' name='create-test-form'>
       <h1 className={styles.createTest}>{pageTitle}</h1>
       <fieldset className={`${styles.contentArea} ${styles.titleForm}`}>
         <label>Название</label>
-        <textarea 
+        <textarea
           id='title'
           name='title'
           value={formData.title}
@@ -112,7 +113,7 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
           id='shortAbstract'
           name='shortAbstract'
           value={formData.shortAbstract}
-          placeholder="Видно в поиске и на промостранице сразу после названия курса"
+          placeholder='Видно в поиске и на промостранице сразу после названия курса'
           onChange={handleOnFormChange}
         />
         <p>Для публикации нужно не менее 100 символов</p>
@@ -123,33 +124,27 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
           id='abstract'
           name='abstract'
           value={formData.abstract}
-          placeholder="Все, что важно знать до начала прохождения теста. Расскажите о:
+          placeholder='Все, что важно знать до начала прохождения теста. Расскажите о:
             • цели теста,
             • почему стоит его пройти,
             • какие у него особенности,
             • какие будут вопросы,
-            • что можно получить после его прохождения."
+            • что можно получить после его прохождения.'
           onChange={handleOnFormChange}
         />
       </fieldset>
       <fieldset className={styles.testLogo}>
         <label>Логотип</label>
-        <div
-          className={`${styles.dropZone} ${formData.avatar && styles.active}`}
-        >
-        <p>png-файл с прозрачностью 230х230px</p>
-        <input
-          type='file'
-          id='avatar'
-          name='avatar'
-          accept="image/png"
-          onChange={handleAvatarUpload}
-        />
+        <div className={`${styles.dropZone} ${formData.avatar && styles.active}`}>
+          <p>png-файл с прозрачностью 230х230px</p>
+          <input type='file' id='avatar' name='avatar' accept='image/png' onChange={handleAvatarUpload} />
         </div>
       </fieldset>
       <div className={styles.controls}>
-        <button className={styles.createButton} onClick={handleSubmit}>{buttonLabel}</button>
+        <button className={styles.createButton} onClick={handleSubmit}>
+          {buttonLabel}
+        </button>
       </div>
     </form>
-  );
+  )
 }

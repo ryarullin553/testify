@@ -12,9 +12,9 @@
   button {
     display: flex;
     box-sizing: border-box;
-    background: #A38FFD;
+    background: #a38ffd;
     border-radius: 5px;
-    color: #FFFFFF;
+    color: #ffffff;
 
     transition: all 0.2s ease-in-out;
   }
@@ -28,7 +28,7 @@
   line-height: 19px;
 
   &:hover {
-    background: #8C7BD8;
+    background: #8c7bd8;
   }
 }
 
@@ -38,18 +38,18 @@
   button {
     margin-left: 30px;
     padding: 9px 20px;
-    border: 2px solid #A38FFD;
+    border: 2px solid #a38ffd;
 
     border-radius: 5px 0 0 5px;
-  
+
     font-weight: 600;
     font-size: 16px;
     line-height: 19px;
-  
+
     &:hover {
-      background: #FFFFFF;
-  
-      color: #A38FFD;
+      background: #ffffff;
+
+      color: #a38ffd;
     }
   }
 
@@ -58,7 +58,7 @@
     text-align: center;
     width: 42px;
     padding: 0;
-    border: 2px solid #A38FFD;
+    border: 2px solid #a38ffd;
     border-left: none;
 
     border-radius: 0 5px 5px 0;
@@ -68,7 +68,7 @@
     font-weight: 600;
     font-size: 18px;
     line-height: 22px;
-    color: #A6A6A6;
+    color: #a6a6a6;
   }
 }
 
@@ -78,16 +78,16 @@
   button {
     margin-left: 30px;
     padding: 9px 20px;
-    border: 2px solid #A38FFD;
-  
+    border: 2px solid #a38ffd;
+
     font-weight: 600;
     font-size: 16px;
     line-height: 19px;
-  
+
     &:hover {
-      background: #FFFFFF;
-  
-      color: #A38FFD;
+      background: #ffffff;
+
+      color: #a38ffd;
     }
   }
 }
