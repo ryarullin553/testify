@@ -8,12 +8,14 @@ import { LoginWindow } from '../../login-window/login-window'
 import { DropdownMenu } from '../../dropdown-menu/dropdown-menu'
 import { PaleButton } from '../../pale-button/pale-button'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
+import { useGetUserDataQuery } from '@/store/api'
 
 export const UserBlock: FC = () => {
-  const { userAvatar } = useSelector(selectUserInfo)
+  const { data: userInfo, isSuccess } = useGetUserDataQuery()
+  const isAuthorized = isSuccess
+  const userAvatar = ''
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const isAuthorized = useSelector(selectAuthorizationStatus)
 
   const handleOpenModal = () => {
     setIsModalOpen(true)

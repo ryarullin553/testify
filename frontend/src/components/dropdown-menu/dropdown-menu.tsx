@@ -1,17 +1,23 @@
 import Link from 'next/link'
 import { FC, useEffect, useRef, RefObject, MouseEvent } from 'react'
-import { logoutAction } from '../../store/api-actions'
-import { store } from '../../store'
 import styles from './dropdown-menu.module.scss'
 import { AppRoute } from '../../reusable/const'
+import { useDispatch } from 'react-redux'
+import { userLoggedOut } from '@/store/authSlice'
+import { dropToken } from '@/services/token'
+import { api } from '@/store/api'
 
 interface Props {
   actionCloseMenu: () => void
 }
 
 export const DropdownMenu: FC<Props> = ({ actionCloseMenu }) => {
+  const dispatch = useDispatch()
+
   const handleLogoutClick = async () => {
-    await store.dispatch(logoutAction())
+    dispatch(userLoggedOut)
+    dropToken()
+    dispatch(api.util.invalidateTags(['UserAuth']))
     actionCloseMenu()
   }
 

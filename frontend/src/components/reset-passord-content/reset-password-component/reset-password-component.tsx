@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import { AppRoute } from '../../../reusable/const'
-import { api } from '../../../store'
+import { api } from '../../../store/store'
 import styles from './reset-password-component.module.scss'
 import { ChangeEvent, FC, FormEvent, useState } from 'react'
 

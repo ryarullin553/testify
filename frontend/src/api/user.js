@@ -1,4 +1,4 @@
-import { api } from '../store'
+import { api } from '../store/store'
 
 const BASE_REQUEST = 'users/'
 

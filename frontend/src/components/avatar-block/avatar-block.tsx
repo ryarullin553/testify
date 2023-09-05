@@ -2,7 +2,7 @@ import { FC } from 'react'
 import styles from './avatar-block.module.scss'
 
 interface Props {
-  src: string
+  src: string | null
   size: number
   additionalStyle?: string
 }

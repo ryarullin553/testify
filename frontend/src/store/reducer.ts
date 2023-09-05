@@ -1,7 +1,6 @@
-import { State } from '../types/State'
-import { setAuthorizationStatus, setUserInfo, setError } from './actions'
-import { configureStore, createReducer } from '@reduxjs/toolkit'
-import { createWrapper } from 'next-redux-wrapper'
+import { State } from '../types/State';
+import { setAuthorizationStatus, setUserInfo, setError } from './actions';
+import { createReducer } from '@reduxjs/toolkit';
 
 const initialState: State = {
   error: null,

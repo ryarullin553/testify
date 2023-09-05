@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { api } from '../store'
+import { api } from '../store/store'
 import { Test, TestWithAvatar } from '../types/Test'
 
 export const useScroll = (baseRequest: string, setTestList: React.Dispatch<React.SetStateAction<any>>) => {

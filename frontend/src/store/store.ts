@@ -1,15 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createAPI } from '../services/api'
 import { reducer } from './reducer'
-
-export const api = createAPI()
+import { api } from './api'
+import { authSlice } from './authSlice'
 
 export const store = configureStore({
-  reducer: reducer,
+  reducer: {
+    [api.reducerPath]: api.reducer,
+    auth: authSlice.reducer
+  },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      thunk: {
-        extraArgument: api,
-      },
-    }),
+    getDefaultMiddleware().concat(api.middleware)
 })

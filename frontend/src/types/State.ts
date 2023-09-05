@@ -1,4 +1,4 @@
-import { store } from '../store'
+import { store } from '../store/store'
 
 export type State = {
   error: string | null

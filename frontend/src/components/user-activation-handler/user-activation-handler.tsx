@@ -1,4 +1,4 @@
-import { api } from '../../store'
+import { api } from '../../store/store'
 import { FC, useEffect } from 'react'
 import { AppRoute } from '../../reusable/const'
 
