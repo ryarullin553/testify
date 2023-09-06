@@ -31,10 +31,9 @@ export interface QuestionWithSelectedAnswer extends Question {
 export interface Test {
   testID: number
   testTitle: string
-  isPublished?: boolean
-  testSummary?: string
-  testAvatar?: string
-  testDescription?: string
+  testSummary: string
+  testAvatar: string
+  testDescription: string
   testRating?: number
   testVotesCounter?: number
   testCompletionCounter?: number
@@ -42,16 +41,15 @@ export interface Test {
   isInProgress?: boolean
 }
 
-export interface TestWithAvatar extends Test {
-  testAvatar: string
+export interface TestWithConfigs extends Test {
+  isPublished: boolean
+  hasComments: boolean
+  hasQuestionPoints: boolean
+  hasCorrectAnswers: boolean
+  hasQuestionExplanation: boolean
 }
 
-export interface TestWithSummary extends TestWithAvatar {
-  testSummary: string
-}
-
-export interface TestWithDescription extends TestWithSummary {
-  testDescription: string
+export interface TestWithDescription extends Test {
   testRating: number
   testVotesCounter: number
   testCompletionCounter: number

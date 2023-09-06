@@ -5,7 +5,7 @@ import { AppRoute } from '../../reusable/const'
 import { useDispatch } from 'react-redux'
 import { userLoggedOut } from '@/store/authSlice'
 import { dropToken } from '@/services/token'
-import { api } from '@/store/api'
+import { api } from '@/services/api'
 
 interface Props {
   actionCloseMenu: () => void

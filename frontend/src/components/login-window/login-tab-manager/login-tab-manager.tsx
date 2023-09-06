@@ -3,10 +3,11 @@ import styles from './login-tab-manager.module.scss'
 import { LoginTabs } from './login-tabs/login-tabs'
 import { LoginForm } from './login-form/login-form'
 import { FORM_TABS, LoginFormState } from '../login-window'
-import { api, useGetUserDataQuery, useLoginUserMutation } from '@/store/api'
 import { useDispatch } from 'react-redux'
 import { userLoggedIn } from '@/store/authSlice'
 import { saveToken } from '@/services/token'
+import { useLoginUserMutation } from '@/services/authApi'
+import { api } from '@/services/api'
 
 interface Props {
   handleCloseModal: () => void

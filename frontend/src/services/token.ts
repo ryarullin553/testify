@@ -1,8 +1,11 @@
 const AUTH_TOKEN_KEY_NAME = 'testify-token'
 
 export const getToken = () => {
-  const token = localStorage.getItem(AUTH_TOKEN_KEY_NAME)
-  return token ?? ''
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY_NAME)
+    return token ?? ''
+  }
+  return ''
 }
 
 export const saveToken = (token: string) => {

@@ -5,7 +5,7 @@ export interface UserInfo {
   userName: string
   userAvatar: string | null
   userEmail: string
-  userInfo: string
+  userBio: string
   accountDateCreated: Date
 }
 
