@@ -4,7 +4,7 @@ import { AnswersInputArea } from '../answers-input-area/answers-input-area'
 import styles from './create-question-manager.module.scss'
 import { FC, useEffect, useState, MouseEvent, ChangeEvent } from 'react'
 import { generateAnswersAction } from '../../../api/questions'
-import { Answer, Question } from '../../../types/Test'
+import { Question } from '../../../types/Test'
 
 interface Props {
   defaultQuestionData: Question
@@ -34,7 +34,7 @@ export const CreateQuestionManager: FC<Props> = ({
     setCurrentQuestionData(defaultQuestionData)
   }, [defaultQuestionData])
 
-  const actionAnswerDelete = (answerID: Answer['answerID']) => {
+  const actionAnswerDelete = (answerID: number) => {
     setCurrentQuestionData((draft) => {
       draft.answerList = draft.answerList.filter((answer) => answer.answerID !== answerID)
     })
@@ -99,27 +99,27 @@ export const CreateQuestionManager: FC<Props> = ({
     }
   }
 
-  const handleGenerateAmountChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    let newValue = Number(evt.target.value.replace(/\D/, ''))
-    newValue = Math.max(Math.min(newValue, 10), 1)
-    setGenerateAmount(newValue)
-  }
+  // const handleGenerateAmountChange = (evt: ChangeEvent<HTMLInputElement>) => {
+  //   let newValue = Number(evt.target.value.replace(/\D/, ''))
+  //   newValue = Math.max(Math.min(newValue, 10), 1)
+  //   setGenerateAmount(newValue)
+  // }
 
-  const handleGenerateAnswersClick = async (evt: MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault()
-    const { questionDescription, correctAnswerID, answerList } = currentQuestionData
-    const request = {
-      question: questionDescription,
-      right_answer: answerList[correctAnswerID || -1].answerDescription,
-      wrong_answers: answerList
-        .slice()
-        .map((a) => a.answerDescription)
-        .splice(correctAnswerID || -1, 1),
-      generate_count: generateAmount,
-    }
-    const { answer_set } = await generateAnswersAction(request)
-    answer_set.map((a: string) => actionAnswerAdd(a))
-  }
+  // const handleGenerateAnswersClick = async (evt: MouseEvent<HTMLButtonElement>) => {
+  //   evt.preventDefault()
+  //   const { questionDescription, correctAnswerID, answerList } = currentQuestionData
+  //   const request = {
+  //     question: questionDescription,
+  //     right_answer: answerList[correctAnswerID || -1].answerDescription,
+  //     wrong_answers: answerList
+  //       .slice()
+  //       .map((a) => a.answerDescription)
+  //       .splice(correctAnswerID || -1, 1),
+  //     generate_count: generateAmount,
+  //   }
+  //   const { answer_set } = await generateAnswersAction(request)
+  //   answer_set.map((a: string) => actionAnswerAdd(a))
+  // }
 
   return (
     <form className={styles.questionForm} action='#' name='question-form'>
@@ -131,7 +131,7 @@ export const CreateQuestionManager: FC<Props> = ({
       />
       <AnswersInputArea
         answerList={currentQuestionData.answerList}
-        correctAnswerID={currentQuestionData.correctAnswerID || 0}
+        correctAnswerID={currentQuestionData.correctAnswerIDs[0] || 0}
         handleCorrectAnswerChange={handleCorrectAnswerChange}
         handleAnswerDescriptionChange={handleAnswerDescriptionChange}
         handleAnswerDelete={handleAnswerDelete}
