@@ -1,24 +1,18 @@
 import { UserInfo, UserInfoExtended } from './UserInfo'
 
-export interface Answer {
-  answerID: number
-  answerDescription: string
-}
-
 export interface Question {
   questionID: number
+  testID: Test['testID']
   questionDescription: string
+  questionAvatar: string | null
+  questionType: 'Single choice'
+  answerList: Record<number, string>
+  answerCount: number
   questionState?: QuestionState
-  answerList: Answer[]
-  correctAnswerID?: number
-  selectedAnswer?: {
-    answerID: number
-    dbEntry: number
-  }
 }
 
 export interface QuestionWithCorrectAnswer extends Question {
-  correctAnswerID: number
+  correctAnswerIDs: number[]
 }
 
 export interface QuestionWithSelectedAnswer extends Question {
@@ -31,9 +25,6 @@ export interface QuestionWithSelectedAnswer extends Question {
 export interface Test {
   testID: number
   testTitle: string
-  testSummary: string
-  testAvatar: string
-  testDescription: string
   testRating?: number
   testVotesCounter?: number
   testCompletionCounter?: number
@@ -41,7 +32,10 @@ export interface Test {
   isInProgress?: boolean
 }
 
-export interface TestWithConfigs extends Test {
+export interface TestWithSettings extends Test {
+  testSummary: string
+  testAvatar: string
+  testDescription: string
   isPublished: boolean
   hasComments: boolean
   hasQuestionPoints: boolean
@@ -50,6 +44,9 @@ export interface TestWithConfigs extends Test {
 }
 
 export interface TestWithDescription extends Test {
+  testSummary: string
+  testAvatar: string
+  testDescription: string
   testRating: number
   testVotesCounter: number
   testCompletionCounter: number
@@ -60,12 +57,16 @@ export interface TestWithDescription extends Test {
 }
 
 export interface TestWithQuestions extends Test {
-  questionList: Question[]
+  questionList: Record<number, Question>
+  questionIDs: number[]
+  isPublished: boolean
+  hasQuestionPoints: boolean
+  hasQuestionExplanation: boolean
 }
 
 export interface Attempt extends TestWithQuestions {
   attemptID: number
-  questionList: QuestionWithSelectedAnswer[]
+  questionList: Record<number, QuestionWithSelectedAnswer>
   date?: Date
   score?: number
   isComplete?: boolean

@@ -4,7 +4,7 @@ import styles from './question-list-sidebar.module.scss'
 
 interface Props extends PropsWithChildren {
   testTitle: Test['testTitle']
-  questionList: Question[]
+  questionList: Record<number, Question>
   setCurrentQuestionID: (questionID: Question['questionID']) => void
 }
 
@@ -36,7 +36,7 @@ export const QuestionListSidebar: FC<Props> = ({ testTitle, questionList, setCur
     <section className={styles.questionListSection}>
       <h2>{testTitle}</h2>
       <ol>
-        {questionList.map((question) => (
+        {Object.values(questionList).map((question) => (
           <li key={question.questionID} style={{ color: getQuestionColor(question.questionState) }}>
             <button
               className={styles.selectQuestionButton}
