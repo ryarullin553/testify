@@ -1,7 +1,7 @@
 $color-header: #010851;
 $color-light-transparent: rgba(255, 255, 255, 0.5);
-$color-light: #FFFFFF;
-$color-span: #A38FFD;
+$color-light: #ffffff;
+$color-span: #a38ffd;
 
 .pageFooter {
   min-width: 1300px;
@@ -16,7 +16,7 @@ $color-span: #A38FFD;
   margin: 0 auto;
 
   display: flex;
-  
+
   color: $color-light-transparent;
 
   a {
@@ -118,11 +118,11 @@ $color-span: #A38FFD;
     width: 185px;
     height: 62px;
     padding: auto 41px;
-  
+
     background-color: $color-span;
     border-radius: 10px;
 
-    transition: 
+    transition:
       color 0.2s ease-out,
       background-color 0.2s ease-out;
 
@@ -131,7 +131,7 @@ $color-span: #A38FFD;
     &:hover {
       background-color: $color-light;
       border: 2px solid $color-span;
-  
+
       color: $color-span;
     }
   }

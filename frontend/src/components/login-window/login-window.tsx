@@ -1,11 +1,11 @@
-import ReactModal from 'react-modal';
-import styles from './login-window.module.scss';
-import { LoginTabManager } from './login-tab-manager/login-tab-manager';
-import { FC } from 'react';
+import ReactModal from 'react-modal'
+import styles from './login-window.module.scss'
+import { LoginTabManager } from './login-tab-manager/login-tab-manager'
+import { FC } from 'react'
 
 interface Props {
-  isOpen: boolean,
-  handleCloseModal: () => void,
+  isOpen: boolean
+  handleCloseModal: () => void
 }
 
 export enum FORM_TABS {
@@ -15,10 +15,10 @@ export enum FORM_TABS {
 }
 
 export interface LoginFormState {
-  email: string,
-  username: string,
-  password: string,
-  passwordRepeat: string,
+  email: string
+  username: string
+  password: string
+  passwordRepeat: string
 }
 
 export const LoginWindow: FC<Props> = ({ isOpen, handleCloseModal }) => {
@@ -27,9 +27,8 @@ export const LoginWindow: FC<Props> = ({ isOpen, handleCloseModal }) => {
       isOpen={isOpen}
       className={styles.loginWindow}
       overlayClassName={styles.overlay}
-      onRequestClose={handleCloseModal}
-    >
-      <LoginTabManager handleCloseModal={handleCloseModal}/>
+      onRequestClose={handleCloseModal}>
+      <LoginTabManager handleCloseModal={handleCloseModal} />
     </ReactModal>
   )
-};
+}

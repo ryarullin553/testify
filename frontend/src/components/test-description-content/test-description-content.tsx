@@ -1,27 +1,27 @@
 'use client'
 
-import styles from './test-description-content.module.scss';
-import { useParams } from 'next/navigation';
-import { TestOverview } from './test-overview/test-overview';
-import { ReviewsBlock } from '../reviews-block/reviews-block';
-import { TestReview } from '../reviews-block/test-review/test-review';
-import { fetchTestInfoAction } from '../../api/tests';
-import { FC, useEffect, useState } from 'react';
-import { Test, TestWithDescription } from '../../types/Test';
+import styles from './test-description-content.module.scss'
+import { useParams } from 'next/navigation'
+import { TestOverview } from './test-overview/test-overview'
+import { ReviewsBlock } from '../reviews-block/reviews-block'
+import { TestReview } from '../reviews-block/test-review/test-review'
+import { fetchTestInfoAction } from '../../api/tests'
+import { FC, useEffect, useState } from 'react'
+import { Test, TestWithDescription } from '../../types/Test'
 
 export const TestDescriptionContent: FC = () => {
-  const testID = Number(useParams().testID);
-  const [testInfo, setTestInfo] = useState<TestWithDescription>();
+  const testID = Number(useParams().testID)
+  const [testInfo, setTestInfo] = useState<TestWithDescription>()
 
   const fetchTestInfo = async (testID: Test['testID']) => {
-    const data = await fetchTestInfoAction(testID);
-    const testData = convertTestDataStC(data);
-    setTestInfo(testData);
+    const data = await fetchTestInfoAction(testID)
+    const testData = convertTestDataStC(data)
+    setTestInfo(testData)
   }
 
   const setIsFavorite = (newValue: boolean) => {
-    if (!testInfo) return;
-    setTestInfo({...testInfo, isFavorite: newValue});
+    if (!testInfo) return
+    setTestInfo({ ...testInfo, isFavorite: newValue })
   }
 
   const convertTestDataStC = (data: any): TestWithDescription => {
@@ -40,14 +40,14 @@ export const TestDescriptionContent: FC = () => {
       authorBio: data.user_bio,
       authorName: data.user_name,
     }
-    return modifiedData;
+    return modifiedData
   }
 
   useEffect(() => {
-    fetchTestInfo(testID);
-  }, []);
+    fetchTestInfo(testID)
+  }, [])
 
-  if (!testInfo) return <></>;
+  if (!testInfo) return <></>
 
   return (
     <main className={styles.main}>
@@ -57,5 +57,5 @@ export const TestDescriptionContent: FC = () => {
         </ReviewsBlock>
       </TestOverview>
     </main>
-  );
+  )
 }

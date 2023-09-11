@@ -2,7 +2,7 @@
   width: 640px;
   min-height: 100px;
   margin-bottom: 15px;
-  
+
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-top: none;
   border-radius: 10px;
@@ -18,10 +18,10 @@
   grid-template-columns: 60px 1fr 15px;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
-    "logo title button"
-    "logo controls controls";
+    'logo title button'
+    'logo controls controls';
   column-gap: 20px;
-  
+
   outline: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   cursor: pointer;
@@ -48,7 +48,7 @@
   left: 17px;
   grid-area: button;
 
-  color: #A5A5A5;
+  color: #a5a5a5;
 
   transform: rotate(90deg) scale(1.15);
 

@@ -1,26 +1,26 @@
-import { FC, useEffect, useState } from 'react';
-import { fetchQuestionCommentsAction } from '../../api/questions';
-import { LikeBlock } from '../add-comment-block/like-block/like-block';
-import styles from './comment-block.module.scss';
-import { submitCommentAction } from '../../api/comments';
-import { AddCommentBlock } from '../add-comment-block/add-comment-block';
-import { CommentList } from './comment-list/comment-list';
+import { FC, useEffect, useState } from 'react'
+import { fetchQuestionCommentsAction } from '../../api/questions'
+import { LikeBlock } from '../add-comment-block/like-block/like-block'
+import styles from './comment-block.module.scss'
+import { submitCommentAction } from '../../api/comments'
+import { AddCommentBlock } from '../add-comment-block/add-comment-block'
+import { CommentList } from './comment-list/comment-list'
 
 interface Props {
-  questionID: number,
+  questionID: number
 }
 
 export const CommentsBlock: FC<Props> = ({ questionID }) => {
-  const [questionFeedback, setQuestionFeedback] = useState([]);
+  const [questionFeedback, setQuestionFeedback] = useState([])
 
   const fetchFeedback = async (questionID: number) => {
-    const data = await fetchQuestionCommentsAction(questionID);
-    const questionData = convertDataStC(data);
-    setQuestionFeedback(questionData);
+    const data = await fetchQuestionCommentsAction(questionID)
+    const questionData = convertDataStC(data)
+    setQuestionFeedback(questionData)
   }
 
   const reloadFeedback = async () => {
-    fetchFeedback(questionID);
+    fetchFeedback(questionID)
   }
 
   const convertDataStC = (data: any) => {
@@ -32,7 +32,7 @@ export const CommentsBlock: FC<Props> = ({ questionID }) => {
       content: r.content,
       date: new Date(Date.parse(r.created)),
     }))
-    return modifiedData;
+    return modifiedData
   }
 
   const convertDataCtS = (data: any) => {
@@ -40,11 +40,11 @@ export const CommentsBlock: FC<Props> = ({ questionID }) => {
       question: questionID,
       content: data.review,
     }
-    return modifiedData;
+    return modifiedData
   }
 
   useEffect(() => {
-    fetchFeedback(questionID);
+    fetchFeedback(questionID)
   }, [questionID])
 
   return (
@@ -61,5 +61,5 @@ export const CommentsBlock: FC<Props> = ({ questionID }) => {
       />
       <CommentList commentList={questionFeedback} />
     </section>
-  );
+  )
 }

@@ -1,7 +1,7 @@
 $color-base: #454868;
-$color-light: #FFFFFF;
+$color-light: #ffffff;
 $color-header: #010851;
-$color-span: #A38FFD;
+$color-span: #a38ffd;
 $color-light-transparent: rgba(255, 255, 255, 0.5);
 
 .pageMain {
@@ -23,7 +23,7 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
     font-size: 40px;
     line-height: 48px;
     color: $color-header;
-  
+
     span {
       color: $color-span;
     }
@@ -35,7 +35,7 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
   height: 800px;
   margin: 0 auto;
   margin-bottom: 136px;
-  background: url("img/hero-1.png") right center no-repeat;
+  background: url('img/hero-1.png') right center no-repeat;
 }
 
 .heroContent {
@@ -105,11 +105,11 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
     }
 
     &::before {
-      content: "";
+      content: '';
       display: block;
       width: 162px;
       height: 193px;
-      background: url("img/advantages-1.png") center no-repeat;
+      background: url('img/advantages-1.png') center no-repeat;
     }
   }
 
@@ -122,11 +122,11 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
     }
 
     &::before {
-      content: "";
+      content: '';
       display: block;
       width: 256px;
       height: 138px;
-      background: url("img/advantages-2.png") center no-repeat;
+      background: url('img/advantages-2.png') center no-repeat;
     }
   }
 
@@ -138,17 +138,17 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
     }
 
     &::before {
-      content: "";
+      content: '';
       display: block;
       width: 176px;
       height: 126px;
-      background: url("img/advantages-3.png") center no-repeat;
+      background: url('img/advantages-3.png') center no-repeat;
     }
   }
 }
 
 .userProfileSection {
-  background: #FAF9FF;
+  background: #faf9ff;
   height: 1408px;
 
   display: flex;
@@ -165,12 +165,12 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
     height: 520px;
 
     &::before {
-      content: "";
+      content: '';
       display: block;
       width: 688px;
       height: 525px;
       margin-right: 42px;
-      background: url("img/user-profile-1.png") center no-repeat;
+      background: url('img/user-profile-1.png') center no-repeat;
     }
   }
 
@@ -180,12 +180,12 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
     flex-direction: row-reverse;
 
     &::before {
-      content: "";
+      content: '';
       display: block;
       width: 600px;
       height: 410px;
       margin-left: 80px;
-      background: url("img/user-profile-2.png") center no-repeat;
+      background: url('img/user-profile-2.png') center no-repeat;
     }
   }
 }
@@ -193,7 +193,8 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
 .userProfileBlockContent {
   width: 530px;
 
-  h2, p {
+  h2,
+  p {
     margin-bottom: 38px;
   }
 }
@@ -207,7 +208,7 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
   justify-content: space-between;
   align-items: center;
 
-  background: url("img/contact-us-1.png") right 75px center no-repeat;
+  background: url('img/contact-us-1.png') right 75px center no-repeat;
 }
 
 .contactUsContent {
@@ -235,18 +236,18 @@ $color-light-transparent: rgba(255, 255, 255, 0.5);
     border: 1px solid rgba(69, 72, 104, 0.4);
     border-radius: 15px;
     resize: none;
-  
+
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;
     color: $color-base;
-  
+
     &:focus {
       border: 1px solid $color-header;
     }
-  
+
     &::placeholder {
       font-family: 'Inter';
       font-style: normal;

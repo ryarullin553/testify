@@ -47,7 +47,9 @@
   text-align: center;
   background-color: #a38ffd;
   border-radius: 15px;
-  transition: color 0.2s ease-out, background-color 0.2s ease-out;
+  transition:
+    color 0.2s ease-out,
+    background-color 0.2s ease-out;
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
@@ -67,7 +69,7 @@
     &:hover {
       background-color: #a38ffd;
       border: 2px solid #a38ffd;
-      color: #ffffff; 
+      color: #ffffff;
     }
   }
 }

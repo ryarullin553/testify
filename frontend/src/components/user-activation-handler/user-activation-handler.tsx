@@ -1,12 +1,11 @@
-import { api } from '../../store';
-import { FC, useEffect } from 'react';
-import { AppRoute } from '../../reusable/const';
+import { api } from '../../store/store'
+import { FC, useEffect } from 'react'
+import { AppRoute } from '../../reusable/const'
 
 export const UserActivationHandler: FC = () => {
-
   // const { uid, token } = useParams();
   // const navigate = useNavigate();
-  
+
   // const activateUser = async (uid: string, token: string) => {
   //   await api.post('auth/users/activation/', {token, uid});
   // }
@@ -21,5 +20,5 @@ export const UserActivationHandler: FC = () => {
   // //   navigate(AppRoute.Root);
   // // }, []);
 
-  return null;
+  return null
 }

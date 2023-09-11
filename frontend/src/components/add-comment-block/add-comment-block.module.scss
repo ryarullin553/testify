@@ -10,7 +10,7 @@
     width: 932px;
     height: 90px;
 
-    border: 1px solid #CCCCCC;
+    border: 1px solid #cccccc;
     border-radius: 5px;
 
     font-family: 'Inter';
@@ -26,7 +26,7 @@
       font-weight: 400;
       font-size: 14px;
       line-height: 17px;
-      color: #A5A5A5;
+      color: #a5a5a5;
     }
   }
 }
@@ -38,9 +38,9 @@
   transition: all 0.2s ease-in-out;
 
   padding: 9px 34px;
-  border: 2px solid #A38FFD;
-  background: #A38FFD;
-  color: #FFFFFF;
+  border: 2px solid #a38ffd;
+  background: #a38ffd;
+  color: #ffffff;
   margin-right: 20px;
   margin-bottom: 23px;
 
@@ -49,13 +49,13 @@
   line-height: 19px;
 
   &:hover {
-    background: #FFFFFF;
-    border: 2px solid #A38FFD;
+    background: #ffffff;
+    border: 2px solid #a38ffd;
 
-    color: #A38FFD;
+    color: #a38ffd;
 
     &::after {
-      border: solid 1px #A38FFD;
+      border: solid 1px #a38ffd;
       border-width: 0 2px 2px 0;
     }
   }

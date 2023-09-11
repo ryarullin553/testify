@@ -5,10 +5,13 @@
   margin-top: 200px;
 
   border-radius: 5px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   opacity: 100;
 
-  animation: ld-float-ttb-in 0.5s 1 ease-in; animation-fill-mode: forwards;transform: matrix(1,0,0,1,0,-14.925);opacity: 0.005; 
+  animation: ld-float-ttb-in 0.5s 1 ease-in;
+  animation-fill-mode: forwards;
+  transform: matrix(1, 0, 0, 1, 0, -14.925);
+  opacity: 0.005;
 }
 
 .overlay {
@@ -17,15 +20,14 @@
   background-color: rgba(0, 0, 0, 0.85);
 }
 
-@keyframes ld-float-ttb-in
-{
+@keyframes ld-float-ttb-in {
   0% {
-    animation-timing-function: cubic-bezier(0.2242,0.7499,0.3142,0.8148);
-    transform: translate(0%,-14.925%);
+    animation-timing-function: cubic-bezier(0.2242, 0.7499, 0.3142, 0.8148);
+    transform: translate(0%, -14.925%);
     opacity: 0.005;
   }
   100% {
-    transform: translate(0%,0%);
+    transform: translate(0%, 0%);
     opacity: 1;
   }
 }

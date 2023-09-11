@@ -10,13 +10,13 @@
 
   overflow-y: auto;
   overflow-x: hidden;
-  
+
   &::-webkit-scrollbar {
     width: 5px;
   }
 
   &::-webkit-scrollbar-track {
-    background: #FFFFFF;
+    background: #ffffff;
     border-radius: 5px;
   }
 
@@ -26,6 +26,6 @@
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #A38FFD;
+    background: #a38ffd;
   }
 }

@@ -1,5 +1,5 @@
 export interface FilterValue {
-  value: string,
-  label: string,
-  appendValue: string,
+  value: string
+  label: string
+  appendValue: string
 }

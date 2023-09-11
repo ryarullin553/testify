@@ -11,7 +11,7 @@ export const newTestData = {
         { answerID: 3, answerDescription: 'Третий ответ' },
       ],
       correctAnswerID: 2,
-    }, 
+    },
     {
       questionID: 2,
       questionDescription: 'Вопрос два',
@@ -21,5 +21,5 @@ export const newTestData = {
       ],
       correctAnswerID: 1,
     },
-  ]
-};
+  ],
+}

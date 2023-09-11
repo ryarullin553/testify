@@ -17,13 +17,13 @@
     color: #222222;
   }
 
-  input[type=search] {
+  input[type='search'] {
     width: 240px;
     height: 33px;
     margin-right: 8px;
     padding-left: 32px;
-    
-    border: 1px solid #CCCCCC;
+
+    border: 1px solid #cccccc;
     border-radius: 5px;
 
     background: url('./img/loupe-icon.svg') no-repeat 9px center;
@@ -38,8 +38,8 @@
 
 .searchButton {
   padding: 7px 15px;
-  
-  background: #FFFFFF;
+
+  background: #ffffff;
   border: 1px solid rgba(69, 72, 104, 0.5);
   border-radius: 5px;
 
@@ -52,6 +52,6 @@
 
   &:hover {
     background: #454868;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 }

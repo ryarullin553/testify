@@ -1,5 +1,4 @@
 .answersArea {
-
   legend {
     display: block;
     margin-bottom: 10px;
@@ -13,7 +12,7 @@
   p {
     font-size: 14px;
     line-height: 17px;
-    color: #A5A5A5;
+    color: #a5a5a5;
   }
 
   li {
@@ -24,10 +23,13 @@
     margin: 12px 0;
     padding-right: 12px;
 
-    border: 1px solid #A5A5A5;
+    border: 1px solid #a5a5a5;
     border-radius: 5px;
 
-    animation: ld-float-ltr-in 0.75s 1 ease-out; animation-fill-mode: forwards;transform: matrix(1,0,0,1,-14.925,0);opacity: 0.005; 
+    animation: ld-float-ltr-in 0.75s 1 ease-out;
+    animation-fill-mode: forwards;
+    transform: matrix(1, 0, 0, 1, -14.925, 0);
+    opacity: 0.005;
   }
 
   label {
@@ -52,7 +54,7 @@
       transition: all 0.2s ease-in-out;
 
       &:hover {
-        color: #DC143C;
+        color: #dc143c;
       }
     }
   }
@@ -72,7 +74,7 @@
     margin-right: 15px;
     padding: 7px 10px;
 
-    border: 1px solid #CCCCCC;
+    border: 1px solid #cccccc;
     border-radius: 5px;
 
     transition: all 0.5s ease-out;
@@ -87,20 +89,19 @@
       font-weight: 400;
       font-size: 14px;
       line-height: 17px;
-      color: #A5A5A5;
+      color: #a5a5a5;
     }
   }
 }
 
-@keyframes ld-float-ltr-in
-{
+@keyframes ld-float-ltr-in {
   0% {
-    animation-timing-function: cubic-bezier(0.2242,0.7499,0.3142,0.8148);
-    transform: translate(-14.925%,0%);
+    animation-timing-function: cubic-bezier(0.2242, 0.7499, 0.3142, 0.8148);
+    transform: translate(-14.925%, 0%);
     opacity: 0.005;
   }
   100% {
-    transform: translate(0%,0%);
+    transform: translate(0%, 0%);
     opacity: 1;
   }
 }

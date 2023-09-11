@@ -1,14 +1,14 @@
-import { store } from "../store";
+import { store } from '../store/store'
 
 export type State = {
-  error: string | null,
-  authorizationStatus: boolean,
+  error: string | null
+  authorizationStatus: boolean
   userInfo: {
-    userID: string,
-    userName: string,
-    email: string,
-    userAvatar: string,
-  },
+    userID: string
+    userName: string
+    email: string
+    userAvatar: string
+  }
 }
 
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = typeof store.dispatch

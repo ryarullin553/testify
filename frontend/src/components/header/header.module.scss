@@ -1,5 +1,5 @@
 $color-base: #454868;
-$color-light: #FFFFFF;
+$color-light: #ffffff;
 
 .pageHeader {
   min-width: 1300px;
@@ -31,7 +31,7 @@ $color-light: #FFFFFF;
       margin-right: 0;
     }
   }
-  
+
   a {
     &:hover {
       text-decoration: underline rgba(69, 72, 104, 0.2) 1px;
@@ -49,13 +49,13 @@ $color-light: #FFFFFF;
   letter-spacing: 0.05em;
 
   &::before {
-    content: "";
+    content: '';
     display: inline-block;
     position: relative;
     top: 4px;
     margin-right: 10px;
     width: 22px;
     height: 22px;
-    background: url("img/locale.svg") center no-repeat;
+    background: url('img/locale.svg') center no-repeat;
   }
 }
