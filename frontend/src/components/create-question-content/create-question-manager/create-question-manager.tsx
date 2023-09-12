@@ -4,7 +4,11 @@ import styles from './create-question-manager.module.scss'
 import { FC, useEffect, useState, MouseEvent, ChangeEvent, SyntheticEvent, FormEvent } from 'react'
 import { generateAnswersAction } from '../../../api/questions'
 import { Answer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
-import { useCreateQuestionMutation, useDeleteQuestionMutation, useUpdateQuestionMutation } from '@/services/testsApi'
+import {
+  useCreateQuestionMutation,
+  useDeleteQuestionMutation,
+  useUpdateQuestionMutation,
+} from '@/services/testCreationApi'
 
 interface Props {
   testID: Test['testID']

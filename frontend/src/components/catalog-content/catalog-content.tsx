@@ -6,13 +6,15 @@ import styles from './catalog-content.module.scss'
 import { useScroll } from '../../reusable/hooks'
 import { CatalogSearch } from '../catalog-search/catalog-search'
 import { TestWithDescription } from '../../types/Test'
+import { useGetPublishedTestsQuery } from '@/services/testCatalogApi'
+import { Spinner } from '../Spinner/Spinner'
 
 export const CatalogContent: FC = () => {
+  const { data: testList } = useGetPublishedTestsQuery()
   const defaultRequest = 'tests/'
-  const [testList, setTestList] = useState<TestWithDescription[]>([])
   const [baseRequest, setBaseRequest] = useState(defaultRequest)
 
-  useScroll(baseRequest, setTestList)
+  if (!testList) return <Spinner />
 
   return (
     <main>

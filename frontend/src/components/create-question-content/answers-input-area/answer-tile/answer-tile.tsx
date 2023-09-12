@@ -1,6 +1,6 @@
 import { FC, ChangeEvent, MouseEvent } from 'react'
 import { Answer, Question, QuestionWithCorrectAnswer, Test } from '../../../../types/Test'
-import { useGetTestWithQuestionsQuery } from '@/services/testsApi'
+import { useGetTestWithQuestionsQuery } from '@/services/testCreationApi'
 
 interface Props {
   testID: Test['testID']

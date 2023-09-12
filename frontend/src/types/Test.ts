@@ -31,11 +31,6 @@ export interface QuestionWithSelectedAnswer extends Question {
 export interface Test {
   testID: number
   testTitle: string
-  testRating?: number
-  testVotesCounter?: number
-  testCompletionCounter?: number
-  isFavorite?: boolean
-  isInProgress?: boolean
 }
 
 export interface TestWithSettings extends Test {

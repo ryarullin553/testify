@@ -6,7 +6,7 @@ import { AppRoute } from '../../reusable/const'
 import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests'
 import { Test } from '../../types/Test'
 import { useRouter } from 'next/navigation'
-import { useCreateTestMutation, useUpdateTestSettingsByIDMutation } from '@/services/testsApi'
+import { useCreateTestMutation, useUpdateTestSettingsByIDMutation } from '@/services/testCreationApi'
 
 interface Props {
   testData?: Test

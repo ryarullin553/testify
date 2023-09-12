@@ -14,7 +14,7 @@ import {
   useGetTestWithQuestionsQuery,
   usePublishTestMutation,
   useUpdateQuestionMutation,
-} from '@/services/testsApi'
+} from '@/services/testCreationApi'
 import { Spinner } from '../Spinner/Spinner'
 
 export const CreateQuestionContent: FC = () => {
