@@ -4,16 +4,34 @@
   margin-left: 92px;
   width: 992px;
   padding: 0 21px;
+
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .createTest {
+    color: #222222;
+    margin-top: 24px;
+    margin-bottom: 32px;
+    margin-right: 13px;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  .publishButton {
+    background: url(./img/published-button.svg) no-repeat;
+    margin-top: 24px;
+    width: 28px;
+    height: 28px;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+  }
 }
 
-.createTest {
-  color: #222222;
-  margin-top: 24px;
-  margin-bottom: 32px;
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 29px;
-}
 
 .contentArea {
   margin-bottom: 26px;
@@ -26,11 +44,17 @@
     font-size: 16px;
     line-height: 19px;
     color: #222222;
+
+    span {
+      color: #FF4545;
+
+    }
   }
 
   textarea {
     box-sizing: border-box;
     width: 100%;
+    max-width: 600px;
     // min-height: 160px;
     resize: vertical;
     padding: 7px 10px;
@@ -60,7 +84,7 @@
     line-height: 15px;
     color: #5E5E5E;
   }
-  
+
 }
 
 .titleForm {
@@ -68,11 +92,13 @@
     min-height: 32px;
   }
 }
+
 .shortAbstractForm {
   textarea {
     min-height: 96px;
   }
 }
+
 .abstractForm {
   textarea {
     min-height: 160px;
@@ -133,6 +159,106 @@
       color: #A38FFD;
     }
   }
+}
+
+.testOptionsLogo {
+  display: flex;
+  justify-content: flex-start;
+
+  .testOptions {
+    margin-top: 10px;
+    margin-left: 142px;
+
+
+    label {
+      color: #222222;
+      font-size: 15px;
+      font-family: Inter;
+      font-weight: 400;
+    }
+
+    .option {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: baseline;
+    }
+
+    .switch {
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      width: 40px;
+      height: 24px;
+      border-radius: 25px;
+      cursor: pointer;
+    }
+
+    .switchButton {
+      background-color: #A38FFD;
+    }
+
+    .switchButtonFalse {
+      background-color: #D1D1D1;
+    }
+
+    .toggle {
+      border-radius: 25px;
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+    }
+
+    .switchToggle {
+      margin-left: 18px;
+    }
+
+    .switchToggleFalse {
+      margin-left: 2px;
+    }
+  }
+
+  .tooltip {
+    margin-left: 15px;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    display: inline-block;
+    background: url(./img/question-icon.svg) 100% no-repeat;
+    
+
+    .answers {
+      width: 200px;
+    }
+    .tooltipText {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      top: -100%;
+      left: 150%;
+      visibility: hidden;
+      height: 15px;
+      width: 180px;
+      background: #A5A5A5;
+      color: #fff;
+      padding: 15%;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 500;
+      
+      position: absolute;
+
+    }
+
+    &:hover {
+      .tooltipText {
+        visibility: visible;
+      }
+    }
+  }
+
+  
+
+
 }
 
 .controls {

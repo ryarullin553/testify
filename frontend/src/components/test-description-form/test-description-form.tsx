@@ -27,15 +27,25 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
     avatar: null,
   });
 
+  let [isSelected, setSelected] = useState(false)
+
+  const handleSwitchButton = () => {
+    return isSelected ? styles.switchButton : styles.switchButtonFalse
+  }
+
+  const handleSwitchToggle = () => {
+    return isSelected ? styles.switchToggle : styles.switchToggleFalse
+  }
+
   const handleOnFormChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
-    let {name, value} = evt.target;
-      setFormData({...formData, [name]: value});
+    let { name, value } = evt.target;
+    setFormData({ ...formData, [name]: value });
   }
 
   const handleAvatarUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-    let {files} = evt.target;
+    let { files } = evt.target;
     // разобраться
-    setFormData({...formData, avatar: (files ? files[0] : null)});
+    setFormData({ ...formData, avatar: (files ? files[0] : null) });
   }
 
   const handleSubmit = async (evt: FormEvent<HTMLButtonElement>) => {
@@ -92,12 +102,17 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
     if (testID) fetchTestData();
   }, []);
 
+
+
   return (
     <form className={styles.contentForm} action="#" name="create-test-form">
-      <h1 className={styles.createTest}>{pageTitle}</h1>
+      <div className={styles.wrapper}>
+        <h1 className={styles.createTest}>{pageTitle}</h1>
+        <button className={styles.publishButton}></button>
+      </div>
       <fieldset className={`${styles.contentArea} ${styles.titleForm}`}>
-        <label>Название</label>
-        <textarea 
+        <label>Название <span>*</span></label>
+        <textarea
           id='title'
           name='title'
           value={formData.title}
@@ -107,7 +122,7 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
         <p>Не более 64 символов</p>
       </fieldset>
       <fieldset className={`${styles.contentArea} ${styles.shortAbstractForm}`}>
-        <label>Краткое описание</label>
+        <label>Краткое описание <span color='red'>*</span></label>
         <textarea
           id='shortAbstract'
           name='shortAbstract'
@@ -132,21 +147,75 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
           onChange={handleOnFormChange}
         />
       </fieldset>
-      <fieldset className={styles.testLogo}>
-        <label>Логотип</label>
-        <div
-          className={`${styles.dropZone} ${formData.avatar && styles.active}`}
-        >
-        <p>png-файл с прозрачностью 230х230px</p>
-        <input
-          type='file'
-          id='avatar'
-          name='avatar'
-          accept="image/png"
-          onChange={handleAvatarUpload}
-        />
+      <div className={styles.testOptionsLogo}>
+        <fieldset className={styles.testLogo}>
+          <label>Логотип</label>
+          <div
+            className={`${styles.dropZone} ${formData.avatar && styles.active}`}
+          >
+            <p>png-файл с прозрачностью 230х230px</p>
+            <input
+              type='file'
+              id='avatar'
+              name='avatar'
+              accept="image/png"
+              onChange={handleAvatarUpload}
+            />
+          </div>
+        </fieldset>
+
+        <div className={styles.testOptions}>
+          <div className={`${styles.points} ${styles.option}`}>
+            <div
+              onClick={() => setSelected(!isSelected)}
+              className={`${styles.switch} ${handleSwitchButton()}`}>
+              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            </div>
+
+            <label>Баллы</label>
+
+            <div className={styles.tooltip}>
+              <span className={styles.tooltipText}>Добавить баллы к вопросам</span>
+            </div>
+          </div>
+          <div className={`${styles.comment} ${styles.option}`}>
+            <div
+              onClick={() => setSelected(!isSelected)}
+              className={`${styles.switch} ${handleSwitchButton()}`}>
+              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            </div>
+            <label>Комментарии</label>
+
+            <div className={styles.tooltip}>
+              <span className={styles.tooltipText}>Открыть комментарии к вопросам</span>
+            </div>
+          </div>
+          <div className={`${styles.rightAnswers} ${styles.option}`}>
+            <div
+              onClick={() => setSelected(!isSelected)}
+              className={`${styles.switch} ${handleSwitchButton()}`}>
+              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            </div>
+            <label>Правильные ответы</label>
+
+            <div className={styles.tooltip}>
+              <span className={styles.tooltipText}>Показать правильные ответы</span>
+            </div>
+          </div>
+          <div className={`${styles.explanations} ${styles.option}`}>
+            <div
+              onClick={() => setSelected(!isSelected)}
+              className={`${styles.switch} ${handleSwitchButton()}`}>
+              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            </div>
+            <label>Пояснения к вопросам</label>
+
+            <div className={styles.tooltip}>
+              <span className={styles.tooltipText}>Показывать пояснения к вопросам</span>
+            </div>
+          </div>
         </div>
-      </fieldset>
+      </div>
       <div className={styles.controls}>
         <button className={styles.createButton} onClick={handleSubmit}>{buttonLabel}</button>
       </div>
