@@ -37,15 +37,56 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
   }
   let [formData, setFormData] = useState<FormState>(initialFormState)
 
+  let [isSelected, setSelected] = useState(false)
+
+  const handleSwitchButton = () => {
+    return isSelected ? styles.switchButton : styles.switchButtonFalse
+  }
+
+  const handleSwitchToggle = () => {
+    return isSelected ? styles.switchToggle : styles.switchToggleFalse
+  }
+
   const handleOnFormChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
-    let { name, value } = evt.target
-    setFormData({ ...formData, [name]: value })
+    let { name, value } = evt.target;
+    setFormData({ ...formData, [name]: value });
   }
 
   const handleAvatarUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-    let { files } = evt.target
+    let { files } = evt.target;
     // разобраться
-    setFormData({ ...formData, testAvatar: files ? files[0] : null })
+    setFormData({ ...formData, avatar: (files ? files[0] : null) });
+  }
+
+  const handleSubmit = async (evt: FormEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    let config;
+    const convertedFormData = convertTestDataCtS(formData);
+    if (formData.avatar) {
+      config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+    }
+    if (testID) {
+      await editTestAction(testID, convertedFormData, config);
+    } else try {
+      const newTestID = await createTestAction(convertedFormData, config);
+      router.push(`${AppRoute.EditTest}/${newTestID}`);
+    } catch (err) {
+      return;
+    }
+  }
+
+  const convertTestDataCtS = (data: any) => {
+    const modifiedData = {
+      title: data.title,
+      short_description: data.shortAbstract,
+      description: data.abstract,
+      avatar: data.avatar,
+    }
+    return modifiedData;
   }
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
@@ -64,22 +105,27 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
   const pageTitle = isNewTest ? 'Создать новый тест' : 'Редактировать описание теста'
   const buttonLabel = isNewTest ? 'Создать тест' : 'Сохранить'
 
+
+
   return (
-    <form className={styles.contentForm} action='#' name='create-test-form' onSubmit={handleSubmit}>
-      <h1 className={styles.createTest}>{pageTitle}</h1>
+    <form className={styles.contentForm} action="#" name="create-test-form">
+      <div className={styles.wrapper}>
+        <h1 className={styles.createTest}>{pageTitle}</h1>
+        <button className={styles.publishButton}></button>
+      </div>
       <fieldset className={`${styles.contentArea} ${styles.titleForm}`}>
-        <label>Название</label>
+        <label>Название <span>*</span></label>
         <textarea
-          id='testTitle'
-          name='testTitle'
-          value={formData.testTitle}
+          id='title'
+          name='title'
+          value={formData.title}
           placeholder='Название теста'
           onChange={handleOnFormChange}
         />
         <p>Не более 64 символов</p>
       </fieldset>
       <fieldset className={`${styles.contentArea} ${styles.shortAbstractForm}`}>
-        <label>Краткое описание</label>
+        <label>Краткое описание <span color='red'>*</span></label>
         <textarea
           id='testSummary'
           name='testSummary'
@@ -104,13 +150,75 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
           onChange={handleOnFormChange}
         />
       </fieldset>
-      <fieldset className={styles.testLogo}>
-        <label>Логотип</label>
-        <div className={`${styles.dropZone} ${formData.testAvatar && styles.active}`}>
-          <p>png-файл с прозрачностью 230х230px</p>
-          <input type='file' id='testAvatar' name='testAvatar' accept='image/png' onChange={handleAvatarUpload} />
+      <div className={styles.testOptionsLogo}>
+        <fieldset className={styles.testLogo}>
+          <label>Логотип</label>
+          <div
+            className={`${styles.dropZone} ${formData.avatar && styles.active}`}
+          >
+            <p>png-файл с прозрачностью 230х230px</p>
+            <input
+              type='file'
+              id='avatar'
+              name='avatar'
+              accept="image/png"
+              onChange={handleAvatarUpload}
+            />
+          </div>
+        </fieldset>
+
+        <div className={styles.testOptions}>
+          <div className={`${styles.points} ${styles.option}`}>
+            <div
+              onClick={() => setSelected(!isSelected)}
+              className={`${styles.switch} ${handleSwitchButton()}`}>
+              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            </div>
+
+            <label>Баллы</label>
+
+            <div className={styles.tooltip}>
+              <span className={styles.tooltipText}>Добавить баллы к вопросам</span>
+            </div>
+          </div>
+          <div className={`${styles.comment} ${styles.option}`}>
+            <div
+              onClick={() => setSelected(!isSelected)}
+              className={`${styles.switch} ${handleSwitchButton()}`}>
+              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            </div>
+            <label>Комментарии</label>
+
+            <div className={styles.tooltip}>
+              <span className={styles.tooltipText}>Открыть комментарии к вопросам</span>
+            </div>
+          </div>
+          <div className={`${styles.rightAnswers} ${styles.option}`}>
+            <div
+              onClick={() => setSelected(!isSelected)}
+              className={`${styles.switch} ${handleSwitchButton()}`}>
+              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            </div>
+            <label>Правильные ответы</label>
+
+            <div className={styles.tooltip}>
+              <span className={styles.tooltipText}>Показать правильные ответы</span>
+            </div>
+          </div>
+          <div className={`${styles.explanations} ${styles.option}`}>
+            <div
+              onClick={() => setSelected(!isSelected)}
+              className={`${styles.switch} ${handleSwitchButton()}`}>
+              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            </div>
+            <label>Пояснения к вопросам</label>
+
+            <div className={styles.tooltip}>
+              <span className={styles.tooltipText}>Показывать пояснения к вопросам</span>
+            </div>
+          </div>
         </div>
-      </fieldset>
+      </div>
       <div className={styles.controls}>
         <button type={'submit'} className={styles.createButton}>
           {buttonLabel}
