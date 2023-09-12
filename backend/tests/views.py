@@ -6,14 +6,14 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from .models import Test
-from .permissions import TestPermission
+from .permissions import CatalogPermission, TestPermission
 from .serializers import TestSerializer
 
 
 class TestAPIView(viewsets.ModelViewSet):
     queryset = Test.objects
     serializer_class = TestSerializer
-    permission_classes = [TestPermission]
+    permission_classes = [CatalogPermission]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['title', 'short_description', 'user__username']
     filterset_fields = ['is_published', 'user']
@@ -65,7 +65,10 @@ class TestAPIView(viewsets.ModelViewSet):
         )
         return Response(serializer.data)
 
-    @action(detail=False, url_path='created', url_name='created', search_fields=['title'])
+    @action(detail=False,
+            url_path='created',
+            url_name='created',
+            search_fields=['title'])
     def created(self, request):
         """
         Созданные тесты
@@ -85,7 +88,10 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer = self.get_serializer(page, many=True, fields=fields)
         return self.get_paginated_response(serializer.data)
 
-    @action(detail=True, url_path='config', url_name='config')
+    @action(detail=True,
+            url_path='config',
+            url_name='config',
+            permission_classes=[TestPermission])
     def config(self, request, **kwargs):
         """
         Настройки теста
@@ -115,7 +121,10 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, fields=fields)
         return Response(serializer.data)
 
-    @action(detail=True, url_path='questions', url_name='questions')
+    @action(detail=True,
+            url_path='questions',
+            url_name='questions',
+            permission_classes=[TestPermission])
     def questions(self, request, **kwargs):
         """
         Данные для страницы "Создание вопросов"
@@ -129,7 +138,10 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, fields=fields[:5] + ['questions'])
         return Response(serializer.data)
 
-    @action(detail=True, url_path='metrics', url_name='metrics')
+    @action(detail=True,
+            url_path='metrics',
+            url_name='metrics',
+            permission_classes=[TestPermission])
     def metrics(self, request, **kwargs):
         """
         Статистика

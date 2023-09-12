@@ -3,8 +3,8 @@ from rest_framework import viewsets, mixins
 from rest_framework.generics import get_object_or_404
 from rest_framework.filters import OrderingFilter
 
-from utils.permissions import UserRelationPermission
 from .models import Feedback
+from .permissions import FeedbackPermission
 from .serializers import FeedbackSerializer
 
 
@@ -14,7 +14,7 @@ class FeedbackAPIView(mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
     queryset = Feedback.objects
     serializer_class = FeedbackSerializer
-    permission_classes = [UserRelationPermission]
+    permission_classes = [FeedbackPermission]
     filter_backends = [OrderingFilter]
     ordering = '-created'
 
