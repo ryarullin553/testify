@@ -24,7 +24,7 @@ const transformUserData = (response: UserDataResponse): UserInfo => {
     userAvatar: image,
     userEmail: email,
     userBio: info,
-    accountDateCreated: new Date(created),
+    accountDateCreated: created,
   }
 }
 

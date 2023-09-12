@@ -1,25 +1,31 @@
 import { FC, ChangeEvent, MouseEvent } from 'react'
-import { Answer, QuestionWithCorrectAnswer } from '../../../../types/Test'
+import { Answer, Question, QuestionWithCorrectAnswer, Test } from '../../../../types/Test'
+import { useGetTestWithQuestionsQuery } from '@/services/testsApi'
 
 interface Props {
-  answerItem: Answer
-  correctAnswerID: QuestionWithCorrectAnswer['correctAnswerID']
-  handleCorrectAnswerChange: (evt: ChangeEvent<HTMLInputElement>) => void
-  handleAnswerDescriptionChange: (evt: ChangeEvent<HTMLInputElement>, answerID: Answer['answerID']) => void
-  handleAnswerDelete: (evt: MouseEvent<HTMLButtonElement>, answerID: Answer['answerID']) => void
+  testID: Test['testID']
+  questionID: Question['questionID']
+  answerID: number
+  actionAnswerDelete: (answerID: number) => void
 }
 
 // Заменить correctAnswerID на isCorrect
 
-export const AnswerTile: FC<Props> = ({
-  answerItem,
-  correctAnswerID,
-  handleCorrectAnswerChange,
-  handleAnswerDescriptionChange,
-  handleAnswerDelete,
-}) => {
-  const { answerID, answerDescription } = answerItem
-
+export const AnswerTile: FC<Props> = ({ testID, questionID, answerID, actionAnswerDelete }) => {
+  const blankAnswer: Answer = {
+    answerDescription: '',
+    isCorrect: false,
+  }
+  const { answerData } = useGetTestWithQuestionsQuery(testID, {
+    selectFromResult: ({ data }) => ({
+      answerData: data?.questionList[questionID]?.answerList[answerID] ?? blankAnswer,
+    }),
+  })
+  const { answerDescription, isCorrect } = answerData
+  const handleAnswerDelete = (evt: MouseEvent<HTMLButtonElement>, answerID: number) => {
+    evt.preventDefault()
+    actionAnswerDelete(answerID)
+  }
   return (
     <li>
       <label htmlFor={`radio-${answerID}`}>
@@ -27,19 +33,19 @@ export const AnswerTile: FC<Props> = ({
           type='radio'
           id={`radio-${answerID}`}
           name='correct-answer-form'
-          defaultValue={answerID}
-          checked={answerID === correctAnswerID}
-          onChange={handleCorrectAnswerChange}
+          value={answerID}
+          defaultChecked={isCorrect}
         />
         <input
           type='text'
           id={`answerDescription-${answerID}`}
           name={`answerDescription-${answerID}`}
           placeholder='Текст ответа'
-          value={answerDescription}
-          onChange={(evt) => handleAnswerDescriptionChange(evt, answerID)}
+          defaultValue={answerDescription}
         />
-        <button onClick={(evt) => handleAnswerDelete(evt, answerID)}>🞩</button>
+        <button type={'button'} onClick={(evt) => handleAnswerDelete(evt, answerID)}>
+          🞩
+        </button>
       </label>
     </li>
   )

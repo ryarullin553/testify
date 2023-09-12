@@ -1,17 +1,23 @@
 import { UserInfo, UserInfoExtended } from './UserInfo'
 
+export interface Answer {
+  answerDescription: string
+  isCorrect: boolean
+}
+
 export interface Question {
   questionID: number
   testID: Test['testID']
   questionDescription: string
   questionAvatar: string | null
   questionType: 'Single choice'
-  answerList: Record<number, string>
-  answerCount: number
+  answerList: Record<number, { answerDescription: string }>
+  answerOrder: number[]
   questionState?: QuestionState
 }
 
 export interface QuestionWithCorrectAnswer extends Question {
+  answerList: Record<number, Answer>
   correctAnswerIDs: number[]
 }
 
@@ -57,8 +63,8 @@ export interface TestWithDescription extends Test {
 }
 
 export interface TestWithQuestions extends Test {
-  questionList: Record<number, Question>
-  questionIDs: number[]
+  questionList: Record<number, QuestionWithCorrectAnswer>
+  questionOrder: number[]
   isPublished: boolean
   hasQuestionPoints: boolean
   hasQuestionExplanation: boolean

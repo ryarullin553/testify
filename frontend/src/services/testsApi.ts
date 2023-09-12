@@ -5,6 +5,7 @@ import {
   TestWithQuestions,
   Question,
   QuestionWithCorrectAnswer,
+  Answer,
 } from '@/types/Test'
 import { api } from './api'
 
@@ -46,9 +47,8 @@ interface CreateQuestionProps {
   questionDescription: string
   questionAvatar: string | null
   questionType: 'Single choice'
-  answerList: Record<number, string>
-  answerCount: number
-  correctAnswerIDs: number[]
+  answerList: Record<number, Answer>
+  answerOrder: number[]
 }
 
 interface EditQuestionProps extends CreateQuestionProps {
@@ -58,8 +58,10 @@ interface EditQuestionProps extends CreateQuestionProps {
 const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuestionRequest => ({
   test: r.testID,
   content: r.questionDescription,
-  answer_choices: Object.values(r.answerList),
-  right_answers: r.correctAnswerIDs.map((x) => r.answerList[x]),
+  answer_choices: Object.values(r.answerList).map((x) => x.answerDescription),
+  right_answers: Object.values(r.answerList)
+    .filter((x) => x.isCorrect)
+    .map((x) => x.answerDescription),
   type: r.questionType,
   points: undefined,
   explanation: undefined,
@@ -163,15 +165,15 @@ const transformQuestionResponse = (r: QuestionResponse, testID?: number): Questi
   questionType: r.type,
   questionDescription: r.content,
   questionAvatar: r.image,
-  answerList: r.answer_choices.reduce((acc: Record<number, string>, x, i) => {
-    acc[i] = x
+  answerList: r.answer_choices.reduce((acc: Record<number, Answer>, x, i) => {
+    acc[i] = { answerDescription: x, isCorrect: r.right_answers.includes(x) }
     return acc
   }, {}),
+  answerOrder: r.answer_choices.map((_, i) => i),
   correctAnswerIDs: r.answer_choices
     .map((x, i) => [i, x] as const)
     .filter((x) => r.right_answers.includes(x[1]))
     .flatMap((x) => x[0]),
-  answerCount: r.answer_choices.length,
 })
 
 const transformTestWithQuestionsResponse = (r: TestWithQuestionsResponse): TestWithQuestions => ({
@@ -180,11 +182,11 @@ const transformTestWithQuestionsResponse = (r: TestWithQuestionsResponse): TestW
   isPublished: r.is_published,
   hasQuestionExplanation: r.has_questions_explanation,
   hasQuestionPoints: r.has_points,
-  questionList: r.questions.reduce((acc: Record<number, Question>, x) => {
+  questionList: r.questions.reduce((acc: Record<number, QuestionWithCorrectAnswer>, x) => {
     acc[x.id] = transformQuestionResponse(x, r.id)
     return acc
   }, {}),
-  questionIDs: r.questions.map((x) => x.id),
+  questionOrder: r.questions.map((x) => x.id),
 })
 
 export const testsApi = api.injectEndpoints({
@@ -212,26 +214,78 @@ export const testsApi = api.injectEndpoints({
       query: (testID) => `tests/${testID}/questions/`,
       transformResponse: transformTestWithQuestionsResponse,
     }),
-    createQuestion: builder.mutation<Question['questionID'], CreateQuestionProps>({
+    createQuestion: builder.mutation<QuestionWithCorrectAnswer, CreateQuestionProps>({
       query: (newQuestionData) => ({
         url: 'questions/',
         method: 'POST',
         body: transformEditQuestionRequest(newQuestionData),
       }),
-      transformResponse: (response: QuestionResponse) => response.id,
+      transformResponse: (response: QuestionResponse) => transformQuestionResponse(response),
+      async onQueryStarted({ testID }, { dispatch, queryFulfilled }) {
+        try {
+          const { data: newQuestionData } = await queryFulfilled
+          const patchResult = dispatch(
+            testsApi.util.updateQueryData('getTestWithQuestions', testID, (draft) => {
+              const { questionID } = newQuestionData
+              draft.questionList[questionID] = newQuestionData
+              draft.questionOrder.push(questionID)
+            })
+          )
+        } catch {}
+      },
     }),
-    updateQuestion: builder.mutation<void, EditQuestionProps>({
+    updateQuestion: builder.mutation<QuestionWithCorrectAnswer, EditQuestionProps>({
       query: (editQuestionArgs) => ({
-        url: `questions/${editQuestionArgs}/`,
+        url: `questions/${editQuestionArgs.questionID}/`,
         method: 'PATCH',
         body: transformEditQuestionRequest(editQuestionArgs),
       }),
+      transformResponse: (response: QuestionResponse) => transformQuestionResponse(response),
+      async onQueryStarted({ testID }, { dispatch, queryFulfilled }) {
+        try {
+          const { data: newQuestionData } = await queryFulfilled
+          const patchResult = dispatch(
+            testsApi.util.updateQueryData('getTestWithQuestions', testID, (draft) => {
+              const { questionID } = newQuestionData
+              draft.questionList[questionID] = newQuestionData
+            })
+          )
+        } catch {}
+      },
     }),
-    deleteQuestion: builder.mutation<void, Question['questionID']>({
-      query: (questionID) => ({
+    deleteQuestion: builder.mutation<void, { questionID: Question['questionID']; testID: Test['testID'] }>({
+      query: ({ questionID }) => ({
         url: `questions/${questionID}`,
         method: 'DELETE',
       }),
+      async onQueryStarted({ testID, questionID }, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          const patchResult = dispatch(
+            testsApi.util.updateQueryData('getTestWithQuestions', testID, (draft) => {
+              delete draft.questionList[questionID]
+              draft.questionOrder = draft.questionOrder.filter((x) => x !== questionID)
+            })
+          )
+        } catch {}
+      },
+    }),
+    publishTest: builder.mutation<void, Test['testID']>({
+      query: (testID) => ({
+        url: `tests/${testID}/`,
+        method: 'PATCH',
+        body: { is_published: true },
+      }),
+      async onQueryStarted(testID, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          const patchResult = dispatch(
+            testsApi.util.updateQueryData('getTestWithQuestions', testID, (draft) => {
+              draft.isPublished = true
+            })
+          )
+        } catch {}
+      },
     }),
   }),
 })
@@ -244,4 +298,5 @@ export const {
   useCreateQuestionMutation,
   useUpdateQuestionMutation,
   useDeleteQuestionMutation,
+  usePublishTestMutation,
 } = testsApi

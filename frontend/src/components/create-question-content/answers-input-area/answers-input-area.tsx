@@ -1,36 +1,28 @@
 import { FC, ChangeEvent, MouseEvent } from 'react'
 import { AnswerTile } from './answer-tile/answer-tile'
 import styles from './answers-input-area.module.scss'
-import { Answer, QuestionWithCorrectAnswer } from '../../../types/Test'
+import { Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
 
 interface Props {
-  answerList: Answer[]
-  correctAnswerID: QuestionWithCorrectAnswer['correctAnswerID']
-  handleCorrectAnswerChange: (evt: ChangeEvent<HTMLInputElement>) => void
-  handleAnswerDescriptionChange: (evt: ChangeEvent<HTMLInputElement>, answerID: Answer['answerID']) => void
-  handleAnswerDelete: (evt: MouseEvent<HTMLButtonElement>, answerID: Answer['answerID']) => void
+  testID: Test['testID']
+  questionID: Question['questionID']
+  answerOrder: Question['answerOrder']
+  actionAnswerDelete: (answerID: number) => void
 }
 
-export const AnswersInputArea: FC<Props> = ({
-  answerList,
-  correctAnswerID,
-  handleCorrectAnswerChange,
-  handleAnswerDescriptionChange,
-  handleAnswerDelete,
-}) => {
+export const AnswersInputArea: FC<Props> = ({ testID, questionID, answerOrder, actionAnswerDelete }) => {
   return (
     <fieldset className={styles.answersArea}>
       <legend>Ответы</legend>
       <p>Добавьте варианты ответа и отметьте правильный</p>
       <ul>
-        {answerList.map((answerItem) => (
+        {answerOrder.map((answerID) => (
           <AnswerTile
-            key={answerItem.answerID}
-            answerItem={answerItem}
-            correctAnswerID={correctAnswerID}
-            handleAnswerDelete={handleAnswerDelete}
-            handleAnswerDescriptionChange={handleAnswerDescriptionChange}
-            handleCorrectAnswerChange={handleCorrectAnswerChange}
+            key={answerID}
+            testID={testID}
+            questionID={questionID}
+            answerID={answerID}
+            actionAnswerDelete={actionAnswerDelete}
           />
         ))}
       </ul>
