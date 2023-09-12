@@ -1,31 +1,41 @@
 'use client'
 
-import { FC, useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import styles from './test-description-form.module.scss';
-import { AppRoute } from '../../reusable/const';
-import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests';
-import { Test } from '../../types/Test';
-import { useRouter } from 'next/navigation';
+import { FC, useEffect, useState, ChangeEvent, FormEvent } from 'react'
+import styles from './test-description-form.module.scss'
+import { AppRoute } from '../../reusable/const'
+import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests'
+import { Test } from '../../types/Test'
+import { useRouter } from 'next/navigation'
+import { useCreateTestMutation, useUpdateTestSettingsByIDMutation } from '@/services/testsApi'
 
 interface Props {
-  testID: Test['testID'],
+  testData?: Test
 }
 
-interface FormData {
-  title: string,
-  shortAbstract: string,
-  abstract: string,
-  avatar: File | null,
+interface FormState {
+  testTitle: string
+  testSummary: string
+  testDescription: string
+  testAvatar: File | null
 }
 
-export const TestDescriptionForm: FC<Props> = ({ testID }) => {
-  const router = useRouter();
-  let [formData, setFormData] = useState<FormData>({
-    title: '',
-    shortAbstract: '',
-    abstract: '',
-    avatar: null,
-  });
+export const TestDescriptionForm: FC<Props> = ({ testData }) => {
+  const router = useRouter()
+  const isNewTest = Boolean(!testData)
+  const [createTest, { isSuccess }] = useCreateTestMutation()
+  const [updateTest, _] = useUpdateTestSettingsByIDMutation()
+  const { testTitle, testSummary, testDescription, testID } = testData || {
+    testTitle: '',
+    testSummary: '',
+    testDescription: '',
+  }
+  const initialFormState: FormState = {
+    testTitle,
+    testSummary,
+    testDescription,
+    testAvatar: null,
+  }
+  let [formData, setFormData] = useState<FormState>(initialFormState)
 
   let [isSelected, setSelected] = useState(false)
 
@@ -79,28 +89,21 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
     return modifiedData;
   }
 
-  const convertTestDataStC = (data: any) => {
-    const modifiedData: FormData = {
-      title: data.title,
-      shortAbstract: data.description,
-      abstract: data.full_description,
-      avatar: null,
+  const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault()
+    if (isNewTest) {
+      const newID = await createTest(formData).unwrap()
+      if (isSuccess) {
+        router.push(`${AppRoute.EditTest}${newID}`)
+      }
+    } else {
+      const updateTestProps = { ...formData, testID: testID! }
+      await updateTest(updateTestProps)
     }
-    return modifiedData;
   }
 
-  const fetchTestData = async () => {
-    const data = await fetchTestDescriptionAction(testID);
-    const convertedData = convertTestDataStC(data);
-    setFormData(convertedData);
-  }
-
-  const pageTitle = testID ? 'Редактировать описание теста' : 'Создать новый тест';
-  const buttonLabel = testID ? 'Сохранить' : 'Создать тест';
-
-  useEffect(() => {
-    if (testID) fetchTestData();
-  }, []);
+  const pageTitle = isNewTest ? 'Создать новый тест' : 'Редактировать описание теста'
+  const buttonLabel = isNewTest ? 'Создать тест' : 'Сохранить'
 
 
 
@@ -124,10 +127,10 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
       <fieldset className={`${styles.contentArea} ${styles.shortAbstractForm}`}>
         <label>Краткое описание <span color='red'>*</span></label>
         <textarea
-          id='shortAbstract'
-          name='shortAbstract'
-          value={formData.shortAbstract}
-          placeholder="Видно в поиске и на промостранице сразу после названия курса"
+          id='testSummary'
+          name='testSummary'
+          value={formData.testSummary}
+          placeholder='Видно в поиске и на промостранице сразу после названия курса'
           onChange={handleOnFormChange}
         />
         <p>Для публикации нужно не менее 100 символов</p>
@@ -135,15 +138,15 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
       <fieldset className={`${styles.contentArea} ${styles.abstractForm}`}>
         <label>Полное описание</label>
         <textarea
-          id='abstract'
-          name='abstract'
-          value={formData.abstract}
-          placeholder="Все, что важно знать до начала прохождения теста. Расскажите о:
+          id='testDescription'
+          name='testDescription'
+          value={formData.testDescription}
+          placeholder='Все, что важно знать до начала прохождения теста. Расскажите о:
             • цели теста,
             • почему стоит его пройти,
             • какие у него особенности,
             • какие будут вопросы,
-            • что можно получить после его прохождения."
+            • что можно получить после его прохождения.'
           onChange={handleOnFormChange}
         />
       </fieldset>
@@ -217,8 +220,10 @@ export const TestDescriptionForm: FC<Props> = ({ testID }) => {
         </div>
       </div>
       <div className={styles.controls}>
-        <button className={styles.createButton} onClick={handleSubmit}>{buttonLabel}</button>
+        <button type={'submit'} className={styles.createButton}>
+          {buttonLabel}
+        </button>
       </div>
     </form>
-  );
+  )
 }

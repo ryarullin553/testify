@@ -11,7 +11,7 @@
   background-color: #454868;
   border-radius: 10px;
 
-  color: #FFFFFF;
+  color: #ffffff;
 
   h2 {
     font-weight: 700;
@@ -23,23 +23,23 @@
     height: min-content;
     margin: 21px 0;
     overflow-y: auto;
-  
+
     &::-webkit-scrollbar {
       width: 5px;
     }
-  
+
     &::-webkit-scrollbar-track {
-      background: #FAF9FF;
+      background: #faf9ff;
       border-radius: 5px;
     }
-  
+
     &::-webkit-scrollbar-thumb {
       background: #010851;
       border-radius: 5px;
     }
-  
+
     &::-webkit-scrollbar-thumb:hover {
-      background: #A38FFD;
+      background: #a38ffd;
     }
   }
 
@@ -55,7 +55,7 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
-  color: #FFFFFF;
+  color: #ffffff;
 
   white-space: nowrap;
   overflow: hidden;

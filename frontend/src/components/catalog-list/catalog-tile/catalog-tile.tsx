@@ -1,15 +1,15 @@
-import Link from 'next/link';
-import styles from './catalog-tile.module.scss';
-import { AppRoute } from '../../../reusable/const';
-import { AvatarBlock } from '../../avatar-block/avatar-block';
-import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks';
-import { FC, useState, MouseEvent } from 'react';
-import { FeedbackStars } from '../../feedback-stars/feedback-stars';
-import UserIcon from './img/user-icon.svg';
-import { TestWithDescription } from '../../../types/Test';
+import Link from 'next/link'
+import styles from './catalog-tile.module.scss'
+import { AppRoute } from '../../../reusable/const'
+import { AvatarBlock } from '../../avatar-block/avatar-block'
+import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks'
+import { FC, useState, MouseEvent } from 'react'
+import { FeedbackStars } from '../../feedback-stars/feedback-stars'
+import UserIcon from './img/user-icon.svg'
+import { TestWithDescription } from '../../../types/Test'
 
 interface Props {
-  testItem: TestWithDescription;
+  testItem: TestWithDescription
 }
 
 export const CatalogTile: FC<Props> = ({ testItem }) => {
@@ -21,18 +21,18 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
     isFavorite,
     testRating,
     testVotesCounter,
-    testCompletionCounter
-  } = testItem;
-  const [isFavoriteState, setIsFavoriteState] = useState(isFavorite);
+    testCompletionCounter,
+  } = testItem
+  const [isFavoriteState, setIsFavoriteState] = useState(isFavorite)
 
   const handleFavoriteClick = async (evt: MouseEvent<HTMLButtonElement>, testID: number) => {
-    evt.preventDefault();
+    evt.preventDefault()
     if (!isFavoriteState) {
-      await addBookmarkAction(testID);
-      setIsFavoriteState(true);
+      await addBookmarkAction(testID)
+      setIsFavoriteState(true)
     } else {
-      await deleteBookmarkAction(testID);
-      setIsFavoriteState(false);
+      await deleteBookmarkAction(testID)
+      setIsFavoriteState(false)
     }
   }
 
@@ -54,7 +54,9 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
                   id={`catalog-${testID}`}
                   additionalStyles={''}
                 />
-                <span className={styles.card__feedback__value}>{testRating} ({testVotesCounter})</span>
+                <span className={styles.card__feedback__value}>
+                  {testRating} ({testVotesCounter})
+                </span>
               </div>
               <div className={styles.card__users}>
                 <UserIcon />
@@ -64,12 +66,11 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
           </div>
         </div>
         <button
-          className={`${styles.bookmark__button} ${(isFavoriteState && styles.buttonActive)}`}
-          onClick={(evt) => handleFavoriteClick(evt, testID)}
-        >
+          className={`${styles.bookmark__button} ${isFavoriteState && styles.buttonActive}`}
+          onClick={(evt) => handleFavoriteClick(evt, testID)}>
           {isFavoriteState ? '♥' : '♡'}
         </button>
       </Link>
     </li>
-  );
+  )
 }

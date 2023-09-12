@@ -16,4 +16,4 @@ export const AppRoute = {
   TestDescription: '/test-description',
 }
 
-export const TIMEOUT_SHOW_ERROR = 5000;
+export const TIMEOUT_SHOW_ERROR = 5000

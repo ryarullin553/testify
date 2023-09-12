@@ -5,7 +5,7 @@ import { FC } from 'react'
 const CatalogPage: FC = () => {
   return (
     <>
-      <Header/>
+      <Header />
       <CatalogContent />
     </>
   )

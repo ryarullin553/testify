@@ -1,13 +1,12 @@
 'use client'
 
-import { useParams } from 'next/navigation';
-import styles from './profile-page-component.module.scss';
-import { ProfileComponent } from './profile-component/profile-component';
-import { ProfileNavigation } from '../profile-navigation/profile-navigation';
-import { FC, useEffect, useState } from 'react';
-import { fetchUserInfoAction } from '../../api/user';
-import { UserInfo, UserInfoExtended } from '../../types/UserInfo';
-
+import { useParams } from 'next/navigation'
+import styles from './profile-page-component.module.scss'
+import { ProfileComponent } from './profile-component/profile-component'
+import { ProfileNavigation } from '../profile-navigation/profile-navigation'
+import { FC, useEffect, useState } from 'react'
+import { fetchUserInfoAction } from '../../api/user'
+import { UserInfo, UserInfoExtended } from '../../types/UserInfo'
 
 export const ProfilePageComponent: FC = () => {
   const [userInfo, setUserInfo] = useState<UserInfoExtended>()
@@ -36,7 +35,7 @@ export const ProfilePageComponent: FC = () => {
 
   useEffect(() => {
     fetchUserInfo(userID)
-  }, []);
+  }, [])
 
   // ???
   if (!userInfo) return null
@@ -45,8 +44,8 @@ export const ProfilePageComponent: FC = () => {
     <>
       <main className={styles.pageMain}>
         <ProfileNavigation />
-        <ProfileComponent userInfo={userInfo}/>
+        <ProfileComponent userInfo={userInfo} />
       </main>
     </>
-  );
+  )
 }

@@ -1,7 +1,6 @@
 import { State } from '../types/State';
 import { setAuthorizationStatus, setUserInfo, setError } from './actions';
-import { configureStore, createReducer } from '@reduxjs/toolkit';
-import { createWrapper } from "next-redux-wrapper";
+import { createReducer } from '@reduxjs/toolkit';
 
 const initialState: State = {
   error: null,
@@ -17,12 +16,12 @@ const initialState: State = {
 export const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(setAuthorizationStatus, (state, action) => {
-      state.authorizationStatus = action.payload;
+      state.authorizationStatus = action.payload
     })
     .addCase(setUserInfo, (state, action) => {
-      state.userInfo = action.payload;
+      state.userInfo = action.payload
     })
     .addCase(setError, (state, action) => {
-      state.error = action.payload;
-    });
-});
+      state.error = action.payload
+    })
+})

@@ -21,23 +21,23 @@
     height: 40px;
     width: 100%;
 
-    &:nth-child(1) >a::before {
+    &:nth-child(1) > a::before {
       background-image: url(./img/profile-icon.svg);
     }
 
-    &:nth-child(2) >a::before {
+    &:nth-child(2) > a::before {
       background-image: url(./img/test-icon.svg);
     }
 
-    &:nth-child(3) >a::before {
+    &:nth-child(3) > a::before {
       background-image: url(./img/my-tests-icon.svg);
     }
 
-    &:nth-child(4) >a::before {
+    &:nth-child(4) > a::before {
       background-image: url(./img/favorite-icon.svg);
     }
 
-    &:nth-child(5) >a::before {
+    &:nth-child(5) > a::before {
       background-image: url(./img/settings-icon.svg);
     }
   }
@@ -53,14 +53,14 @@
     font-size: 18px;
     line-height: 30px;
     color: #454868;
-    
+
     transition: all 0.2s ease-in-out;
 
     &:hover {
-      color: #A38FFD;
+      color: #a38ffd;
 
       &::before {
-        background-color: #A38FFD;
+        background-color: #a38ffd;
       }
     }
 
@@ -74,16 +74,16 @@
       background-color: #454868;
       background-position: center;
       background-repeat: no-repeat;
-    
+
       transition: all 0.2s ease-in-out;
     }
   }
 }
 
 .activeLink {
-  color: #A38FFD !important;
+  color: #a38ffd !important;
 
   &::before {
-    background-color: #A38FFD !important;
+    background-color: #a38ffd !important;
   }
 }

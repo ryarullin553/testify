@@ -1,194 +1,20 @@
 .pageMain {
-    width: 1300px;
-    margin: 0 auto;
-    flex-grow: 1;
-    display: flex;
-    justify-content: space-between;
+  width: 1300px;
+  margin: 0 auto;
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
 
-    .passChange {
-        width: 300px;
-        height: 300px;
-    }
+  .passChange {
+    width: 300px;
+    height: 300px;
+  }
 
-    hr {
-        width: 640px;
-        margin-left: 0;
-        margin-bottom: 30px;
-        color: rgba(69, 72, 104, 0.2);
-    }
+  hr {
+    width: 640px;
+    margin-left: 0;
+    margin-bottom: 30px;
+    color: rgba(69, 72, 104, 0.2);
+  }
 }
 
-.contentForm {
-    box-sizing: border-box;
-    margin-left: 92px;
-    width: 992px;
-    padding: 0 21px;
-}
-
-.createTest {
-    color: #222222;
-    margin-top: 24px;
-    margin-bottom: 32px;
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 29px;
-}
-
-.contentArea {
-    margin-bottom: 26px;
-
-    label {
-        display: block;
-        margin-bottom: 9px;
-
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 19px;
-        color: #222222;
-    }
-
-    textarea {
-        box-sizing: border-box;
-        width: 100%;
-        // min-height: 160px;
-        resize: vertical;
-        padding: 7px 10px;
-
-        border: 1px solid #CCCCCC;
-        border-radius: 5px;
-
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 17px;
-
-        &::placeholder {
-            font-family: 'Inter';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 17px;
-            color: #A5A5A5;
-        }
-    }
-
-    p {
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 15px;
-        color: #5E5E5E;
-    }
-
-}
-
-.titleForm {
-    textarea {
-        min-height: 32px;
-    }
-}
-
-.shortAbstractForm {
-    textarea {
-        min-height: 96px;
-    }
-}
-
-.abstractForm {
-    textarea {
-        min-height: 160px;
-    }
-}
-
-.testLogo {
-    margin-bottom: 32px;
-
-    label {
-        display: block;
-        margin-bottom: 9px;
-
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 19px;
-        color: hsl(0, 0%, 13%);
-    }
-}
-
-.dropZone {
-    display: flex;
-    flex-direction: column-reverse;
-    border: 1px dashed #000000;
-    border-radius: 5px;
-    width: 128px;
-    height: 128px;
-  
-    background: url(./img/test-logo-icon.svg) center 10px no-repeat;
-  
-    p {
-      position: absolute;
-      display: block;
-      width: 128px;
-      margin-bottom: 10px;
-  
-      font-weight: 400;
-      font-size: 12px;
-      line-height: 15px;
-      text-align: center;
-      color: #848492;
-    }
-  
-    input {
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-    }
-  
-    &:hover,
-    &.active {
-      border: 1px solid #A38FFD;
-  
-      background: url(./img/test-logo-icon-hovered.svg) center 10px no-repeat;
-  
-      p {
-        color: #A38FFD;
-      }
-    }
-}
-
-.controls {
-    margin-bottom: 60px;
-    display: flex;
-    justify-content: space-between;
-
-    button {
-        display: flex;
-        box-sizing: border-box;
-        background: #A38FFD;
-        border-radius: 5px;
-        color: #FFFFFF;
-    }
-}
-
-.createButton {
-    padding: 9px 34px;
-    border: 2px solid #A38FFD;
-
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
-
-    transition: all 0.2s ease-in-out;
-
-    &:hover {
-        background: #FFFFFF;
-        border: 2px solid #A38FFD;
-
-        color: #A38FFD;
-
-        &::after {
-            border: solid 1px #A38FFD;
-            border-width: 0 2px 2px 0;
-        }
-    }
-}

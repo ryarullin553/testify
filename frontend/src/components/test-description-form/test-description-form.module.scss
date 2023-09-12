@@ -59,7 +59,7 @@
     resize: vertical;
     padding: 7px 10px;
 
-    border: 1px solid #CCCCCC;
+    border: 1px solid #cccccc;
     border-radius: 5px;
 
     font-family: 'Inter';
@@ -74,7 +74,7 @@
       font-weight: 400;
       font-size: 14px;
       line-height: 17px;
-      color: #A5A5A5;
+      color: #a5a5a5;
     }
   }
 
@@ -82,7 +82,7 @@
     font-weight: 400;
     font-size: 12px;
     line-height: 15px;
-    color: #5E5E5E;
+    color: #5e5e5e;
   }
 
 }
@@ -151,12 +151,12 @@
 
   &:hover,
   &.active {
-    border: 1px solid #A38FFD;
+    border: 1px solid #a38ffd;
 
     background: url(./img/test-logo-icon-hovered.svg) center 10px no-repeat;
 
     p {
-      color: #A38FFD;
+      color: #a38ffd;
     }
   }
 }
@@ -269,15 +269,15 @@
   button {
     display: flex;
     box-sizing: border-box;
-    background: #A38FFD;
+    background: #a38ffd;
     border-radius: 5px;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 }
 
 .createButton {
   padding: 9px 34px;
-  border: 2px solid #A38FFD;
+  border: 2px solid #a38ffd;
 
   font-weight: 600;
   font-size: 16px;
@@ -286,13 +286,13 @@
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    background: #FFFFFF;
-    border: 2px solid #A38FFD;
+    background: #ffffff;
+    border: 2px solid #a38ffd;
 
-    color: #A38FFD;
+    color: #a38ffd;
 
     &::after {
-      border: solid 1px #A38FFD;
+      border: solid 1px #a38ffd;
       border-width: 0 2px 2px 0;
     }
   }
