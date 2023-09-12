@@ -12,8 +12,9 @@ type UserDataResponse = {
 
 export type UpdateUserDataRequest = {
   username: string
-  email: string
+  email?: string
   info: string
+  image?: File | null
 }
 
 const transformUserData = (response: UserDataResponse): UserInfo => {
@@ -40,6 +41,7 @@ export const usersApi = api.injectEndpoints({
         url: 'auth/users/me/',
         method: 'PATCH',
         body: updatedInfo,
+        formData: true,
       }),
       transformResponse: transformUserData,
       async onQueryStarted(_, { dispatch, queryFulfilled }) {

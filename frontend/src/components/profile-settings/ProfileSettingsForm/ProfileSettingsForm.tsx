@@ -6,7 +6,7 @@ import { useUpdateUserDataMutation } from '@/services/usersApi'
 interface FormData {
   userName: string
   userBio: string
-  // userAvatar: File | null
+  userAvatar: File | null
 }
 
 interface Props {
@@ -15,31 +15,12 @@ interface Props {
 
 export const ProfileSettingsForm: FC<Props> = ({ initialUserInfo }) => {
   const [updateUserData, _] = useUpdateUserDataMutation()
-  const { userName, userBio, userEmail } = initialUserInfo
-  const [formData, setFormData] = useState<FormData>({
-    userName,
-    userBio,
-    // userAvatar: null
-  })
-
-  const handleOnFormChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = evt.target
-    setFormData({ ...formData, [name]: value })
-  }
-
-  // const handleAvatarUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-  //   const { files } = evt.target
-  //   if (files) setFormData({ ...formData, userAvatar: files[0] })
-  // }
+  const { userName, userBio } = initialUserInfo
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
-    const { userName, userBio } = formData
-    updateUserData({
-      username: userName,
-      email: userEmail,
-      info: userBio,
-    })
+    const formData = new FormData(evt.currentTarget)
+    updateUserData(formData)
   }
 
   return (
@@ -47,22 +28,17 @@ export const ProfileSettingsForm: FC<Props> = ({ initialUserInfo }) => {
       <h1 className={styles.createTest}>Редактирование профиля</h1>
       <fieldset className={`${styles.contentArea} ${styles.titleForm}`}>
         <label>Имя и фамилия</label>
-        <textarea id='userName' name='userName' value={formData.userName} onChange={handleOnFormChange} />
+        <textarea id='username' name='username' defaultValue={userName} />
       </fieldset>
       <fieldset className={`${styles.contentArea} ${styles.shortAbstractForm}`}>
         <label>О себе</label>
-        <textarea id='userBio' name='userBio' value={formData.userBio} onChange={handleOnFormChange} />
+        <textarea id='info' name='info' defaultValue={userBio} />
       </fieldset>
       <fieldset className={styles.testLogo}>
         <label>Аватар</label>
         <div className={`${styles.dropZone} ${false && styles.active}`}>
           <p>png-файл с прозрачностью 230х230px</p>
-          <input
-            type='file'
-            id='userAvatar'
-            name='userAvatar'
-            accept='image/png' /**onChange={handleAvatarUpload} **/
-          />
+          <input type='file' id='image' name='image' accept='image/png' />
         </div>
       </fieldset>
       <div className={styles.controls}>
