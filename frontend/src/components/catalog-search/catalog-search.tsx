@@ -1,71 +1,56 @@
-import { ChangeEvent, MouseEvent, FC, useEffect, useState } from 'react'
+import { ChangeEvent, MouseEvent, FC, useEffect, useState, FormEvent, SetStateAction, Dispatch } from 'react'
 import styles from './catalog-search.module.scss'
+import { SearchParams } from '../catalog-content/catalog-content'
 
 interface Props {
-  defaultRequest: string
-  setBaseRequest: React.Dispatch<React.SetStateAction<string>>
+  setSearchParams: Dispatch<SetStateAction<SearchParams>>
 }
 
-export const CatalogSearch: FC<Props> = ({ defaultRequest, setBaseRequest }) => {
-  const [searchField, setSearchField] = useState('')
-  const [sort, setSort] = useState('new')
-
-  const handleFieldChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { value } = evt.target
-    setSearchField(value)
-  }
-
-  const handleSearchClick = async (evt: MouseEvent<HTMLButtonElement>) => {
+export const CatalogSearch: FC<Props> = ({ setSearchParams }) => {
+  const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
-    const newRequest = composeRequest(sortValues)
-    setBaseRequest(newRequest)
+    const formData = new FormData(evt.currentTarget)
+    const searchParams = {
+      search: formData.get('search') as string,
+      sort: (formData.get('sort') as string) ?? '-rating',
+    }
+    setSearchParams(searchParams)
   }
 
   const handleSortChange = (evt: ChangeEvent<HTMLSelectElement>) => {
-    const { value } = evt.target
-    setSort(value)
+    const newValue = evt.currentTarget.value
+    setSearchParams((prevState) => ({ ...prevState, sort: newValue }))
   }
 
   interface SortValue {
     value: string
     label: string
-    appendValue: string
   }
 
-  const composeRequest = (sortValues: SortValue[]) => {
-    let request = `${defaultRequest}?`
-    // Разобраться с типами
-    request = request.concat((sortValues.find((i) => i.value === sort) ?? sortValues[0]).appendValue)
-    if (searchField) {
-      request = request.concat(`&search=${searchField}`)
-    }
-    return request
-  }
-
-  useEffect(() => {
-    const newRequest = composeRequest(sortValues)
-    setBaseRequest(newRequest)
-  }, [sort])
-
-  const sortValues = [
-    { value: 'best', label: 'Высокий рейтинг', appendValue: 'ordering=-rating' },
-    { value: 'popular', label: 'Популярные', appendValue: 'ordering=-results_count' },
-    { value: 'new', label: 'Сначала новые', appendValue: 'ordering=-created' },
-    { value: 'old', label: 'Сначала старые', appendValue: 'ordering=created' },
+  const sortValues: SortValue[] = [
+    { value: '-rating', label: 'Высокий рейтинг' },
+    { value: '-results_count', label: 'Популярные' },
+    { value: '-created', label: 'Сначала новые' },
+    { value: 'created', label: 'Сначала старые' },
   ]
 
   return (
-    <form className={styles.catalog__options}>
+    <form className={styles.catalog__options} onSubmit={handleFormSubmit}>
       <div className={styles.search}>
         <div className={styles.search__input}>
-          <input type='search' name='search' id='search' placeholder='Название теста' onChange={handleFieldChange} />
+          <input type='search' name='search' id='search' placeholder='Название теста' />
         </div>
-        <button className={styles.search__button} onClick={handleSearchClick}>
+        <button type={'submit'} className={styles.search__button}>
           Поиск
         </button>
       </div>
       <div className={styles.select}>
-        <select name='sort' id='sort' value={sort} className={styles.select__button} onChange={handleSortChange}>
+        <select
+          name='sort'
+          id='sort'
+          defaultValue={sortValues[0].label}
+          className={styles.select__button}
+          onChange={handleSortChange}>
           {sortValues.map((sortItem) => (
             <option key={sortItem.value} value={sortItem.value}>
               {sortItem.label}
