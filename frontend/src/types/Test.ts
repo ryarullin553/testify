@@ -1,4 +1,4 @@
-import { UserInfo, UserInfoExtended } from './UserInfo'
+import { UserInfo } from './UserInfo'
 
 export interface Answer {
   answerDescription: string
@@ -52,9 +52,10 @@ export interface TestWithDescription extends Test {
   testVotesCounter: number
   testCompletionCounter: number
   isFavorite: boolean
-  authorName: UserInfoExtended['userName']
-  authorBio: UserInfoExtended['userBio']
-  authorAvatar: UserInfoExtended['userAvatar']
+  authorName: UserInfo['userName']
+  authorBio: UserInfo['userBio']
+  authorAvatar: UserInfo['userAvatar']
+  isInProgress?: boolean
 }
 
 export interface TestWithQuestions extends Test {

@@ -8,50 +8,19 @@ import { TestReview } from '../reviews-block/test-review/test-review'
 import { fetchTestInfoAction } from '../../api/tests'
 import { FC, useEffect, useState } from 'react'
 import { Test, TestWithDescription } from '../../types/Test'
+import { useGetTestByIDQuery } from '@/services/testCatalogApi'
+import { Spinner } from '../Spinner/Spinner'
 
 export const TestDescriptionContent: FC = () => {
-  const testID = Number(useParams().testID)
-  const [testInfo, setTestInfo] = useState<TestWithDescription>()
+  const params = useParams()
+  const testID = Number(params.testID)
+  const { data: testInfo } = useGetTestByIDQuery(testID)
 
-  const fetchTestInfo = async (testID: Test['testID']) => {
-    const data = await fetchTestInfoAction(testID)
-    const testData = convertTestDataStC(data)
-    setTestInfo(testData)
-  }
-
-  const setIsFavorite = (newValue: boolean) => {
-    if (!testInfo) return
-    setTestInfo({ ...testInfo, isFavorite: newValue })
-  }
-
-  const convertTestDataStC = (data: any): TestWithDescription => {
-    const modifiedData: TestWithDescription = {
-      testID: data.id,
-      testTitle: data.title,
-      testSummary: data.description,
-      testDescription: data.full_description,
-      testAvatar: data.avatar,
-      isFavorite: data.in_bookmarks,
-      isInProgress: data.is_passage,
-      testRating: data.rating,
-      testVotesCounter: data.feedbacks_count,
-      testCompletionCounter: data.results_count,
-      authorAvatar: data.user_avatar,
-      authorBio: data.user_bio,
-      authorName: data.user_name,
-    }
-    return modifiedData
-  }
-
-  useEffect(() => {
-    fetchTestInfo(testID)
-  }, [])
-
-  if (!testInfo) return <></>
+  if (!testInfo) return <Spinner />
 
   return (
     <main className={styles.main}>
-      <TestOverview testInfo={testInfo} setIsFavorite={setIsFavorite}>
+      <TestOverview testInfo={testInfo}>
         <ReviewsBlock testID={testID}>
           <TestReview rating={testInfo.testRating} ratingCounter={testInfo.testVotesCounter} />
         </ReviewsBlock>

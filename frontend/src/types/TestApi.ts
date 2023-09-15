@@ -135,6 +135,7 @@ export const transformGetTestResponse = (r: TestResponse) => ({
   hasQuestionPoints: r.has_points,
   hasCorrectAnswers: r.has_right_answers,
   hasQuestionExplanation: r.has_questions_explanation,
+  isInProgress: r.has_passage,
 })
 
 export const transformQuestionResponse = (r: QuestionResponse, testID?: number): QuestionWithCorrectAnswer => ({
