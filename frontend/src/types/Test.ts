@@ -1,4 +1,9 @@
-import { UserInfo, UserInfoExtended } from './UserInfo'
+import { UserInfo } from './UserInfo'
+
+export interface Answer {
+  answerDescription: string
+  isCorrect: boolean
+}
 
 export interface Question {
   questionID: number
@@ -6,12 +11,13 @@ export interface Question {
   questionDescription: string
   questionAvatar: string | null
   questionType: 'Single choice'
-  answerList: Record<number, string>
-  answerCount: number
+  answerList: Record<number, { answerDescription: string }>
+  answerOrder: number[]
   questionState?: QuestionState
 }
 
 export interface QuestionWithCorrectAnswer extends Question {
+  answerList: Record<number, Answer>
   correctAnswerIDs: number[]
 }
 
@@ -25,11 +31,6 @@ export interface QuestionWithSelectedAnswer extends Question {
 export interface Test {
   testID: number
   testTitle: string
-  testRating?: number
-  testVotesCounter?: number
-  testCompletionCounter?: number
-  isFavorite?: boolean
-  isInProgress?: boolean
 }
 
 export interface TestWithSettings extends Test {
@@ -51,14 +52,15 @@ export interface TestWithDescription extends Test {
   testVotesCounter: number
   testCompletionCounter: number
   isFavorite: boolean
-  authorName: UserInfoExtended['userName']
-  authorBio: UserInfoExtended['userBio']
-  authorAvatar: UserInfoExtended['userAvatar']
+  authorName: UserInfo['userName']
+  authorBio: UserInfo['userBio']
+  authorAvatar: UserInfo['userAvatar']
+  isInProgress?: boolean
 }
 
 export interface TestWithQuestions extends Test {
-  questionList: Record<number, Question>
-  questionIDs: number[]
+  questionList: Record<number, QuestionWithCorrectAnswer>
+  questionOrder: number[]
   isPublished: boolean
   hasQuestionPoints: boolean
   hasQuestionExplanation: boolean

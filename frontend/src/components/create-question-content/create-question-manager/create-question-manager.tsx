@@ -1,73 +1,67 @@
-import { useImmer } from 'use-immer'
 import { QuestionInputArea } from '../question-input-area/question-input-area'
 import { AnswersInputArea } from '../answers-input-area/answers-input-area'
 import styles from './create-question-manager.module.scss'
-import { FC, useEffect, useState, MouseEvent, ChangeEvent } from 'react'
+import { FC, useEffect, useState, MouseEvent, ChangeEvent, SyntheticEvent, FormEvent } from 'react'
 import { generateAnswersAction } from '../../../api/questions'
-import { Question } from '../../../types/Test'
+import { Answer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
+import {
+  useCreateQuestionMutation,
+  useDeleteQuestionMutation,
+  useUpdateQuestionMutation,
+} from '@/services/testCreationApi'
 
 interface Props {
-  defaultQuestionData: Question
-  actionQuestionUpdate: (updatedQuestionData: Question) => Promise<void>
-  isLastQuestion: boolean
+  testID: Test['testID']
+  questionData: QuestionWithCorrectAnswer
   actionQuestionAdd: () => void
-  actionQuestionSave: (updatedQuestionData: Question) => Promise<void>
   currentQuestionID: Question['questionID']
   currentQuestionIndex: number
-  actionQuestionDelete: () => Promise<void>
 }
 
 export const CreateQuestionManager: FC<Props> = ({
-  defaultQuestionData,
-  actionQuestionUpdate,
-  isLastQuestion,
+  questionData,
+  testID,
   actionQuestionAdd,
-  actionQuestionSave,
   currentQuestionID,
   currentQuestionIndex,
-  actionQuestionDelete,
 }) => {
-  const [currentQuestionData, setCurrentQuestionData] = useImmer(defaultQuestionData)
-  const [generateAmount, setGenerateAmount] = useState(1)
-
-  useEffect(() => {
-    setCurrentQuestionData(defaultQuestionData)
-  }, [defaultQuestionData])
+  const blankAnswer: Answer = {
+    answerDescription: '',
+    isCorrect: false,
+  }
+  const blankQuestion: QuestionWithCorrectAnswer = {
+    testID,
+    questionDescription: '',
+    questionAvatar: null,
+    questionType: 'Single choice',
+    questionID: -1,
+    answerList: {
+      0: blankAnswer,
+      1: blankAnswer,
+    },
+    answerOrder: [0, 1],
+    correctAnswerIDs: [0],
+  }
+  const { questionID, answerOrder, questionDescription } = questionData || blankQuestion
+  const [answerOrderState, setAnswerOrderState] = useState([...answerOrder])
+  const [createQuestion] = useCreateQuestionMutation()
+  const [updateQuestion] = useUpdateQuestionMutation()
+  const [deleteQuestion] = useDeleteQuestionMutation()
+  // const [generateAmount, setGenerateAmount] = useState(1)
 
   const actionAnswerDelete = (answerID: number) => {
-    setCurrentQuestionData((draft) => {
-      draft.answerList = draft.answerList.filter((answer) => answer.answerID !== answerID)
+    setAnswerOrderState((prevState) => {
+      const newState = [...prevState]
+      return newState.filter((x) => x !== answerID)
     })
   }
 
-  const actionAnswerAdd = (answerDescription?: Answer['answerDescription']) => {
-    setCurrentQuestionData((draft) => {
-      draft.answerList.push({
-        answerID: Math.max(...draft.answerList.map((answer) => answer.answerID)) + 1,
-        answerDescription: answerDescription ?? '',
-      })
-    })
-  }
-
-  const handleQuestionDescriptionChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { value } = evt.target
-    setCurrentQuestionData((draft) => {
-      draft.questionDescription = value
-    })
-  }
-
-  const handleCorrectAnswerChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { value } = evt.target
-    setCurrentQuestionData((draft) => {
-      draft.correctAnswerID = +value
-    })
-  }
-
-  const handleAnswerDescriptionChange = (evt: ChangeEvent<HTMLInputElement>, answerID: Answer['answerID']) => {
-    const { value } = evt.target
-    setCurrentQuestionData((draft) => {
-      const currAnswerIndex = draft.answerList.findIndex((answer) => answer.answerID === answerID) || 0
-      draft.answerList[currAnswerIndex].answerDescription = value
+  const actionAnswerAdd = () => {
+    setAnswerOrderState((prevState) => {
+      const newState = [...prevState]
+      const newID = Math.max(...newState) + 1
+      newState.push(newID)
+      return newState
     })
   }
 
@@ -78,25 +72,39 @@ export const CreateQuestionManager: FC<Props> = ({
 
   const handleQuestionDelete = async (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault()
-    await actionQuestionDelete()
+    deleteQuestion({ questionID, testID })
   }
 
-  const handleAnswerDelete = (evt: MouseEvent<HTMLButtonElement>, answerID: Answer['answerID']) => {
-    evt.preventDefault()
-    actionAnswerDelete(answerID)
-    if (currentQuestionData.answerList.length === 2) {
+  const handleAnswerDelete = (answerID: number) => {
+    if (answerOrderState.length === 2) {
       actionAnswerAdd()
     }
+    actionAnswerDelete(answerID)
   }
 
-  const handleSaveClick = async (evt: MouseEvent<HTMLButtonElement>) => {
+  const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
-    if (currentQuestionID <= 0) {
-      await actionQuestionSave(currentQuestionData)
-    } else await actionQuestionUpdate(currentQuestionData)
-    if (isLastQuestion) {
-      actionQuestionAdd()
+    const formData = new FormData(evt.currentTarget)
+    const questionData: QuestionWithCorrectAnswer = {
+      testID,
+      questionID,
+      questionDescription: formData.get('questionDescription') as string,
+      questionAvatar: null,
+      questionType: 'Single choice',
+      answerOrder: answerOrderState,
+      answerList: answerOrderState.reduce((acc: Record<number, Answer>, x) => {
+        acc[x] = {
+          answerDescription: formData.get(`answerDescription-${x}`) as string,
+          isCorrect: Number(formData.get('correct-answer-form')) === x,
+        }
+        return acc
+      }, {}),
+      correctAnswerIDs: [Number(formData.get('correct-answer-form'))],
     }
+    if (currentQuestionID <= 0) {
+      await createQuestion(questionData)
+      actionQuestionAdd()
+    } else await updateQuestion(questionData)
   }
 
   // const handleGenerateAmountChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -122,25 +130,19 @@ export const CreateQuestionManager: FC<Props> = ({
   // }
 
   return (
-    <form className={styles.questionForm} action='#' name='question-form'>
-      <QuestionInputArea
-        currentQuestionID={currentQuestionID}
-        currentQuestionIndex={currentQuestionIndex}
-        questionDescription={currentQuestionData.questionDescription}
-        handleQuestionDescriptionChange={handleQuestionDescriptionChange}
-      />
+    <form className={styles.questionForm} action='#' name='question-form' onSubmit={handleFormSubmit}>
+      <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
       <AnswersInputArea
-        answerList={currentQuestionData.answerList}
-        correctAnswerID={currentQuestionData.correctAnswerIDs[0] || 0}
-        handleCorrectAnswerChange={handleCorrectAnswerChange}
-        handleAnswerDescriptionChange={handleAnswerDescriptionChange}
-        handleAnswerDelete={handleAnswerDelete}
+        testID={testID}
+        questionID={questionID}
+        answerOrder={answerOrderState}
+        actionAnswerDelete={handleAnswerDelete}
       />
       <div className={styles.controls}>
         <button className={styles.plusButton} onClick={handleAnswerAdd}>
           +
         </button>
-        <fieldset className={styles.generateAnswersForm}>
+        {/* <fieldset className={styles.generateAnswersForm}>
           <button className={styles.generateAnswersButton} onClick={handleGenerateAnswersClick}>
             Сгенерировать варианты ответов
           </button>
@@ -152,10 +154,12 @@ export const CreateQuestionManager: FC<Props> = ({
             value={generateAmount}
             onChange={handleGenerateAmountChange}
           />
-        </fieldset>
+        </fieldset> */}
         <div className={styles.questionControls}>
-          <button onClick={handleQuestionDelete}>Удалить вопрос</button>
-          <button onClick={handleSaveClick}>Сохранить вопрос</button>
+          <button type={'button'} onClick={handleQuestionDelete}>
+            Удалить вопрос
+          </button>
+          <button type={'submit'}>Сохранить вопрос</button>
         </div>
       </div>
     </form>

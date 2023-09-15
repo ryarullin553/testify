@@ -7,16 +7,17 @@ import { FeedbackStars } from '../../feedback-stars/feedback-stars'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { TestWithDescription } from '../../../types/Test'
 import { useRouter } from 'next/navigation'
+import { useStartAttemptMutation } from '@/services/testCatalogApi'
 
 interface Props extends PropsWithChildren {
   testInfo: TestWithDescription
-  setIsFavorite: (newValue: boolean) => void
 }
 
-export const TestOverview: FC<Props> = ({ testInfo, setIsFavorite, children }) => {
+export const TestOverview: FC<Props> = ({ testInfo, children }) => {
   const router = useRouter()
-  const [isMouseOver, setIsMouseOver] = useState(false)
+  const [startAttempt] = useStartAttemptMutation()
   const {
+    testID,
     testAvatar,
     testTitle,
     testDescription,
@@ -27,27 +28,19 @@ export const TestOverview: FC<Props> = ({ testInfo, setIsFavorite, children }) =
     authorAvatar,
     authorName,
     authorBio,
+    isInProgress,
   } = testInfo
-
-  const getFavoriteContent = () => (testInfo.isFavorite || isMouseOver ? '♥' : '♡')
 
   const handleStartTestClick = async (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault()
-    if (!testInfo.isInProgress) {
-      await createAttemptAction(testInfo.testID)
+    if (!isInProgress) {
+      await startAttempt(testID)
     }
-    router.push(`${AppRoute.TestMain}/${testInfo.testID}`)
+    // router.push(`${AppRoute.TestMain}/${testID}`)
   }
 
   const handleFavoriteClick = async (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault()
-    if (!testInfo.isFavorite) {
-      await addBookmarkAction(testInfo.testID)
-      setIsFavorite(true)
-    } else {
-      await deleteBookmarkAction(testInfo.testID)
-      setIsFavorite(false)
-    }
   }
 
   return (
@@ -91,12 +84,8 @@ export const TestOverview: FC<Props> = ({ testInfo, setIsFavorite, children }) =
           <button className={styles.button} onClick={handleStartTestClick}>
             {testInfo.isInProgress ? 'Продолжить' : 'Начать'}
           </button>
-          <button
-            className={`${styles.button} ${styles.button_inversed}`}
-            onClick={handleFavoriteClick}
-            onMouseEnter={() => setIsMouseOver(true)}
-            onMouseLeave={() => setIsMouseOver(false)}>
-            <span className={styles.heart}>{getFavoriteContent()}</span>Хочу пройти
+          <button className={`${styles.button} ${styles.button_inversed}`} onClick={handleFavoriteClick}>
+            <span className={styles.heart}>♡</span>Хочу пройти
           </button>
         </div>
       </section>

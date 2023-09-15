@@ -1,14 +1,30 @@
 import { FC, PropsWithChildren } from 'react'
-import { Question, QuestionState, Test } from '../../types/Test'
+import { Question, QuestionState, Test, TestWithQuestions } from '../../types/Test'
 import styles from './question-list-sidebar.module.scss'
 
 interface Props extends PropsWithChildren {
   testTitle: Test['testTitle']
-  questionList: Record<number, Question>
-  setCurrentQuestionID: (questionID: Question['questionID']) => void
+  currentQuestionID: number
+  questionList: Record<
+    number,
+    {
+      questionID: Question['questionID']
+      questionDescription: Question['questionDescription']
+      questionState?: QuestionState
+    }
+  >
+  questionOrder: TestWithQuestions['questionOrder']
+  setCurrentQuestionIndex: (questionID: Question['questionID']) => void
 }
 
-export const QuestionListSidebar: FC<Props> = ({ testTitle, questionList, setCurrentQuestionID, children }) => {
+export const QuestionListSidebar: FC<Props> = ({
+  testTitle,
+  currentQuestionID,
+  questionList,
+  questionOrder,
+  setCurrentQuestionIndex,
+  children,
+}) => {
   const buttonLabel = (text: string) => {
     if (text.length === 0) {
       return 'Нет описания'
@@ -31,18 +47,28 @@ export const QuestionListSidebar: FC<Props> = ({ testTitle, questionList, setCur
         return ''
     }
   }
+  let _questionList = { ...questionList }
+  let _questionOrder = [...questionOrder]
+
+  if (currentQuestionID < 0) {
+    _questionList[-1] = {
+      questionID: -1,
+      questionDescription: 'Новый вопрос',
+    }
+    _questionOrder.push(-1)
+  }
 
   return (
     <section className={styles.questionListSection}>
       <h2>{testTitle}</h2>
       <ol>
-        {Object.values(questionList).map((question) => (
-          <li key={question.questionID} style={{ color: getQuestionColor(question.questionState) }}>
+        {_questionOrder.map((x, i) => (
+          <li key={_questionList[x].questionID} style={{ color: getQuestionColor(_questionList[x].questionState) }}>
             <button
               className={styles.selectQuestionButton}
-              onClick={() => setCurrentQuestionID(question.questionID)}
-              style={{ color: getQuestionColor(question.questionState) }}>
-              {buttonLabel(question.questionDescription)}
+              onClick={() => setCurrentQuestionIndex(i)}
+              style={{ color: getQuestionColor(_questionList[x].questionState) }}>
+              {_questionList[x].questionDescription}
             </button>
           </li>
         ))}
