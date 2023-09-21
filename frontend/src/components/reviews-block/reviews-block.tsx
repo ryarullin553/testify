@@ -5,6 +5,7 @@ import { ReviewList } from '../rewiew-list/rewiew-list'
 import { AddCommentBlock } from '../add-comment-block/add-comment-block'
 import { submitReviewAction } from '../../api/reviews'
 import { Test } from '../../types/Test'
+import { useGetTestReviewsQuery } from '@/services/feedbackApi'
 
 interface Props extends PropsWithChildren {
   testID: Test['testID']
@@ -12,17 +13,7 @@ interface Props extends PropsWithChildren {
 }
 
 export const ReviewsBlock: FC<Props> = ({ testID, hasCommentBlock, children }) => {
-  const [testFeedback, setTestFeedback] = useState([])
-
-  const fetchTestFeedback = async (testID: Test['testID']) => {
-    const data = await fetchTestFeedbackAction(testID)
-    const testData = convertDataStC(data)
-    setTestFeedback(testData)
-  }
-
-  const reloadTestFeedback = async () => {
-    fetchTestFeedback(testID)
-  }
+  const { data: testReviews } = useGetTestReviewsQuery(testID)
 
   const convertDataStC = (data: any) => {
     const modifiedData = data.results.map((r: any, i: string) => ({
@@ -45,24 +36,15 @@ export const ReviewsBlock: FC<Props> = ({ testID, hasCommentBlock, children }) =
     return modifiedData
   }
 
-  useEffect(() => {
-    fetchTestFeedback(testID)
-  }, [])
-
-  if (!testFeedback) return <></>
+  if (!testReviews) return <></>
 
   return (
     <section className={styles.reviews}>
       {children}
       {hasCommentBlock && (
-        <AddCommentBlock
-          reloadFeedback={reloadTestFeedback}
-          submitAction={submitReviewAction}
-          convertAction={convertDataCtS}
-          hasRateBlock
-        />
+        <AddCommentBlock submitAction={submitReviewAction} convertAction={convertDataCtS} hasRateBlock />
       )}
-      <ReviewList reviewList={testFeedback} />
+      <ReviewList reviewList={testReviews} />
     </section>
   )
 }

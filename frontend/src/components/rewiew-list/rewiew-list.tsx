@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { ReviewTile } from './review-tile/review-tile'
 import styles from './rewiew-list.module.scss'
-import { TestReview } from '../../types/TestReview'
+import { TestReview } from '@/types/Feedback'
 
 interface Props {
   reviewList: TestReview[]

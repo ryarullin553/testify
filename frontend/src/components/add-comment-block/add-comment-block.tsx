@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import { selectUserInfo } from '../../store/selectors'
 
 interface Props extends PropsWithChildren {
-  reloadFeedback: () => Promise<void>
   hasRateBlock: boolean
   submitAction: (convertedData: any) => Promise<void>
   convertAction: (formState: any) => any
@@ -19,7 +18,7 @@ interface CommentFormState {
   rating: RatingValues | null
 }
 
-export const AddCommentBlock: FC<Props> = ({ reloadFeedback, hasRateBlock, children, submitAction, convertAction }) => {
+export const AddCommentBlock: FC<Props> = ({ hasRateBlock, children, submitAction, convertAction }) => {
   const { userAvatar } = useSelector(selectUserInfo)
   const [formState, setFormState] = useState<CommentFormState>({
     review: '',
@@ -35,7 +34,6 @@ export const AddCommentBlock: FC<Props> = ({ reloadFeedback, hasRateBlock, child
     evt.preventDefault()
     const convertedData = convertAction(formState)
     await submitAction(convertedData)
-    await reloadFeedback()
   }
 
   return (
