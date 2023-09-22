@@ -59,17 +59,21 @@ export interface TestWithDescription extends Test {
 }
 
 export interface TestWithQuestions extends Test {
-  questionList: Record<number, QuestionWithCorrectAnswer>
+  questionList: Record<number, Question>
   questionOrder: number[]
   isPublished: boolean
   hasQuestionPoints: boolean
   hasQuestionExplanation: boolean
 }
 
+export interface TestWithCorrectAnswers extends TestWithQuestions {
+  questionList: Record<number, QuestionWithCorrectAnswer>
+}
+
 export interface Attempt extends TestWithQuestions {
   attemptID: number
-  questionList: Record<number, QuestionWithSelectedAnswer>
-  date?: Date
+  questionList: Record<number, Question>
+  date?: string
   score?: number
   isComplete?: boolean
 }

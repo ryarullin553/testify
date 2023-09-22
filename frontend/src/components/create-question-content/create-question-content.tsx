@@ -1,31 +1,22 @@
 'use client'
 
-import { FC, useEffect, useState } from 'react'
-import { useImmer } from 'use-immer'
+import { FC, useState } from 'react'
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar'
 import styles from './create-question-content.module.scss'
 import { CreateQuestionManager } from './create-question-manager/create-question-manager'
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button'
-import { Answer, QuestionWithCorrectAnswer, TestWithQuestions } from '../../types/Test'
-import { useParams, useRouter } from 'next/navigation'
-import {
-  useCreateQuestionMutation,
-  useDeleteQuestionMutation,
-  useGetTestWithQuestionsQuery,
-  usePublishTestMutation,
-  useUpdateQuestionMutation,
-} from '@/services/testCreationApi'
+import { useParams } from 'next/navigation'
+import { useGetTestWithQuestionsQuery, usePublishTestMutation } from '@/services/testCreationApi'
 import { Spinner } from '../Spinner/Spinner'
 
 export const CreateQuestionContent: FC = () => {
-  const router = useRouter()
   const params = useParams()
   const testID = Number(params.testID)
   const [publishTest] = usePublishTestMutation()
-  const { data: initialTestData, isSuccess: isGetTestSuccess } = useGetTestWithQuestionsQuery(testID)
+  const { data: initialTestData, isSuccess } = useGetTestWithQuestionsQuery(testID)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
 
-  if (!isGetTestSuccess) return <Spinner />
+  if (!isSuccess) return <Spinner />
 
   const { questionOrder, testTitle, questionList, isPublished } = initialTestData
 

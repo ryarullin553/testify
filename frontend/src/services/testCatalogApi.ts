@@ -1,4 +1,4 @@
-import { Test, TestWithDescription } from '@/types/Test'
+import { Attempt, Test, TestWithDescription } from '@/types/Test'
 import { api } from './api'
 import { TestResponse, transformGetTestResponse } from '@/types/TestApi'
 
@@ -25,14 +25,11 @@ export const testCatalogApi = api.injectEndpoints({
       query: (testID) => `tests/${testID}`,
       transformResponse: (response: TestResponse) => transformGetTestResponse(response) as TestWithDescription,
     }),
-    startAttempt: builder.mutation<void, Test['testID']>({
-      query: (testID) => ({
-        url: `passages/`,
-        method: 'POST',
-        body: { test: testID },
-      }),
+    getTestAttempts: builder.query<Attempt['attemptID'][], Test['testID']>({
+      query: (testID) => `/tests/${testID}/passages/my/`,
+      transformResponse: (r) => r.results.map((x) => x.id),
     }),
   }),
 })
 
-export const { useGetPublishedTestsQuery, useGetTestByIDQuery, useStartAttemptMutation } = testCatalogApi
+export const { useGetPublishedTestsQuery, useGetTestByIDQuery, useGetTestAttemptsQuery } = testCatalogApi

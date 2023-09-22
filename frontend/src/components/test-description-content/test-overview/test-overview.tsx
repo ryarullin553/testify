@@ -7,7 +7,7 @@ import { FeedbackStars } from '../../feedback-stars/feedback-stars'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { TestWithDescription } from '../../../types/Test'
 import { useRouter } from 'next/navigation'
-import { useStartAttemptMutation } from '@/services/testCatalogApi'
+import { useStartAttemptMutation } from '@/services/testCompletionApi'
 
 interface Props extends PropsWithChildren {
   testInfo: TestWithDescription
@@ -36,7 +36,7 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
     if (!isInProgress) {
       await startAttempt(testID)
     }
-    // router.push(`${AppRoute.TestMain}/${testID}`)
+    router.push(`${AppRoute.TestMain}/${testID}`)
   }
 
   const handleFavoriteClick = async (evt: MouseEvent<HTMLButtonElement>) => {

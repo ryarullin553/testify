@@ -4,36 +4,13 @@ import styles from './question-area.module.scss'
 import { Answer, Question, QuestionState, QuestionWithSelectedAnswer } from '../../../types/Test'
 
 interface Props extends PropsWithChildren {
-  questionData: QuestionWithSelectedAnswer
+  questionData: Question
   questionIndex: number
-  changeCorrectAnswer?: (questionID: Question['questionID'], answerID: Answer['answerID']) => void
-  setQuestionState?: (newState: QuestionState) => void
   isTogglable?: boolean
 }
 
-export const QuestionArea: FC<Props> = ({
-  children,
-  questionData,
-  questionIndex,
-  changeCorrectAnswer,
-  setQuestionState,
-  isTogglable,
-}) => {
-  const isChecked = (answerID: Answer['answerID']) =>
-    !!questionData.selectedAnswer && answerID === questionData.selectedAnswer.answerID
-
-  const handleRadioToggle = (evt: ChangeEvent<HTMLInputElement>) => {
-    if (!isTogglable) {
-      evt.preventDefault()
-      return
-    }
-    // Плохо
-    if (!changeCorrectAnswer || !setQuestionState) return
-    const { value } = evt.target
-    const numVal = Number(value)
-    changeCorrectAnswer(questionData.questionID, numVal)
-    setQuestionState(QuestionState.PendingAnswer)
-  }
+export const QuestionArea: FC<Props> = ({ children, questionData, questionIndex, isTogglable }) => {
+  const { answerList, answerOrder } = questionData
 
   return (
     <div className={styles.questionArea}>
@@ -43,8 +20,8 @@ export const QuestionArea: FC<Props> = ({
         <p className={styles.notice}>Выберите один вариант из списка</p>
         <form className={styles.answerForm} action='#'>
           <ul>
-            {questionData.answerList.map((a) => {
-              const { answerID, answerDescription } = a
+            {answerOrder.map((answerID) => {
+              const { answerDescription } = answerList[answerID]
               const stringAnswerID = String(answerID)
               return (
                 <li key={answerID}>
@@ -53,8 +30,7 @@ export const QuestionArea: FC<Props> = ({
                     id={stringAnswerID}
                     name='answer-selection'
                     value={answerID}
-                    checked={isChecked(answerID)}
-                    onChange={handleRadioToggle}
+                    defaultChecked={false}
                   />
                   <label htmlFor={stringAnswerID}>{answerDescription}</label>
                 </li>
@@ -64,7 +40,7 @@ export const QuestionArea: FC<Props> = ({
         </form>
         {children}
       </section>
-      <CommentsBlock questionID={questionData.questionID} />
+      {/* <CommentsBlock questionID={questionData.questionID} /> */}
     </div>
   )
 }
