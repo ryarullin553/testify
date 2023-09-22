@@ -130,6 +130,10 @@ html {
 }
 
 body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -174,10 +178,4 @@ q {
 
 main {
   flex-grow: 1;
-}
-
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
