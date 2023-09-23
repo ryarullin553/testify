@@ -17,7 +17,7 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['81.163.26.65', '127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -134,8 +134,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / STATIC_URL
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / MEDIA_URL

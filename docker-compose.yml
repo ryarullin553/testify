@@ -1,7 +1,6 @@
 services:
 
   nginx:
-    restart: always
     image: nginx:1.23-alpine
     ports:
       - 80:80
@@ -14,7 +13,6 @@ services:
       - gpt
 
   backend:
-    restart: always
     build: backend/
     expose:
       - 8000
@@ -28,18 +26,15 @@ services:
       - database
 
   database:
-    restart: always
     image: postgres:15.3-alpine3.18
     env_file:
       - ./backend/.env
 
   redis:
-    restart: always
     image: redis:7.2-rc-alpine3.18
     hostname: redis
 
   worker:
-    restart: always
     build: backend/
     hostname: worker
     entrypoint: celery
@@ -55,7 +50,6 @@ services:
       - ./backend/.env
 
   worker2:
-    restart: always
     build: backend/
     hostname: worker2
     entrypoint: celery
@@ -70,8 +64,21 @@ services:
     env_file:
       - ./backend/.env
 
+  flower:
+    build: backend/
+    hostname: flower
+    entrypoint: celery
+    command: -A celery_app.app flower
+    volumes:
+      - ./backend:/app/backend
+    links:
+      - redis
+    depends_on:
+      - redis
+    ports:
+      - "5555:5555"
+
   gpt:
-    restart: always
     build: gpt/
     expose:
       - 8501

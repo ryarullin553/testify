@@ -5,7 +5,6 @@ do
     echo "Waiting for server volume..."
 done
 
-
 until python manage.py migrate
 do
     echo "Waiting for db to be ready..."
