@@ -21,18 +21,20 @@ export const testCreationApi = api.injectEndpoints({
         url: 'tests/',
         method: 'POST',
         body: transformEditTestRequest(newTestData),
+        formData: true,
       }),
-      transformResponse: (response: TestResponse) => response.id,
+      transformResponse: (r: TestResponse) => r.id,
     }),
     getTestSettingsByID: builder.query<TestWithSettings, Test['testID']>({
       query: (testID) => `tests/${testID}/config/`,
-      transformResponse: (response: TestResponse) => transformGetTestResponse(response) as TestWithSettings,
+      transformResponse: (r: TestResponse) => transformGetTestResponse(r) as TestWithSettings,
     }),
     updateTestSettingsByID: builder.mutation<void, EditTestProps>({
       query: (editTestArgs) => ({
         url: `tests/${editTestArgs.testID}/`,
         method: 'PATCH',
         body: transformEditTestRequest(editTestArgs),
+        formData: true,
       }),
     }),
     getTestWithQuestions: builder.query<TestWithQuestions, Test['testID']>({
@@ -45,7 +47,7 @@ export const testCreationApi = api.injectEndpoints({
         method: 'POST',
         body: transformEditQuestionRequest(newQuestionData),
       }),
-      transformResponse: (response: QuestionResponse) => transformQuestionResponse(response),
+      transformResponse: (r: QuestionResponse) => transformQuestionResponse(r),
       async onQueryStarted({ testID }, { dispatch, queryFulfilled }) {
         try {
           const { data: newQuestionData } = await queryFulfilled
@@ -65,7 +67,7 @@ export const testCreationApi = api.injectEndpoints({
         method: 'PATCH',
         body: transformEditQuestionRequest(editQuestionArgs),
       }),
-      transformResponse: (response: QuestionResponse) => transformQuestionResponse(response),
+      transformResponse: (r: QuestionResponse) => transformQuestionResponse(r),
       async onQueryStarted({ testID }, { dispatch, queryFulfilled }) {
         try {
           const { data: newQuestionData } = await queryFulfilled

@@ -28,8 +28,7 @@ export const feedbackApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getTestReviews: builder.query<TestReview[], Test['testID']>({
       query: (testID) => `tests/${testID}/feedbacks/`,
-      transformResponse: (response: GetTestReviewsResponse) =>
-        response.result.map((x, i) => transformReviewResponse(x, i)),
+      transformResponse: (r: GetTestReviewsResponse) => r.result.map((x, i) => transformReviewResponse(x, i)),
     }),
   }),
 })

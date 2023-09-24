@@ -12,14 +12,14 @@ export type EditTestRequest = {
   has_questions_explanation?: boolean
 }
 
-export interface CreateTestProps {
+export type CreateTestProps = {
   testTitle: string
   testSummary: string
   testDescription: string
   testAvatar: File | null
 }
 
-export interface EditTestProps extends CreateTestProps {
+export type EditTestProps = CreateTestProps & {
   testID: Test['testID']
 }
 
@@ -107,14 +107,15 @@ export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuesti
   explanation: undefined,
 })
 
-export const transformEditTestRequest = (r: CreateTestProps): EditTestRequest => {
+export const transformEditTestRequest = (r: CreateTestProps) => {
   const { testTitle, testSummary, testDescription, testAvatar } = r
-  return {
-    title: testTitle,
-    short_description: testSummary,
-    description: testDescription,
-    image: testAvatar ?? undefined,
-  }
+  const formData = new FormData()
+  formData.append('title', testTitle)
+  formData.append('short_description', testSummary)
+  formData.append('description', testDescription)
+  if (testAvatar) formData.append('image', testAvatar)
+
+  return formData
 }
 
 export const transformGetTestResponse = (r: TestResponse) => ({

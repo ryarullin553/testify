@@ -33,6 +33,10 @@ export interface Test {
   testTitle: string
 }
 
+export interface TestWithAvatar extends Test {
+  testAvatar: string
+}
+
 export interface TestWithSettings extends Test {
   testSummary: string
   testAvatar: string

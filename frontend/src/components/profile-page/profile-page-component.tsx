@@ -6,45 +6,35 @@ import { ProfileComponent } from './profile-component/profile-component'
 import { ProfileNavigation } from '../profile-navigation/profile-navigation'
 import { FC, useEffect, useState } from 'react'
 import { fetchUserInfoAction } from '../../api/user'
-import { UserInfo, UserInfoExtended } from '../../types/UserInfo'
+import { UserInfo } from '../../types/UserInfo'
+import { Spinner } from '../Spinner/Spinner'
+import { useGetUserDataQuery } from '@/services/usersApi'
+import {
+  useGetFinishedTestsQuery,
+  useGetTestsCreatedByCurrentUserQuery,
+  useGetTestsInProgressQuery,
+} from '@/services/testCatalogApi'
 
 export const ProfilePageComponent: FC = () => {
-  const [userInfo, setUserInfo] = useState<UserInfoExtended>()
-
   const params = useParams()
-  const userID = String(params?.userID ?? 'me')
+  const userID = (params?.userID as string) ?? 'me'
+  const { data: userInfo } = useGetUserDataQuery(userID)
+  const { data: createdTestList, isLoading: isCreatedTestListLoading } = useGetTestsCreatedByCurrentUserQuery()
+  const { data: unfinishedTestList, isLoading: isUnfinishedTestListLoading } = useGetTestsInProgressQuery()
+  const { data: finishedTestList, isLoading: isFinishedTestsLoading } = useGetFinishedTestsQuery()
 
-  const fetchUserInfo = async (userID: UserInfo['userID']) => {
-    const userData = await fetchUserInfoAction(userID)
-    const convertedData = convertDataStC(userData)
-    setUserInfo(convertedData)
-  }
-
-  const convertDataStC = (data: any) => {
-    const modifiedData: UserInfoExtended = {
-      userID: userID,
-      userName: data.user_name,
-      userBio: data.bio,
-      userAvatar: data.avatar,
-      finishedTestList: data.finished_tests,
-      unfinishedTestList: data.unfinished_tests,
-      createdTestList: data.created_tests,
-    }
-    return modifiedData
-  }
-
-  useEffect(() => {
-    fetchUserInfo(userID)
-  }, [])
-
-  // ???
-  if (!userInfo) return null
+  if (!userInfo || isCreatedTestListLoading || isUnfinishedTestListLoading || isFinishedTestsLoading) return <Spinner />
 
   return (
     <>
       <main className={styles.pageMain}>
         <ProfileNavigation />
-        <ProfileComponent userInfo={userInfo} />
+        <ProfileComponent
+          userInfo={userInfo}
+          createdTestList={createdTestList}
+          finishedTestList={finishedTestList}
+          unfinishedTestList={unfinishedTestList}
+        />
       </main>
     </>
   )
