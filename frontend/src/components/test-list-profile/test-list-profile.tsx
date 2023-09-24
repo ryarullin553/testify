@@ -13,7 +13,7 @@ interface Props {
 export const TestListProfile: FC<Props> = ({ testList, linkList, isEditable, isAttemptsAvailiable }) => {
   return (
     <ul>
-      {testList.slice(0, 3).map((testItem: TestWithAvatar) => {
+      {testList.map((testItem: TestWithAvatar) => {
         const { testID } = testItem
         return (
           <TestTileProfile

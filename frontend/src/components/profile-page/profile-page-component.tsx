@@ -9,33 +9,29 @@ import { fetchUserInfoAction } from '../../api/user'
 import { UserInfo } from '../../types/UserInfo'
 import { Spinner } from '../Spinner/Spinner'
 import { useGetUserDataQuery } from '@/services/usersApi'
-import {
-  useGetFinishedTestsQuery,
-  useGetTestsCreatedByCurrentUserQuery,
-  useGetTestsInProgressQuery,
-} from '@/services/testCatalogApi'
+import { useGetTestsCreatedByCurrentUserQuery, useGetTestsHistoryQuery } from '@/services/testCatalogApi'
 
 export const ProfilePageComponent: FC = () => {
   const params = useParams()
   const userID = (params?.userID as string) ?? 'me'
   const { data: userInfo } = useGetUserDataQuery(userID)
   const { data: createdTestList, isLoading: isCreatedTestListLoading } = useGetTestsCreatedByCurrentUserQuery()
-  const { data: unfinishedTestList, isLoading: isUnfinishedTestListLoading } = useGetTestsInProgressQuery()
-  const { data: finishedTestList, isLoading: isFinishedTestsLoading } = useGetFinishedTestsQuery()
+  const { data: unfinishedTestList, isLoading: isUnfinishedTestListLoading } = useGetTestsHistoryQuery({
+    isFinished: false,
+  })
+  const { data: finishedTestList, isLoading: isFinishedTestsLoading } = useGetTestsHistoryQuery({ isFinished: true })
 
   if (!userInfo || isCreatedTestListLoading || isUnfinishedTestListLoading || isFinishedTestsLoading) return <Spinner />
 
   return (
-    <>
-      <main className={styles.pageMain}>
-        <ProfileNavigation />
-        <ProfileComponent
-          userInfo={userInfo}
-          createdTestList={createdTestList}
-          finishedTestList={finishedTestList}
-          unfinishedTestList={unfinishedTestList}
-        />
-      </main>
-    </>
+    <main className={styles.pageMain}>
+      <ProfileNavigation />
+      <ProfileComponent
+        userInfo={userInfo}
+        createdTestList={createdTestList}
+        finishedTestList={finishedTestList}
+        unfinishedTestList={unfinishedTestList}
+      />
+    </main>
   )
 }

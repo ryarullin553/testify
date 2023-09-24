@@ -11,15 +11,17 @@ import { FilterForm } from '../filter-form/filter-form'
 import { Test, TestWithAvatar } from '../../types/Test'
 import { FilterValue } from '../../types/Filter'
 import { LinkItem } from '../../types/LinkList'
+import { useGetTestsHistoryQuery } from '@/services/testCatalogApi'
+import { Spinner } from '../Spinner/Spinner'
+
+export interface SearchParams {
+  search?: string
+  filter?: string
+}
 
 export const ProfileTestsComponent = () => {
-  const { userID } = useParams()
-  const defaultRequest = `tests/user/${userID || 'me'}/`
-
-  const [testList, setTestList] = useState<Test[]>([])
-  const [baseRequest, setBaseRequest] = useState(defaultRequest)
-
-  useScroll(baseRequest, setTestList)
+  const [searchParams, setSearchParams] = useState<SearchParams>({})
+  const { data: testList } = useGetTestsHistoryQuery(searchParams)
 
   // Список ссылок в подвале плашки
   const linkList = (testID: Test['testID']): LinkItem[] => [
@@ -27,41 +29,23 @@ export const ProfileTestsComponent = () => {
   ]
 
   const filterValues: FilterValue[] = [
-    { value: 'all', label: 'Все', appendValue: '' },
-    { value: 'finished', label: 'Завершенные', appendValue: 'is_finished=True' },
-    { value: 'unfinished', label: 'Незавершенные', appendValue: 'is_finished=False' },
+    { value: '', label: 'Все' },
+    { value: 'true', label: 'Завершенные' },
+    { value: 'false', label: 'Незавершенные' },
   ]
 
-  const ConvertDataStC = (data: any) => {
-    const modifiedData: TestWithAvatar[] = data.map((t: any) => {
-      const testData: Test = {
-        testTitle: t.title,
-        testAvatar: t.avatar,
-        testID: t.id ?? t.test,
-        isPublished: t.is_published,
-      }
-      return testData
-    })
-    return modifiedData
-  }
+  if (!testList) return <Spinner />
 
   return (
-    <>
-      <main className={styles.pageMain}>
-        <ProfileNavigation />
-        <section className={styles.sectionMain}>
-          <h1>Пройденные</h1>
-          <div className={styles.listControls}>
-            <FilterForm setBaseRequest={setBaseRequest} defaultRequest={defaultRequest} filterValues={filterValues} />
-          </div>
-          <TestListProfile
-            testList={ConvertDataStC(testList)}
-            linkList={linkList}
-            isAttemptsAvailiable
-            isEditable={false}
-          />
-        </section>
-      </main>
-    </>
+    <main className={styles.pageMain}>
+      <ProfileNavigation />
+      <section className={styles.sectionMain}>
+        <h1>Пройденные</h1>
+        <div className={styles.listControls}>
+          <FilterForm filterValues={filterValues} setSearchParams={setSearchParams} />
+        </div>
+        <TestListProfile testList={testList} linkList={linkList} isAttemptsAvailiable isEditable={false} />
+      </section>
+    </main>
   )
 }

@@ -4,13 +4,13 @@ import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { AppRoute } from '../../../reusable/const'
 import { FC } from 'react'
 import { UserInfo } from '../../../types/UserInfo'
-import { TestWithDescription } from '@/types/Test'
+import { TestWithAvatar, TestWithDescription } from '@/types/Test'
 
 interface Props {
   userInfo: UserInfo
-  finishedTestList?: TestWithDescription[]
-  createdTestList?: TestWithDescription[]
-  unfinishedTestList?: TestWithDescription[]
+  finishedTestList?: TestWithAvatar[]
+  createdTestList?: TestWithAvatar[]
+  unfinishedTestList?: TestWithAvatar[]
 }
 
 export const ProfileComponent: FC<Props> = ({ userInfo, createdTestList, finishedTestList, unfinishedTestList }) => {

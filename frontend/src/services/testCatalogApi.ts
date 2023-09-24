@@ -1,4 +1,4 @@
-import { Attempt, Test, TestWithDescription } from '@/types/Test'
+import { Attempt, Test, TestWithAvatar, TestWithDescription } from '@/types/Test'
 import { api } from './api'
 import { TestResponse, transformGetTestResponse } from '@/types/TestApi'
 import { UserInfo } from '@/types/UserInfo'
@@ -9,6 +9,11 @@ type TestListResponse = {
 
 type GetPublishedTestsQueryParams = {
   sort?: string
+  search?: string
+}
+
+type GetTestsHistoryQueryParams = {
+  filter?: string
   search?: string
 }
 
@@ -35,18 +40,10 @@ export const testCatalogApi = api.injectEndpoints({
       transformResponse: (r: TestListResponse) =>
         r.results.map((x) => transformGetTestResponse(x) as TestWithDescription),
     }),
-    getTestsInProgress: builder.query<TestWithDescription[], void>({
-      query: () => ({
+    getTestsHistory: builder.query<TestWithAvatar[], GetTestsHistoryQueryParams>({
+      query: ({ filter, search }) => ({
         url: 'auth/users/me/passed_tests/',
-        params: { is_finished: false },
-      }),
-      transformResponse: (r: TestListResponse) =>
-        r.results.map((x) => transformGetTestResponse(x) as TestWithDescription),
-    }),
-    getFinishedTests: builder.query<TestWithDescription[], void>({
-      query: () => ({
-        url: 'auth/users/me/passed_tests/',
-        params: { is_finished: true },
+        params: { is_finished: filter, search },
       }),
       transformResponse: (r: TestListResponse) =>
         r.results.map((x) => transformGetTestResponse(x) as TestWithDescription),
@@ -59,6 +56,5 @@ export const {
   useGetTestByIDQuery,
   useGetTestAttemptsQuery,
   useGetTestsCreatedByCurrentUserQuery,
-  useGetTestsInProgressQuery,
-  useGetFinishedTestsQuery,
+  useGetTestsHistoryQuery,
 } = testCatalogApi
