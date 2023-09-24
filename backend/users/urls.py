@@ -1,6 +1,6 @@
 from django.urls import path, re_path, include
 
 urlpatterns = [
-    path('auth/', include('djoser.urls')),
+    path('', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]
