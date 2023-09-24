@@ -180,8 +180,8 @@ class TestAPIView(viewsets.ModelViewSet):
         Прохожу сейчас - is_finished=False
         """
         value = self.request.query_params.get('is_finished')
-        if value == 'True':
+        if value == 'true':
             return queryset.filter(passages__result__isnull=False)
-        elif value == 'False':
+        elif value == 'false':
             return queryset.filter(passages__result__isnull=True)
         return queryset
