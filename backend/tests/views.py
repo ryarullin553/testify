@@ -42,7 +42,7 @@ class TestAPIView(viewsets.ModelViewSet):
         serializer = self.get_serializer(
             instance=page,
             many=True,
-            fields=fields + ['user', 'user_name', 'in_bookmarks', 'has_passage']
+            fields=fields + ['user', 'user_name', 'in_bookmarks', 'passage_id']
         )
         return self.get_paginated_response(serializer.data)
 
@@ -61,7 +61,7 @@ class TestAPIView(viewsets.ModelViewSet):
         instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
         serializer = self.get_serializer(
             instance=instance,
-            fields=fields + ['user', 'user_name', 'user_image', 'user_info', 'in_bookmarks', 'has_passage']
+            fields=fields + ['user', 'user_name', 'user_image', 'user_info', 'in_bookmarks', 'passage_id']
         )
         return Response(serializer.data)
 
