@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import OuterRef, Exists
+from django.db.models import OuterRef, Exists, Subquery
 
 from bookmarks.models import Bookmark
 from passages.models import Passage
@@ -11,7 +11,7 @@ class TestManager(models.Manager):
             test_id=OuterRef('pk'),
             user_id=user_id,
             result__isnull=True
-        )
+        ).only('id')
         bookmark = Bookmark.objects.filter(
             test_id=OuterRef('pk'),
             user_id=user_id
@@ -21,7 +21,7 @@ class TestManager(models.Manager):
             .select_related('user') \
             .annotate(
                 in_bookmarks=Exists(bookmark),
-                has_passage=Exists(passage)
+                passage_id=Subquery(passage.values('id'))
             ) \
             .only(*fields)
 

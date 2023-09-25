@@ -24,7 +24,7 @@ class TestSerializer(DynamicFieldsModelSerializer):
     in_bookmarks = serializers.BooleanField(
         read_only=True
     )
-    has_passage = serializers.BooleanField(
+    passage_id = serializers.IntegerField(
         read_only=True
     )
 

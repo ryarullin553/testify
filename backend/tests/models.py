@@ -1,6 +1,6 @@
 from django.db import models
 
-from tests.managers import TestManager
+from .managers import TestManager
 
 
 class Test(models.Model):
