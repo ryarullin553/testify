@@ -15,11 +15,11 @@ export const ProfilePageComponent: FC = () => {
   const params = useParams()
   const userID = (params?.userID as string) ?? 'me'
   const { data: userInfo } = useGetUserDataQuery(userID)
-  const { data: createdTestList, isLoading: isCreatedTestListLoading } = useGetTestsCreatedByCurrentUserQuery()
+  const { data: createdTestList, isLoading: isCreatedTestListLoading } = useGetTestsCreatedByCurrentUserQuery({})
   const { data: unfinishedTestList, isLoading: isUnfinishedTestListLoading } = useGetTestsHistoryQuery({
-    isFinished: false,
+    filter: 'false',
   })
-  const { data: finishedTestList, isLoading: isFinishedTestsLoading } = useGetTestsHistoryQuery({ isFinished: true })
+  const { data: finishedTestList, isLoading: isFinishedTestsLoading } = useGetTestsHistoryQuery({ filter: 'true' })
 
   if (!userInfo || isCreatedTestListLoading || isUnfinishedTestListLoading || isFinishedTestsLoading) return <Spinner />
 

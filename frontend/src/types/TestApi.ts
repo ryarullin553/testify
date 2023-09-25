@@ -1,4 +1,5 @@
-import { Test, TestWithQuestions, Question, QuestionWithCorrectAnswer, Answer } from '@/types/Test'
+import { Test, TestWithQuestions, Question, QuestionWithCorrectAnswer, Answer, Attempt } from '@/types/Test'
+import { UserInfo } from './UserInfo'
 
 export type EditTestRequest = {
   title: string
@@ -94,6 +95,44 @@ export type TestResponse = {
   avg_answers_count?: string
   avg_correct_answers_count?: string
 }
+
+export type ResultResponse = {
+  score: number
+  passage_time: string
+  answers_count: number
+  finished_time: string
+  questions_count: number
+  correct_answers_count: number
+}
+
+export type AttemptResponse = {
+  answers: []
+  id: number
+  test: Test['testID']
+  test_data?: TestWithQuestionsResponse
+  user_id: UserInfo['userID']
+  result?: ResultResponse
+}
+
+export const transformAttemptResponse = (r: AttemptResponse) => ({
+  attemptID: r.id,
+  testID: r.test,
+  testTitle: r.test_data?.title,
+  isPublished: true,
+  hasQuestionExplanation: r.test_data?.has_questions_explanation,
+  hasQuestionPoints: r.test_data?.has_questions_explanation,
+  questionList: r.test_data?.questions.reduce((acc: Record<number, Question>, x) => {
+    acc[x.id] = transformQuestionResponse(x, r.id)
+    return acc
+  }, {}),
+  questionOrder: r.test_data?.questions.map((x) => x.id),
+  attemptScore: r.result?.score,
+  attemptTime: r.result?.passage_time,
+  finishDate: r.result?.finished_time,
+  questionAmount: r.result?.questions_count,
+  answerAmount: r.result?.answers_count,
+  correctAnswerAmount: r.result?.correct_answers_count,
+})
 
 export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuestionRequest => ({
   test: r.testID,

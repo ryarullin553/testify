@@ -74,23 +74,22 @@ export interface TestWithCorrectAnswers extends TestWithQuestions {
   questionList: Record<number, QuestionWithCorrectAnswer>
 }
 
-export interface Attempt extends TestWithQuestions {
-  attemptID: number
-  questionList: Record<number, Question>
-  date?: string
-  score?: number
-  isComplete?: boolean
+export interface AttemptResult {
+  attemptScore: number
+  attemptTime: string
+  finishDate: string
+  questionAmount: number
+  answerAmount: number
+  correctAnswerAmount: number
 }
 
-export interface AttemptOverview extends Attempt {}
+export interface Attempt extends TestWithQuestions {
+  attemptID: number
+  attemptResult?: AttemptResult
+}
 
-export interface AttemptComplete extends AttemptOverview {
-  correctAnswers: number
-  questionAmount: number
-  attemptScore: number
-  averageScore: number
-  attemptTime: string
-  totalAnswers: number
+export interface FinishedAttempt extends Attempt {
+  attemptResult: AttemptResult
 }
 
 export enum QuestionState {

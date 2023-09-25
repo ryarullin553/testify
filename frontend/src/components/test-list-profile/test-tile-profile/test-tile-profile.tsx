@@ -7,6 +7,7 @@ import { FC, useState, MouseEvent } from 'react'
 import { fetchAttemptsAction } from '../../../api/tests'
 import { Attempt, Test, TestWithAvatar } from '../../../types/Test'
 import { LinkItem } from '../../../types/LinkList'
+import { useGetTestAttemptsQuery } from '@/services/testCatalogApi'
 
 interface Props {
   testItem: TestWithAvatar
@@ -16,38 +17,18 @@ interface Props {
 }
 
 export const TestTileProfile: FC<Props> = ({ testItem, linkList, isEditable, isAttemptsAvailiable }) => {
-  const [isAttemptsShown, setIsAttemptsShown] = useState(false)
-  const [attemptList, setAttemptList] = useState<Attempt[]>()
   const { testTitle, testAvatar, testID, isPublished } = testItem
+  const [isAttemptsShown, setIsAttemptsShown] = useState(false)
+  const { data: attemptList } = useGetTestAttemptsQuery(testID, { skip: !isAttemptsShown })
 
-  const handleShowAttemptsClick = async (evt: MouseEvent<HTMLButtonElement>) => {
+  const handleShowAttemptsClick = async (evt: MouseEvent<HTMLDivElement>) => {
     evt.preventDefault()
-    if (!attemptList && isAttemptsAvailiable) {
-      await fetchTestAttempts()
-    }
-    setIsAttemptsShown(!isAttemptsShown)
-  }
-
-  const fetchTestAttempts = async () => {
-    const data = await fetchAttemptsAction(testID)
-    const convertedData = convertDataStC(data)
-    setAttemptList(convertedData)
-  }
-
-  const convertDataStC = (data: any) => {
-    const convertedData: Attempt[] = data.results.map((r: any) => ({
-      attemptID: r.id,
-      testID: testID,
-      isComplete: !!r.total,
-      score: !!r.total ? r.total.score : undefined,
-      date: !!r.total ? new Date(Date.parse(r.total.finished)) : undefined,
-    }))
-    return convertedData
+    setIsAttemptsShown((prevState) => !prevState)
   }
 
   return (
     <li className={styles.testTile}>
-      <button className={styles.linkWrapper} onClick={handleShowAttemptsClick}>
+      <article className={styles.linkWrapper} onClick={handleShowAttemptsClick}>
         <div className={styles.titleWrapper}>
           <h3>{testTitle}</h3>
           {isEditable && <VisibilityButton isPublished={isPublished} testID={testID} />}
@@ -55,7 +36,7 @@ export const TestTileProfile: FC<Props> = ({ testItem, linkList, isEditable, isA
         <AvatarBlock src={testAvatar} size={60} additionalStyle={styles.logo} />
         <TestTileLinks linkList={linkList} testID={testID} />
         <button className={styles.buttonMore}>...</button>
-      </button>
+      </article>
       {isAttemptsAvailiable && isAttemptsShown && !!attemptList && <TestTileAttemptList attemptList={attemptList} />}
     </li>
   )

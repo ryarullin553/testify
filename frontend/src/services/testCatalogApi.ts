@@ -1,7 +1,6 @@
 import { Attempt, Test, TestWithAvatar, TestWithDescription } from '@/types/Test'
 import { api } from './api'
-import { TestResponse, transformGetTestResponse } from '@/types/TestApi'
-import { UserInfo } from '@/types/UserInfo'
+import { AttemptResponse, TestResponse, transformAttemptResponse, transformGetTestResponse } from '@/types/TestApi'
 
 type TestListResponse = {
   results: TestResponse[]
@@ -15,6 +14,15 @@ type GetPublishedTestsQueryParams = {
 type GetTestsHistoryQueryParams = {
   filter?: string
   search?: string
+}
+
+type GetCreatedTestsQueryParams = {
+  filter?: string
+  search?: string
+}
+
+type AttemptListResponse = {
+  results: AttemptResponse[]
 }
 
 export const testCatalogApi = api.injectEndpoints({
@@ -31,22 +39,23 @@ export const testCatalogApi = api.injectEndpoints({
       query: (testID) => `tests/${testID}`,
       transformResponse: (r: TestResponse) => transformGetTestResponse(r) as TestWithDescription,
     }),
-    getTestAttempts: builder.query<Attempt['attemptID'][], Test['testID']>({
+    getTestAttempts: builder.query<Attempt[], Test['testID']>({
       query: (testID) => `/tests/${testID}/passages/my/`,
-      transformResponse: (r) => r.results.map((x) => x.id),
+      transformResponse: (r: AttemptListResponse) => r.results.map((x) => transformAttemptResponse(x) as Attempt),
     }),
-    getTestsCreatedByCurrentUser: builder.query<TestWithDescription[], void>({
-      query: () => 'tests/created/',
-      transformResponse: (r: TestListResponse) =>
-        r.results.map((x) => transformGetTestResponse(x) as TestWithDescription),
+    getTestsCreatedByCurrentUser: builder.query<TestWithAvatar[], GetCreatedTestsQueryParams>({
+      query: ({ filter, search }) => ({
+        url: 'tests/created/',
+        params: { is_published: filter, search },
+      }),
+      transformResponse: (r: TestListResponse) => r.results.map((x) => transformGetTestResponse(x) as TestWithAvatar),
     }),
     getTestsHistory: builder.query<TestWithAvatar[], GetTestsHistoryQueryParams>({
       query: ({ filter, search }) => ({
-        url: 'auth/users/me/passed_tests/',
+        url: 'users/me/passed_tests/',
         params: { is_finished: filter, search },
       }),
-      transformResponse: (r: TestListResponse) =>
-        r.results.map((x) => transformGetTestResponse(x) as TestWithDescription),
+      transformResponse: (r: TestListResponse) => r.results.map((x) => transformGetTestResponse(x) as TestWithAvatar),
     }),
   }),
 })

@@ -1,29 +1,6 @@
-import { TestWithQuestionsResponse, transformQuestionResponse } from '@/types/TestApi'
+import { AttemptResponse, transformAttemptResponse } from '@/types/TestApi'
 import { api } from './api'
-import { Attempt, Question, Test, TestWithQuestions } from '@/types/Test'
-import { UserInfo } from '@/types/UserInfo'
-
-type AttemptResponse = {
-  answers: []
-  id: number
-  test: Test['testID']
-  test_data: TestWithQuestionsResponse
-  user_id: UserInfo['userID']
-}
-
-const transformGetActiveAttemptResponse = (r: AttemptResponse): Attempt => ({
-  attemptID: r.id,
-  testID: r.test,
-  testTitle: r.test_data.title,
-  isPublished: true,
-  hasQuestionExplanation: r.test_data.has_questions_explanation,
-  hasQuestionPoints: r.test_data.has_questions_explanation,
-  questionList: r.test_data.questions.reduce((acc: Record<number, Question>, x) => {
-    acc[x.id] = transformQuestionResponse(x, r.id)
-    return acc
-  }, {}),
-  questionOrder: r.test_data.questions.map((x) => x.id),
-})
+import { Attempt, Test } from '@/types/Test'
 
 export const testCompletionApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -36,9 +13,15 @@ export const testCompletionApi = api.injectEndpoints({
     }),
     getActiveAtempt: builder.query<Attempt, Test['testID']>({
       query: (testID) => `/passages/${testID}/`,
-      transformResponse: transformGetActiveAttemptResponse,
+      transformResponse: (x: AttemptResponse) => transformAttemptResponse(x) as Attempt,
+    }),
+    finishAttempt: builder.mutation<void, Attempt['attemptID']>({
+      query: (attemptID) => ({
+        url: `passages/${attemptID}/`,
+        method: 'PATCH',
+      }),
     }),
   }),
 })
 
-export const { useGetActiveAtemptQuery, useStartAttemptMutation } = testCompletionApi
+export const { useGetActiveAtemptQuery, useStartAttemptMutation, useFinishAttemptMutation } = testCompletionApi

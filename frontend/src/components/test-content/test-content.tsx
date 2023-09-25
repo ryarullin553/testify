@@ -7,9 +7,10 @@ import { QuestionArea } from './question-area/question-area'
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button'
 import { QuestionControls } from '../question-controls/question-controls'
 import { useParams, useRouter } from 'next/navigation'
-import { useGetActiveAtemptQuery } from '@/services/testCompletionApi'
+import { useFinishAttemptMutation, useGetActiveAtemptQuery } from '@/services/testCompletionApi'
 import { useGetTestAttemptsQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 export const TestContent = () => {
   const router = useRouter()
@@ -18,12 +19,13 @@ export const TestContent = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState([])
   const { data: attemptList } = useGetTestAttemptsQuery(testID)
-  const activeAttemptID = attemptList?.at(-1) || 1
-  const { data: attemptData } = useGetActiveAtemptQuery(activeAttemptID)
+  const activeAttemptID = attemptList?.at(0)?.attemptID
+  const { data: attemptData } = useGetActiveAtemptQuery(activeAttemptID ?? skipToken)
+  const [finishAttempt] = useFinishAttemptMutation()
 
   if (!attemptData) return <Spinner />
 
-  const { testTitle, questionList, questionOrder } = attemptData
+  const { testTitle, questionList, questionOrder, attemptID } = attemptData
 
   const currentQuestionID = questionOrder[currentQuestionIndex]
   const currentQuestionData = questionList[currentQuestionID]
@@ -38,7 +40,7 @@ export const TestContent = () => {
         setCurrentQuestionIndex={setCurrentQuestionIndex}
         currentQuestionID={currentQuestionID}
         questionOrder={questionOrder}>
-        <QuestionListSidebarButton label={'Завершить тест'} onClickAction={() => {}} condition />
+        <QuestionListSidebarButton label={'Завершить тест'} onClickAction={() => finishAttempt(attemptID)} condition />
       </QuestionListSidebar>
       <QuestionArea
         key={currentQuestionID}

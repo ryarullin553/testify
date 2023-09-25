@@ -9,17 +9,17 @@ interface Props {
 }
 
 export const TestTileAttemptTile: FC<Props> = ({ attemptItem }) => {
-  const link = attemptItem.isComplete
-    ? `${AppRoute.Results}/${attemptItem.attemptID}`
-    : `${AppRoute.TestMain}/${attemptItem.testID}`
-  const date = attemptItem.isComplete
+  const { attemptID, attemptResult, testID } = attemptItem
+  const isComplete = Boolean(attemptResult)
+  const link = isComplete ? `${AppRoute.Results}/${attemptID}` : `${AppRoute.TestMain}/${testID}`
+  const date = isComplete
     ? attemptItem.date?.toLocaleString('ru-Ru', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
       })
     : 'Не завершен'
-  const score = attemptItem.isComplete ? `${attemptItem.score}%` : 'Продолжить'
+  const score = isComplete ? `${attemptItem.score}%` : 'Продолжить'
 
   return (
     <li className={styles.result}>

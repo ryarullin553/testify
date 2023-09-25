@@ -59,7 +59,7 @@ export const ProfileComponent: FC<Props> = ({ userInfo, createdTestList, finishe
       )}
       {!!finishedTestList && (
         <>
-          <h1>Пройденные</h1>
+          <h1>Пройденные тесты</h1>
           <TestListProfile
             testList={finishedTestList}
             linkList={linkListFinished}

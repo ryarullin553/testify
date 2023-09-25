@@ -1,7 +1,11 @@
 import { ChangeEvent, FC, Dispatch, SetStateAction, FormEvent } from 'react'
 import styles from './filter-form.module.scss'
 import { FilterValue } from '@/types/Filter'
-import { SearchParams } from '../profile-tests/profile-tests'
+
+export interface SearchParams {
+  search?: string
+  filter?: string
+}
 
 interface Props {
   filterValues: FilterValue[]

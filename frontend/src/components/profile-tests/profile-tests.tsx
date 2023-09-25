@@ -7,17 +7,12 @@ import { TestListProfile } from '../test-list-profile/test-list-profile'
 import { useState } from 'react'
 import { useScroll } from '../../reusable/hooks'
 import { useParams } from 'next/navigation'
-import { FilterForm } from '../filter-form/filter-form'
+import { FilterForm, SearchParams } from '../filter-form/filter-form'
 import { Test, TestWithAvatar } from '../../types/Test'
 import { FilterValue } from '../../types/Filter'
 import { LinkItem } from '../../types/LinkList'
 import { useGetTestsHistoryQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
-
-export interface SearchParams {
-  search?: string
-  filter?: string
-}
 
 export const ProfileTestsComponent = () => {
   const [searchParams, setSearchParams] = useState<SearchParams>({})
