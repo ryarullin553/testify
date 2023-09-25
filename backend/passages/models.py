@@ -1,6 +1,6 @@
 from django.db import models
 
-from passages.managers import PassageManager
+from .managers import PassageManager
 
 
 class Passage(models.Model):
