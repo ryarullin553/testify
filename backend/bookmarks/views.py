@@ -17,6 +17,7 @@ class BookmarkAPIView(mixins.CreateModelMixin,
     filter_backends = [OrderingFilter, SearchFilter]
     search_fields = ['test__title']
     ordering = '-created'
+    lookup_field = 'test_id'
 
     def get_queryset(self):
         current_user_id = self.request.user.id

@@ -17,6 +17,7 @@ class FeedbackAPIView(mixins.CreateModelMixin,
     permission_classes = [FeedbackPermission]
     filter_backends = [OrderingFilter]
     ordering = '-created'
+    lookup_field = 'test_id'
 
     def get_queryset(self):
         queryset = self.queryset \

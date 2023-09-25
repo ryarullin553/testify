@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
-from questions.managers import QuestionManager
+from .managers import QuestionManager
 
 
 class Question(models.Model):
@@ -10,8 +10,7 @@ class Question(models.Model):
         ('Multiple choice', 'Множественный выбор'),
         ('Text input', 'Ввод текста'),
         ('Matching', 'Установление соответствий'),
-        ('Sequencing', 'Установление последовательности'),
-        ('Tabular task', 'Табличная задача')
+        ('Sequencing', 'Установление последовательности')
     ]
     type = models.CharField(
         verbose_name='Тип',
@@ -24,7 +23,7 @@ class Question(models.Model):
     )
     answer_choices = ArrayField(
         verbose_name='Варианты ответов',
-        base_field=models.TextField(),
+        base_field=models.JSONField(),
         size=20
     )
     right_answers = ArrayField(
