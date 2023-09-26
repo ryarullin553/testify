@@ -114,6 +114,15 @@ export type AttemptResponse = {
   result?: ResultResponse
 }
 
+export const transformAttemptResult = (r: ResultResponse) => ({
+  attemptScore: r.score,
+  attemptTime: r.passage_time,
+  finishDate: r.finished_time,
+  questionAmount: r.questions_count,
+  answerAmount: r.answers_count,
+  correctAnswerAmount: r.correct_answers_count,
+})
+
 export const transformAttemptResponse = (r: AttemptResponse) => ({
   attemptID: r.id,
   testID: r.test,
@@ -126,12 +135,8 @@ export const transformAttemptResponse = (r: AttemptResponse) => ({
     return acc
   }, {}),
   questionOrder: r.test_data?.questions.map((x) => x.id),
-  attemptScore: r.result?.score,
-  attemptTime: r.result?.passage_time,
-  finishDate: r.result?.finished_time,
-  questionAmount: r.result?.questions_count,
-  answerAmount: r.result?.answers_count,
-  correctAnswerAmount: r.result?.correct_answers_count,
+  isComplete: Boolean(r.result),
+  attemptResult: transformAttemptResult(r.result!),
 })
 
 export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuestionRequest => ({

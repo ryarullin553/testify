@@ -35,6 +35,7 @@ export interface Test {
 
 export interface TestWithAvatar extends Test {
   testAvatar: string
+  isPublished?: boolean
 }
 
 export interface TestWithSettings extends Test {
@@ -85,7 +86,8 @@ export interface AttemptResult {
 
 export interface Attempt extends TestWithQuestions {
   attemptID: number
-  attemptResult?: AttemptResult
+  isComplete: boolean
+  attemptResult: AttemptResult
 }
 
 export interface FinishedAttempt extends Attempt {
