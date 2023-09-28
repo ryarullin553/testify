@@ -12,9 +12,18 @@
 }
 
 .linkWrapper {
+  position: relative;
   display: flex;
   gap: 20px;
   padding: 20px;
+}
+
+.link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 
 .card__link {
@@ -106,6 +115,7 @@
   border: none;
   background: none;
   cursor: pointer;
+  z-index: 1;
 
   font-size: 22px;
   color: #ababab;

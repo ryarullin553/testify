@@ -21,6 +21,10 @@ type GetCreatedTestsQueryParams = {
   search?: string
 }
 
+type GetBookmarkedTestsQueryParams = {
+  search?: string
+}
+
 type AttemptListResponse = {
   results: AttemptResponse[]
 }
@@ -57,6 +61,26 @@ export const testCatalogApi = api.injectEndpoints({
       }),
       transformResponse: (r: TestListResponse) => r.results.map((x) => transformGetTestResponse(x) as TestWithAvatar),
     }),
+    getTestsBookmarkedByCurrentUser: builder.query<TestWithAvatar[], GetBookmarkedTestsQueryParams>({
+      query: ({ search }) => ({
+        url: 'bookmarks/',
+        params: { search },
+      }),
+      transformResponse: (r: TestListResponse) => r.results.map((x) => transformGetTestResponse(x) as TestWithAvatar),
+    }),
+    createTestBookmark: builder.mutation<void, Test['testID']>({
+      query: (testID) => ({
+        url: 'bookmarks/',
+        method: 'POST',
+        body: { test: testID },
+      }),
+    }),
+    removeTestBookmark: builder.mutation<void, Test['testID']>({
+      query: (testID) => ({
+        url: `bookmarks/${testID}/`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
@@ -66,4 +90,7 @@ export const {
   useGetTestAttemptsQuery,
   useGetTestsCreatedByCurrentUserQuery,
   useGetTestsHistoryQuery,
+  useGetTestsBookmarkedByCurrentUserQuery,
+  useCreateTestBookmarkMutation,
+  useRemoveTestBookmarkMutation,
 } = testCatalogApi

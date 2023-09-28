@@ -8,9 +8,11 @@ import { QuestionListSidebarButton } from '../question-list-sidebar/question-lis
 import { QuestionControls } from '../question-controls/question-controls'
 import { useParams, useRouter } from 'next/navigation'
 import { useFinishAttemptMutation, useGetActiveAtemptQuery } from '@/services/testCompletionApi'
-import { useGetTestAttemptsQuery } from '@/services/testCatalogApi'
+import { useGetTestAttemptsQuery, useGetTestByIDQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { AppRoute } from '@/reusable/const'
+import { Attempt } from '@/types/Test'
 
 export const TestContent = () => {
   const router = useRouter()
@@ -18,10 +20,14 @@ export const TestContent = () => {
   const testID = Number(params.testID)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState([])
-  const { data: attemptList } = useGetTestAttemptsQuery(testID)
-  const activeAttemptID = attemptList?.at(0)?.attemptID
+  const { data: testInfo, isSuccess: isTestInfoSuccess } = useGetTestByIDQuery(testID)
+  const { isInProgress, activeAttemptID } = testInfo ?? { isInProgress: false, activeAttemptID: null }
   const { data: attemptData } = useGetActiveAtemptQuery(activeAttemptID ?? skipToken)
   const [finishAttempt] = useFinishAttemptMutation()
+
+  if (!isTestInfoSuccess) return <Spinner />
+
+  if (!isInProgress) router.replace(`${AppRoute.TestDescription}/${testID}`)
 
   if (!attemptData) return <Spinner />
 

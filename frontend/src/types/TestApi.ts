@@ -76,7 +76,7 @@ export type TestResponse = {
   user_image?: string
   user_info?: string
   in_bookmarks?: boolean
-  has_passage?: boolean
+  passage_id?: boolean
   title?: string
   short_description?: string
   description?: string
@@ -136,7 +136,7 @@ export const transformAttemptResponse = (r: AttemptResponse) => ({
   }, {}),
   questionOrder: r.test_data?.questions.map((x) => x.id),
   isComplete: Boolean(r.result),
-  attemptResult: transformAttemptResult(r.result!),
+  attemptResult: r.result ? transformAttemptResult(r.result) : null,
 })
 
 export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuestionRequest => ({
@@ -180,7 +180,8 @@ export const transformGetTestResponse = (r: TestResponse) => ({
   hasQuestionPoints: r.has_points,
   hasCorrectAnswers: r.has_right_answers,
   hasQuestionExplanation: r.has_questions_explanation,
-  isInProgress: r.has_passage,
+  isInProgress: Boolean(r.passage_id),
+  activeAttemptID: r.passage_id,
 })
 
 export const transformQuestionResponse = (r: QuestionResponse, testID?: number): QuestionWithCorrectAnswer => ({

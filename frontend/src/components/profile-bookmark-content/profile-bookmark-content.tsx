@@ -3,22 +3,20 @@
 import styles from './profile-bookmark-content.module.scss'
 import { ProfileNavigation } from '../profile-navigation/profile-navigation'
 import { TestListProfile } from '../test-list-profile/test-list-profile'
-import { useState } from 'react'
-import { useScroll } from '../../reusable/hooks'
 import { AppRoute } from '../../reusable/const'
 import { Test, TestWithAvatar } from '../../types/Test'
+import { useGetTestsBookmarkedByCurrentUserQuery } from '@/services/testCatalogApi'
+import { Spinner } from '../Spinner/Spinner'
 
 export const ProfileBookmarkContent = () => {
-  const [testList, setTestList] = useState<TestWithAvatar[]>([])
-
-  const baseRequest = 'bookmarks/'
-
-  useScroll(baseRequest, setTestList)
+  const { data: testList } = useGetTestsBookmarkedByCurrentUserQuery({})
 
   // Список ссылок в подвале плашки
   const linkList = (testID: Test['testID']) => [
     { key: 1, link: `${AppRoute.TestDescription}/${testID}`, label: 'Описание' },
   ]
+
+  if (!testList) return <Spinner />
 
   return (
     <>

@@ -1,5 +1,5 @@
 import styles from './test-overview.module.scss'
-import { FC, PropsWithChildren, useState, MouseEvent } from 'react'
+import { FC, PropsWithChildren, useState, MouseEvent, ChangeEvent } from 'react'
 import { createAttemptAction } from '../../../api/results'
 import { AppRoute } from '../../../reusable/const'
 import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks'
@@ -8,6 +8,7 @@ import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { TestWithDescription } from '../../../types/Test'
 import { useRouter } from 'next/navigation'
 import { useStartAttemptMutation } from '@/services/testCompletionApi'
+import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
 
 interface Props extends PropsWithChildren {
   testInfo: TestWithDescription
@@ -16,6 +17,8 @@ interface Props extends PropsWithChildren {
 export const TestOverview: FC<Props> = ({ testInfo, children }) => {
   const router = useRouter()
   const [startAttempt] = useStartAttemptMutation()
+  const [addBookmark] = useCreateTestBookmarkMutation()
+  const [deleteBookmark] = useRemoveTestBookmarkMutation()
   const {
     testID,
     testAvatar,
@@ -39,8 +42,13 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
     router.push(`${AppRoute.TestMain}/${testID}`)
   }
 
-  const handleFavoriteClick = async (evt: MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault()
+  const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>, testID: number) => {
+    const isToggled = evt.target.checked
+    if (isToggled) {
+      addBookmark(testID)
+    } else {
+      deleteBookmark(testID)
+    }
   }
 
   return (
@@ -84,9 +92,14 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
           <button className={styles.button} onClick={handleStartTestClick}>
             {testInfo.isInProgress ? 'Продолжить' : 'Начать'}
           </button>
-          <button className={`${styles.button} ${styles.button_inversed}`} onClick={handleFavoriteClick}>
+          <label>
             <span className={styles.heart}>♡</span>Хочу пройти
-          </button>
+            <input
+              type={'checkbox'}
+              className={`${styles.button} ${styles.button_inversed}`}
+              onChange={(evt) => handleFavoriteClick(evt, testID)}
+            />
+          </label>
         </div>
       </section>
     </section>

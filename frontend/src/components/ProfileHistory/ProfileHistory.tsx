@@ -1,12 +1,10 @@
 'use client'
 
-import styles from './profile-tests.module.scss'
+import styles from './ProfileHistory.module.scss'
 import { AppRoute } from '../../reusable/const'
 import { ProfileNavigation } from '../profile-navigation/profile-navigation'
 import { TestListProfile } from '../test-list-profile/test-list-profile'
 import { useState } from 'react'
-import { useScroll } from '../../reusable/hooks'
-import { useParams } from 'next/navigation'
 import { FilterForm, SearchParams } from '../filter-form/filter-form'
 import { Test, TestWithAvatar } from '../../types/Test'
 import { FilterValue } from '../../types/Filter'
@@ -14,7 +12,7 @@ import { LinkItem } from '../../types/LinkList'
 import { useGetTestsHistoryQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
 
-export const ProfileTestsComponent = () => {
+export const ProfileHistory = () => {
   const [searchParams, setSearchParams] = useState<SearchParams>({})
   const { data: testList } = useGetTestsHistoryQuery(searchParams)
 

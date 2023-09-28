@@ -61,6 +61,7 @@ export interface TestWithDescription extends Test {
   authorBio: UserInfo['userBio']
   authorAvatar: UserInfo['userAvatar']
   isInProgress?: boolean
+  activeAttemptID?: Attempt['attemptID']
 }
 
 export interface TestWithQuestions extends Test {
