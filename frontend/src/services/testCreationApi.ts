@@ -4,7 +4,7 @@ import {
   CreateTestProps,
   transformEditTestRequest,
   TestResponse,
-  transformGetTestResponse,
+  transformTestResponse,
   EditTestProps,
   transformTestWithQuestionsResponse,
   CreateQuestionProps,
@@ -27,7 +27,7 @@ export const testCreationApi = api.injectEndpoints({
     }),
     getTestSettingsByID: builder.query<TestWithSettings, Test['testID']>({
       query: (testID) => `tests/${testID}/config/`,
-      transformResponse: (r: TestResponse) => transformGetTestResponse(r) as TestWithSettings,
+      transformResponse: (r: TestResponse) => transformTestResponse(r) as TestWithSettings,
     }),
     updateTestSettingsByID: builder.mutation<void, EditTestProps>({
       query: (editTestArgs) => ({

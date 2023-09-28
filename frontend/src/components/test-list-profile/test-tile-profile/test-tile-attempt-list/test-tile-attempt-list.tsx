@@ -11,7 +11,7 @@ export const TestTileAttemptList: FC<Props> = ({ attemptList }) => {
   return (
     <ul className={styles.resultList}>
       {attemptList.map((attemptItem) => (
-        <TestTileAttemptTile attemptItem={attemptItem} />
+        <TestTileAttemptTile key={attemptItem.attemptID} attemptItem={attemptItem} />
       ))}
     </ul>
   )

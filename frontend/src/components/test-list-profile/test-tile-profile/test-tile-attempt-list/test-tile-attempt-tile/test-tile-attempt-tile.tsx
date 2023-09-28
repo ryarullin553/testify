@@ -10,7 +10,7 @@ interface Props {
 
 export const TestTileAttemptTile: FC<Props> = ({ attemptItem }) => {
   const { attemptID, attemptResult, testID } = attemptItem
-  const { attemptScore, finishDate } = attemptResult
+  const { attemptScore, finishDate } = attemptResult || {}
   const isComplete = Boolean(attemptResult)
   const link = isComplete ? `${AppRoute.Results}/${attemptID}` : `${AppRoute.TestMain}/${testID}`
   const date = isComplete

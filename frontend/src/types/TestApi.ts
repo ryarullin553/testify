@@ -1,4 +1,12 @@
-import { Test, TestWithQuestions, Question, QuestionWithCorrectAnswer, Answer, Attempt } from '@/types/Test'
+import {
+  Test,
+  TestWithQuestions,
+  Question,
+  QuestionWithCorrectAnswer,
+  Answer,
+  Attempt,
+  TestWithDescription,
+} from '@/types/Test'
 import { UserInfo } from './UserInfo'
 
 export type EditTestRequest = {
@@ -162,7 +170,7 @@ export const transformEditTestRequest = (r: CreateTestProps) => {
   return formData
 }
 
-export const transformGetTestResponse = (r: TestResponse) => ({
+export const transformTestResponse = (r: TestResponse) => ({
   testID: r.id,
   testTitle: r.title,
   testSummary: r.short_description,
@@ -212,4 +220,13 @@ export const transformTestWithQuestionsResponse = (r: TestWithQuestionsResponse)
     return acc
   }, {}),
   questionOrder: r.questions.map((x) => x.id),
+})
+
+export const transformTestListResponse = (r: TestResponse[]) => ({
+  // Постараться найти тип
+  testList: r.reduce((acc: Record<number, any>, x) => {
+    acc[x.id] = transformTestResponse(x)
+    return acc
+  }, {}),
+  testOrder: r.map((x) => x.id),
 })

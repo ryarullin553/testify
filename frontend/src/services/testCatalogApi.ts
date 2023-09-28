@@ -1,6 +1,13 @@
-import { Attempt, Test, TestWithAvatar, TestWithDescription } from '@/types/Test'
+import { Attempt, Test, TestWithAvatar, TestWithDescription, TestWithDescriptionList } from '@/types/Test'
 import { api } from './api'
-import { AttemptResponse, TestResponse, transformAttemptResponse, transformGetTestResponse } from '@/types/TestApi'
+import {
+  AttemptResponse,
+  TestResponse,
+  transformAttemptResponse,
+  transformTestListResponse,
+  transformTestResponse,
+} from '@/types/TestApi'
+import { PatchCollection } from '@reduxjs/toolkit/dist/query/core/buildThunks'
 
 type TestListResponse = {
   results: TestResponse[]
@@ -31,17 +38,17 @@ type AttemptListResponse = {
 
 export const testCatalogApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getPublishedTests: builder.query<TestWithDescription[], GetPublishedTestsQueryParams>({
+    getPublishedTests: builder.query<TestWithDescriptionList, GetPublishedTestsQueryParams>({
       query: ({ search, sort = '-rating' }) => ({
         url: 'tests/',
         params: { search, ordering: sort },
       }),
-      transformResponse: (r: TestListResponse) =>
-        r.results.map((x) => transformGetTestResponse(x) as TestWithDescription),
+      transformResponse: (r: TestListResponse) => transformTestListResponse(r.results),
+      providesTags: ['HasIsFavoriteKey'],
     }),
     getTestByID: builder.query<TestWithDescription, Test['testID']>({
       query: (testID) => `tests/${testID}`,
-      transformResponse: (r: TestResponse) => transformGetTestResponse(r) as TestWithDescription,
+      transformResponse: (r: TestResponse) => transformTestResponse(r) as TestWithDescription,
     }),
     getTestAttempts: builder.query<Attempt[], Test['testID']>({
       query: (testID) => `/tests/${testID}/passages/my/`,
@@ -52,21 +59,21 @@ export const testCatalogApi = api.injectEndpoints({
         url: 'tests/created/',
         params: { is_published: filter, search },
       }),
-      transformResponse: (r: TestListResponse) => r.results.map((x) => transformGetTestResponse(x) as TestWithAvatar),
+      transformResponse: (r: TestListResponse) => r.results.map((x) => transformTestResponse(x) as TestWithAvatar),
     }),
     getTestsHistory: builder.query<TestWithAvatar[], GetTestsHistoryQueryParams>({
       query: ({ filter, search }) => ({
         url: 'users/me/passed_tests/',
         params: { is_finished: filter, search },
       }),
-      transformResponse: (r: TestListResponse) => r.results.map((x) => transformGetTestResponse(x) as TestWithAvatar),
+      transformResponse: (r: TestListResponse) => r.results.map((x) => transformTestResponse(x) as TestWithAvatar),
     }),
     getTestsBookmarkedByCurrentUser: builder.query<TestWithAvatar[], GetBookmarkedTestsQueryParams>({
       query: ({ search }) => ({
         url: 'bookmarks/',
         params: { search },
       }),
-      transformResponse: (r: TestListResponse) => r.results.map((x) => transformGetTestResponse(x) as TestWithAvatar),
+      transformResponse: (r: TestListResponse) => r.results.map((x) => transformTestResponse(x) as TestWithAvatar),
     }),
     createTestBookmark: builder.mutation<void, Test['testID']>({
       query: (testID) => ({
@@ -74,12 +81,62 @@ export const testCatalogApi = api.injectEndpoints({
         method: 'POST',
         body: { test: testID },
       }),
+      async onQueryStarted(testID, { dispatch, queryFulfilled, getState }) {
+        const queriesToUpdate = testCatalogApi.util.selectInvalidatedBy(getState(), ['HasIsFavoriteKey'])
+        const patchResult: PatchCollection[] = []
+        patchResult.push(
+          dispatch(
+            testCatalogApi.util.updateQueryData('getTestByID', testID, (draft) => {
+              draft.isFavorite = true
+            })
+          )
+        )
+        queriesToUpdate.map(({ endpointName, originalArgs }) =>
+          patchResult.push(
+            dispatch(
+              testCatalogApi.util.updateQueryData(endpointName, originalArgs, (draft) => {
+                draft.testList[testID].isFavorite = true
+              })
+            )
+          )
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.forEach((x) => x.undo())
+        }
+      },
     }),
     removeTestBookmark: builder.mutation<void, Test['testID']>({
       query: (testID) => ({
         url: `bookmarks/${testID}/`,
         method: 'DELETE',
       }),
+      async onQueryStarted(testID, { dispatch, queryFulfilled, getState }) {
+        const queriesToUpdate = testCatalogApi.util.selectInvalidatedBy(getState(), ['HasIsFavoriteKey'])
+        const patchResult: PatchCollection[] = []
+        patchResult.push(
+          dispatch(
+            testCatalogApi.util.updateQueryData('getTestByID', testID, (draft) => {
+              draft.isFavorite = false
+            })
+          )
+        )
+        queriesToUpdate.map(({ endpointName, originalArgs }) =>
+          patchResult.push(
+            dispatch(
+              testCatalogApi.util.updateQueryData(endpointName, originalArgs, (draft) => {
+                draft.testList[testID].isFavorite = false
+              })
+            )
+          )
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.forEach((x) => x.undo())
+        }
+      },
     }),
   }),
 })

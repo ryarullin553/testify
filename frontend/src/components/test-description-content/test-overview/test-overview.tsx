@@ -32,6 +32,7 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
     authorName,
     authorBio,
     isInProgress,
+    isFavorite,
   } = testInfo
 
   const handleStartTestClick = async (evt: MouseEvent<HTMLButtonElement>) => {
@@ -96,6 +97,7 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
             <span className={styles.heart}>♡</span>Хочу пройти
             <input
               type={'checkbox'}
+              defaultChecked={isFavorite}
               className={`${styles.button} ${styles.button_inversed}`}
               onChange={(evt) => handleFavoriteClick(evt, testID)}
             />

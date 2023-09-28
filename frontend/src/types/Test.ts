@@ -64,6 +64,11 @@ export interface TestWithDescription extends Test {
   activeAttemptID?: Attempt['attemptID']
 }
 
+export interface TestWithDescriptionList {
+  testList: Record<Test['testID'], TestWithDescription>
+  testOrder: Test['testID'][]
+}
+
 export interface TestWithQuestions extends Test {
   questionList: Record<number, Question>
   questionOrder: number[]

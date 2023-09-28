@@ -14,16 +14,16 @@ export interface SearchParams {
 
 export const CatalogContent: FC = () => {
   const [searchParams, setSearchParams] = useState<SearchParams>({ sort: '-rating' })
-  const { data: testList } = useGetPublishedTestsQuery(searchParams)
+  const { data: listData } = useGetPublishedTestsQuery(searchParams)
 
-  if (!testList) return <Spinner />
+  if (!listData) return <Spinner />
 
   return (
     <main>
       <div className={styles.container}>
         <div className={styles.catalog}>
           <CatalogSearch setSearchParams={setSearchParams} />
-          <CatalogList testList={testList} />
+          <CatalogList listData={listData} />
         </div>
       </div>
     </main>
