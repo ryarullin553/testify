@@ -35,7 +35,9 @@ class LikeAPIView(mixins.CreateModelMixin,
             comment_id=comment_id,
             user_id=self.request.user.id
         )
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=True
+        )
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)

@@ -8,7 +8,8 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Feedback
-        fields = ['user', 'test', 'rate', 'content', 'user_id', 'user_name', 'created']
+        fields = ['user', 'test', 'rate', 'content', 'user_id', 'user_name',
+                  'created']
         extra_kwargs = {'test': {'write_only': True}}
 
     def update(self, instance, validated_data):

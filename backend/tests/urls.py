@@ -9,6 +9,8 @@ router.register(r'tests', TestAPIView)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('users/me/passed_tests/', TestAPIView.as_view({'get': 'passed_tests'}))
+    path('users/me/passed_tests/', TestAPIView.as_view(
+        {'get': 'passed_tests'}
+    ))
 ]
 

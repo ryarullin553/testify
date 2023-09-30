@@ -43,4 +43,5 @@ class Passage(models.Model):
         ordering = ['-created']
 
     def __str__(self):
-        return f"Прохождение теста '{self.test}' пользователя {self.user.username}"
+        return f"Прохождение теста '{self.test}' " \
+               f"пользователя {self.user.username}"

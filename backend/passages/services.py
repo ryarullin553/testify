@@ -29,7 +29,9 @@ def get_result(passage):
             }
         )
     else:
-        answers_score = get_score(passage.correct_answers_count, passage.questions_count)
+        answers_score = get_score(
+            passage.correct_answers_count, passage.questions_count
+        )
         result['score'] = answers_score
     return result
 

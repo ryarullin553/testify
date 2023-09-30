@@ -6,6 +6,8 @@ router = routers.SimpleRouter()
 router.register(r'comments', CommentAPIView)
 
 urlpatterns = [
-    path('questions/<int:pk>/comments/', CommentAPIView.as_view({'get': 'comments'})),
+    path('questions/<int:pk>/comments/', CommentAPIView.as_view(
+        {'get': 'comments'}
+    )),
     path('', include(router.urls)),
 ]

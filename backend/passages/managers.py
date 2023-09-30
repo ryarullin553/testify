@@ -61,7 +61,8 @@ class PassageManager(models.Manager):
 
     def with_base_fields(self):
         fields = ['id', 'test', 'result', 'user_id', 'codeword',
-                  'test__title', 'test__has_points', 'test__has_questions_explanation',
+                  'test__title', 'test__has_points',
+                  'test__has_questions_explanation',
                   'test__has_right_answers', 'test__user_id']
         return self \
             .select_related('test') \

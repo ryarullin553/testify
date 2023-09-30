@@ -17,13 +17,16 @@ class PassageAPIView(mixins.CreateModelMixin,
     permission_classes = [PassagePermission]
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['codeword', 'user__username']
-    ordering_fields = ['result__score', 'result__finished_time', 'result__answers_count',
+    ordering_fields = ['result__score', 'result__finished_time',
+                       'result__answers_count',
                        'result__correct_answers_count', 'result__passage_time']
     ordering = '-created'
 
     def get_object(self):
         queryset = self.get_queryset().with_base_fields()
-        instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
+        instance = get_object_or_404(
+            queryset, pk=self.kwargs[self.lookup_field]
+        )
         self.check_object_permissions(self.request, instance)
         return instance
 
@@ -32,8 +35,9 @@ class PassageAPIView(mixins.CreateModelMixin,
         Таблица с завершенными прохождениями теста
 
         Параметры для поиска: user_name, codeword
-        Параметры для сортировки: result__score, result__finished_time, result__answers_count,
-        result__correct_answers_count, result__passage_time
+        Параметры для сортировки: result__score, result__finished_time,
+        result__answers_count, result__correct_answers_count,
+        result__passage_time
         """
         test_id = kwargs.get('pk')
         fields = ['id', 'user_id', 'result', 'codeword', 'user_name']
@@ -47,16 +51,20 @@ class PassageAPIView(mixins.CreateModelMixin,
         """
         Прохождения теста текущего пользователя
 
-        На странице "Тесты" по нажатию на тест выпадает список с его прохождениями.
-        Параметры для сортировки: result__score, result__finished_time, result__answers_count,
-        result__correct_answers_count, result__passage_time
+        На странице "Тесты" по нажатию на тест выпадает список с его
+        прохождениями.
+        Параметры для сортировки: result__score, result__finished_time,
+        result__answers_count, result__correct_answers_count,
+        result__passage_time
         """
         test_id = kwargs.get('pk')
         current_user_id = self.request.user.id
         queryset = self.get_queryset().user_test(test_id, current_user_id)
         queryset = self.filter_queryset(queryset)
         page = self.paginate_queryset(queryset)
-        serializer = self.get_serializer(page, many=True, fields=['id', 'result'])
+        serializer = self.get_serializer(
+            page, many=True, fields=['id', 'result']
+        )
         return self.get_paginated_response(serializer.data)
 
     def partial_update(self, request, *args, **kwargs):
@@ -66,7 +74,9 @@ class PassageAPIView(mixins.CreateModelMixin,
         Тело запроса должно быть пустым
         """
         queryset = self.get_queryset().create_result()
-        instance = get_object_or_404(queryset, pk=self.kwargs[self.lookup_field])
+        instance = get_object_or_404(
+            queryset, pk=self.kwargs[self.lookup_field]
+        )
         self.check_object_permissions(self.request, instance)
         complete_passage(instance)
         return Response()
