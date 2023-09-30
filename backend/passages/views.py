@@ -40,7 +40,8 @@ class PassageAPIView(mixins.CreateModelMixin,
         result__passage_time
         """
         test_id = kwargs.get('pk')
-        fields = ['id', 'user_id', 'result', 'codeword', 'user_name']
+        fields = ['id', 'user_id', 'result', 'codeword', 'user_name',
+                  'user_image']
         queryset = self.get_queryset().finished(test_id)
         queryset = self.filter_queryset(queryset)
         page = self.paginate_queryset(queryset)
