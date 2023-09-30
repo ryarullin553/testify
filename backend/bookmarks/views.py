@@ -26,6 +26,8 @@ class BookmarkAPIView(mixins.CreateModelMixin,
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
         test_id = self.kwargs[self.lookup_field]
-        instance = get_object_or_404(queryset, test_id=test_id, user_id=self.request.user.id)
+        instance = get_object_or_404(
+            queryset, test_id=test_id, user_id=self.request.user.id
+        )
         self.check_object_permissions(self.request, instance)
         return instance

@@ -9,7 +9,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'question', 'comment', 'user_id', 'user_name', 'user_image', 'created', 'content']
+        fields = ['id', 'user', 'question', 'comment', 'user_id', 'user_name',
+                  'user_image', 'created', 'content']
         extra_kwargs = {
             'question': {'write_only': True},
             'comment': {'write_only': True}

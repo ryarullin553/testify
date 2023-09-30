@@ -1,4 +1,4 @@
-from django.db.models import Count, Q, Exists, OuterRef
+from django.db.models import Exists, OuterRef
 from rest_framework import serializers
 
 from likes.models import Like
@@ -34,9 +34,11 @@ class TestSerializer(DynamicFieldsModelSerializer):
         fields = ['id', 'type', 'content', 'answer_choices', 'image']
         if test.has_points:
             fields.append('points')
-        if test.has_questions_explanation and (current_user.id == test.user_id or test.is_finished_passage):
+        if test.has_questions_explanation and (current_user.id == test.user_id
+                                               or test.is_finished_passage):
             fields.append('explanation')
-        if current_user.id == test.user_id or (test.has_right_answers and test.is_finished_passage):
+        if current_user.id == test.user_id or (test.has_right_answers and
+                                               test.is_finished_passage):
             fields.append('right_answers')
         if current_user.id != test.user_id:
             fields += ['likes_count', 'dislikes_count']
@@ -68,4 +70,5 @@ class TestSerializer(DynamicFieldsModelSerializer):
         model = Test
         fields = '__all__'
         read_only_fields = ['rating', 'feedbacks_count', 'created',
-                            'results_count', 'avg_score', 'avg_answers_count', 'avg_correct_answers_count']
+                            'results_count', 'avg_score', 'avg_answers_count',
+                            'avg_correct_answers_count']
