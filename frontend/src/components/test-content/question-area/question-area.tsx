@@ -31,6 +31,7 @@ export const QuestionArea: FC<Props> = ({ children, questionData, questionIndex,
                     name='answer-selection'
                     value={answerID}
                     defaultChecked={false}
+                    disabled={!isTogglable}
                   />
                   <label htmlFor={stringAnswerID}>{answerDescription}</label>
                 </li>

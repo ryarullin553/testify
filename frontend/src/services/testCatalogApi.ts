@@ -1,4 +1,11 @@
-import { Attempt, Test, TestWithAvatar, TestWithDescription, TestWithDescriptionList } from '@/types/Test'
+import {
+  Attempt,
+  FinishedAttempt,
+  Test,
+  TestWithAvatar,
+  TestWithDescription,
+  TestWithDescriptionList,
+} from '@/types/Test'
 import { api } from './api'
 import {
   AttemptResponse,
@@ -34,6 +41,34 @@ type GetBookmarkedTestsQueryParams = {
 
 type AttemptListResponse = {
   results: AttemptResponse[]
+}
+
+const updateIsFavoriteCache = (newState: boolean) => {
+  return async (testID, { dispatch, queryFulfilled, getState }) => {
+    const queriesToUpdate = testCatalogApi.util.selectInvalidatedBy(getState(), ['HasIsFavoriteKey'])
+    const patchResult: PatchCollection[] = []
+    patchResult.push(
+      dispatch(
+        testCatalogApi.util.updateQueryData('getTestByID', testID, (draft) => {
+          draft.isFavorite = newState
+        })
+      )
+    )
+    queriesToUpdate.map(({ endpointName, originalArgs }) =>
+      patchResult.push(
+        dispatch(
+          testCatalogApi.util.updateQueryData(endpointName, originalArgs, (draft) => {
+            draft.testList[testID].isFavorite = newState
+          })
+        )
+      )
+    )
+    try {
+      await queryFulfilled
+    } catch {
+      patchResult.forEach((x) => x.undo())
+    }
+  }
 }
 
 export const testCatalogApi = api.injectEndpoints({
@@ -81,62 +116,18 @@ export const testCatalogApi = api.injectEndpoints({
         method: 'POST',
         body: { test: testID },
       }),
-      async onQueryStarted(testID, { dispatch, queryFulfilled, getState }) {
-        const queriesToUpdate = testCatalogApi.util.selectInvalidatedBy(getState(), ['HasIsFavoriteKey'])
-        const patchResult: PatchCollection[] = []
-        patchResult.push(
-          dispatch(
-            testCatalogApi.util.updateQueryData('getTestByID', testID, (draft) => {
-              draft.isFavorite = true
-            })
-          )
-        )
-        queriesToUpdate.map(({ endpointName, originalArgs }) =>
-          patchResult.push(
-            dispatch(
-              testCatalogApi.util.updateQueryData(endpointName, originalArgs, (draft) => {
-                draft.testList[testID].isFavorite = true
-              })
-            )
-          )
-        )
-        try {
-          await queryFulfilled
-        } catch {
-          patchResult.forEach((x) => x.undo())
-        }
-      },
+      onQueryStarted: updateIsFavoriteCache(true),
     }),
     removeTestBookmark: builder.mutation<void, Test['testID']>({
       query: (testID) => ({
         url: `bookmarks/${testID}/`,
         method: 'DELETE',
       }),
-      async onQueryStarted(testID, { dispatch, queryFulfilled, getState }) {
-        const queriesToUpdate = testCatalogApi.util.selectInvalidatedBy(getState(), ['HasIsFavoriteKey'])
-        const patchResult: PatchCollection[] = []
-        patchResult.push(
-          dispatch(
-            testCatalogApi.util.updateQueryData('getTestByID', testID, (draft) => {
-              draft.isFavorite = false
-            })
-          )
-        )
-        queriesToUpdate.map(({ endpointName, originalArgs }) =>
-          patchResult.push(
-            dispatch(
-              testCatalogApi.util.updateQueryData(endpointName, originalArgs, (draft) => {
-                draft.testList[testID].isFavorite = false
-              })
-            )
-          )
-        )
-        try {
-          await queryFulfilled
-        } catch {
-          patchResult.forEach((x) => x.undo())
-        }
-      },
+      onQueryStarted: updateIsFavoriteCache(false),
+    }),
+    getAttemptByID: builder.query<FinishedAttempt, Attempt['attemptID']>({
+      query: (attemptID) => `passages/${attemptID}/`,
+      transformResponse: (r: AttemptResponse) => transformAttemptResponse(r) as FinishedAttempt,
     }),
   }),
 })
@@ -150,4 +141,5 @@ export const {
   useGetTestsBookmarkedByCurrentUserQuery,
   useCreateTestBookmarkMutation,
   useRemoveTestBookmarkMutation,
+  useGetAttemptByIDQuery,
 } = testCatalogApi

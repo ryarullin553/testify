@@ -1,15 +1,16 @@
 import styles from './results-area.module.scss'
 import { AppRoute } from '../../../reusable/const'
 import Link from 'next/link'
-import { AttemptComplete } from '../../../types/Test'
+import { AttemptResult, Test } from '../../../types/Test'
 import { FC } from 'react'
 
 interface Props {
-  results: AttemptComplete
+  testTitle: Test['testTitle']
+  results: AttemptResult
 }
 
-export const ResultsArea: FC<Props> = ({ results }) => {
-  const { testTitle, totalAnswers, correctAnswers, questionAmount, attemptScore, attemptTime, averageScore } = results
+export const ResultsArea: FC<Props> = ({ testTitle, results }) => {
+  const { correctAnswerAmount, answerAmount, questionAmount, attemptScore, attemptTime } = results
 
   return (
     <section className={styles.resultContent}>
@@ -21,13 +22,10 @@ export const ResultsArea: FC<Props> = ({ results }) => {
       <div className={styles.resultContainer}>
         <div className={styles.allResults}>
           <p>
-            Вы ответили на <span>{totalAnswers}</span> вопросов из <span>{questionAmount}</span>
+            Вы ответили на <span>{answerAmount}</span> вопросов из <span>{questionAmount}</span>
           </p>
           <p>
-            Ответили верно на <span>{correctAnswers}</span> вопросов
-          </p>
-          <p>
-            Средний результат теста <span>{averageScore}%</span>
+            Ответили верно на <span>{correctAnswerAmount}</span> вопросов
           </p>
           <p>
             Время прохождения теста: <span>{attemptTime}</span>

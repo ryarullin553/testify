@@ -13,7 +13,8 @@ import {
 interface Props {
   testID: Test['testID']
   questionData: QuestionWithCorrectAnswer
-  actionQuestionAdd: () => void
+  addNewQuestion: () => void
+  handleDeleteQuestion: () => void
   currentQuestionID: Question['questionID']
   currentQuestionIndex: number
 }
@@ -21,32 +22,15 @@ interface Props {
 export const CreateQuestionManager: FC<Props> = ({
   questionData,
   testID,
-  actionQuestionAdd,
+  addNewQuestion,
+  handleDeleteQuestion,
   currentQuestionID,
   currentQuestionIndex,
 }) => {
-  const blankAnswer: Answer = {
-    answerDescription: '',
-    isCorrect: false,
-  }
-  const blankQuestion: QuestionWithCorrectAnswer = {
-    testID,
-    questionDescription: '',
-    questionAvatar: null,
-    questionType: 'Single choice',
-    questionID: -1,
-    answerList: {
-      0: blankAnswer,
-      1: blankAnswer,
-    },
-    answerOrder: [0, 1],
-    correctAnswerIDs: [0],
-  }
-  const { questionID, answerOrder, questionDescription } = questionData || blankQuestion
+  const { questionID, answerOrder, questionDescription } = questionData
   const [answerOrderState, setAnswerOrderState] = useState([...answerOrder])
   const [createQuestion] = useCreateQuestionMutation()
   const [updateQuestion] = useUpdateQuestionMutation()
-  const [deleteQuestion] = useDeleteQuestionMutation()
   // const [generateAmount, setGenerateAmount] = useState(1)
 
   const actionAnswerDelete = (answerID: number) => {
@@ -72,7 +56,7 @@ export const CreateQuestionManager: FC<Props> = ({
 
   const handleQuestionDelete = async (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault()
-    deleteQuestion({ questionID, testID })
+    handleDeleteQuestion()
   }
 
   const handleAnswerDelete = (answerID: number) => {
@@ -103,7 +87,7 @@ export const CreateQuestionManager: FC<Props> = ({
     }
     if (currentQuestionID <= 0) {
       await createQuestion(questionData)
-      actionQuestionAdd()
+      addNewQuestion()
     } else await updateQuestion(questionData)
   }
 
