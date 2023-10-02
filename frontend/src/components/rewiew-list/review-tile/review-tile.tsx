@@ -3,27 +3,27 @@ import { FeedbackStars } from '../../feedback-stars/feedback-stars'
 import Link from 'next/link'
 import { AppRoute } from '../../../reusable/const'
 import { formatDate } from '../../../reusable/functions'
-import { TestReview } from '../../../types/TestReview'
 import { FC } from 'react'
+import { TestReview } from '@/types/Feedback'
 
 interface Props {
   reviewItem: TestReview
 }
 
 export const ReviewTile: FC<Props> = ({ reviewItem }) => {
-  const { reviewID, authorName, reviewContent, date, rating, authorID } = reviewItem
+  const { reviewID, userName, reviewContent, reviewDate, reviewRating, userID } = reviewItem
 
   return (
     <div className={styles.review}>
       <div className={styles.review__stars}>
-        <FeedbackStars width={87} height={15} rating={rating} fill={'#FFFFFF'} id={`review-${reviewID}`} />
+        <FeedbackStars width={87} height={15} rating={reviewRating} fill={'#FFFFFF'} id={`review-${reviewID}`} />
       </div>
       <p className={styles.review__text}>{reviewContent}</p>
       <div className={styles.review__info}>
-        <Link href={`${AppRoute.Profile}/${authorID}`} className={styles.name}>
-          {authorName}
+        <Link href={`${AppRoute.Profile}/${userID}`} className={styles.name}>
+          {userName}
         </Link>
-        <span className={styles.data}>{formatDate(date)}</span>
+        <span className={styles.data}>{formatDate(new Date(reviewDate))}</span>
       </div>
     </div>
   )

@@ -12,8 +12,28 @@ type ReviewResponse = {
 }
 
 type GetTestReviewsResponse = {
-  result: ReviewResponse[]
+  results: ReviewResponse[]
 }
+
+export type RatingValues = 1 | 2 | 3 | 4 | 5
+
+export type SubmitReviewArgs = {
+  testID: Test['testID']
+  reviewRating: RatingValues
+  reviewContent?: string
+}
+
+type SubmitReviewRequest = {
+  test: number
+  rate: RatingValues
+  content?: string
+}
+
+const transformEditReviewRequest = (r: SubmitReviewArgs): SubmitReviewRequest => ({
+  test: r.testID,
+  rate: r.reviewRating,
+  content: r.reviewContent,
+})
 
 const transformReviewResponse = (r: ReviewResponse, i: number): TestReview => ({
   reviewID: i,
@@ -28,9 +48,16 @@ export const feedbackApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getTestReviews: builder.query<TestReview[], Test['testID']>({
       query: (testID) => `tests/${testID}/feedbacks/`,
-      transformResponse: (r: GetTestReviewsResponse) => r.result.map((x, i) => transformReviewResponse(x, i)),
+      transformResponse: (r: GetTestReviewsResponse) => r.results.map((x, i) => transformReviewResponse(x, i)),
+    }),
+    submitReview: builder.mutation<void, SubmitReviewArgs>({
+      query: (submitReviewArgs) => ({
+        url: 'feedbacks/',
+        method: 'POST',
+        body: transformEditReviewRequest(submitReviewArgs),
+      }),
     }),
   }),
 })
 
-export const { useGetTestReviewsQuery } = feedbackApi
+export const { useGetTestReviewsQuery, useSubmitReviewMutation } = feedbackApi

@@ -12,7 +12,8 @@ export const ReviewList: FC<Props> = ({ reviewList }) => {
     <ul className={styles.reviewList}>
       <li>
         {reviewList.map((reviewItem) => {
-          return <ReviewTile key={reviewItem.reviewID} reviewItem={reviewItem} />
+          const { reviewID } = reviewItem
+          return <ReviewTile key={reviewID} reviewItem={reviewItem} />
         })}
       </li>
     </ul>

@@ -1,7 +1,6 @@
 import styles from './visibility-button.module.scss'
 import HiddenIcon from './img/unpublished.svg'
 import VisibleIcon from './img/published.svg'
-import { changeTestVisibilityAction } from '../../../../api/tests'
 import { FC, useState, MouseEvent } from 'react'
 import { Test } from '../../../../types/Test'
 
@@ -15,11 +14,6 @@ export const VisibilityButton: FC<Props> = ({ isPublished, testID }) => {
 
   const toggleIsPublished = async (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault()
-    if (isPublished) {
-      await changeTestVisibilityAction(testID, false)
-    } else {
-      await changeTestVisibilityAction(testID, true)
-    }
     setCurrentPublishedState(!currentPublishedState)
   }
 
