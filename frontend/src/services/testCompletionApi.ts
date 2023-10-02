@@ -58,16 +58,22 @@ export const testCompletionApi = api.injectEndpoints({
         method: 'POST',
         body: transformSubmitAnswerRequest(submitAnswerArgs),
       }),
-      // onQueryStarted: async ({testID, selectedAnswer}, {dispatch, queryFulfilled}) => {
-      //   try {
-      //     await queryFulfilled
-      //     const patchResult = dispatch(
-      //       testCompletionApi.util.updateQueryData('getActiveAtempt', testID, (draft) => ({
-
-      //       }))
-      //     )
-      //   }
-      // }
+      onQueryStarted: async ({ testID, questionID, selectedAnswer }, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled
+          // треш (патчит ответы)
+          dispatch(
+            testCatalogApi.util.updateQueryData('getAttemptByID', testID, (draft) => {
+              draft.selectedAnswers[questionID] = [
+                draft.questionList[questionID].answerOrder.find(
+                  (x) =>
+                    draft.questionList[questionID].answerList[x].answerDescription === selectedAnswer.answerDescription
+                )!,
+              ]
+            })
+          )
+        } catch {}
+      },
     }),
   }),
 })

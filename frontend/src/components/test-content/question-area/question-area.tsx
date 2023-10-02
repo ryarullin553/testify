@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, PropsWithChildren } from 'react'
+import { ChangeEvent, FC, FormEvent, MutableRefObject, PropsWithChildren } from 'react'
 import { CommentsBlock } from '../../comment-block/comment-block'
 import styles from './question-area.module.scss'
 import { Answer, Attempt, Question, QuestionState } from '../../../types/Test'
@@ -28,7 +28,6 @@ export const QuestionArea: FC<Props> = ({
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
-    console.log(Object.fromEntries(formData.entries()))
     const submitAnswerArgs: SubmitAnswerArgs = {
       attemptID,
       testID,
