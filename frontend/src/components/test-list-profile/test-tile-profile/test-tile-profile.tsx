@@ -37,7 +37,9 @@ export const TestTileProfile: FC<Props> = ({ testItem, linkList, isEditable, isA
         <TestTileLinks linkList={linkList} testID={testID} />
         <button className={styles.buttonMore}>...</button>
       </article>
-      {isAttemptsAvailiable && isAttemptsShown && !!attemptList && <TestTileAttemptList attemptList={attemptList} />}
+      {isAttemptsAvailiable && isAttemptsShown && !!attemptList && (
+        <TestTileAttemptList testID={testID} attemptList={attemptList} />
+      )}
     </li>
   )
 }

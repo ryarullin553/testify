@@ -2,14 +2,15 @@ import Link from 'next/link'
 import { AppRoute } from '../../../../../reusable/const'
 import styles from './test-tile-attempt-tile.module.scss'
 import { FC } from 'react'
-import { Attempt } from '../../../../../types/Test'
+import { Attempt, Test } from '@/types/Test'
 
 interface Props {
   attemptItem: Attempt
+  testID: Test['testID']
 }
 
-export const TestTileAttemptTile: FC<Props> = ({ attemptItem }) => {
-  const { attemptID, attemptResult, testID } = attemptItem
+export const TestTileAttemptTile: FC<Props> = ({ attemptItem, testID }) => {
+  const { attemptID, attemptResult } = attemptItem
   const { attemptScore, finishDate } = attemptResult || {}
   const isComplete = Boolean(attemptResult)
   const link = isComplete ? `${AppRoute.Results}/${attemptID}` : `${AppRoute.TestMain}/${testID}`
