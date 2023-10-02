@@ -46,9 +46,9 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
   const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>, testID: number) => {
     const isToggled = evt.target.checked
     if (isToggled) {
-      addBookmark(testID)
+      await addBookmark(testID)
     } else {
-      deleteBookmark(testID)
+      await deleteBookmark(testID)
     }
   }
 
@@ -91,7 +91,7 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
         </section>
         <div className={styles.sidebar}>
           <button className={styles.button} onClick={handleStartTestClick}>
-            {testInfo.isInProgress ? 'Продолжить' : 'Начать'}
+            {isInProgress ? 'Продолжить' : 'Начать'}
           </button>
           <label>
             <span className={styles.heart}>♡</span>Хочу пройти

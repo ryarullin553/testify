@@ -1,45 +1,71 @@
-import { ChangeEvent, FC, PropsWithChildren } from 'react'
+import { ChangeEvent, FC, FormEvent, PropsWithChildren } from 'react'
 import { CommentsBlock } from '../../comment-block/comment-block'
 import styles from './question-area.module.scss'
-import { Answer, Question, QuestionState, QuestionWithSelectedAnswer } from '../../../types/Test'
+import { Answer, Attempt, Question, QuestionState } from '../../../types/Test'
+import { SubmitAnswerArgs, useSubmitAnswerMutation } from '@/services/testCompletionApi'
 
 interface Props extends PropsWithChildren {
   questionData: Question
   questionIndex: number
+  attemptID: Attempt['attemptID']
+  selectedAnswers: number[]
+  gotoNextQuestion: () => void
   isTogglable?: boolean
 }
 
-export const QuestionArea: FC<Props> = ({ children, questionData, questionIndex, isTogglable }) => {
-  const { answerList, answerOrder } = questionData
+export const QuestionArea: FC<Props> = ({
+  children,
+  attemptID,
+  questionData,
+  selectedAnswers,
+  questionIndex,
+  gotoNextQuestion,
+  isTogglable,
+}) => {
+  const { testID, answerList, answerOrder, questionID, questionDescription } = questionData
+  const [submitAnswer] = useSubmitAnswerMutation()
+
+  const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault()
+    const formData = new FormData(evt.currentTarget)
+    console.log(Object.fromEntries(formData.entries()))
+    const submitAnswerArgs: SubmitAnswerArgs = {
+      attemptID,
+      testID,
+      questionID,
+      selectedAnswer: answerList[Number(formData.get('selectedAnswer'))],
+    }
+    await submitAnswer(submitAnswerArgs)
+    gotoNextQuestion()
+  }
 
   return (
     <div className={styles.questionArea}>
       <section className={styles.questionSection}>
         <h2>Вопрос №{questionIndex + 1}</h2>
-        <p className={styles.questionDescription}>{questionData.questionDescription}</p>
+        <p className={styles.questionDescription}>{questionDescription}</p>
         <p className={styles.notice}>Выберите один вариант из списка</p>
-        <form className={styles.answerForm} action='#'>
+        <form className={styles.answerForm} onSubmit={handleSubmit} action='#'>
           <ul>
             {answerOrder.map((answerID) => {
               const { answerDescription } = answerList[answerID]
-              const stringAnswerID = String(answerID)
               return (
                 <li key={answerID}>
                   <input
                     type='radio'
-                    id={stringAnswerID}
-                    name='answer-selection'
+                    id={`selectAnswer-${answerID}`}
+                    name='selectedAnswer'
                     value={answerID}
-                    defaultChecked={false}
+                    defaultChecked={selectedAnswers?.includes(answerID) || false}
                     disabled={!isTogglable}
                   />
-                  <label htmlFor={stringAnswerID}>{answerDescription}</label>
+                  <label htmlFor={`selectAnswer-${answerID}`}>{answerDescription}</label>
                 </li>
               )
             })}
           </ul>
+          {children}
         </form>
-        {children}
       </section>
       {/* <CommentsBlock questionID={questionData.questionID} /> */}
     </div>

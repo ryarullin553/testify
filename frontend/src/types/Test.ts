@@ -2,6 +2,9 @@ import { UserInfo } from './UserInfo'
 
 export interface Answer {
   answerDescription: string
+}
+
+export interface KnownAnswer extends Answer {
   isCorrect: boolean
 }
 
@@ -11,21 +14,14 @@ export interface Question {
   questionDescription: string
   questionAvatar: string | null
   questionType: 'Single choice'
-  answerList: Record<number, { answerDescription: string }>
+  answerList: Record<number, Answer>
   answerOrder: number[]
   questionState?: QuestionState
 }
 
 export interface QuestionWithCorrectAnswer extends Question {
-  answerList: Record<number, Answer>
+  answerList: Record<number, KnownAnswer>
   correctAnswerIDs: number[]
-}
-
-export interface QuestionWithSelectedAnswer extends Question {
-  selectedAnswer: {
-    answerID: number
-    dbEntry: number
-  }
 }
 
 export interface Test {
@@ -94,6 +90,7 @@ export interface Attempt extends TestWithQuestions {
   attemptID: number
   isComplete: boolean
   attemptResult: AttemptResult
+  selectedAnswers: Record<Question['questionID'], number[]>
 }
 
 export interface FinishedAttempt extends Attempt {

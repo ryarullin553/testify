@@ -128,6 +128,7 @@ export const testCatalogApi = api.injectEndpoints({
     getAttemptByID: builder.query<FinishedAttempt, Attempt['attemptID']>({
       query: (attemptID) => `passages/${attemptID}/`,
       transformResponse: (r: AttemptResponse) => transformAttemptResponse(r) as FinishedAttempt,
+      providesTags: ['Attempts'],
     }),
   }),
 })

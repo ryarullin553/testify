@@ -6,6 +6,7 @@ import {
   Answer,
   Attempt,
   TestWithDescription,
+  KnownAnswer,
 } from '@/types/Test'
 import { UserInfo } from './UserInfo'
 
@@ -47,7 +48,7 @@ export interface CreateQuestionProps {
   questionDescription: string
   questionAvatar: string | null
   questionType: 'Single choice'
-  answerList: Record<number, Answer>
+  answerList: Record<number, KnownAnswer>
   answerOrder: number[]
 }
 
@@ -113,9 +114,15 @@ export type ResultResponse = {
   correct_answers_count: number
 }
 
-export type AttemptResponse = {
-  answers: []
+export type AnswerResponse = {
   id: number
+  question: number
+  content: string[]
+}
+
+export type AttemptResponse = {
+  id: number
+  answers: AnswerResponse[]
   test: Test['testID']
   test_data?: TestWithQuestionsResponse
   user_id: UserInfo['userID']
@@ -145,6 +152,12 @@ export const transformAttemptResponse = (r: AttemptResponse) => ({
   questionOrder: r.test_data?.questions.map((x) => x.id),
   isComplete: Boolean(r.result),
   attemptResult: r.result ? transformAttemptResult(r.result) : null,
+  selectedAnswers: r.answers?.reduce((acc: Attempt['selectedAnswers'], x) => {
+    acc[x.question] = x.content.map(
+      (y) => r.test_data?.questions.find((q) => q.id === x.question)!.answer_choices.findIndex((a) => a === y)!
+    )
+    return acc
+  }, {}),
 })
 
 export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuestionRequest => ({
@@ -198,7 +211,7 @@ export const transformQuestionResponse = (r: QuestionResponse, testID?: number):
   questionType: r.type,
   questionDescription: r.content,
   questionAvatar: r.image,
-  answerList: r.answer_choices.reduce((acc: Record<number, Answer>, x, i) => {
+  answerList: r.answer_choices.reduce((acc: Record<number, KnownAnswer>, x, i) => {
     acc[i] = { answerDescription: x, isCorrect: r.right_answers.includes(x) }
     return acc
   }, {}),

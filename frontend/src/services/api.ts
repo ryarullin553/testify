@@ -5,7 +5,7 @@ const BACKEND_URL = 'http://127.0.0.1/api/'
 const REQUEST_TIMEOUT = 5000
 
 export const api = createApi({
-  tagTypes: ['UserAuth', 'HasIsFavoriteKey'],
+  tagTypes: ['UserAuth', 'HasIsFavoriteKey', 'Attempts'],
   baseQuery: fetchBaseQuery({
     baseUrl: BACKEND_URL,
     prepareHeaders: (headers) => {

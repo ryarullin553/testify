@@ -48,7 +48,7 @@ export const testCreationApi = api.injectEndpoints({
         body: transformEditQuestionRequest(newQuestionData),
       }),
       transformResponse: (r: QuestionResponse) => transformQuestionResponse(r),
-      async onQueryStarted({ testID }, { dispatch, queryFulfilled }) {
+      onQueryStarted: async ({ testID }, { dispatch, queryFulfilled }) => {
         try {
           const { data: newQuestionData } = await queryFulfilled
           const patchResult = dispatch(
@@ -68,7 +68,7 @@ export const testCreationApi = api.injectEndpoints({
         body: transformEditQuestionRequest(editQuestionArgs),
       }),
       transformResponse: (r: QuestionResponse) => transformQuestionResponse(r),
-      async onQueryStarted({ testID }, { dispatch, queryFulfilled }) {
+      onQueryStarted: async ({ testID }, { dispatch, queryFulfilled }) => {
         try {
           const { data: newQuestionData } = await queryFulfilled
           const patchResult = dispatch(
@@ -85,7 +85,7 @@ export const testCreationApi = api.injectEndpoints({
         url: `questions/${questionID}`,
         method: 'DELETE',
       }),
-      async onQueryStarted({ testID, questionID }, { dispatch, queryFulfilled }) {
+      onQueryStarted: async ({ testID, questionID }, { dispatch, queryFulfilled }) => {
         try {
           await queryFulfilled
           const patchResult = dispatch(
@@ -103,7 +103,7 @@ export const testCreationApi = api.injectEndpoints({
         method: 'PATCH',
         body: { is_published: true },
       }),
-      async onQueryStarted(testID, { dispatch, queryFulfilled }) {
+      onQueryStarted: async (testID, { dispatch, queryFulfilled }) => {
         try {
           await queryFulfilled
           const patchResult = dispatch(
