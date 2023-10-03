@@ -1,18 +1,18 @@
 import { FC } from 'react'
 import styles from './catalog-list.module.scss'
 import { CatalogTile } from './catalog-tile/catalog-tile'
-import { TestWithDescription } from '../../types/Test'
+import { TestWithDescription, TestWithDescriptionList } from '../../types/Test'
 
 interface Props {
-  testList: TestWithDescription[]
+  listData: TestWithDescriptionList
 }
 
-export const CatalogList: FC<Props> = ({ testList }) => {
+export const CatalogList: FC<Props> = ({ listData }) => {
+  const { testList, testOrder } = listData
   return (
     <ul className={styles.catalog__items}>
-      {testList.map((testItem) => {
-        const { testID } = testItem
-        return <CatalogTile key={testID} testItem={testItem} />
+      {testOrder.map((testID) => {
+        return <CatalogTile key={testID} testItem={testList[testID]} />
       })}
     </ul>
   )

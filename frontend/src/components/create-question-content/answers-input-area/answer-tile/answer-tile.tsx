@@ -9,8 +9,6 @@ interface Props {
   actionAnswerDelete: (answerID: number) => void
 }
 
-// Заменить correctAnswerID на isCorrect
-
 export const AnswerTile: FC<Props> = ({ testID, questionID, answerID, actionAnswerDelete }) => {
   const blankAnswer: Answer = {
     answerDescription: '',

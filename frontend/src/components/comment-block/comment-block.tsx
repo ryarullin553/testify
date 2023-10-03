@@ -11,55 +11,14 @@ interface Props {
 }
 
 export const CommentsBlock: FC<Props> = ({ questionID }) => {
-  const [questionFeedback, setQuestionFeedback] = useState([])
-
-  const fetchFeedback = async (questionID: number) => {
-    const data = await fetchQuestionCommentsAction(questionID)
-    const questionData = convertDataStC(data)
-    setQuestionFeedback(questionData)
-  }
-
-  const reloadFeedback = async () => {
-    fetchFeedback(questionID)
-  }
-
-  const convertDataStC = (data: any) => {
-    const modifiedData = data.results.map((r: any) => ({
-      id: r.id,
-      userID: r.user_id,
-      username: r.user_name,
-      userAvatar: r.user_avatar,
-      content: r.content,
-      date: new Date(Date.parse(r.created)),
-    }))
-    return modifiedData
-  }
-
-  const convertDataCtS = (data: any) => {
-    const modifiedData = {
-      question: questionID,
-      content: data.review,
-    }
-    return modifiedData
-  }
-
-  useEffect(() => {
-    fetchFeedback(questionID)
-  }, [questionID])
-
   return (
     <section className={styles.commentsSection}>
       <div className={styles.topPanel}>
-        <p className={styles.commentCount}>{questionFeedback.length} комментариев</p>
-        <LikeBlock questionID={questionID} />
+        <p className={styles.commentCount}>{length} комментариев</p>
+        {/* <LikeBlock questionID={questionID} /> */}
       </div>
-      <AddCommentBlock
-        reloadFeedback={reloadFeedback}
-        submitAction={submitCommentAction}
-        convertAction={convertDataCtS}
-        hasRateBlock={false}
-      />
-      <CommentList commentList={questionFeedback} />
+      {/* <AddCommentBlock submitAction={submitCommentAction} hasRateBlock={false} /> */}
+      {/* <CommentList commentList={questionFeedback} /> */}
     </section>
   )
 }

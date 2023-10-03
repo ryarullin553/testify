@@ -5,10 +5,10 @@ import { ProfileNavigation } from '../profile-navigation/profile-navigation'
 import { FC } from 'react'
 import { ProfileSettingsForm } from './ProfileSettingsForm/ProfileSettingsForm'
 import { Spinner } from '../Spinner/Spinner'
-import { useGetUserDataQuery } from '@/services/usersApi'
+import { useGetCurrentUserDataQuery } from '@/services/usersApi'
 
 export const ProfileSettings: FC = () => {
-  const { data: initialUserInfo } = useGetUserDataQuery()
+  const { data: initialUserInfo } = useGetCurrentUserDataQuery()
 
   if (!initialUserInfo) return <Spinner />
 

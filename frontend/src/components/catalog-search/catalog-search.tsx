@@ -18,8 +18,8 @@ export const CatalogSearch: FC<Props> = ({ setSearchParams }) => {
   }
 
   const handleSortChange = (evt: ChangeEvent<HTMLSelectElement>) => {
-    const newValue = evt.currentTarget.value
-    setSearchParams((prevState) => ({ ...prevState, sort: newValue }))
+    const { value } = evt.currentTarget
+    setSearchParams((prevState) => ({ ...prevState, sort: value }))
   }
 
   interface SortValue {

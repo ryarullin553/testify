@@ -21,6 +21,13 @@
   font-weight: medium;
 }
 
+:root {
+  --color-primary: #a38ffd;
+  --color-primary-dark-accent: #8c7bd8;
+  --color-secondary: #454868;
+  --color-background: #ffffff;
+}
+
 html,
 body,
 div,
@@ -130,6 +137,10 @@ html {
 }
 
 body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -174,10 +185,4 @@ q {
 
 main {
   flex-grow: 1;
-}
-
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }

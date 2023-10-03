@@ -4,19 +4,14 @@ import { FC, useEffect, useState, ChangeEvent, FormEvent } from 'react'
 import styles from './test-description-form.module.scss'
 import { AppRoute } from '../../reusable/const'
 import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests'
-import { Test } from '../../types/Test'
+import { Test, TestWithDescription, TestWithSettings } from '../../types/Test'
 import { useRouter } from 'next/navigation'
 import { useCreateTestMutation, useUpdateTestSettingsByIDMutation } from '@/services/testCreationApi'
+import classNames from 'classnames'
+import { CreateTestProps } from '@/types/TestApi'
 
 interface Props {
-  testData?: Test
-}
-
-interface FormState {
-  testTitle: string
-  testSummary: string
-  testDescription: string
-  testAvatar: File | null
+  testData?: TestWithSettings
 }
 
 export const TestDescriptionForm: FC<Props> = ({ testData }) => {
@@ -29,33 +24,18 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
     testSummary: '',
     testDescription: '',
   }
-  const initialFormState: FormState = {
-    testTitle,
-    testSummary,
-    testDescription,
-    testAvatar: null,
-  }
-  let [formData, setFormData] = useState<FormState>(initialFormState)
-
-  let [isSelected, setSelected] = useState(false)
-
-  const handleSwitchButton = () => {
-    return isSelected ? styles.switchButton : styles.switchButtonFalse
-  }
-
-  const handleSwitchToggle = () => {
-    return isSelected ? styles.switchToggle : styles.switchToggleFalse
-  }
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
+    const formData = new FormData(evt.currentTarget)
+    const createTestProps = Object.fromEntries(formData.entries()) as CreateTestProps
     if (isNewTest) {
-      const newID = await createTest(formData).unwrap()
+      const newID = await createTest(createTestProps).unwrap()
       if (isSuccess) {
         router.push(`${AppRoute.EditTest}${newID}`)
       }
     } else {
-      const updateTestProps = { ...formData, testID: testID! }
+      const updateTestProps = { ...createTestProps, testID: testID! }
       await updateTest(updateTestProps)
     }
   }
@@ -64,7 +44,7 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
   const buttonLabel = isNewTest ? 'Создать тест' : 'Сохранить'
 
   return (
-    <form className={styles.contentForm} action='#' name='create-test-form'>
+    <form className={styles.contentForm} action='#' name='create-test-form' onSubmit={handleSubmit}>
       <div className={styles.wrapper}>
         <h1 className={styles.createTest}>{pageTitle}</h1>
         <button className={styles.publishButton}></button>
@@ -73,7 +53,7 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
         <label>
           Название <span>*</span>
         </label>
-        <textarea id='title' name='title' defaultValue={testTitle} placeholder='Название теста' />
+        <textarea id='testTitle' name='testTitle' defaultValue={testTitle} placeholder='Название теста' />
         <p>Не более 64 символов</p>
       </fieldset>
       <fieldset className={`${styles.contentArea} ${styles.shortAbstractForm}`}>
@@ -83,7 +63,7 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
         <textarea
           id='testSummary'
           name='testSummary'
-          defaultValue={formData.testSummary}
+          defaultValue={testSummary}
           placeholder='Видно в поиске и на промостранице сразу после названия курса'
         />
         <p>Для публикации нужно не менее 100 символов</p>
@@ -93,7 +73,7 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
         <textarea
           id='testDescription'
           name='testDescription'
-          defaultValue={formData.testDescription}
+          defaultValue={testDescription}
           placeholder='Все, что важно знать до начала прохождения теста. Расскажите о:
             • цели теста,
             • почему стоит его пройти,
@@ -105,16 +85,16 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
       <div className={styles.testOptionsLogo}>
         <fieldset className={styles.testLogo}>
           <label>Логотип</label>
-          <div className={`${styles.dropZone} ${formData.testAvatar && styles.active}`}>
+          <div className={classNames(styles.dropZone, false && styles.active)}>
             <p>png-файл с прозрачностью 230х230px</p>
-            <input type='file' id='avatar' name='avatar' accept='image/png' />
+            <input type='file' id='testAvatar' name='testAvatar' accept='image/png' />
           </div>
         </fieldset>
 
         <div className={styles.testOptions}>
-          <div className={`${styles.points} ${styles.option}`}>
-            <div onClick={() => setSelected(!isSelected)} className={`${styles.switch} ${handleSwitchButton()}`}>
-              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+          <div className={classNames(styles.points, styles.option)}>
+            <div className={styles.switch}>
+              <span className={styles.toggle}></span>
             </div>
 
             <label>Баллы</label>
@@ -123,9 +103,9 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
               <span className={styles.tooltipText}>Добавить баллы к вопросам</span>
             </div>
           </div>
-          <div className={`${styles.comment} ${styles.option}`}>
-            <div onClick={() => setSelected(!isSelected)} className={`${styles.switch} ${handleSwitchButton()}`}>
-              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+          {/* <div className={`${styles.comment} ${styles.option}`}>
+            <div className={styles.switch}>
+              <span className={styles.toggle}></span>
             </div>
             <label>Комментарии</label>
 
@@ -134,8 +114,8 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
             </div>
           </div>
           <div className={`${styles.rightAnswers} ${styles.option}`}>
-            <div onClick={() => setSelected(!isSelected)} className={`${styles.switch} ${handleSwitchButton()}`}>
-              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            <div className={styles.switch}>
+              <span className={styles.toggle}></span>
             </div>
             <label>Правильные ответы</label>
 
@@ -144,15 +124,15 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
             </div>
           </div>
           <div className={`${styles.explanations} ${styles.option}`}>
-            <div onClick={() => setSelected(!isSelected)} className={`${styles.switch} ${handleSwitchButton()}`}>
-              <span className={`${styles.toggle} ${handleSwitchToggle()}`}></span>
+            <div className={styles.switch}>
+              <span className={styles.toggle}></span>
             </div>
             <label>Пояснения к вопросам</label>
 
             <div className={styles.tooltip}>
               <span className={styles.tooltipText}>Показывать пояснения к вопросам</span>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className={styles.controls}>

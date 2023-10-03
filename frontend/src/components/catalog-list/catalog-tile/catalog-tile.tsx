@@ -2,11 +2,11 @@ import Link from 'next/link'
 import styles from './catalog-tile.module.scss'
 import { AppRoute } from '../../../reusable/const'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
-import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks'
-import { FC, useState, MouseEvent } from 'react'
+import { FC, ChangeEvent, MouseEvent } from 'react'
 import { FeedbackStars } from '../../feedback-stars/feedback-stars'
 import UserIcon from './img/user-icon.svg'
 import { TestWithDescription } from '../../../types/Test'
+import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
 
 interface Props {
   testItem: TestWithDescription
@@ -23,22 +23,22 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
     testVotesCounter,
     testCompletionCounter,
   } = testItem
-  const [isFavoriteState, setIsFavoriteState] = useState(isFavorite)
+  const [addBookmark] = useCreateTestBookmarkMutation()
+  const [deleteBookmark] = useRemoveTestBookmarkMutation()
 
-  const handleFavoriteClick = async (evt: MouseEvent<HTMLButtonElement>, testID: number) => {
-    evt.preventDefault()
-    if (!isFavoriteState) {
-      await addBookmarkAction(testID)
-      setIsFavoriteState(true)
+  const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>, testID: number) => {
+    const isToggled = evt.target.checked
+    if (isToggled) {
+      addBookmark(testID)
     } else {
-      await deleteBookmarkAction(testID)
-      setIsFavoriteState(false)
+      deleteBookmark(testID)
     }
   }
 
   return (
     <li className={styles.card}>
-      <Link href={`${AppRoute.TestDescription}/${testID}`} className={styles.linkWrapper}>
+      <article className={styles.linkWrapper}>
+        <Link href={`${AppRoute.TestDescription}/${testID}`} className={styles.link} />
         <AvatarBlock src={testAvatar} size={107} />
         <div className={styles.card__info}>
           <div className={styles.card__link}>
@@ -65,12 +65,13 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
             </div>
           </div>
         </div>
-        <button
-          className={`${styles.bookmark__button} ${isFavoriteState && styles.buttonActive}`}
-          onClick={(evt) => handleFavoriteClick(evt, testID)}>
-          {isFavoriteState ? '♥' : '♡'}
-        </button>
-      </Link>
+        <input
+          type={'checkbox'}
+          className={styles.bookmark__button}
+          defaultChecked={isFavorite}
+          onChange={(evt) => handleFavoriteClick(evt, testID)}
+        />
+      </article>
     </li>
   )
 }

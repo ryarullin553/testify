@@ -2,148 +2,65 @@
 
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar'
 import styles from './test-content.module.scss'
-import { useEffect, useState } from 'react'
-import { AppRoute } from '../../reusable/const'
+import { useEffect, useRef, useState } from 'react'
 import { QuestionArea } from './question-area/question-area'
-import { useImmer } from 'use-immer'
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button'
-import { fetchAttemptsAction } from '../../api/tests'
-import { fetchAttemptAction, submitAttemptAction } from '../../api/results'
-import { submitAnswerAction, updateAnswerAction } from '../../api/answers'
 import { QuestionControls } from '../question-controls/question-controls'
-import { Answer, Attempt, AttemptComplete, Question, QuestionState, Test, TestWithQuestions } from '../../types/Test'
 import { useParams, useRouter } from 'next/navigation'
-
-// Тут жесть, надо разбить на компоненты, пересмотреть типы
+import { useFinishAttemptMutation } from '@/services/testCompletionApi'
+import { useGetAttemptByIDQuery, useGetTestByIDQuery } from '@/services/testCatalogApi'
+import { Spinner } from '../Spinner/Spinner'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { AppRoute } from '@/reusable/const'
+import { Attempt } from '@/types/Test'
 
 export const TestContent = () => {
   const router = useRouter()
-  const testID = Number(useParams().testID)
-  const [testState, setTestState] = useImmer<Attempt | null>(null)
-  const [currentQuestionID, setCurrentQuestionID] = useState(0)
+  const params = useParams()
+  const testID = Number(params.testID)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const { data: testInfo, isSuccess: isTestInfoSuccess } = useGetTestByIDQuery(testID)
+  const { isInProgress, activeAttemptID } = testInfo ?? { isInProgress: false, activeAttemptID: null }
+  const { data: attemptData, isSuccess: isAttemptDataSuccess } = useGetAttemptByIDQuery(activeAttemptID ?? skipToken)
+  const [finishAttempt] = useFinishAttemptMutation()
 
-  useEffect(() => {
-    getActiveAttempt(testID)
-  }, [])
+  if (!isTestInfoSuccess) return <Spinner />
 
-  const getCurrentQuestionData = (state: Attempt, currentQuestionID: Question['questionID']) =>
-    state.questionList.find((question) => question.questionID === currentQuestionID) || state.questionList[0]
+  if (!isInProgress) router.replace(`${AppRoute.TestDescription}/${testID}`)
 
-  const getCurrentQuestionIndex = (state: Attempt, currentQuestionID: Question['questionID']) =>
-    state.questionList.findIndex((question) => question.questionID === currentQuestionID)
+  if (!attemptData) return <Spinner />
 
-  const fetchActiveAttempt = async (testID: Test['testID']) => {
-    const attemptList = await fetchAttemptsAction(testID)
-    const activeAttempt = attemptList.results.find((a: AttemptComplete) => !a.totalAnswers)
-    return activeAttempt
-  }
+  const { testTitle, questionList, questionOrder, attemptID, selectedAnswers } = attemptData
 
-  if (!testState) return <></>
+  const currentQuestionID = questionOrder[currentQuestionIndex]
+  const currentQuestionData = questionList[currentQuestionID]
+  const currentSelectedAnswers = selectedAnswers[currentQuestionID]
 
-  const getActiveAttempt = async (testID: Test['testID']) => {
-    let attempt = await fetchActiveAttempt(testID)
-    if (!attempt) {
-      router.push(`${AppRoute.TestDescription}/${testID}`)
-    }
-    const rawData = await fetchAttemptAction(attempt.id)
-    const testData = convertDataStC(rawData)
-    setTestState(testData)
-    setCurrentQuestionID(testData.questionList[0].questionID)
-  }
+  const gotoNextQuestion = () => setCurrentQuestionIndex((prevVal) => Math.min(prevVal + 1, questionOrder.length - 1))
 
-  const changeCorrectAnswer = (questionID: Question['questionID'], answerID: Answer['answerID']) => {
-    setTestState((draft) => {
-      if (!draft) return
-      draft.questionList[getCurrentQuestionIndex(testState, questionID)].selectedAnswer.answerID = answerID
-    })
-  }
-
-  const submitNewAnswer = async (questionID: Question['questionID'], answerID: Answer['answerID']) => {
-    const answerData = {
-      result: testState?.attemptID,
-      answer: answerID,
-    }
-    const { id } = await submitAnswerAction(answerData)
-    setTestState((draft) => {
-      if (!draft) return
-      draft.questionList[getCurrentQuestionIndex(testState, questionID)].selectedAnswer.dbEntry = id
-    })
-  }
-
-  const submitUpdatedAnswer = async (questionData: Question) => {
-    const dbEntry = questionData.selectedAnswer?.dbEntry
-    const answerID = questionData.selectedAnswer?.answerID
-    const payload = {
-      result: testState?.attemptID,
-      answer: answerID,
-    }
-    await updateAnswerAction(dbEntry, payload)
-  }
-
-  const setQuestionState = (newState: QuestionState) => {
-    setTestState((draft) => {
-      if (!draft) return
-      draft.questionList[getCurrentQuestionIndex(testState, currentQuestionID)].questionState = newState
-    })
-  }
-
-  const gotoNextQuestion = () => {
-    if (getCurrentQuestionIndex(testState, currentQuestionID) === testState.questionList.length - 1) return
-
-    const newQuestionID = testState.questionList[getCurrentQuestionIndex(testState, currentQuestionID) + 1].questionID
-    setCurrentQuestionID(newQuestionID)
-  }
-
-  const submitAttempt = async () => {
-    await submitAttemptAction(testState.attemptID)
-    router.push(`${AppRoute.Results}/${testState.attemptID}`)
-  }
-
-  const convertDataStC = (data: any): Attempt => {
-    const convertedData: Attempt = {
-      testID: testID,
-      testTitle: data.passage.title,
-      attemptID: data.id,
-      questionList: data.passage.question_set.map((q: any) => ({
-        questionID: q.id,
-        questionDescription: q.content,
-        questionState: q.choiced_answer ? QuestionState.Submitted : QuestionState.NoAnswer,
-        answerList: q.answer_set.map((a: any) => ({
-          answerID: a.id,
-          answerDescription: a.content,
-        })),
-        selectedAnswer: q.choiced_answer
-          ? {
-              answerID: q.choiced_answer.answer,
-              dbEntry: q.choiced_answer.id,
-            }
-          : {},
-      })),
-    }
-    return convertedData
+  const handleFinishAttemptClick = async () => {
+    await finishAttempt(attemptID)
+    router.push(`${AppRoute.Results}/${attemptID}`)
   }
 
   return (
     <main className={styles.pageMain}>
       <QuestionListSidebar
-        testTitle={testState.testTitle}
-        questionList={testState.questionList}
-        setCurrentQuestionID={setCurrentQuestionID}>
-        <QuestionListSidebarButton label={'Завершить тест'} onClickAction={submitAttempt} condition />
+        testTitle={testTitle}
+        questionList={questionList}
+        setCurrentQuestionIndex={setCurrentQuestionIndex}
+        questionOrder={questionOrder}>
+        <QuestionListSidebarButton label={'Завершить тест'} onClickAction={handleFinishAttemptClick} condition />
       </QuestionListSidebar>
       <QuestionArea
-        questionData={getCurrentQuestionData(testState, currentQuestionID)}
-        questionIndex={getCurrentQuestionIndex(testState, currentQuestionID)}
-        changeCorrectAnswer={changeCorrectAnswer}
-        setQuestionState={setQuestionState}
+        key={currentQuestionID}
+        questionData={currentQuestionData}
+        questionIndex={currentQuestionIndex}
+        attemptID={attemptID}
+        selectedAnswers={currentSelectedAnswers}
+        gotoNextQuestion={gotoNextQuestion}
         isTogglable>
-        <QuestionControls
-          questionData={getCurrentQuestionData(testState, currentQuestionID)}
-          submitNewAnswer={submitNewAnswer}
-          submitUpdatedAnswer={submitUpdatedAnswer}
-          gotoNextQuestion={gotoNextQuestion}
-          setQuestionState={setQuestionState}
-        />
+        <QuestionControls gotoNextQuestion={gotoNextQuestion} />
       </QuestionArea>
     </main>
   )

@@ -3,14 +3,18 @@ import { TestListProfile } from '../../test-list-profile/test-list-profile'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { AppRoute } from '../../../reusable/const'
 import { FC } from 'react'
-import { UserInfoExtended } from '../../../types/UserInfo'
+import { UserInfo } from '../../../types/UserInfo'
+import { TestWithAvatar, TestWithDescription } from '@/types/Test'
 
 interface Props {
-  userInfo: UserInfoExtended
+  userInfo: UserInfo
+  finishedTestList?: TestWithAvatar[]
+  createdTestList?: TestWithAvatar[]
+  unfinishedTestList?: TestWithAvatar[]
 }
 
-export const ProfileComponent: FC<Props> = ({ userInfo }) => {
-  const { userAvatar, userName, userBio, createdTestList, finishedTestList, unfinishedTestList } = userInfo
+export const ProfileComponent: FC<Props> = ({ userInfo, createdTestList, finishedTestList, unfinishedTestList }) => {
+  const { userAvatar, userName, userBio } = userInfo
 
   const linkListUnfinished = (id: number) => [{ key: 1, link: `${AppRoute.TestDescription}/${id}`, label: 'Описание' }]
 
@@ -31,7 +35,7 @@ export const ProfileComponent: FC<Props> = ({ userInfo }) => {
           </div>
         </section>
       </section>
-      {!!userInfo.unfinishedTestList && (
+      {!!unfinishedTestList && (
         <>
           <h1>Прохожу сейчас</h1>
           <TestListProfile
@@ -42,7 +46,7 @@ export const ProfileComponent: FC<Props> = ({ userInfo }) => {
           />
         </>
       )}
-      {!!userInfo.createdTestList && (
+      {!!createdTestList && (
         <>
           <h1>Созданные тесты</h1>
           <TestListProfile
@@ -53,13 +57,17 @@ export const ProfileComponent: FC<Props> = ({ userInfo }) => {
           />
         </>
       )}
-      <h1>Пройденные</h1>
-      <TestListProfile
-        testList={finishedTestList}
-        linkList={linkListFinished}
-        isAttemptsAvailiable
-        isEditable={false}
-      />
+      {!!finishedTestList && (
+        <>
+          <h1>Пройденные тесты</h1>
+          <TestListProfile
+            testList={finishedTestList}
+            linkList={linkListFinished}
+            isAttemptsAvailiable
+            isEditable={false}
+          />
+        </>
+      )}
     </section>
   )
 }

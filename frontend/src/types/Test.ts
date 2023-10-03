@@ -2,6 +2,9 @@ import { UserInfo } from './UserInfo'
 
 export interface Answer {
   answerDescription: string
+}
+
+export interface KnownAnswer extends Answer {
   isCorrect: boolean
 }
 
@@ -11,26 +14,24 @@ export interface Question {
   questionDescription: string
   questionAvatar: string | null
   questionType: 'Single choice'
-  answerList: Record<number, { answerDescription: string }>
+  answerList: Record<number, Answer>
   answerOrder: number[]
   questionState?: QuestionState
 }
 
 export interface QuestionWithCorrectAnswer extends Question {
-  answerList: Record<number, Answer>
+  answerList: Record<number, KnownAnswer>
   correctAnswerIDs: number[]
-}
-
-export interface QuestionWithSelectedAnswer extends Question {
-  selectedAnswer: {
-    answerID: number
-    dbEntry: number
-  }
 }
 
 export interface Test {
   testID: number
   testTitle: string
+}
+
+export interface TestWithAvatar extends Test {
+  testAvatar: string
+  isPublished?: boolean
 }
 
 export interface TestWithSettings extends Test {
@@ -56,6 +57,12 @@ export interface TestWithDescription extends Test {
   authorBio: UserInfo['userBio']
   authorAvatar: UserInfo['userAvatar']
   isInProgress?: boolean
+  activeAttemptID?: Attempt['attemptID']
+}
+
+export interface TestWithDescriptionList {
+  testList: Record<Test['testID'], TestWithDescription>
+  testOrder: Test['testID'][]
 }
 
 export interface TestWithQuestions extends Test {
@@ -66,23 +73,28 @@ export interface TestWithQuestions extends Test {
   hasQuestionExplanation: boolean
 }
 
-export interface Attempt extends TestWithQuestions {
-  attemptID: number
-  questionList: Record<number, QuestionWithSelectedAnswer>
-  date?: Date
-  score?: number
-  isComplete?: boolean
+export interface TestWithCorrectAnswers extends TestWithQuestions {
+  questionList: Record<number, QuestionWithCorrectAnswer>
 }
 
-export interface AttemptOverview extends Attempt {}
-
-export interface AttemptComplete extends AttemptOverview {
-  correctAnswers: number
-  questionAmount: number
+export interface AttemptResult {
   attemptScore: number
-  averageScore: number
   attemptTime: string
-  totalAnswers: number
+  finishDate: string
+  questionAmount: number
+  answerAmount: number
+  correctAnswerAmount: number
+}
+
+export interface Attempt extends TestWithQuestions {
+  attemptID: number
+  isComplete: boolean
+  attemptResult: AttemptResult
+  selectedAnswers: Record<Question['questionID'], number[]>
+}
+
+export interface FinishedAttempt extends Attempt {
+  attemptResult: AttemptResult
 }
 
 export enum QuestionState {

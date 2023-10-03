@@ -1,5 +1,5 @@
 import styles from './test-overview.module.scss'
-import { FC, PropsWithChildren, useState, MouseEvent } from 'react'
+import { FC, PropsWithChildren, useState, MouseEvent, ChangeEvent } from 'react'
 import { createAttemptAction } from '../../../api/results'
 import { AppRoute } from '../../../reusable/const'
 import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks'
@@ -7,7 +7,8 @@ import { FeedbackStars } from '../../feedback-stars/feedback-stars'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { TestWithDescription } from '../../../types/Test'
 import { useRouter } from 'next/navigation'
-import { useStartAttemptMutation } from '@/services/testCatalogApi'
+import { useStartAttemptMutation } from '@/services/testCompletionApi'
+import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
 
 interface Props extends PropsWithChildren {
   testInfo: TestWithDescription
@@ -16,6 +17,8 @@ interface Props extends PropsWithChildren {
 export const TestOverview: FC<Props> = ({ testInfo, children }) => {
   const router = useRouter()
   const [startAttempt] = useStartAttemptMutation()
+  const [addBookmark] = useCreateTestBookmarkMutation()
+  const [deleteBookmark] = useRemoveTestBookmarkMutation()
   const {
     testID,
     testAvatar,
@@ -29,6 +32,7 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
     authorName,
     authorBio,
     isInProgress,
+    isFavorite,
   } = testInfo
 
   const handleStartTestClick = async (evt: MouseEvent<HTMLButtonElement>) => {
@@ -36,11 +40,16 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
     if (!isInProgress) {
       await startAttempt(testID)
     }
-    // router.push(`${AppRoute.TestMain}/${testID}`)
+    router.push(`${AppRoute.TestMain}/${testID}`)
   }
 
-  const handleFavoriteClick = async (evt: MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault()
+  const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>, testID: number) => {
+    const isToggled = evt.target.checked
+    if (isToggled) {
+      await addBookmark(testID)
+    } else {
+      await deleteBookmark(testID)
+    }
   }
 
   return (
@@ -82,11 +91,17 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
         </section>
         <div className={styles.sidebar}>
           <button className={styles.button} onClick={handleStartTestClick}>
-            {testInfo.isInProgress ? 'Продолжить' : 'Начать'}
+            {isInProgress ? 'Продолжить' : 'Начать'}
           </button>
-          <button className={`${styles.button} ${styles.button_inversed}`} onClick={handleFavoriteClick}>
+          <label>
             <span className={styles.heart}>♡</span>Хочу пройти
-          </button>
+            <input
+              type={'checkbox'}
+              defaultChecked={isFavorite}
+              className={`${styles.button} ${styles.button_inversed}`}
+              onChange={(evt) => handleFavoriteClick(evt, testID)}
+            />
+          </label>
         </div>
       </section>
     </section>

@@ -8,7 +8,6 @@ const CreateQuestionPage: FC = () => {
     <>
       <Header />
       <CreateQuestionContent />
-      <Footer />
     </>
   )
 }
