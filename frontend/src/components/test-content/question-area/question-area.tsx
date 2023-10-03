@@ -66,7 +66,7 @@ export const QuestionArea: FC<Props> = ({
           {children}
         </form>
       </section>
-      {/* <CommentsBlock questionID={questionData.questionID} /> */}
+      <CommentsBlock questionID={questionID} />
     </div>
   )
 }

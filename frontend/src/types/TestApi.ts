@@ -212,13 +212,13 @@ export const transformQuestionResponse = (r: QuestionResponse, testID?: number):
   questionDescription: r.content,
   questionAvatar: r.image,
   answerList: r.answer_choices.reduce((acc: Record<number, KnownAnswer>, x, i) => {
-    acc[i] = { answerDescription: x, isCorrect: r.right_answers.includes(x) }
+    acc[i] = { answerDescription: x, isCorrect: r.right_answers?.includes(x) }
     return acc
   }, {}),
   answerOrder: r.answer_choices.map((_, i) => i),
   correctAnswerIDs: r.answer_choices
     .map((x, i) => [i, x] as const)
-    .filter((x) => r.right_answers.includes(x[1]))
+    .filter((x) => r.right_answers?.includes(x[1]))
     .flatMap((x) => x[0]),
 })
 

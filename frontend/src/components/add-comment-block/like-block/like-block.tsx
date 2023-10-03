@@ -16,52 +16,15 @@ interface Props {
 }
 
 export const LikeBlock: FC<Props> = ({ questionID }) => {
-  const [likeCount, setLikeCount] = useState({ likes: 0, dislikes: 0 })
-  const [likeState, setLikeState] = useState(LikeStates.None)
-
-  const fetchQuestionLikes = async () => {
-    const { likes, dislikes, is_like } = await fetchQuestionLikesAction(questionID)
-    setLikeState(getLikeState(is_like))
-    setLikeCount({ likes, dislikes })
-  }
-
-  const getLikeState = (state: boolean | null) => {
-    switch (state) {
-      case true:
-        return LikeStates.Like
-      case false:
-        return LikeStates.Dislike
-      default:
-        return LikeStates.None
-    }
-  }
-
-  // Надо переписать логику radio, возможно поменять на кнопки
-  const handleLikeClick = async (evt: any) => {
-    const { value } = evt.target
-    if (value === likeState) {
-      await deleteLikeAction(questionID)
-    } else if (likeState === LikeStates.None) {
-      await addLikeAction({ question: questionID, is_like: value === LikeStates.Like })
-    } else {
-      await changeLikeAction(questionID, { is_like: value === LikeStates.Like })
-    }
-    fetchQuestionLikes()
-  }
-
-  useEffect(() => {
-    fetchQuestionLikes()
-  }, [questionID])
-
   return (
     <fieldset className={styles.likeField}>
       <label>
         {likeState === LikeStates.Like ? <LikeImageActive /> : <LikeImage />}
         {likeCount.likes}
         <input
-          type='radio'
-          name='is-liked'
-          id='like'
+          type={'checkbox'}
+          name={'like'}
+          id={'like'}
           value={LikeStates.Like}
           checked={likeState === LikeStates.Like}
           onClick={handleLikeClick}
@@ -75,9 +38,9 @@ export const LikeBlock: FC<Props> = ({ questionID }) => {
         )}
         {likeCount.dislikes}
         <input
-          type='radio'
-          name='is-liked'
-          id='dislike'
+          type={'radio'}
+          name={'dislike'}
+          id={'dislike'}
           value={LikeStates.Dislike}
           checked={likeState === LikeStates.Dislike}
           onClick={handleLikeClick}
