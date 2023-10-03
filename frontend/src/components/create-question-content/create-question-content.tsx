@@ -12,7 +12,8 @@ import {
   usePublishTestMutation,
 } from '@/services/testCreationApi'
 import { Spinner } from '../Spinner/Spinner'
-import { Answer, QuestionWithCorrectAnswer } from '@/types/Test'
+import { Answer, KnownAnswer, QuestionWithCorrectAnswer } from '@/types/Test'
+import { Button } from '../Button/Button'
 
 export const CreateQuestionContent: FC = () => {
   const params = useParams()
@@ -23,7 +24,7 @@ export const CreateQuestionContent: FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [newQuestionData, setNewQuestionData] = useState<QuestionWithCorrectAnswer | null>(null)
 
-  const blankAnswer: Answer = {
+  const blankAnswer: KnownAnswer = {
     answerDescription: '',
     isCorrect: false,
   }
@@ -48,6 +49,8 @@ export const CreateQuestionContent: FC = () => {
   const _questionOrder = [...questionOrder]
   const _questionList = { ...questionList }
 
+  if (questionOrder.length === 0 && !newQuestionData) setNewQuestionData(blankQuestion)
+
   if (newQuestionData) {
     _questionList[-1] = newQuestionData
     _questionOrder.push(-1)
@@ -61,7 +64,7 @@ export const CreateQuestionContent: FC = () => {
     setCurrentQuestionIndex(_questionOrder.length)
   }
 
-  const handleDeleteQuestion = () => {
+  const handleQuestionDelete = () => {
     const questionID = currentQuestionID
     setCurrentQuestionIndex(Math.min(questionOrder.length - 2, currentQuestionIndex))
     if (questionID === -1) {
@@ -75,22 +78,19 @@ export const CreateQuestionContent: FC = () => {
     <main className={styles.pageMain}>
       <QuestionListSidebar
         testTitle={testTitle}
-        currentQuestionID={currentQuestionID}
         questionList={_questionList}
         questionOrder={_questionOrder}
         setCurrentQuestionIndex={setCurrentQuestionIndex}>
-        <QuestionListSidebarButton
-          key={1}
-          label={'Новый вопрос'}
-          onClickAction={addNewQuestion}
-          condition={!newQuestionData}
-        />
-        <QuestionListSidebarButton
-          key={2}
-          label={'Опубликовать тест'}
-          onClickAction={() => publishTest(testID)}
-          condition={!isPublished}
-        />
+        {!newQuestionData && (
+          <Button key={1} outerStyles={styles.sidebarButton} view={'sidebar'} onClick={addNewQuestion}>
+            Новый вопрос
+          </Button>
+        )}
+        {!isPublished && (
+          <Button key={2} outerStyles={styles.sidebarButton} view={'sidebar'} onClick={() => publishTest(testID)}>
+            Опубликовать тест
+          </Button>
+        )}
       </QuestionListSidebar>
       <CreateQuestionManager
         key={currentQuestionID}
@@ -99,7 +99,7 @@ export const CreateQuestionContent: FC = () => {
         currentQuestionIndex={currentQuestionIndex}
         questionData={currentQuestionData}
         addNewQuestion={addNewQuestion}
-        handleDeleteQuestion={handleDeleteQuestion}
+        handleQuestionDelete={handleQuestionDelete}
       />
     </main>
   )

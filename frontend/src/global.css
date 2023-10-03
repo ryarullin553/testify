@@ -21,6 +21,13 @@
   font-weight: medium;
 }
 
+:root {
+  --color-primary: #a38ffd;
+  --color-primary-dark-accent: #8c7bd8;
+  --color-secondary: #454868;
+  --color-background: #ffffff;
+}
+
 html,
 body,
 div,

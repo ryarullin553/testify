@@ -3,18 +3,19 @@ import { AnswersInputArea } from '../answers-input-area/answers-input-area'
 import styles from './create-question-manager.module.scss'
 import { FC, useEffect, useState, MouseEvent, ChangeEvent, SyntheticEvent, FormEvent } from 'react'
 import { generateAnswersAction } from '../../../api/questions'
-import { Answer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
+import { Answer, KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
 import {
   useCreateQuestionMutation,
   useDeleteQuestionMutation,
   useUpdateQuestionMutation,
 } from '@/services/testCreationApi'
+import { Button } from '@/components/Button/Button'
 
 interface Props {
   testID: Test['testID']
   questionData: QuestionWithCorrectAnswer
   addNewQuestion: () => void
-  handleDeleteQuestion: () => void
+  handleQuestionDelete: () => void
   currentQuestionID: Question['questionID']
   currentQuestionIndex: number
 }
@@ -23,7 +24,7 @@ export const CreateQuestionManager: FC<Props> = ({
   questionData,
   testID,
   addNewQuestion,
-  handleDeleteQuestion,
+  handleQuestionDelete,
   currentQuestionID,
   currentQuestionIndex,
 }) => {
@@ -49,14 +50,8 @@ export const CreateQuestionManager: FC<Props> = ({
     })
   }
 
-  const handleAnswerAdd = (evt: MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault()
+  const handleAnswerAdd = () => {
     actionAnswerAdd()
-  }
-
-  const handleQuestionDelete = async (evt: MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault()
-    handleDeleteQuestion()
   }
 
   const handleAnswerDelete = (answerID: number) => {
@@ -76,7 +71,7 @@ export const CreateQuestionManager: FC<Props> = ({
       questionAvatar: null,
       questionType: 'Single choice',
       answerOrder: answerOrderState,
-      answerList: answerOrderState.reduce((acc: Record<number, Answer>, x) => {
+      answerList: answerOrderState.reduce((acc: Record<number, KnownAnswer>, x) => {
         acc[x] = {
           answerDescription: formData.get(`answerDescription-${x}`) as string,
           isCorrect: Number(formData.get('correct-answer-form')) === x,
@@ -123,9 +118,9 @@ export const CreateQuestionManager: FC<Props> = ({
         actionAnswerDelete={handleAnswerDelete}
       />
       <div className={styles.controls}>
-        <button className={styles.plusButton} onClick={handleAnswerAdd}>
+        <Button type={'button'} colorTheme={'hoverDark'} outerStyles={styles.plusButton} onClick={handleAnswerAdd}>
           +
-        </button>
+        </Button>
         {/* <fieldset className={styles.generateAnswersForm}>
           <button className={styles.generateAnswersButton} onClick={handleGenerateAnswersClick}>
             Сгенерировать варианты ответов
@@ -140,10 +135,12 @@ export const CreateQuestionManager: FC<Props> = ({
           />
         </fieldset> */}
         <div className={styles.questionControls}>
-          <button type={'button'} onClick={handleQuestionDelete}>
+          <Button type={'button'} onClick={handleQuestionDelete} outerStyles={styles.questionControlsButton}>
             Удалить вопрос
-          </button>
-          <button type={'submit'}>Сохранить вопрос</button>
+          </Button>
+          <Button type={'submit'} outerStyles={styles.questionControlsButton}>
+            Сохранить вопрос
+          </Button>
         </div>
       </div>
     </form>

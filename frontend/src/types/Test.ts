@@ -66,7 +66,7 @@ export interface TestWithDescriptionList {
 }
 
 export interface TestWithQuestions extends Test {
-  questionList: Record<number, Question>
+  questionList: Record<number, QuestionWithCorrectAnswer>
   questionOrder: number[]
   isPublished: boolean
   hasQuestionPoints: boolean
