@@ -1,5 +1,8 @@
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 import { api } from './api'
 import { UserInfo } from '@/types/UserInfo'
+import { userLoggedOut } from '@/store/authSlice'
+import { dropToken } from './token'
 
 type UserDataResponse = {
   id: string

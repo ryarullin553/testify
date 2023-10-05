@@ -1,7 +1,7 @@
 'use client'
 
 import { FC, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectAuthorizationStatus, selectUserInfo } from '../../../store/selectors'
 import styles from './user-block.module.scss'
 import { LoginWindow } from '../../login-window/login-window'
@@ -9,11 +9,14 @@ import { DropdownMenu } from '../../dropdown-menu/dropdown-menu'
 import { PaleButton } from '../../pale-button/pale-button'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { useGetCurrentUserDataQuery } from '@/services/usersApi'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
+import { userLoggedOut } from '@/store/authSlice'
+import { dropToken } from '@/services/token'
 
 export const UserBlock: FC = () => {
-  const { data: userInfo, isSuccess } = useGetCurrentUserDataQuery()
-  const isAuthorized = isSuccess
+  const { data: userInfo, isSuccess: isAuthorized, isError, error } = useGetCurrentUserDataQuery()
   const userAvatar = userInfo?.userAvatar || ''
+  const dispatch = useDispatch()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -31,6 +34,14 @@ export const UserBlock: FC = () => {
 
   const actionCloseMenu = () => {
     setIsMenuOpen(false)
+  }
+
+  if (isError) {
+    const err = error as FetchBaseQueryError
+    if (err.status === 401) {
+      dispatch(userLoggedOut)
+      dropToken()
+    }
   }
 
   if (!isAuthorized) {

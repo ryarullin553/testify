@@ -17,7 +17,7 @@ export const DropdownMenu: FC<Props> = ({ actionCloseMenu }) => {
   const handleLogoutClick = async () => {
     dispatch(userLoggedOut)
     dropToken()
-    dispatch(api.util.invalidateTags(['UserAuth']))
+    dispatch(api.util.resetApiState())
     actionCloseMenu()
   }
 
