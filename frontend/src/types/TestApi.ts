@@ -36,7 +36,7 @@ export type EditTestProps = CreateTestProps & {
 export type EditQuestionRequest = {
   test: number
   content: string
-  answer_choices: string[]
+  answer_choices: AnswerResponse[]
   right_answers: string[]
   type?: string
   points?: number
@@ -65,13 +65,19 @@ export type TestWithQuestionsResponse = {
   has_questions_explanation: boolean
 }
 
+export type AnswerResponse = {
+  id: number
+  content: string
+  is_correct: boolean
+}
+
 export type QuestionResponse = {
   test: number
   id: number
   has_like: boolean
   type: 'Single choice'
   content: string
-  answer_choices: string[]
+  answer_choices: AnswerResponse[]
   right_answers: string[]
   image: string | null
   likes_count: number
@@ -114,7 +120,7 @@ export type ResultResponse = {
   correct_answers_count: number
 }
 
-export type AnswerResponse = {
+export type SelectedAnswerResponse = {
   id: number
   question: number
   content: string[]
@@ -122,12 +128,18 @@ export type AnswerResponse = {
 
 export type AttemptResponse = {
   id: number
-  answers: AnswerResponse[]
+  answers: SelectedAnswerResponse[]
   test: Test['testID']
   test_data?: TestWithQuestionsResponse
   user_id: UserInfo['userID']
   result?: ResultResponse
 }
+
+export const transformAnswerResponse = (r: AnswerResponse) => ({
+  answerID: r.id,
+  answerDescription: r.content,
+  isCorrect: r.is_correct,
+})
 
 export const transformAttemptResult = (r: ResultResponse) => ({
   attemptScore: r.score,
@@ -152,10 +164,8 @@ export const transformAttemptResponse = (r: AttemptResponse) => ({
   questionOrder: r.test_data?.questions.map((x) => x.id),
   isComplete: Boolean(r.result),
   attemptResult: r.result ? transformAttemptResult(r.result) : null,
-  selectedAnswers: r.answers?.reduce((acc: Attempt['selectedAnswers'], x) => {
-    acc[x.question] = x.content.map(
-      (y) => r.test_data?.questions.find((q) => q.id === x.question)!.answer_choices.findIndex((a) => a === y)!
-    )
+  selectedAnswers: r.answers?.reduce((acc: Record<number, number[]>, x) => {
+    acc[x.question] = x.content.map(Number)
     return acc
   }, {}),
 })
@@ -163,10 +173,12 @@ export const transformAttemptResponse = (r: AttemptResponse) => ({
 export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuestionRequest => ({
   test: r.testID,
   content: r.questionDescription,
-  answer_choices: Object.values(r.answerList).map((x) => x.answerDescription),
-  right_answers: Object.values(r.answerList)
-    .filter((x) => x.isCorrect)
-    .map((x) => x.answerDescription),
+  answer_choices: r.answerOrder.map((id) => ({
+    id: id,
+    content: r.answerList[id].answerDescription,
+    is_correct: r.answerList[id].isCorrect,
+  })),
+  right_answers: r.answerOrder.filter((id) => r.answerList[id].isCorrect === true).map(String),
   type: r.questionType,
   points: undefined,
   explanation: undefined,
@@ -211,15 +223,12 @@ export const transformQuestionResponse = (r: QuestionResponse, testID?: number):
   questionType: r.type,
   questionDescription: r.content,
   questionAvatar: r.image,
-  answerList: r.answer_choices.reduce((acc: Record<number, KnownAnswer>, x, i) => {
-    acc[i] = { answerDescription: x, isCorrect: r.right_answers?.includes(x) }
+  answerList: r.answer_choices.reduce((acc: Record<number, KnownAnswer>, x) => {
+    acc[x.id] = transformAnswerResponse(x)
     return acc
   }, {}),
-  answerOrder: r.answer_choices.map((_, i) => i),
-  correctAnswerIDs: r.answer_choices
-    .map((x, i) => [i, x] as const)
-    .filter((x) => r.right_answers?.includes(x[1]))
-    .flatMap((x) => x[0]),
+  answerOrder: r.answer_choices.map((x) => x.id),
+  correctAnswerIDs: r.right_answers.map(Number),
 })
 
 export const transformTestWithQuestionsResponse = (r: TestWithQuestionsResponse): TestWithQuestions => ({
