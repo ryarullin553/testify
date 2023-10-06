@@ -30,10 +30,10 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
     const formData = new FormData(evt.currentTarget)
     const createTestProps = Object.fromEntries(formData.entries()) as CreateTestProps
     if (isNewTest) {
-      const newID = await createTest(createTestProps).unwrap()
-      if (isSuccess) {
-        router.push(`${AppRoute.EditTest}${newID}`)
-      }
+      try {
+        const { testID } = await createTest(createTestProps).unwrap()
+        router.push(`${AppRoute.EditTest}/${testID}`)
+      } catch {}
     } else {
       const updateTestProps = { ...createTestProps, testID: testID! }
       await updateTest(updateTestProps)

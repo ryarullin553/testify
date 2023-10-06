@@ -1,4 +1,12 @@
-import { Test, TestWithSettings, TestWithQuestions, Question, QuestionWithCorrectAnswer } from '@/types/Test'
+import {
+  Test,
+  TestWithSettings,
+  TestWithQuestions,
+  Question,
+  QuestionWithCorrectAnswer,
+  TestWithCorrectAnswers,
+  TestWithDescription,
+} from '@/types/Test'
 import { api } from './api'
 import {
   CreateTestProps,
@@ -12,18 +20,27 @@ import {
   QuestionResponse,
   transformQuestionResponse,
   EditQuestionProps,
+  TestWithQuestionsResponse,
 } from '@/types/TestApi'
+import { testCatalogApi } from './testCatalogApi'
 
 export const testCreationApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    createTest: builder.mutation<Test['testID'], CreateTestProps>({
+    createTest: builder.mutation<TestWithDescription, CreateTestProps>({
       query: (newTestData) => ({
         url: 'tests/',
         method: 'POST',
         body: transformEditTestRequest(newTestData),
         formData: true,
       }),
-      transformResponse: (r: TestResponse) => r.id,
+      transformResponse: (r: TestResponse) => transformTestResponse(r) as TestWithDescription,
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: testData } = await queryFulfilled
+          dispatch(testCatalogApi.util.upsertQueryData('getTestByID', testData.testID, testData))
+        } catch {}
+      },
+      invalidatesTags: ['TestList'],
     }),
     getTestSettingsByID: builder.query<TestWithSettings, Test['testID']>({
       query: (testID) => `tests/${testID}/config/`,

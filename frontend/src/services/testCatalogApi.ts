@@ -79,7 +79,7 @@ export const testCatalogApi = api.injectEndpoints({
         params: { search, ordering: sort },
       }),
       transformResponse: (r: TestListResponse) => transformTestListResponse(r.results),
-      providesTags: ['HasIsFavoriteKey'],
+      providesTags: ['HasIsFavoriteKey', 'TestList'],
     }),
     getTestByID: builder.query<TestWithDescription, Test['testID']>({
       query: (testID) => `tests/${testID}`,
@@ -95,6 +95,7 @@ export const testCatalogApi = api.injectEndpoints({
         params: { is_published: filter, search },
       }),
       transformResponse: (r: TestListResponse) => r.results.map((x) => transformTestResponse(x) as TestWithAvatar),
+      providesTags: ['TestList'],
     }),
     getTestsHistory: builder.query<TestWithAvatar[], GetTestsHistoryQueryParams>({
       query: ({ filter, search }) => ({
@@ -102,6 +103,7 @@ export const testCatalogApi = api.injectEndpoints({
         params: { is_finished: filter, search },
       }),
       transformResponse: (r: TestListResponse) => r.results.map((x) => transformTestResponse(x) as TestWithAvatar),
+      providesTags: ['TestList'],
     }),
     getTestsBookmarkedByCurrentUser: builder.query<TestWithAvatar[], GetBookmarkedTestsQueryParams>({
       query: ({ search }) => ({
