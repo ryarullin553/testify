@@ -80,4 +80,5 @@ class PassageAPIView(mixins.CreateModelMixin,
         )
         self.check_object_permissions(self.request, instance)
         complete_passage(instance)
-        return Response()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
