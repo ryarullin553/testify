@@ -7,7 +7,8 @@ from questions.tasks import update_question_metrics
 class Like(models.Model):
     is_like = models.BooleanField(
         verbose_name='Значение',
-        default=None
+        default=None,
+        null=True
     )
     created = models.DateTimeField(
         verbose_name='Создано',

@@ -1,4 +1,4 @@
-from django.db.models import Exists, OuterRef
+from django.db.models import OuterRef, Subquery
 from rest_framework import serializers
 
 from likes.models import Like
@@ -44,18 +44,17 @@ class TestSerializer(DynamicFieldsModelSerializer):
 
         questions = test.questions\
             .annotate(
-                has_like=Exists(
+                has_like=Subquery(
                     Like.objects.filter(
                         user_id=current_user.id,
                         question_id=OuterRef('pk')
-                    )
+                    ).values('is_like')
                 )
             )\
             .only(*fields, 'test_id')\
             .order_by('id')
 
-        if current_user.id != test.user_id:
-            fields.append('has_like')
+        fields.append('has_like')
 
         serializer = QuestionSerializer(
             instance=questions,
