@@ -17,6 +17,9 @@ class PassageSerializer(DynamicFieldsModelSerializer):
     user_name = serializers.CharField(
         read_only=True
     )
+    user_image = serializers.ImageField(
+        read_only=True
+    )
     test = serializers.PrimaryKeyRelatedField(
         queryset=Test.objects
         .filter(is_published=True)

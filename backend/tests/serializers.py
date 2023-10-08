@@ -1,4 +1,4 @@
-from django.db.models import Exists, OuterRef
+from django.db.models import OuterRef, Subquery
 from rest_framework import serializers
 
 from likes.models import Like
@@ -31,7 +31,8 @@ class TestSerializer(DynamicFieldsModelSerializer):
     def get_questions(self, test):
         request = self.context.get('request')
         current_user = request.user
-        fields = ['id', 'type', 'content', 'answer_choices', 'image']
+        fields = ['id', 'type', 'content', 'answer_choices', 'image',
+                  'likes_count', 'dislikes_count']
         if test.has_points:
             fields.append('points')
         if test.has_questions_explanation and (current_user.id == test.user_id
@@ -40,23 +41,20 @@ class TestSerializer(DynamicFieldsModelSerializer):
         if current_user.id == test.user_id or (test.has_right_answers and
                                                test.is_finished_passage):
             fields.append('right_answers')
-        if current_user.id != test.user_id:
-            fields += ['likes_count', 'dislikes_count']
 
         questions = test.questions\
             .annotate(
-                has_like=Exists(
+                has_like=Subquery(
                     Like.objects.filter(
                         user_id=current_user.id,
                         question_id=OuterRef('pk')
-                    )
+                    ).values('is_like')
                 )
             )\
             .only(*fields, 'test_id')\
             .order_by('id')
 
-        if current_user.id != test.user_id:
-            fields.append('has_like')
+        fields.append('has_like')
 
         serializer = QuestionSerializer(
             instance=questions,

@@ -46,7 +46,8 @@ class PassageManager(models.Manager):
                 result__isnull=False
             ) \
             .annotate(
-                user_name=F('user__username')
+                user_name=F('user__username'),
+                user_image=F('user__image')
             ) \
             .only(*fields)
 
