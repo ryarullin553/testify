@@ -17,8 +17,8 @@ interface Props {
 export const TestDescriptionForm: FC<Props> = ({ testData }) => {
   const router = useRouter()
   const isNewTest = Boolean(!testData)
-  const [createTest, { isSuccess }] = useCreateTestMutation()
-  const [updateTest, _] = useUpdateTestSettingsByIDMutation()
+  const [createTest] = useCreateTestMutation()
+  const [updateTest] = useUpdateTestSettingsByIDMutation()
   const { testTitle, testSummary, testDescription, testID } = testData || {
     testTitle: '',
     testSummary: '',

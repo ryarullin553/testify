@@ -22,22 +22,21 @@ import {
   EditQuestionProps,
   TestWithQuestionsResponse,
 } from '@/types/TestApi'
-import { testCatalogApi } from './testCatalogApi'
 
 export const testCreationApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    createTest: builder.mutation<TestWithDescription, CreateTestProps>({
+    createTest: builder.mutation<TestWithQuestions, CreateTestProps>({
       query: (newTestData) => ({
         url: 'tests/',
         method: 'POST',
         body: transformEditTestRequest(newTestData),
         formData: true,
       }),
-      transformResponse: (r: TestResponse) => transformTestResponse(r) as TestWithDescription,
+      transformResponse: (r: TestWithQuestionsResponse) => transformTestWithQuestionsResponse(r) as TestWithQuestions,
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
           const { data: testData } = await queryFulfilled
-          dispatch(testCatalogApi.util.upsertQueryData('getTestByID', testData.testID, testData))
+          dispatch(testCreationApi.util.upsertQueryData('getTestWithQuestions', testData.testID, testData))
         } catch {}
       },
       invalidatesTags: ['TestList'],
