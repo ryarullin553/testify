@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useCreateTestMutation, useUpdateTestSettingsByIDMutation } from '@/services/testCreationApi'
 import classNames from 'classnames'
 import { CreateTestProps } from '@/types/TestApi'
+import { VisibilityButton } from '../test-list-profile/test-tile-profile/visibility-button/visibility-button'
 
 interface Props {
   testData?: TestWithSettings
@@ -45,10 +46,11 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
 
   return (
     <form className={styles.contentForm} action='#' name='create-test-form' onSubmit={handleSubmit}>
-      <div className={styles.wrapper}>
-        <h1 className={styles.createTest}>{pageTitle}</h1>
-        <button className={styles.publishButton}></button>
-      </div>
+      <h1 className={styles.createTest}>
+        {pageTitle}
+        {!!testID && <VisibilityButton testID={testID} />}
+      </h1>
+
       <fieldset className={`${styles.contentArea} ${styles.titleForm}`}>
         <label>
           Название <span>*</span>
