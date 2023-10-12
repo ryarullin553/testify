@@ -1,0 +1,101 @@
+.icon {
+  display: flex;
+  height: max-content;
+  cursor: pointer;
+  z-index: 1;
+
+  transition: transform 50ms ease-in-out;
+
+  span {
+    display: inline-block;
+    font-size: 22px;
+
+    &::before {
+      display: block;
+      content: '♡';
+      color: var(--color-disabled);
+
+      transition: all 50ms ease-in-out;
+    }
+
+    &:hover::before {
+      content: '♥';
+    }
+
+    &:has(+ input:checked)::before {
+      content: '♥';
+      color: var(--color-primary);
+    }
+  }
+
+  &:has(input:active) {
+    transform: scale(0.95);
+  }
+
+  input {
+    display: none;
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  box-sizing: border-box;
+  width: 300px;
+  height: 48px;
+  padding: 13px 38px;
+  cursor: pointer;
+
+  background-color: var(--color-background);
+  border: 2px solid var(--color-primary);
+  border-radius: 15px;
+
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: var(--color-primary);
+
+  transition:
+    color 200ms ease-in-out,
+    background-color 200ms ease-in-out,
+    border 200ms ease-in-out,
+    transform 50ms ease-in-out;
+
+  &:hover {
+    border: 2px solid var(--color-primary-dark-accent);
+    color: var(--color-primary-dark-accent);
+
+    span::before {
+      color: var(--color-primary-dark-accent);
+    }
+  }
+
+  span {
+    display: flex;
+    &::before {
+      font-size: 22px;
+      margin-right: 7px;
+      display: block;
+      content: '♡';
+      color: var(--color-primary);
+
+      transition: all 200ms ease-in-out;
+    }
+
+    &:has(+ input:checked)::before {
+      content: '♥';
+    }
+  }
+
+  &:has(input:active) {
+    transform: scale(0.95);
+  }
+
+  input {
+    display: none;
+  }
+}

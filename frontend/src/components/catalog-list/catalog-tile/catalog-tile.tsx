@@ -8,6 +8,7 @@ import UserIcon from './img/user-icon.svg'
 import { TestWithDescription } from '../../../types/Test'
 import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
 import { ToggleButton } from '@/components/ToggleButton/ToggleButton'
+import { FavoriteButton } from '@/components/FavoriteButton/FavoriteButton'
 
 interface Props {
   testItem: TestWithDescription
@@ -23,6 +24,7 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
     testRating,
     testVotesCounter,
     testCompletionCounter,
+    authorName,
   } = testItem
   const [addBookmark] = useCreateTestBookmarkMutation()
   const [deleteBookmark] = useRemoveTestBookmarkMutation()
@@ -63,10 +65,11 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
                 <UserIcon />
                 <span className={styles.card__users__count}>{testCompletionCounter}</span>
               </div>
+              <span className={styles.authorName}>{authorName}</span>
             </div>
           </div>
         </div>
-        <ToggleButton format='icon' defaultChecked={isFavorite} onChange={handleFavoriteClick} />
+        <FavoriteButton format='icon' defaultChecked={isFavorite} onChange={handleFavoriteClick} />
       </article>
     </li>
   )

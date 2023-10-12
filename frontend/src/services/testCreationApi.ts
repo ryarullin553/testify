@@ -129,6 +129,25 @@ export const testCreationApi = api.injectEndpoints({
           )
         } catch {}
       },
+      invalidatesTags: ['TestList'],
+    }),
+    hideTest: builder.mutation<void, Test['testID']>({
+      query: (testID) => ({
+        url: `tests/${testID}/`,
+        method: 'PATCH',
+        body: { is_published: false },
+      }),
+      onQueryStarted: async (testID, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled
+          const patchResult = dispatch(
+            testCreationApi.util.updateQueryData('getTestWithQuestions', testID, (draft) => {
+              draft.isPublished = false
+            })
+          )
+        } catch {}
+      },
+      invalidatesTags: ['TestList'],
     }),
   }),
 })
@@ -142,4 +161,5 @@ export const {
   useUpdateQuestionMutation,
   useDeleteQuestionMutation,
   usePublishTestMutation,
+  useHideTestMutation,
 } = testCreationApi

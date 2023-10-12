@@ -11,6 +11,7 @@ import { useStartAttemptMutation } from '@/services/testCompletionApi'
 import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
 import { ToggleButton } from '@/components/ToggleButton/ToggleButton'
 import { Button } from '@/components/Button/Button'
+import { FavoriteButton } from '@/components/FavoriteButton/FavoriteButton'
 
 interface Props extends PropsWithChildren {
   testInfo: TestWithDescription
@@ -94,7 +95,7 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
           <Button type={'button'} view={'rounded'} onClick={handleStartTestClick}>
             {isInProgress ? 'Продолжить' : 'Начать'}
           </Button>
-          <ToggleButton format={'button'} defaultChecked={isFavorite} onChange={handleFavoriteClick} />
+          <FavoriteButton format={'button'} defaultChecked={isFavorite} onChange={handleFavoriteClick} />
         </div>
       </section>
     </section>
