@@ -45,32 +45,30 @@ export const testCompletionApi = api.injectEndpoints({
         } catch {}
       },
     }),
-    finishAttempt: builder.mutation<void, Attempt['attemptID']>({
+    finishAttempt: builder.mutation<FinishedAttempt, Attempt['attemptID']>({
       query: (attemptID) => ({
         url: `passages/${attemptID}/`,
         method: 'PATCH',
       }),
-      // Пропатчит attempt
-      //
-      // transformResponse: (r: AttemptResponse) => transformAttemptResponse(r) as FinishedAttempt,
-      // onQueryStarted: async (attemptID, { dispatch, queryFulfilled }) => {
-      //   try {
-      //     const { data: attemptResult } = await queryFulfilled
-      //     const { testID } = attemptResult
-      //     dispatch(testCatalogApi.util.upsertQueryData('getAttemptByID', attemptID, attemptResult))
-      //     dispatch(
-      //       testCatalogApi.util.updateQueryData('getTestByID', testID, (draft) => {
-      //         draft.activeAttemptID = undefined
-      //         draft.isInProgress = false
-      //       })
-      //     )
-      //     dispatch(
-      //       testCatalogApi.util.updateQueryData('getTestAttempts', testID, (draft) => {
-      //         draft[testID] = attemptResult
-      //       })
-      //     )
-      //   } catch {}
-      // },
+      transformResponse: (r: AttemptResponse) => transformAttemptResponse(r) as FinishedAttempt,
+      onQueryStarted: async (attemptID, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: attemptResult } = await queryFulfilled
+          const { testID } = attemptResult
+          dispatch(testCatalogApi.util.upsertQueryData('getAttemptByID', attemptID, attemptResult))
+          dispatch(
+            testCatalogApi.util.updateQueryData('getTestByID', testID, (draft) => {
+              draft.activeAttemptID = undefined
+              draft.isInProgress = false
+            })
+          )
+          dispatch(
+            testCatalogApi.util.updateQueryData('getTestAttempts', testID, (draft) => {
+              draft[testID] = attemptResult
+            })
+          )
+        } catch {}
+      },
       invalidatesTags: ['Attempts'],
     }),
     submitAnswer: builder.mutation<void, SubmitAnswerArgs>({

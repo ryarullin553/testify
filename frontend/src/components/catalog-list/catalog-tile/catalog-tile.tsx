@@ -7,6 +7,7 @@ import { FeedbackStars } from '../../feedback-stars/feedback-stars'
 import UserIcon from './img/user-icon.svg'
 import { TestWithDescription } from '../../../types/Test'
 import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
+import { ToggleButton } from '@/components/ToggleButton/ToggleButton'
 
 interface Props {
   testItem: TestWithDescription
@@ -26,7 +27,7 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
   const [addBookmark] = useCreateTestBookmarkMutation()
   const [deleteBookmark] = useRemoveTestBookmarkMutation()
 
-  const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>, testID: number) => {
+  const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>) => {
     const isToggled = evt.target.checked
     if (isToggled) {
       addBookmark(testID)
@@ -65,12 +66,7 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
             </div>
           </div>
         </div>
-        <input
-          type={'checkbox'}
-          className={styles.bookmark__button}
-          defaultChecked={isFavorite}
-          onChange={(evt) => handleFavoriteClick(evt, testID)}
-        />
+        <ToggleButton format='icon' defaultChecked={isFavorite} onChange={handleFavoriteClick} />
       </article>
     </li>
   )
