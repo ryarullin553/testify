@@ -10,6 +10,7 @@ import { useCreateTestMutation, useUpdateTestSettingsByIDMutation } from '@/serv
 import classNames from 'classnames'
 import { CreateTestProps } from '@/types/TestApi'
 import { VisibilityButton } from '../test-list-profile/test-tile-profile/visibility-button/visibility-button'
+import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch'
 
 interface Props {
   testData?: TestWithSettings
@@ -94,16 +95,9 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
         </fieldset>
 
         <div className={styles.testOptions}>
-          <div className={classNames(styles.points, styles.option)}>
-            <div className={styles.switch}>
-              <span className={styles.toggle}></span>
-            </div>
-
-            <label>Баллы</label>
-
-            <div className={styles.tooltip}>
-              <span className={styles.tooltipText}>Добавить баллы к вопросам</span>
-            </div>
+          <ToggleSwitch label='Баллы' />
+          <div className={styles.tooltip}>
+            <span className={styles.tooltipText}>Добавить баллы к вопросам</span>
           </div>
           {/* <div className={`${styles.comment} ${styles.option}`}>
             <div className={styles.switch}>
