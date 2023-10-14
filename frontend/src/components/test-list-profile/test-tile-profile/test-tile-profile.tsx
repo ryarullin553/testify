@@ -28,7 +28,7 @@ export const TestTileProfile: FC<Props> = ({ testItem, linkList, isEditable, isA
 
   return (
     <li className={styles.testTile}>
-      <article className={styles.linkWrapper} onClick={handleShowAttemptsClick}>
+      <article className={styles.linkWrapper} onClick={isAttemptsAvailiable ? handleShowAttemptsClick : () => {}}>
         <div className={styles.titleWrapper}>
           <h3>{testTitle}</h3>
           {isEditable && <VisibilityButton isPublished={isPublished} testID={testID} />}

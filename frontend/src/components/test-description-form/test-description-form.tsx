@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation'
 import { useCreateTestMutation, useUpdateTestSettingsByIDMutation } from '@/services/testCreationApi'
 import classNames from 'classnames'
 import { CreateTestProps } from '@/types/TestApi'
+import { VisibilityButton } from '../test-list-profile/test-tile-profile/visibility-button/visibility-button'
+import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch'
 
 interface Props {
   testData?: TestWithSettings
@@ -17,8 +19,8 @@ interface Props {
 export const TestDescriptionForm: FC<Props> = ({ testData }) => {
   const router = useRouter()
   const isNewTest = Boolean(!testData)
-  const [createTest, { isSuccess }] = useCreateTestMutation()
-  const [updateTest, _] = useUpdateTestSettingsByIDMutation()
+  const [createTest] = useCreateTestMutation()
+  const [updateTest] = useUpdateTestSettingsByIDMutation()
   const { testTitle, testSummary, testDescription, testID } = testData || {
     testTitle: '',
     testSummary: '',
@@ -30,10 +32,10 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
     const formData = new FormData(evt.currentTarget)
     const createTestProps = Object.fromEntries(formData.entries()) as CreateTestProps
     if (isNewTest) {
-      const newID = await createTest(createTestProps).unwrap()
-      if (isSuccess) {
-        router.push(`${AppRoute.EditTest}${newID}`)
-      }
+      try {
+        const { testID } = await createTest(createTestProps).unwrap()
+        router.push(`${AppRoute.EditTest}/${testID}`)
+      } catch {}
     } else {
       const updateTestProps = { ...createTestProps, testID: testID! }
       await updateTest(updateTestProps)
@@ -45,10 +47,11 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
 
   return (
     <form className={styles.contentForm} action='#' name='create-test-form' onSubmit={handleSubmit}>
-      <div className={styles.wrapper}>
-        <h1 className={styles.createTest}>{pageTitle}</h1>
-        <button className={styles.publishButton}></button>
-      </div>
+      <h1 className={styles.createTest}>
+        {pageTitle}
+        {!!testID && <VisibilityButton testID={testID} />}
+      </h1>
+
       <fieldset className={`${styles.contentArea} ${styles.titleForm}`}>
         <label>
           Название <span>*</span>
@@ -92,16 +95,9 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
         </fieldset>
 
         <div className={styles.testOptions}>
-          <div className={classNames(styles.points, styles.option)}>
-            <div className={styles.switch}>
-              <span className={styles.toggle}></span>
-            </div>
-
-            <label>Баллы</label>
-
-            <div className={styles.tooltip}>
-              <span className={styles.tooltipText}>Добавить баллы к вопросам</span>
-            </div>
+          <ToggleSwitch label='Баллы' />
+          <div className={styles.tooltip}>
+            <span className={styles.tooltipText}>Добавить баллы к вопросам</span>
           </div>
           {/* <div className={`${styles.comment} ${styles.option}`}>
             <div className={styles.switch}>

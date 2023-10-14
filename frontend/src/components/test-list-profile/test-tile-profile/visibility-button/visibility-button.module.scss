@@ -1,4 +1,5 @@
 .visibilityButton {
+  display: inline-block;
   height: 19px;
   width: 19px;
 
@@ -6,6 +7,13 @@
 }
 
 .visibilityIcon {
+  display: block;
   height: 100%;
   width: 100%;
+
+  background: url('./img/unpublished.svg') no-repeat center;
+
+  &:has(+ input:checked) {
+    background-image: url('./img/published.svg');
+  }
 }

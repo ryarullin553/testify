@@ -32,7 +32,7 @@ export const QuestionArea: FC<Props> = ({
       attemptID,
       testID,
       questionID,
-      selectedAnswer: answerList[Number(formData.get('selectedAnswer'))],
+      selectedAnswers: [Number(formData.get('selectedAnswer'))],
     }
     await submitAnswer(submitAnswerArgs)
     gotoNextQuestion()

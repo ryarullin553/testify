@@ -9,6 +9,9 @@ import { TestWithDescription } from '../../../types/Test'
 import { useRouter } from 'next/navigation'
 import { useStartAttemptMutation } from '@/services/testCompletionApi'
 import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
+import { ToggleButton } from '@/components/ToggleButton/ToggleButton'
+import { Button } from '@/components/Button/Button'
+import { FavoriteButton } from '@/components/FavoriteButton/FavoriteButton'
 
 interface Props extends PropsWithChildren {
   testInfo: TestWithDescription
@@ -35,15 +38,14 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
     isFavorite,
   } = testInfo
 
-  const handleStartTestClick = async (evt: MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault()
+  const handleStartTestClick = async () => {
     if (!isInProgress) {
       await startAttempt(testID)
     }
     router.push(`${AppRoute.TestMain}/${testID}`)
   }
 
-  const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>, testID: number) => {
+  const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>) => {
     const isToggled = evt.target.checked
     if (isToggled) {
       await addBookmark(testID)
@@ -90,18 +92,10 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
           {children}
         </section>
         <div className={styles.sidebar}>
-          <button className={styles.button} onClick={handleStartTestClick}>
+          <Button type={'button'} view={'rounded'} onClick={handleStartTestClick}>
             {isInProgress ? 'Продолжить' : 'Начать'}
-          </button>
-          <label>
-            <span className={styles.heart}>♡</span>Хочу пройти
-            <input
-              type={'checkbox'}
-              defaultChecked={isFavorite}
-              className={`${styles.button} ${styles.button_inversed}`}
-              onChange={(evt) => handleFavoriteClick(evt, testID)}
-            />
-          </label>
+          </Button>
+          <FavoriteButton format={'button'} defaultChecked={isFavorite} onChange={handleFavoriteClick} />
         </div>
       </section>
     </section>

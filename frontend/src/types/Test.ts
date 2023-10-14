@@ -1,14 +1,15 @@
 import { UserInfo } from './UserInfo'
 
-export interface Answer {
+export type Answer = {
+  answerID: number
   answerDescription: string
 }
 
-export interface KnownAnswer extends Answer {
+export type KnownAnswer = Answer & {
   isCorrect: boolean
 }
 
-export interface Question {
+export type Question = {
   questionID: number
   testID: Test['testID']
   questionDescription: string
@@ -19,22 +20,22 @@ export interface Question {
   questionState?: QuestionState
 }
 
-export interface QuestionWithCorrectAnswer extends Question {
+export type QuestionWithCorrectAnswer = Question & {
   answerList: Record<number, KnownAnswer>
   correctAnswerIDs: number[]
 }
 
-export interface Test {
+export type Test = {
   testID: number
   testTitle: string
 }
 
-export interface TestWithAvatar extends Test {
+export type TestWithAvatar = Test & {
   testAvatar: string
   isPublished?: boolean
 }
 
-export interface TestWithSettings extends Test {
+export type TestWithSettings = Test & {
   testSummary: string
   testAvatar: string
   testDescription: string
@@ -45,7 +46,7 @@ export interface TestWithSettings extends Test {
   hasQuestionExplanation: boolean
 }
 
-export interface TestWithDescription extends Test {
+export type TestWithDescription = Test & {
   testSummary: string
   testAvatar: string
   testDescription: string
@@ -60,24 +61,24 @@ export interface TestWithDescription extends Test {
   activeAttemptID?: Attempt['attemptID']
 }
 
-export interface TestWithDescriptionList {
+export type TestWithDescriptionList = {
   testList: Record<Test['testID'], TestWithDescription>
   testOrder: Test['testID'][]
 }
 
-export interface TestWithQuestions extends Test {
-  questionList: Record<number, QuestionWithCorrectAnswer>
+export type TestWithQuestions = Test & {
+  questionList: Record<number, Question>
   questionOrder: number[]
   isPublished: boolean
   hasQuestionPoints: boolean
   hasQuestionExplanation: boolean
 }
 
-export interface TestWithCorrectAnswers extends TestWithQuestions {
+export type TestWithCorrectAnswers = TestWithQuestions & {
   questionList: Record<number, QuestionWithCorrectAnswer>
 }
 
-export interface AttemptResult {
+export type AttemptResult = {
   attemptScore: number
   attemptTime: string
   finishDate: string
@@ -86,14 +87,14 @@ export interface AttemptResult {
   correctAnswerAmount: number
 }
 
-export interface Attempt extends TestWithQuestions {
+export type Attempt = TestWithQuestions & {
   attemptID: number
   isComplete: boolean
   attemptResult: AttemptResult
   selectedAnswers: Record<Question['questionID'], number[]>
 }
 
-export interface FinishedAttempt extends Attempt {
+export type FinishedAttempt = Attempt & {
   attemptResult: AttemptResult
 }
 

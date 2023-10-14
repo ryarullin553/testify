@@ -1,0 +1,16 @@
+.innerStyles {
+  display: flex;
+  height: max-content;
+  cursor: pointer;
+  z-index: 1;
+
+  transition: transform 50ms ease-in-out;
+
+  &:has(input:active) {
+    transform: scale(0.95);
+  }
+
+  input {
+    display: none;
+  }
+}

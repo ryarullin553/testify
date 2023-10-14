@@ -1,4 +1,12 @@
-import { Test, TestWithSettings, TestWithQuestions, Question, QuestionWithCorrectAnswer } from '@/types/Test'
+import {
+  Test,
+  TestWithSettings,
+  TestWithQuestions,
+  Question,
+  QuestionWithCorrectAnswer,
+  TestWithCorrectAnswers,
+  TestWithDescription,
+} from '@/types/Test'
 import { api } from './api'
 import {
   CreateTestProps,
@@ -12,18 +20,26 @@ import {
   QuestionResponse,
   transformQuestionResponse,
   EditQuestionProps,
+  TestWithQuestionsResponse,
 } from '@/types/TestApi'
 
 export const testCreationApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    createTest: builder.mutation<Test['testID'], CreateTestProps>({
+    createTest: builder.mutation<TestWithQuestions, CreateTestProps>({
       query: (newTestData) => ({
         url: 'tests/',
         method: 'POST',
         body: transformEditTestRequest(newTestData),
         formData: true,
       }),
-      transformResponse: (r: TestResponse) => r.id,
+      transformResponse: (r: TestWithQuestionsResponse) => transformTestWithQuestionsResponse(r) as TestWithQuestions,
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: testData } = await queryFulfilled
+          dispatch(testCreationApi.util.upsertQueryData('getTestWithQuestions', testData.testID, testData))
+        } catch {}
+      },
+      invalidatesTags: ['TestList'],
     }),
     getTestSettingsByID: builder.query<TestWithSettings, Test['testID']>({
       query: (testID) => `tests/${testID}/config/`,
@@ -113,6 +129,25 @@ export const testCreationApi = api.injectEndpoints({
           )
         } catch {}
       },
+      invalidatesTags: ['TestList'],
+    }),
+    hideTest: builder.mutation<void, Test['testID']>({
+      query: (testID) => ({
+        url: `tests/${testID}/`,
+        method: 'PATCH',
+        body: { is_published: false },
+      }),
+      onQueryStarted: async (testID, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled
+          const patchResult = dispatch(
+            testCreationApi.util.updateQueryData('getTestWithQuestions', testID, (draft) => {
+              draft.isPublished = false
+            })
+          )
+        } catch {}
+      },
+      invalidatesTags: ['TestList'],
     }),
   }),
 })
@@ -126,4 +161,5 @@ export const {
   useUpdateQuestionMutation,
   useDeleteQuestionMutation,
   usePublishTestMutation,
+  useHideTestMutation,
 } = testCreationApi

@@ -172,28 +172,3 @@
   border: 2px solid #a38ffd;
   color: #a38ffd;
 }
-
-.button_inversed {
-  position: relative;
-  background-color: #ffffff;
-  border: 2px solid #a38ffd;
-  color: #a38ffd;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-}
-
-.heart {
-  font-size: 22px;
-}
-
-.button_inversed:hover .heart {
-  content: '♥';
-  transition: fill 0.2s ease-in-out;
-}
-
-.button_inversed:hover {
-  border: 2px solid #8c7bd8;
-  color: #8c7bd8;
-}

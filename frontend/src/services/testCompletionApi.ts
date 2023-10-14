@@ -1,6 +1,6 @@
 import { AttemptResponse, transformAttemptResponse } from '@/types/TestApi'
 import { api } from './api'
-import { Answer, Attempt, Question, Test } from '@/types/Test'
+import { Answer, Attempt, FinishedAttempt, Question, Test } from '@/types/Test'
 import { testCatalogApi } from './testCatalogApi'
 
 type SubmitAnswerRequest = {
@@ -13,13 +13,13 @@ export type SubmitAnswerArgs = {
   attemptID: Attempt['attemptID']
   testID: Test['testID']
   questionID: Question['questionID']
-  selectedAnswer: Answer
+  selectedAnswers: number[]
 }
 
 const transformSubmitAnswerRequest = (r: SubmitAnswerArgs): SubmitAnswerRequest => ({
   passage: r.attemptID,
   question: r.questionID,
-  content: [r.selectedAnswer.answerDescription],
+  content: r.selectedAnswers.map(String),
 })
 
 export const testCompletionApi = api.injectEndpoints({
@@ -45,11 +45,30 @@ export const testCompletionApi = api.injectEndpoints({
         } catch {}
       },
     }),
-    finishAttempt: builder.mutation<void, Attempt['attemptID']>({
+    finishAttempt: builder.mutation<FinishedAttempt, Attempt['attemptID']>({
       query: (attemptID) => ({
         url: `passages/${attemptID}/`,
         method: 'PATCH',
       }),
+      transformResponse: (r: AttemptResponse) => transformAttemptResponse(r) as FinishedAttempt,
+      onQueryStarted: async (attemptID, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: attemptResult } = await queryFulfilled
+          const { testID } = attemptResult
+          dispatch(testCatalogApi.util.upsertQueryData('getAttemptByID', attemptID, attemptResult))
+          dispatch(
+            testCatalogApi.util.updateQueryData('getTestByID', testID, (draft) => {
+              draft.activeAttemptID = undefined
+              draft.isInProgress = false
+            })
+          )
+          dispatch(
+            testCatalogApi.util.updateQueryData('getTestAttempts', testID, (draft) => {
+              draft[testID] = attemptResult
+            })
+          )
+        } catch {}
+      },
       invalidatesTags: ['Attempts'],
     }),
     submitAnswer: builder.mutation<void, SubmitAnswerArgs>({
@@ -58,18 +77,12 @@ export const testCompletionApi = api.injectEndpoints({
         method: 'POST',
         body: transformSubmitAnswerRequest(submitAnswerArgs),
       }),
-      onQueryStarted: async ({ testID, questionID, selectedAnswer }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ testID, questionID, selectedAnswers }, { dispatch, queryFulfilled }) => {
         try {
           await queryFulfilled
-          // треш (патчит ответы)
           dispatch(
             testCatalogApi.util.updateQueryData('getAttemptByID', testID, (draft) => {
-              draft.selectedAnswers[questionID] = [
-                draft.questionList[questionID].answerOrder.find(
-                  (x) =>
-                    draft.questionList[questionID].answerList[x].answerDescription === selectedAnswer.answerDescription
-                )!,
-              ]
+              draft.selectedAnswers[questionID] = selectedAnswers
             })
           )
         } catch {}

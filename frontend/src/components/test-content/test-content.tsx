@@ -26,7 +26,8 @@ export const TestContent = () => {
 
   if (!isTestInfoSuccess) return <Spinner />
 
-  if (!isInProgress) router.replace(`${AppRoute.TestDescription}/${testID}`)
+  // Исправит моргание при завершении теста
+  if (!isInProgress && !attemptData) router.replace(`${AppRoute.TestDescription}/${testID}`)
 
   if (!attemptData) return <Spinner />
 
