@@ -17,7 +17,7 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['81.163.31.142', '127.0.0.1']
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -102,6 +102,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'testify_db',
+#         'USER': 'testify_user',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -178,6 +189,8 @@ DJOSER = {
 }
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+#CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 
 # LOGGING = {
 #     'version': 1,
