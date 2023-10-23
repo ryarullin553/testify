@@ -6,7 +6,7 @@ import { FORM_TABS, LoginFormState } from '../login-window'
 import { useDispatch } from 'react-redux'
 import { userLoggedIn } from '@/store/authSlice'
 import { saveToken } from '@/services/token'
-import { useLoginUserMutation } from '@/services/authApi'
+import { useCreateUserMutation, useLoginUserMutation, useResetPasswordMutation } from '@/services/authApi'
 import { api } from '@/services/api'
 
 interface Props {
@@ -15,7 +15,9 @@ interface Props {
 
 export const LoginTabManager: FC<Props> = ({ handleCloseModal }) => {
   const [formTab, setFormTab] = useState(FORM_TABS.SIGN_IN)
-  const [login, _] = useLoginUserMutation()
+  const [login] = useLoginUserMutation()
+  const [register] = useCreateUserMutation()
+  const [resetPassword] = useResetPasswordMutation()
   const dispatch = useDispatch()
 
   const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>, formTab: FORM_TABS, formState: LoginFormState) => {
@@ -43,11 +45,11 @@ export const LoginTabManager: FC<Props> = ({ handleCloseModal }) => {
   }
 
   const actionRegister = async (username: string, email: string, password: string) => {
-    // await api.post('auth/users/', { username, email, password })
+    await register({ username, email, password })
   }
 
   const actionResetPassword = async (email: string) => {
-    // await api.post('auth/users/reset_password/', { email })
+    await resetPassword({ email })
   }
 
   return (

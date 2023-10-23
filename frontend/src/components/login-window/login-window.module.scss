@@ -12,12 +12,16 @@
   animation-fill-mode: forwards;
   transform: matrix(1, 0, 0, 1, 0, -14.925);
   opacity: 0.005;
+
+  z-index: 1001;
 }
 
 .overlay {
   position: fixed;
   inset: 0px;
   background-color: rgba(0, 0, 0, 0.85);
+
+  z-index: 1000;
 }
 
 @keyframes ld-float-ttb-in {
