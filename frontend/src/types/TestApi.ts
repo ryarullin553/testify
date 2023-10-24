@@ -16,10 +16,10 @@ export type EditTestRequest = {
   description?: string
   image?: File
   is_published?: boolean
-  has_points?: boolean
-  has_comments?: boolean
-  has_right_answers?: boolean
-  has_questions_explanation?: boolean
+  has_points: boolean
+  has_comments: boolean
+  has_right_answers: boolean
+  has_questions_explanation: boolean
 }
 
 export type CreateTestProps = {
@@ -27,6 +27,10 @@ export type CreateTestProps = {
   testSummary: string
   testDescription: string
   testAvatar: File | null
+  hasPoints?: string
+  hasComments?: string
+  areCorrectAnswersShown?: string
+  hasQuestionsExplanation?: string
 }
 
 export type EditTestProps = CreateTestProps & {
@@ -185,11 +189,24 @@ export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuesti
 })
 
 export const transformEditTestRequest = (r: CreateTestProps) => {
-  const { testTitle, testSummary, testDescription, testAvatar } = r
+  const {
+    testTitle,
+    testSummary,
+    testDescription,
+    testAvatar,
+    hasPoints,
+    hasComments,
+    hasQuestionsExplanation,
+    areCorrectAnswersShown,
+  } = r
   const formData = new FormData()
   formData.append('title', testTitle)
   formData.append('short_description', testSummary)
   formData.append('description', testDescription)
+  formData.append('has_points', String(Boolean(hasPoints)))
+  formData.append('has_comments', String(Boolean(hasComments)))
+  formData.append('has_right_answers', String(Boolean(areCorrectAnswersShown)))
+  formData.append('has_questions_explanation', String(Boolean(hasQuestionsExplanation)))
   if (testAvatar) formData.append('image', testAvatar)
 
   return formData

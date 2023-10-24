@@ -42,6 +42,13 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
     }
   }
 
+  const toggles = [
+    { label: 'Баллы', id: 'hasPoints' },
+    { label: 'Комментарии', id: 'hasComments' },
+    { label: 'Правильные ответы', id: 'areCorrectAnswersShown' },
+    { label: 'Пояснения к вопросам', id: 'hasQuestionsExplanation' },
+  ]
+
   const pageTitle = isNewTest ? 'Создать новый тест' : 'Редактировать описание теста'
   const buttonLabel = isNewTest ? 'Создать тест' : 'Сохранить'
 
@@ -95,40 +102,11 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
         </fieldset>
 
         <div className={styles.testOptions}>
-          <ToggleSwitch label='Баллы' />
-          <div className={styles.tooltip}>
-            <span className={styles.tooltipText}>Добавить баллы к вопросам</span>
-          </div>
-          {/* <div className={`${styles.comment} ${styles.option}`}>
-            <div className={styles.switch}>
-              <span className={styles.toggle}></span>
+          {toggles.map((x) => (
+            <div className={styles.toggleWrapper}>
+              <ToggleSwitch label={x.label} id={x.id} />
             </div>
-            <label>Комментарии</label>
-
-            <div className={styles.tooltip}>
-              <span className={styles.tooltipText}>Открыть комментарии к вопросам</span>
-            </div>
-          </div>
-          <div className={`${styles.rightAnswers} ${styles.option}`}>
-            <div className={styles.switch}>
-              <span className={styles.toggle}></span>
-            </div>
-            <label>Правильные ответы</label>
-
-            <div className={styles.tooltip}>
-              <span className={styles.tooltipText}>Показать правильные ответы</span>
-            </div>
-          </div>
-          <div className={`${styles.explanations} ${styles.option}`}>
-            <div className={styles.switch}>
-              <span className={styles.toggle}></span>
-            </div>
-            <label>Пояснения к вопросам</label>
-
-            <div className={styles.tooltip}>
-              <span className={styles.tooltipText}>Показывать пояснения к вопросам</span>
-            </div>
-          </div> */}
+          ))}
         </div>
       </div>
       <div className={styles.controls}>
