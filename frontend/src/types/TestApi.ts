@@ -245,7 +245,7 @@ export const transformQuestionResponse = (r: QuestionResponse, testID?: number):
     return acc
   }, {}),
   answerOrder: r.answer_choices.map((x) => x.id),
-  correctAnswerIDs: r.right_answers.map(Number),
+  correctAnswerIDs: r.right_answers?.map(Number),
 })
 
 export const transformTestWithQuestionsResponse = (r: TestWithQuestionsResponse): TestWithQuestions => ({

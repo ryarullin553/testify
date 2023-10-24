@@ -1,5 +1,4 @@
 export interface TestReview {
-  reviewID: number
   userName: string
   userID: string
   reviewContent: string

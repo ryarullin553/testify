@@ -35,8 +35,7 @@ const transformEditReviewRequest = (r: SubmitReviewArgs): SubmitReviewRequest =>
   content: r.reviewContent,
 })
 
-const transformReviewResponse = (r: ReviewResponse, i: number): TestReview => ({
-  reviewID: i,
+const transformReviewResponse = (r: ReviewResponse): TestReview => ({
   userName: r.user_name,
   userID: r.user_id,
   reviewContent: r.content,
@@ -48,14 +47,25 @@ export const feedbackApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getTestReviews: builder.query<TestReview[], Test['testID']>({
       query: (testID) => `tests/${testID}/feedbacks/`,
-      transformResponse: (r: GetTestReviewsResponse) => r.results.map((x, i) => transformReviewResponse(x, i)),
+      transformResponse: (r: GetTestReviewsResponse) => r.results.map((x) => transformReviewResponse(x)),
     }),
-    submitReview: builder.mutation<void, SubmitReviewArgs>({
+    submitReview: builder.mutation<TestReview, SubmitReviewArgs>({
       query: (submitReviewArgs) => ({
         url: 'feedbacks/',
         method: 'POST',
         body: transformEditReviewRequest(submitReviewArgs),
       }),
+      transformResponse: transformReviewResponse,
+      onQueryStarted: async ({ testID }, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: newReviewData } = await queryFulfilled
+          dispatch(
+            feedbackApi.util.updateQueryData('getTestReviews', testID, (draft) => {
+              draft.unshift(newReviewData)
+            })
+          )
+        } catch {}
+      },
     }),
   }),
 })
