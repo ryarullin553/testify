@@ -29,7 +29,7 @@ export const ResultsContent: FC = () => {
   const gotoNextQuestion = () => setCurrentQuestionIndex((prevVal) => Math.min(prevVal + 1, questionOrder.length - 1))
 
   return (
-    <main className={styles.pageMain}>
+    <>
       <QuestionListSidebar
         testTitle={testTitle}
         questionList={questionList}
@@ -57,6 +57,6 @@ export const ResultsContent: FC = () => {
           selectedAnswers={currentSelectedAnswers}
         />
       )}
-    </main>
+    </>
   )
 }

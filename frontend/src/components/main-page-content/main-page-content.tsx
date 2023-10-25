@@ -6,7 +6,7 @@ import { FC } from 'react'
 
 export const MainPageContent: FC = () => {
   return (
-    <main className={styles.pageMain}>
+    <div className={styles.pageMain}>
       <section className={styles.heroSection}>
         <div className={styles.heroContent}>
           <h1>Testify — бесплатная платформа для создания и прохождения тестов</h1>
@@ -61,6 +61,6 @@ export const MainPageContent: FC = () => {
           </a>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

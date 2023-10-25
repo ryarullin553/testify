@@ -11,6 +11,7 @@ import { FilterValue } from '../../types/Filter'
 import { LinkItem } from '../../types/LinkList'
 import { useGetTestsHistoryQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
+import { Main } from '../Main/Main'
 
 export const ProfileHistory = () => {
   const [searchParams, setSearchParams] = useState<SearchParams>({})
@@ -30,7 +31,7 @@ export const ProfileHistory = () => {
   if (!testList) return <Spinner />
 
   return (
-    <main className={styles.pageMain}>
+    <Main>
       <ProfileNavigation />
       <section className={styles.sectionMain}>
         <h1>Пройденные</h1>
@@ -39,6 +40,6 @@ export const ProfileHistory = () => {
         </div>
         <TestListProfile testList={testList} linkList={linkList} isAttemptsAvailiable isEditable={false} />
       </section>
-    </main>
+    </Main>
   )
 }

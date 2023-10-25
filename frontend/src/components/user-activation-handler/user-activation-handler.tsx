@@ -4,7 +4,6 @@ import { FC, useEffect } from 'react'
 import { AppRoute } from '../../reusable/const'
 import { useParams, useRouter } from 'next/navigation'
 import { useActivateUserMutation } from '@/services/authApi'
-import { Spinner } from '../Spinner/Spinner'
 
 export const UserActivationHandler: FC = () => {
   const params = useParams()

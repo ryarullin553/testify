@@ -4,15 +4,6 @@
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
-
-  h1 {
-    margin-bottom: 32px;
-
-    font-size: 26px;
-    line-height: 31px;
-    font-weight: 600;
-    color: #222222;
-  }
 }
 
 .listControls {
@@ -49,6 +40,15 @@
 }
 
 .sectionMain {
+  h1 {
+    margin-bottom: 32px;
+
+    font-size: 26px;
+    line-height: 31px;
+    font-weight: 600;
+    color: #222222;
+  }
+
   box-sizing: border-box;
   margin-top: 19px;
   margin-left: 92px;

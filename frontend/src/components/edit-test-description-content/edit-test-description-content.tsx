@@ -7,6 +7,7 @@ import styles from './edit-test-description-content.module.scss'
 import { FC } from 'react'
 import { useGetTestSettingsByIDQuery } from '@/services/testCreationApi'
 import { Spinner } from '../Spinner/Spinner'
+import { Main } from '../Main/Main'
 
 export const EditTestDescriptionContent: FC = () => {
   const params = useParams()
@@ -17,9 +18,9 @@ export const EditTestDescriptionContent: FC = () => {
   if (isLoading) return <Spinner />
 
   return (
-    <main className={styles.pageMain}>
+    <>
       <ProfileNavigation />
       <TestDescriptionForm testData={testData} />
-    </main>
+    </>
   )
 }

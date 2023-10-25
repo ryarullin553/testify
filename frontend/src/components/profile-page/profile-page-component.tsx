@@ -4,9 +4,7 @@ import { useParams } from 'next/navigation'
 import styles from './profile-page-component.module.scss'
 import { ProfileComponent } from './profile-component/profile-component'
 import { ProfileNavigation } from '../profile-navigation/profile-navigation'
-import { FC, useEffect, useState } from 'react'
-import { fetchUserInfoAction } from '../../api/user'
-import { UserInfo } from '../../types/UserInfo'
+import { FC } from 'react'
 import { Spinner } from '../Spinner/Spinner'
 import { useGetUserDataQuery } from '@/services/usersApi'
 import { useGetTestsCreatedByCurrentUserQuery, useGetTestsHistoryQuery } from '@/services/testCatalogApi'
@@ -24,7 +22,7 @@ export const ProfilePageComponent: FC = () => {
   if (!userInfo || isCreatedTestListLoading || isUnfinishedTestListLoading || isFinishedTestsLoading) return <Spinner />
 
   return (
-    <main className={styles.pageMain}>
+    <>
       <ProfileNavigation />
       <ProfileComponent
         userInfo={userInfo}
@@ -32,6 +30,6 @@ export const ProfilePageComponent: FC = () => {
         finishedTestList={finishedTestList}
         unfinishedTestList={unfinishedTestList}
       />
-    </main>
+    </>
   )
 }

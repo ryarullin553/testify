@@ -7,11 +7,11 @@ import { FilterForm, SearchParams } from '../filter-form/filter-form'
 import Link from 'next/link'
 import styles from './my-tests-page-content.module.scss'
 import { FC, useState } from 'react'
-import { useScroll } from '../../reusable/hooks'
 import { Test, TestWithAvatar } from '../../types/Test'
 import { useGetTestsCreatedByCurrentUserQuery } from '@/services/testCatalogApi'
 import { FilterValue } from '@/types/Filter'
 import { Spinner } from '../Spinner/Spinner'
+import { Main } from '../Main/Main'
 
 export const MyTestsPageContent: FC = () => {
   const [searchParams, setSearchParams] = useState<SearchParams>({})
@@ -32,7 +32,7 @@ export const MyTestsPageContent: FC = () => {
   if (!testList) return <Spinner />
 
   return (
-    <main className={styles.pageMain}>
+    <>
       <ProfileNavigation />
       <section className={styles.sectionMain}>
         <h1>Мои тесты</h1>
@@ -44,6 +44,6 @@ export const MyTestsPageContent: FC = () => {
         </div>
         <TestListProfile testList={testList} linkList={linkList} isEditable isAttemptsAvailiable={false} />
       </section>
-    </main>
+    </>
   )
 }

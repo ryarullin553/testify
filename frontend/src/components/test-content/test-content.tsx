@@ -2,7 +2,7 @@
 
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar'
 import styles from './test-content.module.scss'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { QuestionArea } from './question-area/question-area'
 import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button'
 import { QuestionControls } from '../question-controls/question-controls'
@@ -12,7 +12,6 @@ import { useGetAttemptByIDQuery, useGetTestByIDQuery } from '@/services/testCata
 import { Spinner } from '../Spinner/Spinner'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { AppRoute } from '@/reusable/const'
-import { Attempt } from '@/types/Test'
 
 export const TestContent = () => {
   const router = useRouter()
@@ -45,7 +44,7 @@ export const TestContent = () => {
   }
 
   return (
-    <main className={styles.pageMain}>
+    <>
       <QuestionListSidebar
         testTitle={testTitle}
         questionList={questionList}
@@ -63,6 +62,6 @@ export const TestContent = () => {
         isTogglable>
         <QuestionControls gotoNextQuestion={gotoNextQuestion} />
       </QuestionArea>
-    </main>
+    </>
   )
 }
