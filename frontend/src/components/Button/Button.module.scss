@@ -13,11 +13,10 @@
 }
 
 .normal {
-  display: block;
   box-sizing: border-box;
   border-radius: 5px;
 
-  padding: 0px 18px;
+  padding: 9px 34px;
   border: 2px solid var(--color-primary);
 
   font-weight: 600;
@@ -87,6 +86,6 @@
 }
 
 .widthMax {
-  margin-right: 0;
-  margin-left: 0;
+  width: 100%;
+  margin: 0 auto;
 }

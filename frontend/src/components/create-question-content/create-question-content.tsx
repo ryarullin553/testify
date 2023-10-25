@@ -11,9 +11,8 @@ import {
   usePublishTestMutation,
 } from '@/services/testCreationApi'
 import { Spinner } from '../Spinner/Spinner'
-import { Answer, KnownAnswer, QuestionWithCorrectAnswer } from '@/types/Test'
+import { KnownAnswer, QuestionWithCorrectAnswer } from '@/types/Test'
 import { Button } from '../Button/Button'
-import { Main } from '../Main/Main'
 
 export const CreateQuestionContent: FC = () => {
   const params = useParams()

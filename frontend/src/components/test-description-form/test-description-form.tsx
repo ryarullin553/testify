@@ -11,6 +11,7 @@ import classNames from 'classnames'
 import { CreateTestProps } from '@/types/TestApi'
 import { VisibilityButton } from '../test-list-profile/test-tile-profile/visibility-button/visibility-button'
 import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch'
+import { Button } from '../Button/Button'
 
 interface Props {
   testData?: TestWithSettings
@@ -110,9 +111,7 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
         </div>
       </div>
       <div className={styles.controls}>
-        <button type={'submit'} className={styles.createButton}>
-          {buttonLabel}
-        </button>
+        <Button type={'submit'}>{buttonLabel}</Button>
       </div>
     </form>
   )

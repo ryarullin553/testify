@@ -1,9 +1,8 @@
 import { QuestionInputArea } from '../question-input-area/question-input-area'
 import { AnswersInputArea } from '../answers-input-area/answers-input-area'
 import styles from './create-question-manager.module.scss'
-import { FC, useEffect, useState, MouseEvent, ChangeEvent, SyntheticEvent, FormEvent } from 'react'
-import { generateAnswersAction } from '../../../api/questions'
-import { Answer, KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
+import { FC, useState, FormEvent } from 'react'
+import { KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
 import {
   useCreateQuestionMutation,
   useDeleteQuestionMutation,
@@ -73,6 +72,7 @@ export const CreateQuestionManager: FC<Props> = ({
       answerOrder: answerOrderState,
       answerList: answerOrderState.reduce((acc: Record<number, KnownAnswer>, x) => {
         acc[x] = {
+          answerID: x,
           answerDescription: formData.get(`answerDescription-${x}`) as string,
           isCorrect: Number(formData.get('correct-answer-form')) === x,
         }

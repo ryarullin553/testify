@@ -11,6 +11,7 @@ import { ResultsArea } from './results-area/results-area'
 import { ReviewsBlock } from '../reviews-block/reviews-block'
 import { useGetAttemptByIDQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
+import { Button } from '../Button/Button'
 
 export const ResultsContent: FC = () => {
   const params = useParams()
@@ -35,11 +36,9 @@ export const ResultsContent: FC = () => {
         questionList={questionList}
         questionOrder={questionOrder}
         setCurrentQuestionIndex={setCurrentQuestionIndex}>
-        <QuestionListSidebarButton
-          label={'К результатам'}
-          onClickAction={() => setCurrentQuestionIndex(-1)}
-          condition
-        />
+        <Button view={'sidebar'} type={'button'} onClick={() => setCurrentQuestionIndex(-1)}>
+          К результатам
+        </Button>
       </QuestionListSidebar>
       {currentQuestionIndex === -1 ? (
         <div>

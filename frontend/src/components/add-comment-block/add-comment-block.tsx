@@ -1,12 +1,11 @@
-import { ChangeEvent, MouseEvent, FC, PropsWithChildren, useState, FormEvent } from 'react'
+import { FC, PropsWithChildren, FormEvent } from 'react'
 import { AvatarBlock } from '../avatar-block/avatar-block'
 import styles from './add-comment-block.module.scss'
 import { RateBlock } from './rate-block/rate-block'
-import { useSelector } from 'react-redux'
-import { selectUserInfo } from '../../store/selectors'
 import { useGetCurrentUserDataQuery } from '@/services/usersApi'
-import { RatingValues, SubmitReviewArgs, useSubmitReviewMutation } from '@/services/feedbackApi'
+import { SubmitReviewArgs, useSubmitReviewMutation } from '@/services/feedbackApi'
 import { Test } from '@/types/Test'
+import { Button } from '../Button/Button'
 
 interface Props extends PropsWithChildren {
   hasRateBlock: boolean
@@ -37,9 +36,9 @@ export const AddCommentBlock: FC<Props> = ({ hasRateBlock, testID, children }) =
         <AvatarBlock size={50} src={userAvatar} />
         <textarea name='reviewContent' placeholder='Напишите что думаете' />
       </div>
-      <button type={'submit'} className={styles.submitButton}>
+      <Button type={'submit'} outerStyles={styles.submitButton}>
         Оставить отзыв
-      </button>
+      </Button>
     </form>
   )
 }

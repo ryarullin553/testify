@@ -4,7 +4,6 @@ import { QuestionListSidebar } from '../question-list-sidebar/question-list-side
 import styles from './test-content.module.scss'
 import { useState } from 'react'
 import { QuestionArea } from './question-area/question-area'
-import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button'
 import { QuestionControls } from '../question-controls/question-controls'
 import { useParams, useRouter } from 'next/navigation'
 import { useFinishAttemptMutation } from '@/services/testCompletionApi'
@@ -12,6 +11,7 @@ import { useGetAttemptByIDQuery, useGetTestByIDQuery } from '@/services/testCata
 import { Spinner } from '../Spinner/Spinner'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { AppRoute } from '@/reusable/const'
+import { Button } from '../Button/Button'
 
 export const TestContent = () => {
   const router = useRouter()
@@ -50,7 +50,9 @@ export const TestContent = () => {
         questionList={questionList}
         setCurrentQuestionIndex={setCurrentQuestionIndex}
         questionOrder={questionOrder}>
-        <QuestionListSidebarButton label={'Завершить тест'} onClickAction={handleFinishAttemptClick} condition />
+        <Button view={'sidebar'} onClick={handleFinishAttemptClick}>
+          Завершить тест
+        </Button>
       </QuestionListSidebar>
       <QuestionArea
         key={currentQuestionID}
