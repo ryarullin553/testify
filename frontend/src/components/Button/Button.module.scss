@@ -26,7 +26,8 @@
   background-color: var(--color-primary);
   color: var(--color-background);
 
-  &:hover {
+  &:hover,
+  &:active {
     background-color: var(--color-background);
 
     color: var(--color-primary);
@@ -52,7 +53,8 @@
   background-color: var(--color-primary);
   color: var(--color-background);
 
-  &:hover {
+  &:hover,
+  &:active {
     background-color: var(--color-background);
 
     color: var(--color-primary);
@@ -70,7 +72,8 @@
   background-color: var(--color-primary);
   color: var(--color-background);
 
-  &:hover {
+  &:hover,
+  &:active {
     background-color: var(--color-background);
 
     color: var(--color-secondary);
@@ -78,7 +81,8 @@
 }
 
 .hoverDark {
-  &:hover {
+  &:hover,
+  &:active {
     background-color: var(--color-primary-dark-accent);
     border-color: var(--color-primary-dark-accent);
     color: var(--color-background);

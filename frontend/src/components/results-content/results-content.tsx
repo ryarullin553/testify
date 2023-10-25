@@ -36,9 +36,11 @@ export const ResultsContent: FC = () => {
         questionList={questionList}
         questionOrder={questionOrder}
         setCurrentQuestionIndex={setCurrentQuestionIndex}>
-        <Button view={'sidebar'} type={'button'} onClick={() => setCurrentQuestionIndex(-1)}>
-          К результатам
-        </Button>
+        {currentQuestionIndex !== -1 && (
+          <Button view={'sidebar'} type={'button'} onClick={() => setCurrentQuestionIndex(-1)}>
+            К результатам
+          </Button>
+        )}
       </QuestionListSidebar>
       {currentQuestionIndex === -1 ? (
         <div>
