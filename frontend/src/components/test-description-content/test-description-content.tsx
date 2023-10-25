@@ -17,12 +17,10 @@ export const TestDescriptionContent: FC = () => {
   if (!testInfo) return <Spinner />
 
   return (
-    <>
-      <TestOverview testInfo={testInfo}>
-        <ReviewsBlock testID={testID}>
-          <TestReview rating={testInfo.testRating} ratingCounter={testInfo.testVotesCounter} />
-        </ReviewsBlock>
-      </TestOverview>
-    </>
+    <TestOverview testInfo={testInfo}>
+      <ReviewsBlock testID={testID}>
+        <TestReview rating={testInfo.testRating} ratingCounter={testInfo.testVotesCounter} />
+      </ReviewsBlock>
+    </TestOverview>
   )
 }
