@@ -1,33 +1,28 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import styles from './like-block.module.scss'
-import { fetchQuestionLikesAction } from '../../../api/questions'
 import LikeImage from './img/like.svg'
 import LikeImageActive from './img/like-active.svg'
-import { addLikeAction, changeLikeAction, deleteLikeAction } from '../../../api/likes'
-
-const enum LikeStates {
-  Like = 'like',
-  Dislike = 'dislike',
-  None = 'none',
-}
+import { LikeState } from '@/types/Test'
 
 interface Props {
-  questionID: number
+  likeCount: number
+  dislikeCount: number
+  likeState: LikeState
 }
 
-export const LikeBlock: FC<Props> = ({ questionID }) => {
+export const LikeBlock: FC<Props> = ({ likeCount, dislikeCount, likeState }) => {
   return (
     <fieldset className={styles.likeField}>
       <label>
-        {likeState === LikeStates.Like ? <LikeImageActive /> : <LikeImage />}
-        {likeCount.likes}
+        {likeState === 'like' ? <LikeImageActive /> : <LikeImage />}
+        {likeCount}
         <input
           type={'checkbox'}
           name={'like'}
           id={'like'}
-          value={LikeStates.Like}
-          checked={likeState === LikeStates.Like}
-          onClick={handleLikeClick}
+          value={'like'}
+          checked={likeState === 'like'}
+          onChange={handleLikeClick}
         />
       </label>
       <label>
@@ -36,14 +31,14 @@ export const LikeBlock: FC<Props> = ({ questionID }) => {
         ) : (
           <LikeImage style={{ transform: 'rotate(180deg)' }} />
         )}
-        {likeCount.dislikes}
+        {dislikeCount}
         <input
-          type={'radio'}
+          type={'checkbox'}
           name={'dislike'}
           id={'dislike'}
-          value={LikeStates.Dislike}
-          checked={likeState === LikeStates.Dislike}
-          onClick={handleLikeClick}
+          value={'dislike'}
+          checked={likeState === 'dislike'}
+          onChange={handleLikeClick}
         />
       </label>
     </fieldset>

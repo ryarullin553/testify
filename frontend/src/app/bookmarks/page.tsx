@@ -1,13 +1,12 @@
-import { Header } from '@/components/header/header'
+import { Main } from '@/components/Main/Main'
 import { ProfileBookmarkContent } from '@/components/profile-bookmark-content/profile-bookmark-content'
 import { FC } from 'react'
 
 const ProfileBookmarkPage: FC = () => {
   return (
-    <>
-      <Header />
+    <Main>
       <ProfileBookmarkContent />
-    </>
+    </Main>
   )
 }
 

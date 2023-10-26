@@ -6,6 +6,7 @@ import { FC } from 'react'
 import { ProfileSettingsForm } from './ProfileSettingsForm/ProfileSettingsForm'
 import { Spinner } from '../Spinner/Spinner'
 import { useGetCurrentUserDataQuery } from '@/services/usersApi'
+import { Main } from '../Main/Main'
 
 export const ProfileSettings: FC = () => {
   const { data: initialUserInfo } = useGetCurrentUserDataQuery()
@@ -13,9 +14,9 @@ export const ProfileSettings: FC = () => {
   if (!initialUserInfo) return <Spinner />
 
   return (
-    <main className={styles.pageMain}>
+    <>
       <ProfileNavigation />
       <ProfileSettingsForm initialUserInfo={initialUserInfo} />
-    </main>
+    </>
   )
 }

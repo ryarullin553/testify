@@ -1,13 +1,14 @@
+import { Main } from '@/components/Main/Main'
 import { EditTestDescriptionContent } from '@/components/edit-test-description-content/edit-test-description-content'
 import { Footer } from '@/components/footer/footer'
-import { Header } from '@/components/header/header'
 import { FC } from 'react'
 
 const EditTestDescriptionPage: FC = () => {
   return (
     <>
-      <Header />
-      <EditTestDescriptionContent />
+      <Main>
+        <EditTestDescriptionContent />
+      </Main>
       <Footer />
     </>
   )

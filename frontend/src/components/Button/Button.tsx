@@ -11,6 +11,7 @@ interface Props extends PropsWithChildren {
   onClick?: () => void
   outerStyles?: string
   view?: View
+  widthMax?: boolean
   colorTheme?: ColorTheme
 }
 
@@ -21,12 +22,19 @@ export const Button: FC<Props> = ({
   outerStyles,
   view = 'normal',
   colorTheme = 'default',
+  widthMax,
 }) => {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={classNames(styles.innerStyle, styles[view], styles[colorTheme], outerStyles)}>
+      className={classNames(
+        styles.innerStyle,
+        styles[view],
+        styles[colorTheme],
+        widthMax && styles.widthMax,
+        outerStyles
+      )}>
       {children}
     </button>
   )

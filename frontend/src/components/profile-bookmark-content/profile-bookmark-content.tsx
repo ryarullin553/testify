@@ -7,6 +7,7 @@ import { AppRoute } from '../../reusable/const'
 import { Test, TestWithAvatar } from '../../types/Test'
 import { useGetTestsBookmarkedByCurrentUserQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
+import { Main } from '../Main/Main'
 
 export const ProfileBookmarkContent = () => {
   const { data: testList } = useGetTestsBookmarkedByCurrentUserQuery({})
@@ -20,13 +21,11 @@ export const ProfileBookmarkContent = () => {
 
   return (
     <>
-      <main className={styles.pageMain}>
-        <ProfileNavigation />
-        <section className={styles.sectionMain}>
-          <h1>Избранное</h1>
-          <TestListProfile testList={testList} linkList={linkList} isEditable={false} isAttemptsAvailiable={false} />
-        </section>
-      </main>
+      <ProfileNavigation />
+      <section className={styles.sectionMain}>
+        <h1>Избранное</h1>
+        <TestListProfile testList={testList} linkList={linkList} isEditable={false} isAttemptsAvailiable={false} />
+      </section>
     </>
   )
 }

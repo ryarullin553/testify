@@ -162,6 +162,10 @@
   display: flex;
   justify-content: flex-start;
 
+  .toggleWrapper {
+    margin-bottom: 10px;
+  }
+
   .testOptions {
     margin-top: 10px;
     margin-left: 142px;
@@ -170,39 +174,6 @@
       margin-bottom: 20px;
       display: flex;
       justify-content: baseline;
-    }
-
-    .switch {
-      margin-right: 15px;
-      display: flex;
-      align-items: center;
-      width: 40px;
-      height: 24px;
-      border-radius: 25px;
-      cursor: pointer;
-    }
-
-    .switchButton {
-      background-color: #a38ffd;
-    }
-
-    .switchButtonFalse {
-      background-color: #d1d1d1;
-    }
-
-    .toggle {
-      border-radius: 25px;
-      width: 20px;
-      height: 20px;
-      background-color: #fff;
-    }
-
-    .switchToggle {
-      margin-left: 18px;
-    }
-
-    .switchToggleFalse {
-      margin-left: 2px;
     }
   }
 

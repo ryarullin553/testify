@@ -19,13 +19,11 @@ export const CatalogContent: FC = () => {
   if (!listData) return <Spinner />
 
   return (
-    <main>
-      <div className={styles.container}>
-        <div className={styles.catalog}>
-          <CatalogSearch setSearchParams={setSearchParams} />
-          <CatalogList listData={listData} />
-        </div>
+    <div className={styles.container}>
+      <div className={styles.catalog}>
+        <CatalogSearch setSearchParams={setSearchParams} />
+        <CatalogList listData={listData} />
       </div>
-    </main>
+    </div>
   )
 }

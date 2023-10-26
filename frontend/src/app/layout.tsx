@@ -1,4 +1,6 @@
+import { Main } from '@/components/Main/Main'
 import { ErrorMessage } from '@/components/error-message/error-message'
+import { Header } from '@/components/header/header'
 import { Providers } from '@/components/provider/provider'
 import '@/global.css'
 
@@ -13,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <ErrorMessage />
+          <Header />
           {children}
         </Providers>
       </body>

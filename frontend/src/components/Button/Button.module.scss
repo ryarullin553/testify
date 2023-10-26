@@ -13,11 +13,10 @@
 }
 
 .normal {
-  display: block;
   box-sizing: border-box;
   border-radius: 5px;
 
-  padding: 0px 18px;
+  padding: 9px 34px;
   border: 2px solid var(--color-primary);
 
   font-weight: 600;
@@ -27,7 +26,8 @@
   background-color: var(--color-primary);
   color: var(--color-background);
 
-  &:hover {
+  &:hover,
+  &:active {
     background-color: var(--color-background);
 
     color: var(--color-primary);
@@ -53,7 +53,8 @@
   background-color: var(--color-primary);
   color: var(--color-background);
 
-  &:hover {
+  &:hover,
+  &:active {
     background-color: var(--color-background);
 
     color: var(--color-primary);
@@ -71,7 +72,8 @@
   background-color: var(--color-primary);
   color: var(--color-background);
 
-  &:hover {
+  &:hover,
+  &:active {
     background-color: var(--color-background);
 
     color: var(--color-secondary);
@@ -79,7 +81,8 @@
 }
 
 .hoverDark {
-  &:hover {
+  &:hover,
+  &:active {
     background-color: var(--color-primary-dark-accent);
     border-color: var(--color-primary-dark-accent);
     color: var(--color-background);
@@ -87,6 +90,6 @@
 }
 
 .widthMax {
-  margin-right: 0;
-  margin-left: 0;
+  width: 100%;
+  margin: 0 auto;
 }

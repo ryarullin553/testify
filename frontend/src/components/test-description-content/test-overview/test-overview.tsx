@@ -1,15 +1,12 @@
 import styles from './test-overview.module.scss'
-import { FC, PropsWithChildren, useState, MouseEvent, ChangeEvent } from 'react'
-import { createAttemptAction } from '../../../api/results'
+import { FC, PropsWithChildren, ChangeEvent } from 'react'
 import { AppRoute } from '../../../reusable/const'
-import { addBookmarkAction, deleteBookmarkAction } from '../../../api/bookmarks'
 import { FeedbackStars } from '../../feedback-stars/feedback-stars'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { TestWithDescription } from '../../../types/Test'
 import { useRouter } from 'next/navigation'
 import { useStartAttemptMutation } from '@/services/testCompletionApi'
 import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
-import { ToggleButton } from '@/components/ToggleButton/ToggleButton'
 import { Button } from '@/components/Button/Button'
 import { FavoriteButton } from '@/components/FavoriteButton/FavoriteButton'
 
@@ -55,7 +52,7 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
   }
 
   return (
-    <section>
+    <div className={styles.pageWrapper}>
       <header className={styles.title}>
         <div className={styles.descriptionWrapper}>
           <h1 className={styles.title__testName}>{testTitle}</h1>
@@ -98,6 +95,6 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
           <FavoriteButton format={'button'} defaultChecked={isFavorite} onChange={handleFavoriteClick} />
         </div>
       </section>
-    </section>
+    </div>
   )
 }

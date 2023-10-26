@@ -3,28 +3,4 @@
   margin-bottom: 40px;
   display: flex;
   justify-content: space-between;
-
-  button {
-    padding: 9px 34px;
-    border: 2px solid #a38ffd;
-
-    display: flex;
-    box-sizing: border-box;
-    background: #a38ffd;
-    border-radius: 5px;
-    color: #ffffff;
-
-    transition: all 0.2s ease-in-out;
-
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
-
-    &:hover {
-      background: #ffffff;
-      border: 2px solid #a38ffd;
-
-      color: #a38ffd;
-    }
-  }
 }

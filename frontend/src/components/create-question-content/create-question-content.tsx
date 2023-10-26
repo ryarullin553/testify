@@ -4,7 +4,6 @@ import { FC, useState } from 'react'
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar'
 import styles from './create-question-content.module.scss'
 import { CreateQuestionManager } from './create-question-manager/create-question-manager'
-import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button'
 import { useParams } from 'next/navigation'
 import {
   useDeleteQuestionMutation,
@@ -12,7 +11,7 @@ import {
   usePublishTestMutation,
 } from '@/services/testCreationApi'
 import { Spinner } from '../Spinner/Spinner'
-import { Answer, KnownAnswer, QuestionWithCorrectAnswer } from '@/types/Test'
+import { KnownAnswer, QuestionWithCorrectAnswer } from '@/types/Test'
 import { Button } from '../Button/Button'
 
 export const CreateQuestionContent: FC = () => {
@@ -75,7 +74,7 @@ export const CreateQuestionContent: FC = () => {
   }
 
   return (
-    <main className={styles.pageMain}>
+    <>
       <QuestionListSidebar
         testTitle={testTitle}
         questionList={_questionList}
@@ -101,6 +100,6 @@ export const CreateQuestionContent: FC = () => {
         addNewQuestion={addNewQuestion}
         handleQuestionDelete={handleQuestionDelete}
       />
-    </main>
+    </>
   )
 }

@@ -1,45 +1,38 @@
-import { ChangeEvent, MouseEvent, FC, PropsWithChildren, useState, FormEvent } from 'react'
+import { FC, PropsWithChildren, FormEvent } from 'react'
 import { AvatarBlock } from '../avatar-block/avatar-block'
 import styles from './add-comment-block.module.scss'
 import { RateBlock } from './rate-block/rate-block'
-import { useSelector } from 'react-redux'
-import { selectUserInfo } from '../../store/selectors'
 import { useGetCurrentUserDataQuery } from '@/services/usersApi'
-import { RatingValues, SubmitReviewArgs, useSubmitReviewMutation } from '@/services/feedbackApi'
+import { SubmitReviewArgs, useSubmitReviewMutation } from '@/services/feedbackApi'
 import { Test } from '@/types/Test'
+import { Button } from '../Button/Button'
 
 interface Props extends PropsWithChildren {
-  hasRateBlock: boolean
-  testID: Test['testID']
+  hasRateBlock?: boolean
+  submitAction: (formData: FormData) => Promise<void>
 }
 
-export const AddCommentBlock: FC<Props> = ({ hasRateBlock, testID, children }) => {
+export const AddCommentBlock: FC<Props> = ({ hasRateBlock, submitAction, children }) => {
   const { data: userData } = useGetCurrentUserDataQuery()
-  const [submitReview] = useSubmitReviewMutation()
   const { userAvatar } = userData!
 
-  const handleSubmitClick = (evt: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
-    const submitReviewArgs: SubmitReviewArgs = {
-      testID,
-      reviewRating: Number(formData.get('reviewRating')),
-      reviewContent: formData.get('reviewContent') as string,
-    }
-    submitReview(submitReviewArgs)
+    await submitAction(formData)
   }
 
   return (
-    <form className={styles.commentForm} name='review-test-form' onSubmit={handleSubmitClick}>
+    <form className={styles.commentForm} name='review-test-form' onSubmit={handleSubmit}>
       {hasRateBlock && <RateBlock />}
       {children}
       <div className={styles.reviewBlock}>
         <AvatarBlock size={50} src={userAvatar} />
         <textarea name='reviewContent' placeholder='Напишите что думаете' />
       </div>
-      <button type={'submit'} className={styles.submitButton}>
+      <Button type={'submit'} outerStyles={styles.submitButton}>
         Оставить отзыв
-      </button>
+      </Button>
     </form>
   )
 }

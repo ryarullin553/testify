@@ -3,6 +3,7 @@ import styles from './ProfileSettingsForm.module.scss'
 import { UserInfo } from '@/types/UserInfo'
 import { useUpdateUserDataMutation } from '@/services/usersApi'
 import classNames from 'classnames'
+import { Button } from '@/components/Button/Button'
 
 interface FormData {
   userName: string
@@ -43,9 +44,7 @@ export const ProfileSettingsForm: FC<Props> = ({ initialUserInfo }) => {
         </div>
       </fieldset>
       <div className={styles.controls}>
-        <button type={'submit'} className={styles.createButton}>
-          Сохранить
-        </button>
+        <Button type={'submit'}>Сохранить</Button>
       </div>
     </form>
   )

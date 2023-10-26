@@ -1,13 +1,12 @@
-import { Header } from '@/components/header/header'
+import { Main } from '@/components/Main/Main'
 import { TestDescriptionContent } from '@/components/test-description-content/test-description-content'
 import React, { FC } from 'react'
 
 const TestDescriptionPage: FC = () => {
   return (
-    <>
-      <Header />
+    <Main>
       <TestDescriptionContent />
-    </>
+    </Main>
   )
 }
 

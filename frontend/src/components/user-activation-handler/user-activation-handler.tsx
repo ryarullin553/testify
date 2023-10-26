@@ -1,24 +1,20 @@
-import { api } from '../../store/store'
+'use client'
+
 import { FC, useEffect } from 'react'
 import { AppRoute } from '../../reusable/const'
+import { useParams, useRouter } from 'next/navigation'
+import { useActivateUserMutation } from '@/services/authApi'
 
 export const UserActivationHandler: FC = () => {
-  // const { uid, token } = useParams();
-  // const navigate = useNavigate();
+  const params = useParams()
+  const { uid, token } = params
+  const router = useRouter()
+  const [activateUser] = useActivateUserMutation()
 
-  // const activateUser = async (uid: string, token: string) => {
-  //   await api.post('auth/users/activation/', {token, uid});
-  // }
-
-  // if (uid && token) {
-  //   activateUser(uid, token);
-  //   navigate(AppRoute.Root);
-  // }
-
-  // // useEffect(() => {
-  // //   activateUser(uid, token);
-  // //   navigate(AppRoute.Root);
-  // // }, []);
+  useEffect(() => {
+    activateUser({ uid, token })
+    router.replace(AppRoute.Root)
+  }, [])
 
   return null
 }

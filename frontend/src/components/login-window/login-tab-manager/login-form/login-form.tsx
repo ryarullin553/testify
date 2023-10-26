@@ -2,6 +2,7 @@ import { ChangeEvent, FC, FormEvent, useState } from 'react'
 import { LoginFormInput } from './login-form-input/login-form-input'
 import styles from './login-form.module.scss'
 import { FORM_TABS, LoginFormState } from '../../login-window'
+import { Button } from '@/components/Button/Button'
 
 export interface InputProps {
   type: string
@@ -53,7 +54,9 @@ export const LoginForm: FC<Props> = ({ formTab, handleFormSubmit }) => {
       {INPUT_LIST.map((props) => (
         <LoginFormInput formTab={formTab} handleFieldChange={handleFieldChange} inputProps={props} />
       ))}
-      <button type={'submit'}>{submitButtonValue()}</button>
+      <Button type={'submit'} widthMax outerStyles={styles.submitButton}>
+        {submitButtonValue()}
+      </Button>
     </form>
   )
 }

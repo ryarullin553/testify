@@ -32,33 +32,8 @@
 }
 
 .submitButton {
-  box-sizing: border-box;
-  border-radius: 5px;
-
-  transition: all 0.2s ease-in-out;
-
-  padding: 9px 34px;
-  border: 2px solid #a38ffd;
-  background: #a38ffd;
-  color: #ffffff;
   margin-right: 20px;
   margin-bottom: 23px;
-
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 19px;
-
-  &:hover {
-    background: #ffffff;
-    border: 2px solid #a38ffd;
-
-    color: #a38ffd;
-
-    &::after {
-      border: solid 1px #a38ffd;
-      border-width: 0 2px 2px 0;
-    }
-  }
 }
 
 // .feedbackStars {

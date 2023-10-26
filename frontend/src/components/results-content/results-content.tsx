@@ -11,6 +11,7 @@ import { ResultsArea } from './results-area/results-area'
 import { ReviewsBlock } from '../reviews-block/reviews-block'
 import { useGetAttemptByIDQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
+import { Button } from '../Button/Button'
 
 export const ResultsContent: FC = () => {
   const params = useParams()
@@ -29,17 +30,17 @@ export const ResultsContent: FC = () => {
   const gotoNextQuestion = () => setCurrentQuestionIndex((prevVal) => Math.min(prevVal + 1, questionOrder.length - 1))
 
   return (
-    <main className={styles.pageMain}>
+    <>
       <QuestionListSidebar
         testTitle={testTitle}
         questionList={questionList}
         questionOrder={questionOrder}
         setCurrentQuestionIndex={setCurrentQuestionIndex}>
-        <QuestionListSidebarButton
-          label={'К результатам'}
-          onClickAction={() => setCurrentQuestionIndex(-1)}
-          condition
-        />
+        {currentQuestionIndex !== -1 && (
+          <Button view={'sidebar'} type={'button'} onClick={() => setCurrentQuestionIndex(-1)}>
+            К результатам
+          </Button>
+        )}
       </QuestionListSidebar>
       {currentQuestionIndex === -1 ? (
         <div>
@@ -57,6 +58,6 @@ export const ResultsContent: FC = () => {
           selectedAnswers={currentSelectedAnswers}
         />
       )}
-    </main>
+    </>
   )
 }

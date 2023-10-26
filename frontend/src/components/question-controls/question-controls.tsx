@@ -1,22 +1,22 @@
-import { FC, FormEvent, MouseEvent } from 'react'
+import { FC } from 'react'
 import styles from './question-controls.module.scss'
-import { Answer, Question, QuestionState } from '../../types/Test'
+import { Button } from '../Button/Button'
 
 interface Props {
   gotoNextQuestion: () => void
 }
 
 export const QuestionControls: FC<Props> = ({ gotoNextQuestion }) => {
-  const handleNextClick = (evt: MouseEvent<HTMLButtonElement>) => {
+  const handleNextClick = () => {
     gotoNextQuestion()
   }
 
   return (
     <div className={styles.questionControls}>
-      <button type={'submit'}>Ответить</button>
-      <button type={'button'} onClick={handleNextClick}>
+      <Button type={'submit'}>Ответить</Button>
+      <Button type={'button'} onClick={handleNextClick}>
         Следующий вопрос
-      </button>
+      </Button>
     </div>
   )
 }

@@ -5,9 +5,7 @@ import { useParams } from 'next/navigation'
 import { TestOverview } from './test-overview/test-overview'
 import { ReviewsBlock } from '../reviews-block/reviews-block'
 import { TestReview } from '../reviews-block/test-review/test-review'
-import { fetchTestInfoAction } from '../../api/tests'
-import { FC, useEffect, useState } from 'react'
-import { Test, TestWithDescription } from '../../types/Test'
+import { FC } from 'react'
 import { useGetTestByIDQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
 
@@ -19,12 +17,10 @@ export const TestDescriptionContent: FC = () => {
   if (!testInfo) return <Spinner />
 
   return (
-    <main className={styles.main}>
-      <TestOverview testInfo={testInfo}>
-        <ReviewsBlock testID={testID}>
-          <TestReview rating={testInfo.testRating} ratingCounter={testInfo.testVotesCounter} />
-        </ReviewsBlock>
-      </TestOverview>
-    </main>
+    <TestOverview testInfo={testInfo}>
+      <ReviewsBlock testID={testID}>
+        <TestReview rating={testInfo.testRating} ratingCounter={testInfo.testVotesCounter} />
+      </ReviewsBlock>
+    </TestOverview>
   )
 }
