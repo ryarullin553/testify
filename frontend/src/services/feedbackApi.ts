@@ -1,7 +1,6 @@
-import { TestReview } from '@/types/Feedback'
+import { Comment, CommentCatalog, TestReview } from '@/types/Feedback'
 import { api } from './api'
-import { Test } from '@/types/Test'
-import { type } from '@testing-library/user-event/dist/type'
+import { Question, Test } from '@/types/Test'
 
 type ReviewResponse = {
   user_id: string
@@ -23,11 +22,62 @@ export type SubmitReviewArgs = {
   reviewContent?: string
 }
 
+export type SubmitCommentArgs = {
+  questionID: Question['questionID']
+  commentContent: string
+  replyTo?: Comment['commentID']
+}
+
+type SubmitCommentRequest = {
+  question: number
+  content: string
+  comment?: number
+}
+
 type SubmitReviewRequest = {
   test: number
   rate: RatingValues
   content?: string
 }
+
+type GetCommentResponse = {
+  id: number
+  question: number
+  user_id: string
+  user_name: string
+  user_image: string
+  created: string
+  content: string
+  comment?: number
+}
+
+type GetCommentListResponse = {
+  results: GetCommentResponse[]
+}
+
+const transformCommentResponse = (r: GetCommentResponse): Comment => ({
+  commentID: r.id,
+  userID: r.user_id,
+  userName: r.user_name,
+  userAvatar: r.user_image,
+  commentContent: r.content,
+  commentDate: r.created,
+  childCommentOrder: [],
+})
+
+const transformCommentListResponse = (r: GetCommentListResponse): CommentCatalog => ({
+  commentList: r.results.reduce((acc: Record<number, Comment>, x) => {
+    acc[x.id] = transformCommentResponse(x)
+    return acc
+  }, {}),
+  commentOrder: r.results.map((x) => x.id),
+})
+
+const transformSubmitCommentRequest = (r: SubmitCommentArgs): SubmitCommentRequest => ({
+  question: r.questionID,
+  content: r.commentContent,
+  comment: r.replyTo,
+})
 
 const transformEditReviewRequest = (r: SubmitReviewArgs): SubmitReviewRequest => ({
   test: r.testID,
@@ -67,7 +117,36 @@ export const feedbackApi = api.injectEndpoints({
         } catch {}
       },
     }),
+    getCommentsByQuestionID: builder.query<CommentCatalog, Question['questionID']>({
+      query: (questionID) => `questions/${questionID}/comments/`,
+      transformResponse: transformCommentListResponse,
+    }),
+    submitComment: builder.mutation<Comment, SubmitCommentArgs>({
+      query: (submitCommentArgs) => ({
+        url: 'comments/',
+        method: 'POST',
+        body: transformSubmitCommentRequest(submitCommentArgs),
+      }),
+      transformResponse: transformCommentResponse,
+      onQueryStarted: async ({ questionID }, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: newCommentData } = await queryFulfilled
+          dispatch(
+            feedbackApi.util.updateQueryData('getCommentsByQuestionID', questionID, (draft) => {
+              const { commentID } = newCommentData
+              draft.commentList[commentID] = newCommentData
+              draft.commentOrder.unshift(commentID)
+            })
+          )
+        } catch {}
+      },
+    }),
   }),
 })
 
-export const { useGetTestReviewsQuery, useSubmitReviewMutation } = feedbackApi
+export const {
+  useGetTestReviewsQuery,
+  useSubmitReviewMutation,
+  useGetCommentsByQuestionIDQuery,
+  useSubmitCommentMutation,
+} = feedbackApi

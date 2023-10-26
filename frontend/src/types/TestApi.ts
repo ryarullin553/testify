@@ -78,7 +78,7 @@ export type AnswerResponse = {
 export type QuestionResponse = {
   test: number
   id: number
-  has_like: boolean
+  has_like: boolean | null
   type: 'Single choice'
   content: string
   answer_choices: AnswerResponse[]
@@ -245,6 +245,9 @@ export const transformQuestionResponse = (r: QuestionResponse, testID?: number):
     return acc
   }, {}),
   answerOrder: r.answer_choices.map((x) => x.id),
+  likesCount: r.likes_count,
+  dislikesCount: r.dislikes_count,
+  likeState: r.has_like === true ? 'like' : r.has_like === false ? 'dislike' : 'none',
   correctAnswerIDs: r.right_answers?.map(Number),
 })
 

@@ -8,28 +8,22 @@ import { Test } from '@/types/Test'
 import { Button } from '../Button/Button'
 
 interface Props extends PropsWithChildren {
-  hasRateBlock: boolean
-  testID: Test['testID']
+  hasRateBlock?: boolean
+  submitAction: (formData: FormData) => Promise<void>
 }
 
-export const AddCommentBlock: FC<Props> = ({ hasRateBlock, testID, children }) => {
+export const AddCommentBlock: FC<Props> = ({ hasRateBlock, submitAction, children }) => {
   const { data: userData } = useGetCurrentUserDataQuery()
-  const [submitReview] = useSubmitReviewMutation()
   const { userAvatar } = userData!
 
-  const handleSubmitClick = (evt: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
-    const submitReviewArgs: SubmitReviewArgs = {
-      testID,
-      reviewRating: Number(formData.get('reviewRating')),
-      reviewContent: formData.get('reviewContent') as string,
-    }
-    submitReview(submitReviewArgs)
+    await submitAction(formData)
   }
 
   return (
-    <form className={styles.commentForm} name='review-test-form' onSubmit={handleSubmitClick}>
+    <form className={styles.commentForm} name='review-test-form' onSubmit={handleSubmit}>
       {hasRateBlock && <RateBlock />}
       {children}
       <div className={styles.reviewBlock}>

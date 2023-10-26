@@ -4,14 +4,14 @@ import { formatDate } from '../../../../reusable/functions'
 import { AppRoute } from '../../../../reusable/const'
 import { AvatarBlock } from '../../../avatar-block/avatar-block'
 import { FC } from 'react'
-import { Comment } from '../../../../types/Comment'
+import { Comment } from '@/types/Feedback'
 
 interface Props {
   commentItem: Comment
 }
 
 export const CommentTile: FC<Props> = ({ commentItem }) => {
-  const { userName, content, date, userID, userAvatar } = commentItem
+  const { userName, commentContent, commentDate, userID, userAvatar } = commentItem
 
   return (
     <div className={styles.comment}>
@@ -21,9 +21,9 @@ export const CommentTile: FC<Props> = ({ commentItem }) => {
           <Link href={`${AppRoute.Profile}/${userID}`} className={styles.name}>
             {userName}
           </Link>
-          <span className={styles.date}>{formatDate(date)}</span>
+          <span className={styles.date}>{formatDate(new Date(commentDate))}</span>
         </div>
-        <p className={styles.comment__text}>{content}</p>
+        <p className={styles.comment__text}>{commentContent}</p>
       </div>
     </div>
   )

@@ -9,6 +9,8 @@ export type KnownAnswer = Answer & {
   isCorrect: boolean
 }
 
+export type LikeState = 'like' | 'dislike' | 'none'
+
 export type Question = {
   questionID: number
   testID: Test['testID']
@@ -17,6 +19,9 @@ export type Question = {
   questionType: 'Single choice'
   answerList: Record<number, Answer>
   answerOrder: number[]
+  likesCount: number
+  dislikesCount: number
+  likeState: LikeState
   questionState?: QuestionState
 }
 

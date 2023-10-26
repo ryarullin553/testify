@@ -13,4 +13,10 @@ export interface Comment {
   userAvatar: string
   commentContent: string
   commentDate: string
+  childCommentOrder: Comment['commentID'][]
+}
+
+export interface CommentCatalog {
+  commentList: Record<number, Comment>
+  commentOrder: Comment['commentID'][]
 }
