@@ -11,12 +11,12 @@ interface Props {
 }
 
 export const ReviewTile: FC<Props> = ({ reviewItem }) => {
-  const { reviewID, userName, reviewContent, reviewDate, reviewRating, userID } = reviewItem
+  const { userName, reviewContent, reviewDate, reviewRating, userID } = reviewItem
 
   return (
     <div className={styles.review}>
       <div className={styles.review__stars}>
-        <FeedbackStars width={87} height={15} rating={reviewRating} fill={'#FFFFFF'} id={`review-${reviewID}`} />
+        <FeedbackStars width={87} height={15} rating={reviewRating} fill={'#FFFFFF'} id={`review-${userID}`} />
       </div>
       <p className={styles.review__text}>{reviewContent}</p>
       <div className={styles.review__info}>

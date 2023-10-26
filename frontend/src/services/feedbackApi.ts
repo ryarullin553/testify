@@ -6,7 +6,7 @@ type ReviewResponse = {
   user_id: string
   user_name: string
   content: string
-  date: string
+  created: string
   rate: number
 }
 
@@ -90,7 +90,7 @@ const transformReviewResponse = (r: ReviewResponse): TestReview => ({
   userID: r.user_id,
   reviewContent: r.content,
   reviewRating: r.rate,
-  reviewDate: r.date,
+  reviewDate: r.created,
 })
 
 export const feedbackApi = api.injectEndpoints({
