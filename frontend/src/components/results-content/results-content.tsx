@@ -21,11 +21,11 @@ export const ResultsContent: FC = () => {
 
   if (!attemptData) return <Spinner />
 
-  const { testID, testTitle, questionList, questionOrder, attemptResult, selectedAnswers } = attemptData
+  const { testID, testTitle, questionList, questionOrder, attemptResult, submittedAnswers } = attemptData
 
   const currentQuestionID = questionOrder[currentQuestionIndex]
   const currentQuestionData = questionList[currentQuestionID]
-  const currentSelectedAnswers = selectedAnswers[currentQuestionID]
+  const currentSelectedAnswers = submittedAnswers[currentQuestionID]
 
   const gotoNextQuestion = () => setCurrentQuestionIndex((prevVal) => Math.min(prevVal + 1, questionOrder.length - 1))
 
@@ -55,7 +55,7 @@ export const ResultsContent: FC = () => {
           isTogglable={false}
           attemptID={attemptID}
           gotoNextQuestion={gotoNextQuestion}
-          selectedAnswers={currentSelectedAnswers}
+          submittedAnswers={currentSelectedAnswers}
         />
       )}
     </>

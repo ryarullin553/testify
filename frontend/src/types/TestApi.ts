@@ -168,7 +168,7 @@ export const transformAttemptResponse = (r: AttemptResponse) => ({
   questionOrder: r.test_data?.questions.map((x) => x.id),
   isComplete: Boolean(r.result),
   attemptResult: r.result ? transformAttemptResult(r.result) : null,
-  selectedAnswers: r.answers?.reduce((acc: Record<number, number[]>, x) => {
+  submittedAnswers: r.answers?.reduce((acc: Record<number, number[]>, x) => {
     acc[x.question] = x.content.map(Number)
     return acc
   }, {}),

@@ -13,6 +13,7 @@ interface Props extends PropsWithChildren {
   view?: View
   widthMax?: boolean
   colorTheme?: ColorTheme
+  disabled?: boolean
 }
 
 export const Button: FC<Props> = ({
@@ -23,11 +24,13 @@ export const Button: FC<Props> = ({
   view = 'normal',
   colorTheme = 'default',
   widthMax,
+  disabled,
 }) => {
   return (
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={classNames(
         styles.innerStyle,
         styles[view],

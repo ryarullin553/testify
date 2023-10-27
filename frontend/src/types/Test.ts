@@ -11,6 +11,14 @@ export type KnownAnswer = Answer & {
 
 export type LikeState = 'like' | 'dislike' | 'none'
 
+export const enum QuestionStates {
+  Pending,
+  Changed,
+  Submitted,
+  Correct,
+  Incorrect,
+}
+
 export type Question = {
   questionID: number
   testID: Test['testID']
@@ -22,7 +30,6 @@ export type Question = {
   likesCount: number
   dislikesCount: number
   likeState: LikeState
-  questionState?: QuestionState
 }
 
 export type QuestionWithCorrectAnswer = Question & {
@@ -96,17 +103,9 @@ export type Attempt = TestWithQuestions & {
   attemptID: number
   isComplete: boolean
   attemptResult: AttemptResult
-  selectedAnswers: Record<Question['questionID'], number[]>
+  submittedAnswers: Record<Question['questionID'], number[]>
 }
 
 export type FinishedAttempt = Attempt & {
   attemptResult: AttemptResult
-}
-
-export enum QuestionState {
-  NoAnswer = 'noAnswer',
-  PendingAnswer = 'pendingAnswer',
-  Submitted = 'submitted',
-  Correct = 'correct',
-  Incorrect = 'incorrect',
 }

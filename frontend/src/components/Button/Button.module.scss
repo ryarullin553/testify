@@ -7,7 +7,11 @@
     color 200ms ease-in-out,
     transform 50ms;
 
-  &:active {
+  &:disabled {
+    cursor: default;
+  }
+
+  &:active:not(:disabled) {
     transform: scale(0.95);
   }
 }
@@ -26,8 +30,13 @@
   background-color: var(--color-primary);
   color: var(--color-background);
 
-  &:hover,
-  &:active {
+  &:disabled {
+    background-color: var(--color-disabled);
+    border-color: var(--color-disabled);
+  }
+
+  &:hover:not(:disabled),
+  &:active:not(:disabled) {
     background-color: var(--color-background);
 
     color: var(--color-primary);

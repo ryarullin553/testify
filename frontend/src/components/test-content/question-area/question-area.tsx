@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, FormEvent, MutableRefObject, PropsWithChildren } from 'react'
 import { CommentsBlock } from '../../comment-block/comment-block'
 import styles from './question-area.module.scss'
-import { Answer, Attempt, Question, QuestionState } from '../../../types/Test'
+import { Answer, Attempt, Question } from '../../../types/Test'
 import { SubmitAnswerArgs, useSubmitAnswerMutation } from '@/services/testCompletionApi'
 
 interface Props extends PropsWithChildren {
@@ -9,7 +9,8 @@ interface Props extends PropsWithChildren {
   questionIndex: number
   attemptID: Attempt['attemptID']
   selectedAnswers: number[]
-  gotoNextQuestion: () => void
+  changeLocalAnswer: (newValue: number) => void
+  submitAnswerAction: (submitAnswerArgs: SubmitAnswerArgs) => void
   isTogglable?: boolean
 }
 
@@ -19,11 +20,16 @@ export const QuestionArea: FC<Props> = ({
   questionData,
   selectedAnswers,
   questionIndex,
-  gotoNextQuestion,
+  changeLocalAnswer,
+  submitAnswerAction,
   isTogglable,
 }) => {
   const { testID, answerList, answerOrder, questionID, questionDescription } = questionData
-  const [submitAnswer] = useSubmitAnswerMutation()
+
+  const handleChange = (evt: FormEvent<HTMLInputElement>) => {
+    const newValue = Number(evt.currentTarget.value)
+    changeLocalAnswer(newValue)
+  }
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
@@ -32,10 +38,9 @@ export const QuestionArea: FC<Props> = ({
       attemptID,
       testID,
       questionID,
-      selectedAnswers: [Number(formData.get('selectedAnswer'))],
+      submittedAnswers: [Number(formData.get('selectedAnswer'))],
     }
-    await submitAnswer(submitAnswerArgs)
-    gotoNextQuestion()
+    submitAnswerAction(submitAnswerArgs)
   }
 
   return (
@@ -56,6 +61,7 @@ export const QuestionArea: FC<Props> = ({
                     name='selectedAnswer'
                     value={answerID}
                     defaultChecked={selectedAnswers?.includes(answerID) || false}
+                    onChange={handleChange}
                     disabled={!isTogglable}
                   />
                   <label htmlFor={`selectAnswer-${answerID}`}>{answerDescription}</label>
