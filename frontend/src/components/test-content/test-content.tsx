@@ -60,6 +60,7 @@ export const TestContent = () => {
   const currentSubmittedAnswers = submittedAnswers[currentQuestionID]
   const currentLocalAnswers = attemptState.localAnswers[currentQuestionID]
   const hasAnswerChanged = questionStates[currentQuestionID] === QuestionStates.Changed
+  const isTestComplete = !Boolean(questionOrder.find((x) => questionStates[x] !== QuestionStates.Submitted))
 
   const selectedAnswers = currentLocalAnswers ?? currentSubmittedAnswers
 
@@ -74,7 +75,13 @@ export const TestContent = () => {
     })
   }
 
-  const gotoNextQuestion = () => setCurrentQuestionIndex((prevVal) => Math.min(prevVal + 1, questionOrder.length - 1))
+  const gotoNextQuestion = () =>
+    setCurrentQuestionIndex((prevVal) => {
+      const relativeOrder = questionOrder.slice(prevVal + 1).concat(questionOrder.slice(0, prevVal + 1))
+      const nextID = relativeOrder.find((x) => questionStates[x] !== QuestionStates.Submitted) ?? currentQuestionID
+      const nextIndex = questionOrder.findIndex((x) => x === relativeOrder.find((y) => y === nextID))
+      return nextIndex
+    })
 
   const submitAnswerAction = async (submitAnswerArgs: SubmitAnswerArgs) => {
     await submitAnswer(submitAnswerArgs)
@@ -89,9 +96,10 @@ export const TestContent = () => {
       })
   }
 
-  const handleFinishAttemptClick = async () => {
+  const finishAttemptAction = async () => {
     await finishAttempt(attemptID)
-    router.push(`${AppRoute.Results}/${attemptID}`)
+      .unwrap()
+      .then(() => router.push(`${AppRoute.Results}/${attemptID}`))
   }
 
   return (
@@ -102,7 +110,7 @@ export const TestContent = () => {
         setCurrentQuestionIndex={setCurrentQuestionIndex}
         questionOrder={questionOrder}
         questionStates={questionStates}>
-        <Button view={'sidebar'} onClick={handleFinishAttemptClick}>
+        <Button view={'sidebar'} onClick={finishAttemptAction}>
           Завершить тест
         </Button>
       </QuestionListSidebar>
@@ -115,7 +123,12 @@ export const TestContent = () => {
         changeLocalAnswer={changeLocalAnswer}
         submitAnswerAction={submitAnswerAction}
         isTogglable>
-        <QuestionControls gotoNextQuestion={gotoNextQuestion} hasAnswerChanged={hasAnswerChanged} />
+        <QuestionControls
+          gotoNextQuestion={gotoNextQuestion}
+          isTestComplete={isTestComplete}
+          finishAttemptAction={finishAttemptAction}
+          hasAnswerChanged={hasAnswerChanged}
+        />
       </QuestionArea>
     </>
   )
