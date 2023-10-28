@@ -4,7 +4,7 @@ from .models import Feedback
 
 class FeedbackSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    user_name = serializers.CharField(read_only=True)
+    user_name = serializers.CharField(read_only=True, source='user.username')
 
     class Meta:
         model = Feedback
