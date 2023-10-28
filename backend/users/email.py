@@ -3,6 +3,8 @@ from templated_mail.mail import BaseEmailMessage
 from djoser import utils
 from djoser.conf import settings
 
+from config.settings import ALLOWED_HOSTS
+
 
 class ActivationEmail(BaseEmailMessage):
     template_name = "email/activation.html"
@@ -14,7 +16,7 @@ class ActivationEmail(BaseEmailMessage):
         context["uid"] = utils.encode_uid(user.pk)
         context["token"] = default_token_generator.make_token(user)
         context["url"] = settings.ACTIVATION_URL.format(**context)
-        context["domain"] = '127.0.0.1:3000'
+        context["domain"] = ALLOWED_HOSTS[0]
         return context
 
 
