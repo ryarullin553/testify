@@ -24,7 +24,6 @@
 
   outline: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  cursor: pointer;
 
   transition: all 0.2s ease-in-out;
 
@@ -40,6 +39,10 @@
     line-height: 19px;
     color: #000000;
   }
+}
+
+.clickableWrapper {
+  cursor: pointer;
 }
 
 .buttonMore {

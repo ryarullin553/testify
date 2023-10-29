@@ -14,6 +14,7 @@ export const enum AppRoute {
   Results = '/results',
   Catalog = '/catalog',
   TestDescription = '/test-description',
+  TestStats = '/stats',
 }
 
 export const TIMEOUT_SHOW_ERROR = 5000
