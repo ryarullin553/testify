@@ -80,11 +80,24 @@
   background-color: var(--color-primary);
   color: var(--color-background);
 
-  &:hover,
-  &:active {
+  &:disabled {
+    background-color: var(--color-disabled);
+  }
+
+  &:is(:hover, :active):not(:disabled) {
     background-color: var(--color-background);
 
     color: var(--color-secondary);
+  }
+}
+
+.flat {
+  display: flex;
+  align-items: center;
+  color: var(--color-disabled);
+
+  &:is(:hover, :active):not(:disabled) {
+    color: var(--color-primary);
   }
 }
 

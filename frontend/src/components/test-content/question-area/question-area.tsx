@@ -9,8 +9,8 @@ interface Props extends PropsWithChildren {
   questionIndex: number
   attemptID: Attempt['attemptID']
   selectedAnswers: number[]
-  changeLocalAnswer: (newValue: number) => void
-  submitAnswerAction: (submitAnswerArgs: SubmitAnswerArgs) => void
+  changeLocalAnswer?: (newValue: number) => void
+  submitAnswerAction?: (submitAnswerArgs: SubmitAnswerArgs) => void
   isTogglable?: boolean
 }
 
@@ -28,7 +28,7 @@ export const QuestionArea: FC<Props> = ({
 
   const handleChange = (evt: FormEvent<HTMLInputElement>) => {
     const newValue = Number(evt.currentTarget.value)
-    changeLocalAnswer(newValue)
+    changeLocalAnswer!(newValue)
   }
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
@@ -40,7 +40,7 @@ export const QuestionArea: FC<Props> = ({
       questionID,
       submittedAnswers: [Number(formData.get('selectedAnswer'))],
     }
-    submitAnswerAction(submitAnswerArgs)
+    submitAnswerAction!(submitAnswerArgs)
   }
 
   return (

@@ -1,13 +1,10 @@
 import { QuestionInputArea } from '../question-input-area/question-input-area'
 import { AnswersInputArea } from '../answers-input-area/answers-input-area'
 import styles from './create-question-manager.module.scss'
+import TrashIcon from './img/trash_icon.svg'
 import { FC, useState, FormEvent } from 'react'
 import { KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
-import {
-  useCreateQuestionMutation,
-  useDeleteQuestionMutation,
-  useUpdateQuestionMutation,
-} from '@/services/testCreationApi'
+import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services/testCreationApi'
 import { Button } from '@/components/Button/Button'
 
 interface Props {
@@ -17,6 +14,7 @@ interface Props {
   handleQuestionDelete: () => void
   currentQuestionID: Question['questionID']
   currentQuestionIndex: number
+  hasQuestionSubmitted: boolean
 }
 
 export const CreateQuestionManager: FC<Props> = ({
@@ -26,6 +24,7 @@ export const CreateQuestionManager: FC<Props> = ({
   handleQuestionDelete,
   currentQuestionID,
   currentQuestionIndex,
+  hasQuestionSubmitted,
 }) => {
   const { questionID, answerOrder, questionDescription } = questionData
   const [answerOrderState, setAnswerOrderState] = useState([...answerOrder])
@@ -135,8 +134,13 @@ export const CreateQuestionManager: FC<Props> = ({
           />
         </fieldset> */}
         <div className={styles.questionControls}>
-          <Button type={'button'} onClick={handleQuestionDelete} outerStyles={styles.questionControlsButton}>
-            Удалить вопрос
+          <Button
+            type={'button'}
+            view={'flat'}
+            onClick={handleQuestionDelete}
+            outerStyles={styles.questionControlsButton}
+            disabled={hasQuestionSubmitted}>
+            <TrashIcon />
           </Button>
           <Button type={'submit'} outerStyles={styles.questionControlsButton}>
             Сохранить вопрос

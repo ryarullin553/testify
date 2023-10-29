@@ -27,8 +27,6 @@ export const ResultsContent: FC = () => {
   const currentQuestionData = questionList[currentQuestionID]
   const currentSelectedAnswers = submittedAnswers[currentQuestionID]
 
-  const gotoNextQuestion = () => setCurrentQuestionIndex((prevVal) => Math.min(prevVal + 1, questionOrder.length - 1))
-
   return (
     <>
       <QuestionListSidebar
@@ -54,8 +52,7 @@ export const ResultsContent: FC = () => {
           questionIndex={currentQuestionIndex}
           isTogglable={false}
           attemptID={attemptID}
-          gotoNextQuestion={gotoNextQuestion}
-          submittedAnswers={currentSelectedAnswers}
+          selectedAnswers={currentSelectedAnswers}
         />
       )}
     </>

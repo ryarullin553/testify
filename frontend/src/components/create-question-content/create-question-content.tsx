@@ -55,6 +55,7 @@ export const CreateQuestionContent: FC = () => {
     _questionOrder.push(-1)
   }
 
+  const hasQuestionSubmitted = questionOrder.length > 0
   const currentQuestionID = _questionOrder[currentQuestionIndex]
   const currentQuestionData = _questionList[currentQuestionID]
 
@@ -65,7 +66,7 @@ export const CreateQuestionContent: FC = () => {
 
   const handleQuestionDelete = () => {
     const questionID = currentQuestionID
-    setCurrentQuestionIndex(Math.min(questionOrder.length - 2, currentQuestionIndex))
+    setCurrentQuestionIndex(Math.max(0, Math.min(_questionOrder.length - 2, currentQuestionIndex)))
     if (questionID === -1) {
       setNewQuestionData(null)
     } else {
@@ -86,7 +87,12 @@ export const CreateQuestionContent: FC = () => {
           </Button>
         )}
         {!isPublished && (
-          <Button key={2} outerStyles={styles.sidebarButton} view={'sidebar'} onClick={() => publishTest(testID)}>
+          <Button
+            key={2}
+            outerStyles={styles.sidebarButton}
+            view={'sidebar'}
+            onClick={() => publishTest(testID)}
+            disabled={!hasQuestionSubmitted}>
             Опубликовать тест
           </Button>
         )}
@@ -99,6 +105,7 @@ export const CreateQuestionContent: FC = () => {
         questionData={currentQuestionData}
         addNewQuestion={addNewQuestion}
         handleQuestionDelete={handleQuestionDelete}
+        hasQuestionSubmitted={!hasQuestionSubmitted}
       />
     </>
   )

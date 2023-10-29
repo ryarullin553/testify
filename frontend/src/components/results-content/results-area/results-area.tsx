@@ -17,7 +17,7 @@ export const ResultsArea: FC<Props> = ({ testTitle, results }) => {
       <h1>
         Поздравляем!
         <br />
-        Вы завершили прохождение теста {testTitle}.
+        Вы завершили прохождение теста «{testTitle}».
       </h1>
       <div className={styles.resultContainer}>
         <div className={styles.allResults}>
