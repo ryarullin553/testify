@@ -6,17 +6,17 @@ from .managers import QuestionManager
 
 class Question(models.Model):
     QUESTION_TYPES = [
-        ('Single choice', 'Одиночный выбор'),
-        ('Multiple choice', 'Множественный выбор'),
-        ('Text input', 'Ввод текста'),
-        ('Matching', 'Установление соответствий'),
-        ('Sequencing', 'Установление последовательности')
+        ('SINGLE CHOICE', 'Одиночный выбор'),
+        ('MULTIPLE CHOICE', 'Множественный выбор'),
+        ('TEXT INPUT', 'Ввод текста'),
+        ('MATCHING', 'Установление соответствий'),
+        ('SEQUENCING', 'Установление последовательности')
     ]
     type = models.CharField(
         verbose_name='Тип',
         max_length=30,
         choices=QUESTION_TYPES,
-        default='Single choice'
+        default='SINGLE CHOICE'
     )
     content = models.TextField(
         verbose_name='Содержание'
