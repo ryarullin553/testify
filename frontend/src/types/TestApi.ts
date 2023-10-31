@@ -149,9 +149,9 @@ export const transformAttemptResult = (r: ResultResponse) => ({
   attemptScore: r.score,
   attemptTime: r.passage_time,
   finishDate: r.finished_time,
-  questionAmount: r.questions_count,
-  answerAmount: r.answers_count,
-  correctAnswerAmount: r.correct_answers_count,
+  questionCount: r.questions_count,
+  answerCount: r.answers_count,
+  correctAnswerCount: r.correct_answers_count,
 })
 
 export const transformAttemptResponse = (r: AttemptResponse) => ({

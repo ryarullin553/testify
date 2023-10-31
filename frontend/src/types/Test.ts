@@ -94,9 +94,9 @@ export type AttemptResult = {
   attemptScore: number
   attemptTime: string
   finishDate: string
-  questionAmount: number
-  answerAmount: number
-  correctAnswerAmount: number
+  questionCount: number
+  answerCount: number
+  correctAnswerCount: number
 }
 
 export type Attempt = TestWithQuestions & {
@@ -106,6 +106,24 @@ export type Attempt = TestWithQuestions & {
   submittedAnswers: Record<Question['questionID'], number[]>
 }
 
+export type Completion = AttemptResult & {
+  attemptID: number
+  userID: string
+  userName: string
+  userAvatar: string | null
+  codeword: string
+}
+
 export type FinishedAttempt = Attempt & {
   attemptResult: AttemptResult
+}
+
+export type TestStats = Test & {
+  createDate: string
+  avgScore: number
+  avgAnswers: number
+  avgCorrectAnswers: number
+  reviewsCount: number
+  completionsCount: number
+  testRating: number
 }
