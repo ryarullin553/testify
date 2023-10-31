@@ -50,6 +50,9 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
     { label: 'Пояснения к вопросам', id: 'hasQuestionsExplanation' },
   ]
 
+  const placeholder =
+    'Все, что важно знать до начала прохождения теста. Расскажите о:\n\n• цели теста,\n• почему стоит его пройти,\n• какие у него особенности,\n• какие будут вопросы,\n• что можно получить после его прохождения.'
+
   const pageTitle = isNewTest ? 'Создать новый тест' : 'Редактировать описание теста'
   const buttonLabel = isNewTest ? 'Создать тест' : 'Сохранить'
 
@@ -85,12 +88,7 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
           id='testDescription'
           name='testDescription'
           defaultValue={testDescription}
-          placeholder='Все, что важно знать до начала прохождения теста. Расскажите о:
-            • цели теста,
-            • почему стоит его пройти,
-            • какие у него особенности,
-            • какие будут вопросы,
-            • что можно получить после его прохождения.'
+          placeholder={placeholder}
         />
       </fieldset>
       <div className={styles.testOptionsLogo}>
