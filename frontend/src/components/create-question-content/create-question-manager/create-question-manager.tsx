@@ -6,6 +6,7 @@ import { FC, useState, FormEvent } from 'react'
 import { KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services/testCreationApi'
 import { Button } from '@/components/Button/Button'
+import { Select, SelectOption } from '@/components/Select/Select'
 
 interface Props {
   testID: Test['testID']
@@ -26,11 +27,16 @@ export const CreateQuestionManager: FC<Props> = ({
   currentQuestionIndex,
   hasQuestionSubmitted,
 }) => {
-  const { questionID, answerOrder, questionDescription } = questionData
+  const { questionID, answerOrder, questionDescription, questionType } = questionData
   const [answerOrderState, setAnswerOrderState] = useState([...answerOrder])
+  const [questionTypeState, setQuestionTypeState] = useState(questionType)
   const [createQuestion] = useCreateQuestionMutation()
   const [updateQuestion] = useUpdateQuestionMutation()
   // const [generateAmount, setGenerateAmount] = useState(1)
+  const options: SelectOption[] = [
+    { value: '1', label: 'a' },
+    { value: '2', label: 'b' },
+  ]
 
   const actionAnswerDelete = (answerID: number) => {
     setAnswerOrderState((prevState) => {
@@ -110,6 +116,7 @@ export const CreateQuestionManager: FC<Props> = ({
   return (
     <form className={styles.questionForm} action='#' name='question-form' onSubmit={handleFormSubmit}>
       <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
+      <Select options={options} currentValue='' handleSelect={() => {}} />
       <AnswersInputArea
         testID={testID}
         questionID={questionID}
@@ -138,11 +145,11 @@ export const CreateQuestionManager: FC<Props> = ({
             type={'button'}
             view={'flat'}
             onClick={handleQuestionDelete}
-            outerStyles={styles.questionControlsButton}
+            outerStyles={styles.deleteButton}
             disabled={hasQuestionSubmitted}>
             <TrashIcon />
           </Button>
-          <Button type={'submit'} outerStyles={styles.questionControlsButton}>
+          <Button type={'submit'} outerStyles={styles.saveButton}>
             Сохранить вопрос
           </Button>
         </div>

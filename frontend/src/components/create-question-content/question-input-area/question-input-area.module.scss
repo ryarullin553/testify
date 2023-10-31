@@ -1,20 +1,13 @@
 .questionArea {
+  display: flex;
   margin-bottom: 26px;
-
-  label {
-    display: block;
-    margin-bottom: 10px;
-
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    color: #222222;
-  }
+  gap: 25px;
 
   textarea {
     box-sizing: border-box;
-    width: 100%;
-    min-height: 160px;
+    width: 678px;
+    min-height: 33px;
+    height: 33px;
     resize: vertical;
     padding: 7px 10px;
 
@@ -34,6 +27,28 @@
       font-size: 14px;
       line-height: 17px;
       color: #a5a5a5;
+    }
+  }
+
+  .imageInput {
+    display: block;
+    color: var(--color-grey);
+    height: 33px;
+    width: 33px;
+    cursor: pointer;
+    transition: color 200ms ease-in-out;
+
+    input[type='file'] {
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+      display: block;
+      width: 0;
+      height: 0;
+    }
+
+    &:is(:hover, :active) {
+      color: var(--color-primary);
     }
   }
 }

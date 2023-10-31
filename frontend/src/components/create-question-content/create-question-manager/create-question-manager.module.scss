@@ -60,7 +60,15 @@
 .questionControls {
   display: flex;
 
-  .questionControlsButton {
-    margin-left: 30px;
+  .saveButton {
+    margin-left: 35px;
+  }
+
+  .deleteButton {
+    margin-left: 25px;
+
+    &:is(:hover, :active):not(:disabled) {
+      color: var(--color-red);
+    }
   }
 }
