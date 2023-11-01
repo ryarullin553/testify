@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren } from 'react'
 import { Question, QuestionStates, Test, TestWithQuestions } from '../../types/Test'
 import styles from './question-list-sidebar.module.scss'
+import classNames from 'classnames'
 
 interface Props extends PropsWithChildren {
   testTitle: Test['testTitle']
@@ -8,6 +9,7 @@ interface Props extends PropsWithChildren {
   questionOrder: TestWithQuestions['questionOrder']
   questionStates?: Record<Question['questionID'], QuestionStates>
   setCurrentQuestionIndex: (questionID: Question['questionID']) => void
+  currentQuestionIndex?: number
 }
 
 export const QuestionListSidebar: FC<Props> = ({
@@ -17,6 +19,7 @@ export const QuestionListSidebar: FC<Props> = ({
   setCurrentQuestionIndex,
   questionStates = {},
   children,
+  currentQuestionIndex,
 }) => {
   const getQuestionColor = (questionState?: QuestionStates) => {
     switch (questionState) {
@@ -38,7 +41,10 @@ export const QuestionListSidebar: FC<Props> = ({
       <h2>{testTitle}</h2>
       <ol>
         {questionOrder.map((x, i) => (
-          <li key={questionList[x].questionID} style={{ color: getQuestionColor(questionStates[x]) }}>
+          <li
+            key={questionList[x].questionID}
+            className={classNames(currentQuestionIndex === i && styles.active)}
+            style={{ color: getQuestionColor(questionStates[x]) }}>
             <button
               className={styles.selectQuestionButton}
               onClick={() => setCurrentQuestionIndex(i)}

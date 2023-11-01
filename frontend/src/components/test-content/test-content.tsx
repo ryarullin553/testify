@@ -109,7 +109,8 @@ export const TestContent = () => {
         questionList={questionList}
         setCurrentQuestionIndex={setCurrentQuestionIndex}
         questionOrder={questionOrder}
-        questionStates={questionStates}>
+        questionStates={questionStates}
+        currentQuestionIndex={currentQuestionIndex}>
         <Button view={'sidebar'} onClick={finishAttemptAction}>
           Завершить тест
         </Button>

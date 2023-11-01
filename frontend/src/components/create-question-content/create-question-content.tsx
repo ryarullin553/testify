@@ -80,7 +80,8 @@ export const CreateQuestionContent: FC = () => {
         testTitle={testTitle}
         questionList={_questionList}
         questionOrder={_questionOrder}
-        setCurrentQuestionIndex={setCurrentQuestionIndex}>
+        setCurrentQuestionIndex={setCurrentQuestionIndex}
+        currentQuestionIndex={currentQuestionIndex}>
         {!newQuestionData && (
           <Button key={1} outerStyles={styles.sidebarButton} view={'sidebar'} onClick={addNewQuestion}>
             Новый вопрос

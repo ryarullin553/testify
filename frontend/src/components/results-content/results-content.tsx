@@ -33,7 +33,8 @@ export const ResultsContent: FC = () => {
         testTitle={testTitle}
         questionList={questionList}
         questionOrder={questionOrder}
-        setCurrentQuestionIndex={setCurrentQuestionIndex}>
+        setCurrentQuestionIndex={setCurrentQuestionIndex}
+        currentQuestionIndex={currentQuestionIndex}>
         {currentQuestionIndex !== -1 && (
           <Button view={'sidebar'} type={'button'} onClick={() => setCurrentQuestionIndex(-1)}>
             К результатам
