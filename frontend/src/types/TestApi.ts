@@ -7,6 +7,7 @@ import {
   Attempt,
   TestWithDescription,
   KnownAnswer,
+  QuestionTypes,
 } from '@/types/Test'
 import { UserInfo } from './UserInfo'
 
@@ -51,7 +52,7 @@ export interface CreateQuestionProps {
   testID: Test['testID']
   questionDescription: string
   questionAvatar: string | null
-  questionType: 'Single choice'
+  questionType: keyof typeof QuestionTypes
   answerList: Record<number, KnownAnswer>
   answerOrder: number[]
 }
@@ -79,7 +80,7 @@ export type QuestionResponse = {
   test: number
   id: number
   has_like: boolean | null
-  type: 'Single choice'
+  type: keyof typeof QuestionTypes
   content: string
   answer_choices: AnswerResponse[]
   right_answers: string[]

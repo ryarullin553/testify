@@ -1,12 +1,4 @@
-import {
-  Test,
-  TestWithSettings,
-  TestWithQuestions,
-  Question,
-  QuestionWithCorrectAnswer,
-  TestWithCorrectAnswers,
-  TestWithDescription,
-} from '@/types/Test'
+import { Test, TestWithSettings, TestWithQuestions, Question, QuestionWithCorrectAnswer } from '@/types/Test'
 import { api } from './api'
 import {
   CreateTestProps,

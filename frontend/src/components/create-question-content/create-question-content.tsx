@@ -11,7 +11,7 @@ import {
   usePublishTestMutation,
 } from '@/services/testCreationApi'
 import { Spinner } from '../Spinner/Spinner'
-import { KnownAnswer, QuestionWithCorrectAnswer } from '@/types/Test'
+import { KnownAnswer, QuestionTypes, QuestionWithCorrectAnswer } from '@/types/Test'
 import { Button } from '../Button/Button'
 
 export const CreateQuestionContent: FC = () => {
@@ -31,7 +31,7 @@ export const CreateQuestionContent: FC = () => {
     testID,
     questionDescription: '',
     questionAvatar: null,
-    questionType: 'Single choice',
+    questionType: 'SINGLE_CHOICE',
     questionID: -1,
     answerList: {
       0: blankAnswer,
@@ -100,7 +100,7 @@ export const CreateQuestionContent: FC = () => {
       </QuestionListSidebar>
       <CreateQuestionManager
         key={currentQuestionID}
-        testID={Number(testID)}
+        testID={testID}
         currentQuestionID={currentQuestionID}
         currentQuestionIndex={currentQuestionIndex}
         questionData={currentQuestionData}

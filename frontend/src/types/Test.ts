@@ -32,7 +32,7 @@ export type Question = {
   testID: Test['testID']
   questionDescription: string
   questionAvatar: string | null
-  questionType: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'TEXT_INPUT' | 'MATCHING' | 'SEQUENCING'
+  questionType: keyof typeof QuestionTypes
   answerList: Record<number, Answer>
   answerOrder: number[]
   likesCount: number

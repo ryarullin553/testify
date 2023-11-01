@@ -7,6 +7,7 @@ import { KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../..
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services/testCreationApi'
 import { Button } from '@/components/Button/Button'
 import { Select } from '@/components/Select/Select'
+import { useGenerateAnswersMutation } from '@/services/generativeApi'
 
 interface Props {
   testID: Test['testID']
@@ -32,7 +33,7 @@ export const CreateQuestionManager: FC<Props> = ({
   const [questionTypeState, setQuestionTypeState] = useState(questionType)
   const [createQuestion] = useCreateQuestionMutation()
   const [updateQuestion] = useUpdateQuestionMutation()
-  // const [generateAmount, setGenerateAmount] = useState(1)
+  const [generateAnswers] = useGenerateAnswersMutation()
   const options = {
     SINGLE_CHOICE: 'Одиночный выбор',
     MULTIPLE_CHOICE: 'Множественный выбор',
@@ -80,7 +81,7 @@ export const CreateQuestionManager: FC<Props> = ({
       questionID,
       questionDescription: formData.get('questionDescription') as string,
       questionAvatar: null,
-      questionType: 'Single choice',
+      questionType: questionTypeState,
       answerOrder: answerOrderState,
       answerList: answerOrderState.reduce((acc: Record<number, KnownAnswer>, x) => {
         acc[x] = {
@@ -104,21 +105,15 @@ export const CreateQuestionManager: FC<Props> = ({
   //   setGenerateAmount(newValue)
   // }
 
-  // const handleGenerateAnswersClick = async (evt: MouseEvent<HTMLButtonElement>) => {
-  //   evt.preventDefault()
-  //   const { questionDescription, correctAnswerID, answerList } = currentQuestionData
-  //   const request = {
-  //     question: questionDescription,
-  //     right_answer: answerList[correctAnswerID || -1].answerDescription,
-  //     wrong_answers: answerList
-  //       .slice()
-  //       .map((a) => a.answerDescription)
-  //       .splice(correctAnswerID || -1, 1),
-  //     generate_count: generateAmount,
-  //   }
-  //   const { answer_set } = await generateAnswersAction(request)
-  //   answer_set.map((a: string) => actionAnswerAdd(a))
-  // }
+  const handleGenerateAnswersClick = async () => {
+    const request = {
+      questionDescription: 'Сколько рогов у коровы',
+      numberToGenerate: 3,
+      correctAnswers: ['0'],
+      answers: ['3', '1'],
+    }
+    generateAnswers(request)
+  }
 
   return (
     <form className={styles.questionForm} action='#' name='question-form' onSubmit={handleFormSubmit}>
@@ -136,19 +131,12 @@ export const CreateQuestionManager: FC<Props> = ({
         <Button type={'button'} colorTheme={'hoverDark'} outerStyles={styles.plusButton} onClick={handleAnswerAdd}>
           +
         </Button>
-        {/* <fieldset className={styles.generateAnswersForm}>
-          <button className={styles.generateAnswersButton} onClick={handleGenerateAnswersClick}>
+        <fieldset className={styles.generateAnswersForm}>
+          <button type={'button'} className={styles.generateAnswersButton} onClick={handleGenerateAnswersClick}>
             Сгенерировать варианты ответов
           </button>
-          <input
-            type='number'
-            min={1}
-            max={10}
-            id='generateAmount'
-            value={generateAmount}
-            onChange={handleGenerateAmountChange}
-          />
-        </fieldset> */}
+          <input type='number' min={1} max={10} id='generateAmount' value={2} />
+        </fieldset>
         <div className={styles.questionControls}>
           <Button
             type={'button'}
