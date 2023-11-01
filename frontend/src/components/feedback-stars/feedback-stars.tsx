@@ -5,7 +5,7 @@ interface Props {
   width: number
   height: number
   rating: number
-  fill: HEX
+  fill: string
   id: string
   additionalStyles?: string
 }

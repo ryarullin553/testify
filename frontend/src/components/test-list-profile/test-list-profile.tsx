@@ -1,29 +1,18 @@
 import { FC } from 'react'
 import { TestTileProfile } from './test-tile-profile/test-tile-profile'
-import { Test, TestWithAvatar } from '../../types/Test'
-import { LinkItem } from '../../types/LinkList'
+import { TestWithAvatar } from '../../types/Test'
 
 interface Props {
   testList: TestWithAvatar[]
-  linkList: (testID: Test['testID']) => LinkItem[]
   isEditable: boolean
-  isAttemptsAvailiable: boolean
 }
 
-export const TestListProfile: FC<Props> = ({ testList, linkList, isEditable, isAttemptsAvailiable }) => {
+export const TestListProfile: FC<Props> = ({ testList, isEditable }) => {
   return (
     <ul>
       {testList.map((testItem: TestWithAvatar) => {
         const { testID } = testItem
-        return (
-          <TestTileProfile
-            key={testID}
-            testItem={testItem}
-            linkList={linkList}
-            isEditable={isEditable}
-            isAttemptsAvailiable={isAttemptsAvailiable}
-          />
-        )
+        return <TestTileProfile key={testID} testItem={testItem} isEditable={isEditable} />
       })}
     </ul>
   )

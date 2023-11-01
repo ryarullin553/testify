@@ -1,20 +1,8 @@
 .testTileLinks {
   grid-area: controls;
-
   align-self: end;
-
   text-align: left;
 
-  a {
-    margin-right: 20px;
-
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    color: #4485ed;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  display: flex;
+  gap: 15px;
 }

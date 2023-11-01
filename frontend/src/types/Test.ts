@@ -11,18 +11,33 @@ export type KnownAnswer = Answer & {
 
 export type LikeState = 'like' | 'dislike' | 'none'
 
+export const enum QuestionStates {
+  Pending,
+  Changed,
+  Submitted,
+  Correct,
+  Incorrect,
+}
+
+export const enum QuestionTypes {
+  SINGLE_CHOICE = 'Одиночный выбор',
+  MULTIPLE_CHOICE = 'Множественный выбор',
+  TEXT_INPUT = 'Ввод текста',
+  MATCHING = 'Cоответствие',
+  SEQUENCING = 'Последовательность',
+}
+
 export type Question = {
   questionID: number
   testID: Test['testID']
   questionDescription: string
   questionAvatar: string | null
-  questionType: 'Single choice'
+  questionType: keyof typeof QuestionTypes
   answerList: Record<number, Answer>
   answerOrder: number[]
   likesCount: number
   dislikesCount: number
   likeState: LikeState
-  questionState?: QuestionState
 }
 
 export type QuestionWithCorrectAnswer = Question & {
@@ -87,26 +102,36 @@ export type AttemptResult = {
   attemptScore: number
   attemptTime: string
   finishDate: string
-  questionAmount: number
-  answerAmount: number
-  correctAnswerAmount: number
+  questionCount: number
+  answerCount: number
+  correctAnswerCount: number
 }
 
 export type Attempt = TestWithQuestions & {
   attemptID: number
   isComplete: boolean
   attemptResult: AttemptResult
-  selectedAnswers: Record<Question['questionID'], number[]>
+  submittedAnswers: Record<Question['questionID'], number[]>
+}
+
+export type Completion = AttemptResult & {
+  attemptID: number
+  userID: string
+  userName: string
+  userAvatar: string | null
+  codeword: string
 }
 
 export type FinishedAttempt = Attempt & {
   attemptResult: AttemptResult
 }
 
-export enum QuestionState {
-  NoAnswer = 'noAnswer',
-  PendingAnswer = 'pendingAnswer',
-  Submitted = 'submitted',
-  Correct = 'correct',
-  Incorrect = 'incorrect',
+export type TestStats = Test & {
+  createDate: string
+  avgScore: number
+  avgAnswers: number
+  avgCorrectAnswers: number
+  reviewsCount: number
+  completionsCount: number
+  testRating: number
 }

@@ -1,7 +1,13 @@
+.questionContainer {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 26px;
+}
+
 .questionForm {
   box-sizing: border-box;
   width: 992px;
-  padding: 0 21px;
+  padding-right: 21px;
 }
 
 .controls {
@@ -60,7 +66,15 @@
 .questionControls {
   display: flex;
 
-  .questionControlsButton {
-    margin-left: 30px;
+  .saveButton {
+    margin-left: 35px;
+  }
+
+  .deleteButton {
+    margin-left: 25px;
+
+    &:is(:hover, :active):not(:disabled) {
+      color: var(--color-red);
+    }
   }
 }

@@ -13,13 +13,13 @@ export type SubmitAnswerArgs = {
   attemptID: Attempt['attemptID']
   testID: Test['testID']
   questionID: Question['questionID']
-  selectedAnswers: number[]
+  submittedAnswers: number[]
 }
 
 const transformSubmitAnswerRequest = (r: SubmitAnswerArgs): SubmitAnswerRequest => ({
   passage: r.attemptID,
   question: r.questionID,
-  content: r.selectedAnswers.map(String),
+  content: r.submittedAnswers.map(String),
 })
 
 export const testCompletionApi = api.injectEndpoints({
@@ -77,12 +77,12 @@ export const testCompletionApi = api.injectEndpoints({
         method: 'POST',
         body: transformSubmitAnswerRequest(submitAnswerArgs),
       }),
-      onQueryStarted: async ({ testID, questionID, selectedAnswers }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ testID, questionID, submittedAnswers }, { dispatch, queryFulfilled }) => {
         try {
           await queryFulfilled
           dispatch(
             testCatalogApi.util.updateQueryData('getAttemptByID', testID, (draft) => {
-              draft.selectedAnswers[questionID] = selectedAnswers
+              draft.submittedAnswers[questionID] = submittedAnswers
             })
           )
         } catch {}

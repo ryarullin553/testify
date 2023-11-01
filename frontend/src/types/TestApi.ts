@@ -7,6 +7,7 @@ import {
   Attempt,
   TestWithDescription,
   KnownAnswer,
+  QuestionTypes,
 } from '@/types/Test'
 import { UserInfo } from './UserInfo'
 
@@ -51,7 +52,7 @@ export interface CreateQuestionProps {
   testID: Test['testID']
   questionDescription: string
   questionAvatar: string | null
-  questionType: 'Single choice'
+  questionType: keyof typeof QuestionTypes
   answerList: Record<number, KnownAnswer>
   answerOrder: number[]
 }
@@ -79,7 +80,7 @@ export type QuestionResponse = {
   test: number
   id: number
   has_like: boolean | null
-  type: 'Single choice'
+  type: keyof typeof QuestionTypes
   content: string
   answer_choices: AnswerResponse[]
   right_answers: string[]
@@ -149,9 +150,9 @@ export const transformAttemptResult = (r: ResultResponse) => ({
   attemptScore: r.score,
   attemptTime: r.passage_time,
   finishDate: r.finished_time,
-  questionAmount: r.questions_count,
-  answerAmount: r.answers_count,
-  correctAnswerAmount: r.correct_answers_count,
+  questionCount: r.questions_count,
+  answerCount: r.answers_count,
+  correctAnswerCount: r.correct_answers_count,
 })
 
 export const transformAttemptResponse = (r: AttemptResponse) => ({
@@ -168,7 +169,7 @@ export const transformAttemptResponse = (r: AttemptResponse) => ({
   questionOrder: r.test_data?.questions.map((x) => x.id),
   isComplete: Boolean(r.result),
   attemptResult: r.result ? transformAttemptResult(r.result) : null,
-  selectedAnswers: r.answers?.reduce((acc: Record<number, number[]>, x) => {
+  submittedAnswers: r.answers?.reduce((acc: Record<number, number[]>, x) => {
     acc[x.question] = x.content.map(Number)
     return acc
   }, {}),

@@ -6,9 +6,9 @@ from .managers import QuestionManager
 
 class Question(models.Model):
     QUESTION_TYPES = [
-        ('SINGLE CHOICE', 'Одиночный выбор'),
-        ('MULTIPLE CHOICE', 'Множественный выбор'),
-        ('TEXT INPUT', 'Ввод текста'),
+        ('SINGLE_CHOICE', 'Одиночный выбор'),
+        ('MULTIPLE_CHOICE', 'Множественный выбор'),
+        ('TEXT_INPUT', 'Ввод текста'),
         ('MATCHING', 'Установление соответствий'),
         ('SEQUENCING', 'Установление последовательности')
     ]
@@ -16,7 +16,7 @@ class Question(models.Model):
         verbose_name='Тип',
         max_length=30,
         choices=QUESTION_TYPES,
-        default='SINGLE CHOICE'
+        default='SINGLE_CHOICE'
     )
     content = models.TextField(
         verbose_name='Содержание'

@@ -1,5 +1,6 @@
 import { Question } from '@/types/Test'
 import styles from './question-input-area.module.scss'
+import PictureIcon from './img/picture-icon.svg'
 import { FC } from 'react'
 
 interface Props {
@@ -10,13 +11,16 @@ interface Props {
 export const QuestionInputArea: FC<Props> = ({ questionDescription, currentQuestionIndex }) => {
   return (
     <fieldset className={styles.questionArea}>
-      <label>{`Вопрос ${currentQuestionIndex + 1}`}</label>
       <textarea
         name={'questionDescription'}
         id={'questionDescription'}
-        placeholder={'Напишите ваш вопрос или условие задачи'}
+        placeholder={`Вопрос ${currentQuestionIndex + 1}`}
         defaultValue={questionDescription}
       />
+      <label className={styles.imageInput}>
+        <input type={'file'} />
+        <PictureIcon />
+      </label>
     </fieldset>
   )
 }

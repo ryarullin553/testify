@@ -1,14 +1,13 @@
 import { QuestionInputArea } from '../question-input-area/question-input-area'
 import { AnswersInputArea } from '../answers-input-area/answers-input-area'
 import styles from './create-question-manager.module.scss'
+import TrashIcon from './img/trash_icon.svg'
 import { FC, useState, FormEvent } from 'react'
 import { KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
-import {
-  useCreateQuestionMutation,
-  useDeleteQuestionMutation,
-  useUpdateQuestionMutation,
-} from '@/services/testCreationApi'
+import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services/testCreationApi'
 import { Button } from '@/components/Button/Button'
+import { Select } from '@/components/Select/Select'
+import { useGenerateAnswersMutation } from '@/services/generativeApi'
 
 interface Props {
   testID: Test['testID']
@@ -17,6 +16,7 @@ interface Props {
   handleQuestionDelete: () => void
   currentQuestionID: Question['questionID']
   currentQuestionIndex: number
+  hasQuestionSubmitted: boolean
 }
 
 export const CreateQuestionManager: FC<Props> = ({
@@ -26,12 +26,25 @@ export const CreateQuestionManager: FC<Props> = ({
   handleQuestionDelete,
   currentQuestionID,
   currentQuestionIndex,
+  hasQuestionSubmitted,
 }) => {
-  const { questionID, answerOrder, questionDescription } = questionData
+  const { questionID, answerOrder, questionDescription, questionType } = questionData
   const [answerOrderState, setAnswerOrderState] = useState([...answerOrder])
+  const [questionTypeState, setQuestionTypeState] = useState(questionType)
   const [createQuestion] = useCreateQuestionMutation()
   const [updateQuestion] = useUpdateQuestionMutation()
-  // const [generateAmount, setGenerateAmount] = useState(1)
+  const [generateAnswers] = useGenerateAnswersMutation()
+  const options = {
+    SINGLE_CHOICE: 'Одиночный выбор',
+    MULTIPLE_CHOICE: 'Множественный выбор',
+    // TEXT_INPUT: 'Ввод текста',
+    // MATCHING: 'Cоответствие',
+    // SEQUENCING: 'Последовательность',
+  }
+
+  const handleSelect = (newValue: Question['questionType']) => {
+    setQuestionTypeState(newValue)
+  }
 
   const actionAnswerDelete = (answerID: number) => {
     setAnswerOrderState((prevState) => {
@@ -68,7 +81,7 @@ export const CreateQuestionManager: FC<Props> = ({
       questionID,
       questionDescription: formData.get('questionDescription') as string,
       questionAvatar: null,
-      questionType: 'Single choice',
+      questionType: questionTypeState,
       answerOrder: answerOrderState,
       answerList: answerOrderState.reduce((acc: Record<number, KnownAnswer>, x) => {
         acc[x] = {
@@ -92,25 +105,22 @@ export const CreateQuestionManager: FC<Props> = ({
   //   setGenerateAmount(newValue)
   // }
 
-  // const handleGenerateAnswersClick = async (evt: MouseEvent<HTMLButtonElement>) => {
-  //   evt.preventDefault()
-  //   const { questionDescription, correctAnswerID, answerList } = currentQuestionData
-  //   const request = {
-  //     question: questionDescription,
-  //     right_answer: answerList[correctAnswerID || -1].answerDescription,
-  //     wrong_answers: answerList
-  //       .slice()
-  //       .map((a) => a.answerDescription)
-  //       .splice(correctAnswerID || -1, 1),
-  //     generate_count: generateAmount,
-  //   }
-  //   const { answer_set } = await generateAnswersAction(request)
-  //   answer_set.map((a: string) => actionAnswerAdd(a))
-  // }
+  const handleGenerateAnswersClick = async () => {
+    const request = {
+      questionDescription: 'Сколько рогов у коровы',
+      numberToGenerate: 3,
+      correctAnswers: ['0'],
+      answers: ['3', '1'],
+    }
+    generateAnswers(request)
+  }
 
   return (
     <form className={styles.questionForm} action='#' name='question-form' onSubmit={handleFormSubmit}>
-      <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
+      <div className={styles.questionContainer}>
+        <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
+        <Select options={options} currentValue={questionTypeState} handleSelect={handleSelect} />
+      </div>
       <AnswersInputArea
         testID={testID}
         questionID={questionID}
@@ -121,24 +131,22 @@ export const CreateQuestionManager: FC<Props> = ({
         <Button type={'button'} colorTheme={'hoverDark'} outerStyles={styles.plusButton} onClick={handleAnswerAdd}>
           +
         </Button>
-        {/* <fieldset className={styles.generateAnswersForm}>
-          <button className={styles.generateAnswersButton} onClick={handleGenerateAnswersClick}>
+        <fieldset className={styles.generateAnswersForm}>
+          <button type={'button'} className={styles.generateAnswersButton} onClick={handleGenerateAnswersClick}>
             Сгенерировать варианты ответов
           </button>
-          <input
-            type='number'
-            min={1}
-            max={10}
-            id='generateAmount'
-            value={generateAmount}
-            onChange={handleGenerateAmountChange}
-          />
-        </fieldset> */}
+          <input type='number' min={1} max={10} id='generateAmount' value={2} />
+        </fieldset>
         <div className={styles.questionControls}>
-          <Button type={'button'} onClick={handleQuestionDelete} outerStyles={styles.questionControlsButton}>
-            Удалить вопрос
+          <Button
+            type={'button'}
+            view={'flat'}
+            onClick={handleQuestionDelete}
+            outerStyles={styles.deleteButton}
+            disabled={hasQuestionSubmitted}>
+            <TrashIcon />
           </Button>
-          <Button type={'submit'} outerStyles={styles.questionControlsButton}>
+          <Button type={'submit'} outerStyles={styles.saveButton}>
             Сохранить вопрос
           </Button>
         </div>
