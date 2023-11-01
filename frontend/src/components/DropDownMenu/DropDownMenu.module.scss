@@ -1,26 +1,40 @@
 .userMenu {
   box-sizing: border-box;
+  z-index: 100;
 
   position: absolute;
-  top: 50px;
+  top: 100%;
   right: 0;
-  width: 150px;
-  height: 192px;
+  width: 100%;
 
-  background: #ffffff;
+  user-select: none;
+
+  background: var(--color-background);
   border: 1px solid #cccccc;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
 
-  animation: ld-float-ttb-in 0.5s 1 ease-in;
+  animation: ld-float-ttb-in 200ms 1 ease-in;
   animation-fill-mode: forwards;
   transform: matrix(1, 0, 0, 1, 0, -14.925);
   opacity: 0.005;
 
+  .selected {
+    background-color: var(--color-disabled);
+    .dropdownMenuButton {
+      color: var(--color-background);
+      cursor: auto;
+
+      &:hover {
+        color: var(--color-background);
+      }
+    }
+  }
+
   li {
-    margin-left: 14px;
-    margin-bottom: 10px;
-    margin-top: 8px;
+    padding-left: 14px;
+    padding-bottom: 10px;
+    padding-top: 8px;
   }
 
   .dropdownMenuButton {

@@ -6,7 +6,7 @@ import { FC, useState, FormEvent } from 'react'
 import { KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services/testCreationApi'
 import { Button } from '@/components/Button/Button'
-import { Select, SelectOption } from '@/components/Select/Select'
+import { Select } from '@/components/Select/Select'
 
 interface Props {
   testID: Test['testID']
@@ -33,10 +33,17 @@ export const CreateQuestionManager: FC<Props> = ({
   const [createQuestion] = useCreateQuestionMutation()
   const [updateQuestion] = useUpdateQuestionMutation()
   // const [generateAmount, setGenerateAmount] = useState(1)
-  const options: SelectOption[] = [
-    { value: '1', label: 'a' },
-    { value: '2', label: 'b' },
-  ]
+  const options = {
+    SINGLE_CHOICE: 'Одиночный выбор',
+    MULTIPLE_CHOICE: 'Множественный выбор',
+    // TEXT_INPUT: 'Ввод текста',
+    // MATCHING: 'Cоответствие',
+    // SEQUENCING: 'Последовательность',
+  }
+
+  const handleSelect = (newValue: Question['questionType']) => {
+    setQuestionTypeState(newValue)
+  }
 
   const actionAnswerDelete = (answerID: number) => {
     setAnswerOrderState((prevState) => {
@@ -115,8 +122,10 @@ export const CreateQuestionManager: FC<Props> = ({
 
   return (
     <form className={styles.questionForm} action='#' name='question-form' onSubmit={handleFormSubmit}>
-      <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
-      <Select options={options} currentValue='' handleSelect={() => {}} />
+      <div className={styles.questionContainer}>
+        <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
+        <Select options={options} currentValue={questionTypeState} handleSelect={handleSelect} />
+      </div>
       <AnswersInputArea
         testID={testID}
         questionID={questionID}

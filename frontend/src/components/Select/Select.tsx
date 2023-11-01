@@ -1,25 +1,45 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import styles from './Select.module.scss'
-
-export interface SelectOption {
-  value: string
-  label: string
-}
+import { DropDownMenu } from '../DropDownMenu/DropDownMenu'
+import classNames from 'classnames'
 
 interface Props {
-  options: SelectOption[]
+  options: Record<string, string>
   currentValue: string
   handleSelect: (newValue: string) => void
 }
 
 export const Select: FC<Props> = ({ options, currentValue, handleSelect }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const optionsArray = Object.entries(options).map(([id, label]) => ({ id, label }))
+
+  const closeMenu = () => {
+    setIsOpen(false)
+  }
+
+  const openMenu = () => {
+    setIsOpen(true)
+  }
+
   return (
-    <div className={styles.selectWrapper}>
+    <div className={classNames(styles.selectWrapper, isOpen && styles.active)} onClick={openMenu}>
       <select className={styles.selectInput}>
-        {options.map((x) => (
-          <option value={x.value}>{x.label}</option>
+        {optionsArray.map((x) => (
+          <option key={x.id} value={x.id}>
+            {x.label}
+          </option>
         ))}
       </select>
+      {options[currentValue]}
+      {isOpen && (
+        <DropDownMenu
+          closeMenu={closeMenu}
+          menuList={optionsArray}
+          selectHandler={handleSelect}
+          currentOption={currentValue}
+        />
+      )}
     </div>
   )
 }

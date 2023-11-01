@@ -19,12 +19,20 @@ export const enum QuestionStates {
   Incorrect,
 }
 
+export const enum QuestionTypes {
+  SINGLE_CHOICE = 'Одиночный выбор',
+  MULTIPLE_CHOICE = 'Множественный выбор',
+  TEXT_INPUT = 'Ввод текста',
+  MATCHING = 'Cоответствие',
+  SEQUENCING = 'Последовательность',
+}
+
 export type Question = {
   questionID: number
   testID: Test['testID']
   questionDescription: string
   questionAvatar: string | null
-  questionType: 'Single choice'
+  questionType: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'TEXT_INPUT' | 'MATCHING' | 'SEQUENCING'
   answerList: Record<number, Answer>
   answerOrder: number[]
   likesCount: number

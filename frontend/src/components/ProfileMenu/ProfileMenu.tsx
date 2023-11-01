@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { FC, useEffect, useRef, RefObject, MouseEvent } from 'react'
-import styles from './dropdown-menu.module.scss'
+import { FC, useEffect, useRef, RefObject } from 'react'
+import styles from './ProfileMenu.module.scss'
 import { AppRoute } from '../../reusable/const'
 import { useDispatch } from 'react-redux'
 import { userLoggedOut } from '@/store/authSlice'
@@ -11,7 +11,7 @@ interface Props {
   actionCloseMenu: () => void
 }
 
-export const DropdownMenu: FC<Props> = ({ actionCloseMenu }) => {
+export const ProfileMenu: FC<Props> = ({ actionCloseMenu }) => {
   const dispatch = useDispatch()
 
   const handleLogoutClick = async () => {
@@ -20,8 +20,6 @@ export const DropdownMenu: FC<Props> = ({ actionCloseMenu }) => {
     dispatch(api.util.resetApiState())
     actionCloseMenu()
   }
-
-  // Тут жесть, переделать
 
   const useOutsideHandler = (ref: RefObject<HTMLDivElement>) => {
     useEffect(() => {

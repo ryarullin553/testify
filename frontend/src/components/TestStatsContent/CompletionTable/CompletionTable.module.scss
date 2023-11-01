@@ -16,11 +16,11 @@
 
     td {
       &:first-of-type {
-        border-left: 1px solid var(--color-grey);
+        border-left: 1px solid var(--color-light-grey);
       }
 
       &:last-of-type {
-        border-right: 1px solid var(--color-grey);
+        border-right: 1px solid var(--color-light-grey);
       }
     }
 
@@ -42,7 +42,7 @@
     box-sizing: border-box;
     padding: 10px 20px;
     vertical-align: middle;
-    border-bottom: 1px solid var(--color-grey);
+    border-bottom: 1px solid var(--color-light-grey);
   }
 
   tbody {
@@ -56,16 +56,16 @@
     font-weight: 600;
 
     th {
-      border-top: 1px solid var(--color-grey);
+      border-top: 1px solid var(--color-light-grey);
 
       &:first-of-type {
         border-top-left-radius: 12px;
-        border-left: 1px solid var(--color-grey);
+        border-left: 1px solid var(--color-light-grey);
       }
 
       &:last-of-type {
         border-top-right-radius: 12px;
-        border-right: 1px solid var(--color-grey);
+        border-right: 1px solid var(--color-light-grey);
       }
     }
   }
