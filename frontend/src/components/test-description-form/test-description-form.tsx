@@ -103,7 +103,7 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
         <div className={styles.testOptions}>
           {toggles.map((x) => (
             <div className={styles.toggleWrapper}>
-              <ToggleSwitch label={x.label} id={x.id} />
+              <ToggleSwitch label={x.label} id={x.id} disabled />
             </div>
           ))}
         </div>
