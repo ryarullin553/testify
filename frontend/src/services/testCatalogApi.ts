@@ -1,7 +1,9 @@
 import {
   Attempt,
+  Completion,
   FinishedAttempt,
   Test,
+  TestStats,
   TestWithAvatar,
   TestWithDescription,
   TestWithDescriptionList,
@@ -9,8 +11,10 @@ import {
 import { api } from './api'
 import {
   AttemptResponse,
+  ResultResponse,
   TestResponse,
   transformAttemptResponse,
+  transformAttemptResult,
   transformTestListResponse,
   transformTestResponse,
 } from '@/types/TestApi'
@@ -42,6 +46,52 @@ type GetBookmarkedTestsQueryParams = {
 type AttemptListResponse = {
   results: AttemptResponse[]
 }
+
+export type CompletionResponse = {
+  id: number
+  user_id: string
+  user_name: string
+  user_image: string | null
+  result: ResultResponse
+  codeword: string
+}
+
+type CompletionListResponse = {
+  results: CompletionResponse[]
+}
+
+type TestStatsResponse = {
+  id: number
+  title: string
+  created: string
+  rating: number
+  feedbacks_count: number
+  results_count: number
+  avg_score: number
+  avg_answers_count: number
+  avg_correct_answers_count: number
+}
+
+export const transformCompletionResponse = (r: CompletionResponse): Completion => ({
+  attemptID: r.id,
+  userID: r.user_id,
+  userName: r.user_name,
+  userAvatar: r.user_image,
+  codeword: r.codeword,
+  ...transformAttemptResult(r.result),
+})
+
+export const transformStatsResponse = (r: TestStatsResponse): TestStats => ({
+  testID: r.id,
+  testTitle: r.title,
+  createDate: r.created,
+  avgScore: r.avg_score,
+  avgAnswers: r.avg_answers_count,
+  avgCorrectAnswers: r.avg_correct_answers_count,
+  reviewsCount: r.feedbacks_count,
+  completionsCount: r.results_count,
+  testRating: r.rating,
+})
 
 const updateIsFavoriteCache = (newState: boolean) => {
   return async (testID, { dispatch, queryFulfilled, getState }) => {
@@ -132,6 +182,14 @@ export const testCatalogApi = api.injectEndpoints({
       transformResponse: (r: AttemptResponse) => transformAttemptResponse(r) as FinishedAttempt,
       providesTags: ['Attempts'],
     }),
+    getStatsByTestID: builder.query<TestStats, Test['testID']>({
+      query: (testID) => `tests/${testID}/metrics/`,
+      transformResponse: transformStatsResponse,
+    }),
+    getTestCompletionsByID: builder.query<Completion[], Test['testID']>({
+      query: (testID) => `tests/${testID}/passages/`,
+      transformResponse: (r: CompletionListResponse) => r.results.map(transformCompletionResponse),
+    }),
   }),
 })
 
@@ -145,4 +203,6 @@ export const {
   useCreateTestBookmarkMutation,
   useRemoveTestBookmarkMutation,
   useGetAttemptByIDQuery,
+  useGetStatsByTestIDQuery,
+  useGetTestCompletionsByIDQuery,
 } = testCatalogApi

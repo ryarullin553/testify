@@ -10,22 +10,22 @@ interface Props {
 }
 
 export const ResultsArea: FC<Props> = ({ testTitle, results }) => {
-  const { correctAnswerAmount, answerAmount, questionAmount, attemptScore, attemptTime } = results
+  const { correctAnswerCount, answerCount, questionCount, attemptScore, attemptTime } = results
 
   return (
     <section className={styles.resultContent}>
       <h1>
         Поздравляем!
         <br />
-        Вы завершили прохождение теста {testTitle}.
+        Вы завершили прохождение теста «{testTitle}».
       </h1>
       <div className={styles.resultContainer}>
         <div className={styles.allResults}>
           <p>
-            Вы ответили на <span>{answerAmount}</span> вопросов из <span>{questionAmount}</span>
+            Вы ответили на <span>{answerCount}</span> вопросов из <span>{questionCount}</span>
           </p>
           <p>
-            Ответили верно на <span>{correctAnswerAmount}</span> вопросов
+            Ответили верно на <span>{correctAnswerCount}</span> вопросов
           </p>
           <p>
             Время прохождения теста: <span>{attemptTime}</span>

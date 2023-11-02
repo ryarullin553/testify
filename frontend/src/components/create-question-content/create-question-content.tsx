@@ -11,7 +11,7 @@ import {
   usePublishTestMutation,
 } from '@/services/testCreationApi'
 import { Spinner } from '../Spinner/Spinner'
-import { KnownAnswer, QuestionWithCorrectAnswer } from '@/types/Test'
+import { KnownAnswer, QuestionTypes, QuestionWithCorrectAnswer } from '@/types/Test'
 import { Button } from '../Button/Button'
 
 export const CreateQuestionContent: FC = () => {
@@ -31,7 +31,7 @@ export const CreateQuestionContent: FC = () => {
     testID,
     questionDescription: '',
     questionAvatar: null,
-    questionType: 'Single choice',
+    questionType: 'SINGLE_CHOICE',
     questionID: -1,
     answerList: {
       0: blankAnswer,
@@ -55,6 +55,7 @@ export const CreateQuestionContent: FC = () => {
     _questionOrder.push(-1)
   }
 
+  const hasQuestionSubmitted = questionOrder.length > 0
   const currentQuestionID = _questionOrder[currentQuestionIndex]
   const currentQuestionData = _questionList[currentQuestionID]
 
@@ -65,7 +66,7 @@ export const CreateQuestionContent: FC = () => {
 
   const handleQuestionDelete = () => {
     const questionID = currentQuestionID
-    setCurrentQuestionIndex(Math.min(questionOrder.length - 2, currentQuestionIndex))
+    setCurrentQuestionIndex(Math.max(0, Math.min(_questionOrder.length - 2, currentQuestionIndex)))
     if (questionID === -1) {
       setNewQuestionData(null)
     } else {
@@ -79,26 +80,33 @@ export const CreateQuestionContent: FC = () => {
         testTitle={testTitle}
         questionList={_questionList}
         questionOrder={_questionOrder}
-        setCurrentQuestionIndex={setCurrentQuestionIndex}>
+        setCurrentQuestionIndex={setCurrentQuestionIndex}
+        currentQuestionIndex={currentQuestionIndex}>
         {!newQuestionData && (
           <Button key={1} outerStyles={styles.sidebarButton} view={'sidebar'} onClick={addNewQuestion}>
             Новый вопрос
           </Button>
         )}
         {!isPublished && (
-          <Button key={2} outerStyles={styles.sidebarButton} view={'sidebar'} onClick={() => publishTest(testID)}>
+          <Button
+            key={2}
+            outerStyles={styles.sidebarButton}
+            view={'sidebar'}
+            onClick={() => publishTest(testID)}
+            disabled={!hasQuestionSubmitted}>
             Опубликовать тест
           </Button>
         )}
       </QuestionListSidebar>
       <CreateQuestionManager
         key={currentQuestionID}
-        testID={Number(testID)}
+        testID={testID}
         currentQuestionID={currentQuestionID}
         currentQuestionIndex={currentQuestionIndex}
         questionData={currentQuestionData}
         addNewQuestion={addNewQuestion}
         handleQuestionDelete={handleQuestionDelete}
+        hasQuestionSubmitted={!hasQuestionSubmitted}
       />
     </>
   )

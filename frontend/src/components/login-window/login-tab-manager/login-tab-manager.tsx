@@ -39,9 +39,9 @@ export const LoginTabManager: FC<Props> = ({ handleCloseModal }) => {
 
   const actionLogin = async (email: string, password: string) => {
     const token = await login({ email, password }).unwrap()
+    dispatch(api.util.resetApiState())
     saveToken(token)
     dispatch(userLoggedIn(token))
-    dispatch(api.util.invalidateTags(['UserAuth']))
   }
 
   const actionRegister = async (username: string, email: string, password: string) => {

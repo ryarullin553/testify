@@ -1,17 +1,16 @@
 'use client'
 
 import { FC, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectAuthorizationStatus, selectUserInfo } from '../../../store/selectors'
+import { useDispatch } from 'react-redux'
 import styles from './user-block.module.scss'
 import { LoginWindow } from '../../login-window/login-window'
-import { DropdownMenu } from '../../dropdown-menu/dropdown-menu'
 import { PaleButton } from '../../pale-button/pale-button'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { useGetCurrentUserDataQuery } from '@/services/usersApi'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 import { userLoggedOut } from '@/store/authSlice'
 import { dropToken } from '@/services/token'
+import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu'
 
 export const UserBlock: FC = () => {
   const { data: userInfo, isSuccess: isAuthorized, isError, error } = useGetCurrentUserDataQuery()
@@ -58,7 +57,7 @@ export const UserBlock: FC = () => {
       <button onClick={handleMenuClick}>
         <AvatarBlock src={userAvatar} size={41} additionalStyle={styles.userAvatar} />
       </button>
-      {isMenuOpen && <DropdownMenu actionCloseMenu={actionCloseMenu} />}
+      {isMenuOpen && <ProfileMenu actionCloseMenu={actionCloseMenu} />}
     </div>
   )
 }

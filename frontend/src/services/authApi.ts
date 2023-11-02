@@ -35,6 +35,12 @@ export const authApi = api.injectEndpoints({
         body: loginUserRequest,
       }),
       transformResponse: (response: LoginUserResponse) => response.auth_token,
+      // onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+      //   try {
+      //     await queryFulfilled
+      //     dispatch(api.util.resetApiState())
+      //   } catch {}
+      // },
     }),
     createUser: builder.mutation<void, CreateUserRequest>({
       query: (createUserRequest) => ({

@@ -1,0 +1,40 @@
+.selectWrapper {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  height: 33px;
+  width: 100%;
+  padding-top: 6px;
+  padding-bottom: 7px;
+  padding-left: 11px;
+  cursor: pointer;
+
+  user-select: none;
+
+  border-radius: 5px;
+  border: 1px solid var(--color-text-secondary);
+
+  color: var(--color-text-primary);
+
+  &:after {
+    position: absolute;
+    content: '';
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: var(--color-dark-grey) transparent transparent transparent;
+
+    transition: all 200ms ease-in-out;
+  }
+
+  &.active::after {
+    border-color: transparent transparent var(--color-dark-grey) transparent;
+    top: 7px;
+  }
+}
+
+.selectInput {
+  display: none;
+}
