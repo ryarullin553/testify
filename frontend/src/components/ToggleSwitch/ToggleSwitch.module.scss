@@ -5,6 +5,10 @@
   gap: 15px;
   cursor: pointer;
 
+  &:has(:disabled) {
+    cursor: auto;
+  }
+
   input {
     display: none;
   }
