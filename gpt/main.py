@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.schemas import QuestionData
 from app.services import generate_wrong_answer_choices
@@ -6,6 +7,13 @@ from app.services import generate_wrong_answer_choices
 app = FastAPI(
     title='Testify',
     version='0.2.0'
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
 )
 
 
