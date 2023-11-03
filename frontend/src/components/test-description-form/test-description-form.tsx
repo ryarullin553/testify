@@ -1,10 +1,9 @@
 'use client'
 
-import { FC, useEffect, useState, ChangeEvent, FormEvent } from 'react'
+import { FC, FormEvent } from 'react'
 import styles from './test-description-form.module.scss'
 import { AppRoute } from '../../reusable/const'
-import { createTestAction, editTestAction, fetchTestDescriptionAction } from '../../api/tests'
-import { Test, TestWithDescription, TestWithSettings } from '../../types/Test'
+import { TestWithSettings } from '../../types/Test'
 import { useRouter } from 'next/navigation'
 import { useCreateTestMutation, useUpdateTestSettingsByIDMutation } from '@/services/testCreationApi'
 import classNames from 'classnames'
@@ -62,12 +61,11 @@ export const TestDescriptionForm: FC<Props> = ({ testData }) => {
         {pageTitle}
         {!!testID && <VisibilityButton testID={testID} />}
       </h1>
-
       <fieldset className={`${styles.contentArea} ${styles.titleForm}`}>
         <label>
           Название <span>*</span>
         </label>
-        <textarea id='testTitle' name='testTitle' defaultValue={testTitle} placeholder='Название теста' />
+        <input type={'text'} id='testTitle' name='testTitle' defaultValue={testTitle} placeholder='Название теста' />
         <p>Не более 64 символов</p>
       </fieldset>
       <fieldset className={`${styles.contentArea} ${styles.shortAbstractForm}`}>

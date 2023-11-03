@@ -18,32 +18,3 @@
   line-height: 24px;
   color: #222222;
 }
-
-.notice {
-  margin-bottom: 40px;
-
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 22px;
-  color: #222222;
-}
-
-.answerForm {
-  li {
-    margin-bottom: 15px;
-
-    display: flex;
-  }
-
-  label {
-    font-size: 16px;
-    line-height: 19px;
-  }
-
-  input[type='radio'] {
-    height: 20px;
-    width: 20px;
-    margin: 0;
-    margin-right: 9px;
-  }
-}

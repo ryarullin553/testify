@@ -76,6 +76,15 @@ export const CreateQuestionManager: FC<Props> = ({
   const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
+    const correctAnswerIDs = formData.getAll(`answer-select`).map(Number)
+    const answerList = answerOrderState.reduce((acc: Record<number, KnownAnswer>, x) => {
+      acc[x] = {
+        answerID: x,
+        answerDescription: formData.get(`answer-description-${x}`) as string,
+        isCorrect: correctAnswerIDs.includes(x),
+      }
+      return acc
+    }, {})
     const questionData: QuestionWithCorrectAnswer = {
       testID,
       questionID,
@@ -83,15 +92,8 @@ export const CreateQuestionManager: FC<Props> = ({
       questionAvatar: null,
       questionType: questionTypeState,
       answerOrder: answerOrderState,
-      answerList: answerOrderState.reduce((acc: Record<number, KnownAnswer>, x) => {
-        acc[x] = {
-          answerID: x,
-          answerDescription: formData.get(`answerDescription-${x}`) as string,
-          isCorrect: Number(formData.get('correct-answer-form')) === x,
-        }
-        return acc
-      }, {}),
-      correctAnswerIDs: [Number(formData.get('correct-answer-form'))],
+      answerList,
+      correctAnswerIDs,
     }
     if (currentQuestionID <= 0) {
       await createQuestion(questionData)
@@ -122,6 +124,7 @@ export const CreateQuestionManager: FC<Props> = ({
         <Select options={options} currentValue={questionTypeState} handleSelect={handleSelect} />
       </div>
       <AnswersInputArea
+        questionType={questionTypeState}
         testID={testID}
         questionID={questionID}
         answerOrder={answerOrderState}
