@@ -36,7 +36,7 @@ def _create_completion(model: str, messages: list, stream: bool, **kwargs):
         "chatHistory": (None, json.dumps(messages))
     }
 
-    r = requests.post("https://api.deepai.org/make_me_a_sandwich", headers=headers, files=files, stream=True)
+    r = requests.post("https://api.deepai.org/hacking_is_a_crime", headers=headers, files=files, stream=True)
 
     for chunk in r.iter_content(chunk_size=None):
         r.raise_for_status()
