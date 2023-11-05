@@ -135,12 +135,12 @@ export const CreateQuestionManager: FC<Props> = ({
         <Button type={'button'} colorTheme={'hoverDark'} outerStyles={styles.plusButton} onClick={handleAnswerAdd}>
           +
         </Button>
-        {/* <fieldset className={styles.generateAnswersForm}>
-          <button type={'button'} className={styles.generateAnswersButton} onClick={handleGenerateAnswersClick}>
+        <fieldset className={styles.generateAnswersForm}>
+          <button type={'button'} onClick={handleGenerateAnswersClick}>
             Сгенерировать варианты ответов
           </button>
           <input type='number' min={1} max={10} id='generateAmount' value={2} />
-        </fieldset> */}
+        </fieldset>
         <div className={styles.questionControls}>
           <Button
             type={'button'}
