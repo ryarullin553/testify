@@ -1,6 +1,8 @@
 services:
 
   nginx:
+    container_name: nginx
+    restart: unless-stopped
     image: nginx:1.23-alpine
     ports:
       - 80:80
@@ -12,6 +14,8 @@ services:
       - frontend
 
   backend:
+    container_name: backend
+    restart: unless-stopped
     build: backend/
     expose:
       - 8000
@@ -25,15 +29,21 @@ services:
       - database
 
   database:
+    container_name: database
+    restart: unless-stopped
     image: postgres:15.3-alpine3.18
     env_file:
       - ./backend/.env
 
   redis:
+    container_name: redis
+    restart: unless-stopped
     image: redis:7.2-rc-alpine3.18
     hostname: redis
 
   worker:
+    container_name: worker
+    restart: unless-stopped
     build: backend/
     hostname: worker
     entrypoint: celery
@@ -49,6 +59,8 @@ services:
       - ./backend/.env
 
   worker2:
+    container_name: worker2
+    restart: unless-stopped
     build: backend/
     hostname: worker2
     entrypoint: celery
@@ -64,6 +76,8 @@ services:
       - ./backend/.env
 
   flower:
+    container_name: flower
+    restart: unless-stopped
     build: backend/
     hostname: flower
     entrypoint: celery
@@ -75,18 +89,21 @@ services:
     depends_on:
       - redis
     ports:
-      - "5555:5555"
+      - 5555:5555
 
   gpt:
+    container_name: gpt
+    restart: unless-stopped
     build: gpt/
     expose:
       - 8501
     volumes:
       - ./gpt:/app/gpt
-    command: >
-      sh -c "uvicorn main:app --host 0.0.0.0 --port 8501"
+    command: uvicorn main:app --host 0.0.0.0 --port 8501
 
   frontend:
+    container_name: frontend
+    restart: unless-stopped
     build: frontend/
     expose:
       - 3000
