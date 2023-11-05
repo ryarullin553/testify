@@ -3,7 +3,7 @@ import { AnswersInputArea } from '../answers-input-area/answers-input-area'
 import styles from './create-question-manager.module.scss'
 import TrashIcon from './img/trash_icon.svg'
 import { FC, useState, FormEvent } from 'react'
-import { KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
+import { Answer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services/testCreationApi'
 import { Button } from '@/components/Button/Button'
 import { Select } from '@/components/Select/Select'
@@ -28,7 +28,7 @@ export const CreateQuestionManager: FC<Props> = ({
   currentQuestionIndex,
   hasQuestionSubmitted,
 }) => {
-  const { questionID, answerOrder, questionDescription, questionType } = questionData
+  const { questionID, answerOrder, answerList, correctAnswerIDs, questionDescription, questionType } = questionData
   const [answerOrderState, setAnswerOrderState] = useState([...answerOrder])
   const [questionTypeState, setQuestionTypeState] = useState(questionType)
   const [createQuestion] = useCreateQuestionMutation()
@@ -77,11 +77,10 @@ export const CreateQuestionManager: FC<Props> = ({
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
     const correctAnswerIDs = formData.getAll(`answer-select`).map(Number)
-    const answerList = answerOrderState.reduce((acc: Record<number, KnownAnswer>, x) => {
+    const answerList = answerOrderState.reduce((acc: Record<number, Answer>, x) => {
       acc[x] = {
         answerID: x,
         answerDescription: formData.get(`answer-description-${x}`) as string,
-        isCorrect: correctAnswerIDs.includes(x),
       }
       return acc
     }, {})
@@ -128,6 +127,8 @@ export const CreateQuestionManager: FC<Props> = ({
         testID={testID}
         questionID={questionID}
         answerOrder={answerOrderState}
+        answerList={answerList}
+        correctAnswerIDs={correctAnswerIDs}
         actionAnswerDelete={handleAnswerDelete}
       />
       <div className={styles.controls}>

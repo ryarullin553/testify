@@ -1,29 +1,19 @@
 import styles from './answer-tile.module.scss'
 import { FC, MouseEvent } from 'react'
-import { KnownAnswer, Question, QuestionTypes, Test } from '@/types/Test'
+import { Answer, Question, QuestionTypes, Test } from '@/types/Test'
 import { useGetTestWithQuestionsQuery } from '@/services/testCreationApi'
 
 interface Props {
   testID: Test['testID']
   questionID: Question['questionID']
   answerID: number
+  answerDescription: string
+  isCorrect: boolean
   actionAnswerDelete: (answerID: number) => void
   questionType: keyof typeof QuestionTypes
 }
 
-export const AnswerTile: FC<Props> = ({ testID, questionID, answerID, actionAnswerDelete, questionType }) => {
-  const blankAnswer: KnownAnswer = {
-    answerDescription: '',
-    isCorrect: false,
-  }
-
-  const { answerData } = useGetTestWithQuestionsQuery(testID, {
-    selectFromResult: ({ data }) => ({
-      answerData: data?.questionList[questionID]?.answerList[answerID] ?? blankAnswer,
-    }),
-  })
-
-  const { answerDescription, isCorrect } = answerData
+export const AnswerTile: FC<Props> = ({ answerID, answerDescription, isCorrect, actionAnswerDelete, questionType }) => {
   const handleAnswerDelete = (evt: MouseEvent<HTMLButtonElement>, answerID: number) => {
     evt.preventDefault()
     actionAnswerDelete(answerID)

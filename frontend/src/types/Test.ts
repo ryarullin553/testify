@@ -5,10 +5,6 @@ export type Answer = {
   answerDescription: string
 }
 
-export type KnownAnswer = Answer & {
-  isCorrect: boolean
-}
-
 export type LikeState = 'like' | 'dislike' | 'none'
 
 export const enum QuestionStates {
@@ -41,7 +37,6 @@ export type Question = {
 }
 
 export type QuestionWithCorrectAnswer = Question & {
-  answerList: Record<number, KnownAnswer>
   correctAnswerIDs: number[]
 }
 
