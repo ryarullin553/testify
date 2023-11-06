@@ -9,6 +9,7 @@ import { Button } from '@/components/Button/Button'
 import { Select } from '@/components/Select/Select'
 import { useGenerateAnswersMutation } from '@/services/generativeApi'
 import { PointsField } from '../PointsField/PointsField'
+import { AnswerGenerator } from './AnswerGenerator/AnswerGenerator'
 
 interface Props {
   testID: Test['testID']
@@ -142,12 +143,7 @@ export const CreateQuestionManager: FC<Props> = ({
         <Button type={'button'} colorTheme={'hoverDark'} outerStyles={styles.plusButton} onClick={handleAnswerAdd}>
           +
         </Button>
-        <fieldset className={styles.generateAnswersForm}>
-          <button type={'button'} onClick={handleGenerateAnswersClick}>
-            Сгенерировать варианты
-          </button>
-          <input type='number' min={1} max={10} id='generateAmount' value={2} />
-        </fieldset>
+        {/* <AnswerGenerator handleGenerateAnswersClick={handleGenerateAnswersClick} /> */}
         <PointsField
           defaultValue={questionPoints}
           disabled={!hasQuestionPoints}
