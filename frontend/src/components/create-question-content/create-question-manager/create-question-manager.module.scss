@@ -1,13 +1,13 @@
+.formWrapper {
+  box-sizing: border-box;
+  width: 992px;
+  padding-right: 21px;
+}
+
 .questionContainer {
   display: flex;
   gap: 25px;
   margin-bottom: 26px;
-}
-
-.questionForm {
-  box-sizing: border-box;
-  width: 992px;
-  padding-right: 21px;
 }
 
 .controls {

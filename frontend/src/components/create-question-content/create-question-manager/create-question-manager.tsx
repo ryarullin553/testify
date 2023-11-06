@@ -8,9 +8,11 @@ import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services
 import { Button } from '@/components/Button/Button'
 import { Select } from '@/components/Select/Select'
 import { useGenerateAnswersMutation } from '@/services/generativeApi'
+import { PointsField } from '../PointsField/PointsField'
 
 interface Props {
   testID: Test['testID']
+  hasQuestionPoints: boolean
   questionData: QuestionWithCorrectAnswer
   addNewQuestion: () => void
   handleQuestionDelete: () => void
@@ -22,13 +24,15 @@ interface Props {
 export const CreateQuestionManager: FC<Props> = ({
   questionData,
   testID,
+  hasQuestionPoints,
   addNewQuestion,
   handleQuestionDelete,
   currentQuestionID,
   currentQuestionIndex,
   hasQuestionSubmitted,
 }) => {
-  const { questionID, answerOrder, answerList, correctAnswerIDs, questionDescription, questionType } = questionData
+  const { questionID, answerOrder, answerList, correctAnswerIDs, questionDescription, questionType, questionPoints } =
+    questionData
   const [answerOrderState, setAnswerOrderState] = useState([...answerOrder])
   const [questionTypeState, setQuestionTypeState] = useState(questionType)
   const [createQuestion] = useCreateQuestionMutation()
@@ -93,6 +97,7 @@ export const CreateQuestionManager: FC<Props> = ({
       answerOrder: answerOrderState,
       answerList,
       correctAnswerIDs,
+      questionPoints: Number(formData.get('question-points')),
     }
     if (currentQuestionID <= 0) {
       await createQuestion(questionData)
@@ -117,30 +122,38 @@ export const CreateQuestionManager: FC<Props> = ({
   }
 
   return (
-    <form className={styles.questionForm} action='#' name='question-form' onSubmit={handleFormSubmit}>
-      <div className={styles.questionContainer}>
-        <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
-        <Select options={options} currentValue={questionTypeState} handleSelect={handleSelect} />
-      </div>
-      <AnswersInputArea
-        questionType={questionTypeState}
-        testID={testID}
-        questionID={questionID}
-        answerOrder={answerOrderState}
-        answerList={answerList}
-        correctAnswerIDs={correctAnswerIDs}
-        actionAnswerDelete={handleAnswerDelete}
-      />
+    <section className={styles.formWrapper}>
+      <form className={styles.questionForm} id={'question-form'} name={'question-form'} onSubmit={handleFormSubmit}>
+        <div className={styles.questionContainer}>
+          <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
+          <Select options={options} currentValue={questionTypeState} handleSelect={handleSelect} />
+        </div>
+        <AnswersInputArea
+          questionType={questionTypeState}
+          testID={testID}
+          questionID={questionID}
+          answerOrder={answerOrderState}
+          answerList={answerList}
+          correctAnswerIDs={correctAnswerIDs}
+          actionAnswerDelete={handleAnswerDelete}
+        />
+      </form>
       <div className={styles.controls}>
         <Button type={'button'} colorTheme={'hoverDark'} outerStyles={styles.plusButton} onClick={handleAnswerAdd}>
           +
         </Button>
         <fieldset className={styles.generateAnswersForm}>
           <button type={'button'} onClick={handleGenerateAnswersClick}>
-            Сгенерировать варианты ответов
+            Сгенерировать варианты
           </button>
           <input type='number' min={1} max={10} id='generateAmount' value={2} />
         </fieldset>
+        <PointsField
+          defaultValue={questionPoints}
+          disabled={!hasQuestionPoints}
+          formID={'question-form'}
+          fieldID={'question-points'}
+        />
         <div className={styles.questionControls}>
           <Button
             type={'button'}
@@ -150,11 +163,11 @@ export const CreateQuestionManager: FC<Props> = ({
             disabled={hasQuestionSubmitted}>
             <TrashIcon />
           </Button>
-          <Button type={'submit'} outerStyles={styles.saveButton}>
+          <Button form={'question-form'} type={'submit'} outerStyles={styles.saveButton}>
             Сохранить вопрос
           </Button>
         </div>
       </div>
-    </form>
+    </section>
   )
 }

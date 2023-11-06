@@ -47,7 +47,7 @@ export const CreateQuestionContent: FC = () => {
 
   if (!isSuccess) return <Spinner />
 
-  const { questionOrder, testTitle, questionList, isPublished } = initialTestData
+  const { questionOrder, testTitle, questionList, isPublished, hasQuestionPoints } = initialTestData
 
   const _questionOrder = [...questionOrder]
   const _questionList = { ...questionList }
@@ -105,6 +105,7 @@ export const CreateQuestionContent: FC = () => {
       <CreateQuestionManager
         key={currentQuestionID}
         testID={testID}
+        hasQuestionPoints={hasQuestionPoints}
         currentQuestionID={currentQuestionID}
         currentQuestionIndex={currentQuestionIndex}
         questionData={currentQuestionData}
