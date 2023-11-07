@@ -47,7 +47,7 @@ export type EditQuestionRequest = {
   explanation?: string
 }
 
-export interface CreateQuestionProps {
+export interface CreateQuestionArgs {
   testID: Test['testID']
   questionDescription: string
   questionAvatar: string | null
@@ -55,9 +55,10 @@ export interface CreateQuestionProps {
   answerList: Record<number, Answer>
   answerOrder: number[]
   correctAnswerIDs: number[]
+  questionPoints?: number
 }
 
-export interface EditQuestionProps extends CreateQuestionProps {
+export interface EditQuestionArgs extends CreateQuestionArgs {
   questionID: Question['questionID']
 }
 
@@ -86,6 +87,7 @@ export type QuestionResponse = {
   image: string | null
   likes_count: number
   dislikes_count: number
+  points?: number
 }
 
 export type TestResponse = {
@@ -173,7 +175,7 @@ export const transformAttemptResponse = (r: AttemptResponse) => ({
   }, {}),
 })
 
-export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuestionRequest => ({
+export const transformEditQuestionRequest = (r: CreateQuestionArgs): EditQuestionRequest => ({
   test: r.testID,
   content: r.questionDescription,
   answer_choices: r.answerOrder.map((id) => ({
@@ -182,7 +184,7 @@ export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuesti
   })),
   right_answers: r.correctAnswerIDs.map(String),
   type: r.questionType,
-  points: undefined,
+  points: r.questionPoints,
   explanation: undefined,
 })
 
@@ -246,6 +248,7 @@ export const transformQuestionResponse = (r: QuestionResponse, testID?: number):
   likesCount: r.likes_count,
   dislikesCount: r.dislikes_count,
   likeState: r.has_like === true ? 'like' : r.has_like === false ? 'dislike' : 'none',
+  questionPoints: r.points,
   correctAnswerIDs: r.right_answers?.map(Number),
 })
 

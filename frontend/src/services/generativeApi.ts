@@ -43,7 +43,7 @@ export const generativeApi = createApi({
   endpoints: (builder) => ({
     generateAnswers: builder.mutation<void, GenerateAnswerArgs>({
       query: (generateAnswerArgs) => ({
-        url: 'create_answer_choices/',
+        url: 'create_answer_choices',
         method: 'POST',
         body: transformGenerateAnswersRequest(generateAnswerArgs),
       }),

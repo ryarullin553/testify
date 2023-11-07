@@ -34,6 +34,7 @@ export type Question = {
   likesCount: number
   dislikesCount: number
   likeState: LikeState
+  questionPoints?: number
 }
 
 export type QuestionWithCorrectAnswer = Question & {

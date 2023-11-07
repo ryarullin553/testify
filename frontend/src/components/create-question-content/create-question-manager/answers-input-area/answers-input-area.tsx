@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { AnswerTile } from './answer-tile/answer-tile'
 import styles from './answers-input-area.module.scss'
-import { Question, QuestionTypes, QuestionWithCorrectAnswer, Test } from '@/types/Test'
+import { Answer, Question, QuestionTypes, QuestionWithCorrectAnswer, Test } from '@/types/Test'
 
 interface Props {
   testID: Test['testID']
@@ -22,6 +22,11 @@ export const AnswersInputArea: FC<Props> = ({
   actionAnswerDelete,
   questionType,
 }) => {
+  const blankAnswer = (id: number): Answer => ({
+    answerID: id,
+    answerDescription: '',
+  })
+
   const tip = {
     SINGLE_CHOICE: 'Добавьте варианты ответа и отметьте верный',
     MULTIPLE_CHOICE: 'Добавьте варианты ответа и отметьте верные',
@@ -36,7 +41,7 @@ export const AnswersInputArea: FC<Props> = ({
       <p>{tip[questionType]}</p>
       <ul>
         {answerOrder.map((answerID) => {
-          const { answerDescription } = answerList[answerID]
+          const { answerDescription } = answerList[answerID] || blankAnswer(answerID)
           const isCorrect = correctAnswerIDs.includes(answerID)
           return (
             <AnswerTile

@@ -47,12 +47,7 @@ export const ResultsContent: FC = () => {
         </div>
       ) : (
         <QuestionArea key={currentQuestionID} questionData={currentQuestionData} questionIndex={currentQuestionIndex}>
-          <AnswerArea
-            attemptID={attemptID}
-            questionData={currentQuestionData}
-            selectedAnswers={selectedAnswers}
-            isTogglable
-          />
+          <AnswerArea attemptID={attemptID} questionData={currentQuestionData} selectedAnswers={selectedAnswers} />
         </QuestionArea>
       )}
     </>

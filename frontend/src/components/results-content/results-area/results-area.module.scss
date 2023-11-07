@@ -3,7 +3,6 @@
   width: 992px;
 
   h1 {
-    width: 640px;
     height: 61px;
     font-style: normal;
     font-weight: 700;
@@ -73,54 +72,5 @@
         border-width: 0 2px 2px 0;
       }
     }
-  }
-}
-
-.progressBar {
-  width: 200px;
-  h3 {
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
-    color: #222222;
-    text-align: center;
-  }
-
-  .container {
-    display: flex;
-    width: 200px;
-    padding: 13px 0;
-    border-radius: 8px;
-    background: #fff;
-    row-gap: 30px;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .circularProgress {
-    position: relative;
-    height: 190px;
-    width: 190px;
-    border-radius: 50%;
-    background: conic-gradient(#a38ffd 3.6deg, #ffffff 0deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .circularProgress::before {
-    content: '';
-    position: absolute;
-    height: 140px;
-    width: 140px;
-    border-radius: 50%;
-    background-color: #fff;
-  }
-
-  .progressValue {
-    position: relative;
-    font-size: 50px;
-    font-weight: 800;
-    color: #a38ffd;
   }
 }

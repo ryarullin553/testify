@@ -3,8 +3,8 @@ import { TestTileLinks } from './test-tile-links/test-tile-links'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { VisibilityButton } from './visibility-button/visibility-button'
 import { TestTileAttemptList } from './test-tile-attempt-list/test-tile-attempt-list'
-import { FC, useState, MouseEvent } from 'react'
-import { Test, TestWithAvatar } from '../../../types/Test'
+import { FC, useState } from 'react'
+import { TestWithAvatar } from '@/types/Test'
 import { useGetTestAttemptsQuery } from '@/services/testCatalogApi'
 import classNames from 'classnames'
 
@@ -32,6 +32,7 @@ export const TestTileProfile: FC<Props> = ({ testItem, isEditable }) => {
           {isEditable && <VisibilityButton isPublished={isPublished} testID={testID} />}
         </div>
         <AvatarBlock src={testAvatar} size={60} additionalStyle={styles.logo} />
+        {isEditable && <TestTileLinks testID={testID} />}
         {isEditable && <TestTileLinks testID={testID} />}
       </article>
       {!isEditable && isAttemptsShown && !!attemptList && (

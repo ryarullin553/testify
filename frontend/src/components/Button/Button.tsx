@@ -16,6 +16,7 @@ interface Props extends PropsWithChildren {
   widthMax?: boolean
   colorTheme?: ColorTheme
   disabled?: boolean
+  form?: string
 }
 
 export const Button: FC<Props> = ({
@@ -28,6 +29,7 @@ export const Button: FC<Props> = ({
   colorTheme = 'default',
   widthMax,
   disabled,
+  form,
 }) => {
   if (!!href)
     return (
@@ -49,6 +51,7 @@ export const Button: FC<Props> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
+      form={form}
       className={classNames(
         styles.innerStyle,
         styles[view],
