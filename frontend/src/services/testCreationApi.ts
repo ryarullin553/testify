@@ -33,6 +33,13 @@ export const testCreationApi = api.injectEndpoints({
       },
       invalidatesTags: ['TestList'],
     }),
+    deleteTest: builder.mutation<void, Test['testID']>({
+      query: (testID) => ({
+        url: `tests/${testID}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['TestList'],
+    }),
     getTestSettingsByID: builder.query<TestWithSettings, Test['testID']>({
       query: (testID) => `tests/${testID}/config/`,
       transformResponse: (r: TestResponse) => transformTestResponse(r) as TestWithSettings,
@@ -114,7 +121,7 @@ export const testCreationApi = api.injectEndpoints({
       onQueryStarted: async (testID, { dispatch, queryFulfilled }) => {
         try {
           await queryFulfilled
-          const patchResult = dispatch(
+          dispatch(
             testCreationApi.util.updateQueryData('getTestWithQuestions', testID, (draft) => {
               draft.isPublished = true
             })
@@ -154,4 +161,5 @@ export const {
   useDeleteQuestionMutation,
   usePublishTestMutation,
   useHideTestMutation,
+  useDeleteTestMutation,
 } = testCreationApi
