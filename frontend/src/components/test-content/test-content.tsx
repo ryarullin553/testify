@@ -13,6 +13,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { AppRoute } from '@/reusable/const'
 import { Button } from '../Button/Button'
 import { Question, QuestionStates } from '@/types/Test'
+import { AnswerArea } from './AnswerArea/AnswerArea'
 
 export const TestContent = () => {
   const router = useRouter()
@@ -40,7 +41,7 @@ export const TestContent = () => {
           acc[x] = !!submittedAnswers[x] ? QuestionStates.Submitted : QuestionStates.Pending
           return acc
         }, {}),
-        localAnswers: {},
+        localAnswers: { ...submittedAnswers },
       })
     }
   }, [isAttemptDataSuccess])
@@ -57,19 +58,14 @@ export const TestContent = () => {
 
   const currentQuestionID = questionOrder[currentQuestionIndex]
   const currentQuestionData = questionList[currentQuestionID]
-  const currentSubmittedAnswers = submittedAnswers[currentQuestionID]
-  const currentLocalAnswers = attemptState.localAnswers[currentQuestionID]
+  const selectedAnswers = attemptState.localAnswers[currentQuestionID]
   const hasAnswerChanged = questionStates[currentQuestionID] === QuestionStates.Changed
   const isTestComplete = !Boolean(questionOrder.find((x) => questionStates[x] !== QuestionStates.Submitted))
 
-  const selectedAnswers = currentLocalAnswers ?? currentSubmittedAnswers
-
-  // работает только для одного ответа
-
-  const changeLocalAnswer = (newValue: number) => {
+  const changeLocalAnswer = (newValue: number[]) => {
     setAttemptState((prevState) => {
       const newState = { ...prevState }
-      newState.localAnswers[currentQuestionID] = [newValue]
+      newState.localAnswers[currentQuestionID] = newValue
       newState.questionStates[currentQuestionID] = QuestionStates.Changed
       return newState
     })
@@ -115,21 +111,21 @@ export const TestContent = () => {
           Завершить тест
         </Button>
       </QuestionListSidebar>
-      <QuestionArea
-        key={currentQuestionID}
-        questionData={currentQuestionData}
-        questionIndex={currentQuestionIndex}
-        attemptID={attemptID}
-        selectedAnswers={selectedAnswers}
-        changeLocalAnswer={changeLocalAnswer}
-        submitAnswerAction={submitAnswerAction}
-        isTogglable>
-        <QuestionControls
-          gotoNextQuestion={gotoNextQuestion}
-          isTestComplete={isTestComplete}
-          finishAttemptAction={finishAttemptAction}
-          hasAnswerChanged={hasAnswerChanged}
-        />
+      <QuestionArea key={currentQuestionID} questionData={currentQuestionData} questionIndex={currentQuestionIndex}>
+        <AnswerArea
+          attemptID={attemptID}
+          questionData={currentQuestionData}
+          selectedAnswers={selectedAnswers}
+          changeLocalAnswer={changeLocalAnswer}
+          submitAnswerAction={submitAnswerAction}
+          isTogglable>
+          <QuestionControls
+            gotoNextQuestion={gotoNextQuestion}
+            isTestComplete={isTestComplete}
+            finishAttemptAction={finishAttemptAction}
+            hasAnswerChanged={hasAnswerChanged}
+          />
+        </AnswerArea>
       </QuestionArea>
     </>
   )

@@ -1,5 +1,6 @@
 .innerStyle {
   display: block;
+  user-select: none;
 
   transition:
     background-color 200ms ease-in-out,

@@ -7,11 +7,11 @@ import {
   transformTestResponse,
   EditTestProps,
   transformTestWithQuestionsResponse,
-  CreateQuestionProps,
+  CreateQuestionArgs,
   transformEditQuestionRequest,
   QuestionResponse,
   transformQuestionResponse,
-  EditQuestionProps,
+  EditQuestionArgs,
   TestWithQuestionsResponse,
 } from '@/types/TestApi'
 
@@ -49,7 +49,7 @@ export const testCreationApi = api.injectEndpoints({
       query: (testID) => `tests/${testID}/questions/`,
       transformResponse: transformTestWithQuestionsResponse,
     }),
-    createQuestion: builder.mutation<QuestionWithCorrectAnswer, CreateQuestionProps>({
+    createQuestion: builder.mutation<QuestionWithCorrectAnswer, CreateQuestionArgs>({
       query: (newQuestionData) => ({
         url: 'questions/',
         method: 'POST',
@@ -69,7 +69,7 @@ export const testCreationApi = api.injectEndpoints({
         } catch {}
       },
     }),
-    updateQuestion: builder.mutation<QuestionWithCorrectAnswer, EditQuestionProps>({
+    updateQuestion: builder.mutation<QuestionWithCorrectAnswer, EditQuestionArgs>({
       query: (editQuestionArgs) => ({
         url: `questions/${editQuestionArgs.questionID}/`,
         method: 'PATCH',

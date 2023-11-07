@@ -1,19 +1,20 @@
+.formWrapper {
+  box-sizing: border-box;
+  width: 992px;
+  padding-right: 21px;
+}
+
 .questionContainer {
   display: flex;
   gap: 25px;
   margin-bottom: 26px;
 }
 
-.questionForm {
-  box-sizing: border-box;
-  width: 992px;
-  padding-right: 21px;
-}
-
 .controls {
   margin-bottom: 60px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 35px;
 }
 
 .plusButton {
@@ -65,6 +66,7 @@
 
 .questionControls {
   display: flex;
+  margin-left: auto;
 
   .saveButton {
     margin-left: 35px;

@@ -2,16 +2,15 @@
 
 import { useParams } from 'next/navigation'
 import { QuestionListSidebar } from '../question-list-sidebar/question-list-sidebar'
-import { QuestionListSidebarButton } from '../question-list-sidebar/question-list-sidebar-button/question-list-sidebar-button'
 import { QuestionArea } from '../test-content/question-area/question-area'
 import styles from './results-content.module.scss'
 import { FC, useEffect, useState } from 'react'
-import { fetchAttemptAction } from '../../api/results'
 import { ResultsArea } from './results-area/results-area'
 import { ReviewsBlock } from '../reviews-block/reviews-block'
 import { useGetAttemptByIDQuery } from '@/services/testCatalogApi'
 import { Spinner } from '../Spinner/Spinner'
 import { Button } from '../Button/Button'
+import { AnswerArea } from '../test-content/AnswerArea/AnswerArea'
 
 export const ResultsContent: FC = () => {
   const params = useParams()
@@ -25,7 +24,7 @@ export const ResultsContent: FC = () => {
 
   const currentQuestionID = questionOrder[currentQuestionIndex]
   const currentQuestionData = questionList[currentQuestionID]
-  const currentSelectedAnswers = submittedAnswers[currentQuestionID]
+  const selectedAnswers = submittedAnswers[currentQuestionID]
 
   return (
     <>
@@ -47,14 +46,9 @@ export const ResultsContent: FC = () => {
           <ReviewsBlock testID={testID} hasCommentBlock />
         </div>
       ) : (
-        <QuestionArea
-          key={currentQuestionID}
-          questionData={currentQuestionData}
-          questionIndex={currentQuestionIndex}
-          isTogglable={false}
-          attemptID={attemptID}
-          selectedAnswers={currentSelectedAnswers}
-        />
+        <QuestionArea key={currentQuestionID} questionData={currentQuestionData} questionIndex={currentQuestionIndex}>
+          <AnswerArea attemptID={attemptID} questionData={currentQuestionData} selectedAnswers={selectedAnswers} />
+        </QuestionArea>
       )}
     </>
   )

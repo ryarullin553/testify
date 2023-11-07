@@ -11,7 +11,7 @@ import {
   usePublishTestMutation,
 } from '@/services/testCreationApi'
 import { Spinner } from '../Spinner/Spinner'
-import { KnownAnswer, QuestionTypes, QuestionWithCorrectAnswer } from '@/types/Test'
+import { Answer, QuestionWithCorrectAnswer } from '@/types/Test'
 import { Button } from '../Button/Button'
 
 export const CreateQuestionContent: FC = () => {
@@ -23,10 +23,11 @@ export const CreateQuestionContent: FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [newQuestionData, setNewQuestionData] = useState<QuestionWithCorrectAnswer | null>(null)
 
-  const blankAnswer: KnownAnswer = {
+  const blankAnswer = (id: number): Answer => ({
+    answerID: id,
     answerDescription: '',
-    isCorrect: false,
-  }
+  })
+
   const blankQuestion: QuestionWithCorrectAnswer = {
     testID,
     questionDescription: '',
@@ -34,16 +35,19 @@ export const CreateQuestionContent: FC = () => {
     questionType: 'SINGLE_CHOICE',
     questionID: -1,
     answerList: {
-      0: blankAnswer,
-      1: blankAnswer,
+      0: blankAnswer(0),
+      1: blankAnswer(1),
     },
     answerOrder: [0, 1],
     correctAnswerIDs: [0],
+    likesCount: 0,
+    dislikesCount: 0,
+    likeState: 'none',
   }
 
   if (!isSuccess) return <Spinner />
 
-  const { questionOrder, testTitle, questionList, isPublished } = initialTestData
+  const { questionOrder, testTitle, questionList, isPublished, hasQuestionPoints } = initialTestData
 
   const _questionOrder = [...questionOrder]
   const _questionList = { ...questionList }
@@ -101,6 +105,7 @@ export const CreateQuestionContent: FC = () => {
       <CreateQuestionManager
         key={currentQuestionID}
         testID={testID}
+        hasQuestionPoints={hasQuestionPoints}
         currentQuestionID={currentQuestionID}
         currentQuestionIndex={currentQuestionIndex}
         questionData={currentQuestionData}

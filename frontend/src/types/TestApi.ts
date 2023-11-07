@@ -6,7 +6,6 @@ import {
   Answer,
   Attempt,
   TestWithDescription,
-  KnownAnswer,
   QuestionTypes,
 } from '@/types/Test'
 import { UserInfo } from './UserInfo'
@@ -48,16 +47,18 @@ export type EditQuestionRequest = {
   explanation?: string
 }
 
-export interface CreateQuestionProps {
+export interface CreateQuestionArgs {
   testID: Test['testID']
   questionDescription: string
   questionAvatar: string | null
   questionType: keyof typeof QuestionTypes
-  answerList: Record<number, KnownAnswer>
+  answerList: Record<number, Answer>
   answerOrder: number[]
+  correctAnswerIDs: number[]
+  questionPoints?: number
 }
 
-export interface EditQuestionProps extends CreateQuestionProps {
+export interface EditQuestionArgs extends CreateQuestionArgs {
   questionID: Question['questionID']
 }
 
@@ -73,7 +74,6 @@ export type TestWithQuestionsResponse = {
 export type AnswerResponse = {
   id: number
   content: string
-  is_correct: boolean
 }
 
 export type QuestionResponse = {
@@ -87,6 +87,7 @@ export type QuestionResponse = {
   image: string | null
   likes_count: number
   dislikes_count: number
+  points?: number
 }
 
 export type TestResponse = {
@@ -143,7 +144,6 @@ export type AttemptResponse = {
 export const transformAnswerResponse = (r: AnswerResponse) => ({
   answerID: r.id,
   answerDescription: r.content,
-  isCorrect: r.is_correct,
 })
 
 export const transformAttemptResult = (r: ResultResponse) => ({
@@ -175,17 +175,16 @@ export const transformAttemptResponse = (r: AttemptResponse) => ({
   }, {}),
 })
 
-export const transformEditQuestionRequest = (r: CreateQuestionProps): EditQuestionRequest => ({
+export const transformEditQuestionRequest = (r: CreateQuestionArgs): EditQuestionRequest => ({
   test: r.testID,
   content: r.questionDescription,
   answer_choices: r.answerOrder.map((id) => ({
     id: id,
     content: r.answerList[id].answerDescription,
-    is_correct: r.answerList[id].isCorrect,
   })),
-  right_answers: r.answerOrder.filter((id) => r.answerList[id].isCorrect === true).map(String),
+  right_answers: r.correctAnswerIDs.map(String),
   type: r.questionType,
-  points: undefined,
+  points: r.questionPoints,
   explanation: undefined,
 })
 
@@ -241,7 +240,7 @@ export const transformQuestionResponse = (r: QuestionResponse, testID?: number):
   questionType: r.type,
   questionDescription: r.content,
   questionAvatar: r.image,
-  answerList: r.answer_choices.reduce((acc: Record<number, KnownAnswer>, x) => {
+  answerList: r.answer_choices.reduce((acc: Record<number, Answer>, x) => {
     acc[x.id] = transformAnswerResponse(x)
     return acc
   }, {}),
@@ -249,6 +248,7 @@ export const transformQuestionResponse = (r: QuestionResponse, testID?: number):
   likesCount: r.likes_count,
   dislikesCount: r.dislikes_count,
   likeState: r.has_like === true ? 'like' : r.has_like === false ? 'dislike' : 'none',
+  questionPoints: r.points,
   correctAnswerIDs: r.right_answers?.map(Number),
 })
 

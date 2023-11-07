@@ -1,0 +1,37 @@
+.notice {
+  margin-bottom: 40px;
+
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #222222;
+}
+
+.answerForm {
+  li {
+    margin-bottom: 15px;
+
+    display: flex;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    font-size: 16px;
+    line-height: 19px;
+    cursor: pointer;
+
+    &:has(:disabled) {
+      cursor: auto;
+    }
+  }
+
+  input[type='radio'],
+  input[type='checkbox'] {
+    height: 20px;
+    width: 20px;
+    margin: 0;
+    margin-right: 9px;
+  }
+}

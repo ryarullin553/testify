@@ -1,16 +1,19 @@
-import { QuestionInputArea } from '../question-input-area/question-input-area'
-import { AnswersInputArea } from '../answers-input-area/answers-input-area'
+import { QuestionInputArea } from './question-input-area/question-input-area'
 import styles from './create-question-manager.module.scss'
 import TrashIcon from './img/trash_icon.svg'
 import { FC, useState, FormEvent } from 'react'
-import { KnownAnswer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
+import { Answer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services/testCreationApi'
 import { Button } from '@/components/Button/Button'
 import { Select } from '@/components/Select/Select'
 import { useGenerateAnswersMutation } from '@/services/generativeApi'
+import { PointsField } from './PointsField/PointsField'
+import { AnswerGenerator } from './AnswerGenerator/AnswerGenerator'
+import { AnswersInputArea } from './answers-input-area/answers-input-area'
 
 interface Props {
   testID: Test['testID']
+  hasQuestionPoints: boolean
   questionData: QuestionWithCorrectAnswer
   addNewQuestion: () => void
   handleQuestionDelete: () => void
@@ -22,13 +25,15 @@ interface Props {
 export const CreateQuestionManager: FC<Props> = ({
   questionData,
   testID,
+  hasQuestionPoints,
   addNewQuestion,
   handleQuestionDelete,
   currentQuestionID,
   currentQuestionIndex,
   hasQuestionSubmitted,
 }) => {
-  const { questionID, answerOrder, questionDescription, questionType } = questionData
+  const { questionID, answerOrder, answerList, correctAnswerIDs, questionDescription, questionType, questionPoints } =
+    questionData
   const [answerOrderState, setAnswerOrderState] = useState([...answerOrder])
   const [questionTypeState, setQuestionTypeState] = useState(questionType)
   const [createQuestion] = useCreateQuestionMutation()
@@ -76,6 +81,14 @@ export const CreateQuestionManager: FC<Props> = ({
   const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
+    const correctAnswerIDs = formData.getAll(`answer-select`).map(Number)
+    const answerList = answerOrderState.reduce((acc: Record<number, Answer>, x) => {
+      acc[x] = {
+        answerID: x,
+        answerDescription: formData.get(`answer-description-${x}`) as string,
+      }
+      return acc
+    }, {})
     const questionData: QuestionWithCorrectAnswer = {
       testID,
       questionID,
@@ -83,15 +96,9 @@ export const CreateQuestionManager: FC<Props> = ({
       questionAvatar: null,
       questionType: questionTypeState,
       answerOrder: answerOrderState,
-      answerList: answerOrderState.reduce((acc: Record<number, KnownAnswer>, x) => {
-        acc[x] = {
-          answerID: x,
-          answerDescription: formData.get(`answerDescription-${x}`) as string,
-          isCorrect: Number(formData.get('correct-answer-form')) === x,
-        }
-        return acc
-      }, {}),
-      correctAnswerIDs: [Number(formData.get('correct-answer-form'))],
+      answerList,
+      correctAnswerIDs,
+      questionPoints: Number(formData.get('question-points')),
     }
     if (currentQuestionID <= 0) {
       await createQuestion(questionData)
@@ -116,27 +123,33 @@ export const CreateQuestionManager: FC<Props> = ({
   }
 
   return (
-    <form className={styles.questionForm} action='#' name='question-form' onSubmit={handleFormSubmit}>
-      <div className={styles.questionContainer}>
-        <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
-        <Select options={options} currentValue={questionTypeState} handleSelect={handleSelect} />
-      </div>
-      <AnswersInputArea
-        testID={testID}
-        questionID={questionID}
-        answerOrder={answerOrderState}
-        actionAnswerDelete={handleAnswerDelete}
-      />
+    <section className={styles.formWrapper}>
+      <form className={styles.questionForm} id={'question-form'} name={'question-form'} onSubmit={handleFormSubmit}>
+        <div className={styles.questionContainer}>
+          <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
+          <Select options={options} currentValue={questionTypeState} handleSelect={handleSelect} />
+        </div>
+        <AnswersInputArea
+          questionType={questionTypeState}
+          testID={testID}
+          questionID={questionID}
+          answerOrder={answerOrderState}
+          answerList={answerList}
+          correctAnswerIDs={correctAnswerIDs}
+          actionAnswerDelete={handleAnswerDelete}
+        />
+      </form>
       <div className={styles.controls}>
         <Button type={'button'} colorTheme={'hoverDark'} outerStyles={styles.plusButton} onClick={handleAnswerAdd}>
           +
         </Button>
-        {/* <fieldset className={styles.generateAnswersForm}>
-          <button type={'button'} className={styles.generateAnswersButton} onClick={handleGenerateAnswersClick}>
-            Сгенерировать варианты ответов
-          </button>
-          <input type='number' min={1} max={10} id='generateAmount' value={2} />
-        </fieldset> */}
+        {/* <AnswerGenerator handleGenerateAnswersClick={handleGenerateAnswersClick} /> */}
+        <PointsField
+          defaultValue={questionPoints}
+          disabled={!hasQuestionPoints}
+          formID={'question-form'}
+          fieldID={'question-points'}
+        />
         <div className={styles.questionControls}>
           <Button
             type={'button'}
@@ -146,11 +159,11 @@ export const CreateQuestionManager: FC<Props> = ({
             disabled={hasQuestionSubmitted}>
             <TrashIcon />
           </Button>
-          <Button type={'submit'} outerStyles={styles.saveButton}>
+          <Button form={'question-form'} type={'submit'} outerStyles={styles.saveButton}>
             Сохранить вопрос
           </Button>
         </div>
       </div>
-    </form>
+    </section>
   )
 }
