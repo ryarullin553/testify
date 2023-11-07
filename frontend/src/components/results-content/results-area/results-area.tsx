@@ -3,6 +3,7 @@ import { AppRoute } from '../../../reusable/const'
 import Link from 'next/link'
 import { AttemptResult, Test } from '../../../types/Test'
 import { FC } from 'react'
+import { ProgressBar } from './ProgressBar/ProgressBar'
 
 interface Props {
   testTitle: Test['testTitle']
@@ -31,16 +32,7 @@ export const ResultsArea: FC<Props> = ({ testTitle, results }) => {
             Время прохождения теста: <span>{attemptTime}</span>
           </p>
         </div>
-        <div className={styles.progressBar}>
-          <h3>Ваш результат</h3>
-          <div className={styles.container}>
-            <div
-              className={styles.circularProgress}
-              style={{ background: `conic-gradient(#A38FFD ${attemptScore * 3.6}deg, #fff 0deg)` }}>
-              <span className={styles.progressValue}>{attemptScore}%</span>
-            </div>
-          </div>
-        </div>
+        <ProgressBar attemptScore={attemptScore} />
       </div>
       <div className={styles.controls}>
         <Link href={AppRoute.Catalog} className={styles.catalog}>
