@@ -1,5 +1,4 @@
-import { QuestionInputArea } from '../question-input-area/question-input-area'
-import { AnswersInputArea } from '../answers-input-area/answers-input-area'
+import { QuestionInputArea } from './question-input-area/question-input-area'
 import styles from './create-question-manager.module.scss'
 import TrashIcon from './img/trash_icon.svg'
 import { FC, useState, FormEvent } from 'react'
@@ -8,8 +7,9 @@ import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services
 import { Button } from '@/components/Button/Button'
 import { Select } from '@/components/Select/Select'
 import { useGenerateAnswersMutation } from '@/services/generativeApi'
-import { PointsField } from '../PointsField/PointsField'
+import { PointsField } from './PointsField/PointsField'
 import { AnswerGenerator } from './AnswerGenerator/AnswerGenerator'
+import { AnswersInputArea } from './answers-input-area/answers-input-area'
 
 interface Props {
   testID: Test['testID']

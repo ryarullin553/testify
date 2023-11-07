@@ -21,6 +21,10 @@
     font-size: 16px;
     line-height: 19px;
     cursor: pointer;
+
+    &:has(:disabled) {
+      cursor: auto;
+    }
   }
 
   input[type='radio'],
