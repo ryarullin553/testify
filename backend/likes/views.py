@@ -1,54 +1,65 @@
-from rest_framework import viewsets, mixins, status
-from rest_framework.generics import get_object_or_404
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 from utils.permissions import UserRelationPermission
 from .models import Like
-from .serializers import LikeSerializer
 
 
-class LikeAPIView(mixins.CreateModelMixin,
-                  mixins.UpdateModelMixin,
-                  mixins.DestroyModelMixin,
-                  viewsets.GenericViewSet):
+class LikeAPIView(viewsets.GenericViewSet):
     queryset = Like.objects
-    serializer_class = LikeSerializer
     permission_classes = [UserRelationPermission]
-    lookup_field = 'question_id'
 
-    def get_object(self):
-        queryset = self.filter_queryset(self.get_queryset())
-        question_id = self.kwargs[self.lookup_field]
-        obj = get_object_or_404(
-            queryset=queryset,
-            question_id=question_id,
-            user_id=self.request.user.id
-        )
-        self.check_object_permissions(self.request, obj)
-        return obj
+    def create(self, request, *args, **kwargs):
+        """
+        Система лайков
 
-    def update_comment_like(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        comment_id = self.kwargs['comment_id']
-        instance = get_object_or_404(
-            queryset=queryset,
-            comment_id=comment_id,
-            user_id=self.request.user.id
-        )
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
+        Поставить лайк вопросу:
+        {
+            is_like: true,
+            question_id: <question_id>
+        }
 
-    def delete_comment_like(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        comment_id = self.kwargs['comment_id']
-        instance = get_object_or_404(
-            queryset=queryset,
-            comment_id=comment_id,
-            user_id=self.request.user.id
+        Поставить дизлайк вопросу:
+        {
+            is_like: false,
+            question_id: <question_id>
+        }
+
+        Убрать лайк или дизлайк у вопроса:
+        {
+            is_like: null,
+            question_id: <question_id>
+        }
+
+        Поставить лайк комментарию:
+        {
+            is_like: true,
+            comment_id: <comment_id>
+        }
+
+        Поставить дизлайк комментарию:
+        {
+            is_like: false,
+            comment_id: <comment_id>
+        }
+
+        Убрать лайк или дизлайк у комментария:
+        {
+            is_like: null,
+            comment_id: <comment_id>
+        }
+        """
+        data = request.data
+        is_like = data.pop('is_like')
+        if 'question_id' not in data.keys() \
+                and 'comment_id' not in data.keys() or len(data.keys()) != 1:
+            raise TypeError('Некорректный json в теле запроса')
+        obj, _ = self.queryset.get_or_create(
+            **data, user_id=self.request.user.id
         )
-        instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if is_like is None:
+            obj.delete()
+        else:
+            obj.is_like = is_like
+            obj.save()
+        return Response(status=status.HTTP_201_CREATED)
