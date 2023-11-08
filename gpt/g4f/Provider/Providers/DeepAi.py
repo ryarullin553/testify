@@ -24,7 +24,7 @@ def _create_completion(model: str, messages: list, stream: bool, **kwargs):
         
         return f"tryit-{part1}-{part2}"
 
-    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
 
     headers = {
         "api-key": get_api_key(user_agent),
