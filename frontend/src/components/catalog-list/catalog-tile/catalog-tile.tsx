@@ -6,8 +6,6 @@ import { FC, ChangeEvent, MouseEvent } from 'react'
 import { FeedbackStars } from '../../feedback-stars/feedback-stars'
 import UserIcon from './img/user-icon.svg'
 import { TestWithDescription } from '../../../types/Test'
-import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
-import { ToggleButton } from '@/components/ToggleButton/ToggleButton'
 import { FavoriteButton } from '@/components/FavoriteButton/FavoriteButton'
 
 interface Props {
@@ -26,17 +24,6 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
     testCompletionCounter,
     authorName,
   } = testItem
-  const [addBookmark] = useCreateTestBookmarkMutation()
-  const [deleteBookmark] = useRemoveTestBookmarkMutation()
-
-  const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>) => {
-    const isToggled = evt.target.checked
-    if (isToggled) {
-      addBookmark(testID)
-    } else {
-      deleteBookmark(testID)
-    }
-  }
 
   return (
     <li className={styles.card}>
@@ -69,7 +56,7 @@ export const CatalogTile: FC<Props> = ({ testItem }) => {
             </div>
           </div>
         </div>
-        <FavoriteButton format='icon' defaultChecked={isFavorite} onChange={handleFavoriteClick} />
+        <FavoriteButton format='icon' defaultChecked={isFavorite} testID={testID} />
       </article>
     </li>
   )

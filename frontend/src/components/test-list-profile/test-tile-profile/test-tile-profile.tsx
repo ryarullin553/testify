@@ -7,13 +7,15 @@ import { FC, useState } from 'react'
 import { TestWithAvatar } from '@/types/Test'
 import { useGetTestAttemptsQuery } from '@/services/testCatalogApi'
 import classNames from 'classnames'
+import { FavoriteButton } from '@/components/FavoriteButton/FavoriteButton'
 
 interface Props {
   testItem: TestWithAvatar
-  isEditable: boolean
+  isEditable?: boolean
+  isFavorite?: boolean
 }
 
-export const TestTileProfile: FC<Props> = ({ testItem, isEditable }) => {
+export const TestTileProfile: FC<Props> = ({ testItem, isEditable, isFavorite }) => {
   const { testTitle, testAvatar, testID, isPublished } = testItem
   const [isAttemptsShown, setIsAttemptsShown] = useState(false)
   const { data: attemptList } = useGetTestAttemptsQuery(testID, { skip: !isAttemptsShown })
@@ -33,7 +35,9 @@ export const TestTileProfile: FC<Props> = ({ testItem, isEditable }) => {
         </div>
         <AvatarBlock src={testAvatar} size={60} additionalStyle={styles.logo} />
         {isEditable && <TestTileLinks testID={testID} />}
-        {isEditable && <TestTileLinks testID={testID} />}
+        {isFavorite && (
+          <FavoriteButton format={'icon'} defaultChecked={true} testID={testID} outerStyles={styles.favoriteButton} />
+        )}
       </article>
       {!isEditable && isAttemptsShown && !!attemptList && (
         <TestTileAttemptList testID={testID} attemptList={attemptList} />

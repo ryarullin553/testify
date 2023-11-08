@@ -6,7 +6,6 @@ import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { TestWithDescription } from '../../../types/Test'
 import { useRouter } from 'next/navigation'
 import { useStartAttemptMutation } from '@/services/testCompletionApi'
-import { useCreateTestBookmarkMutation, useRemoveTestBookmarkMutation } from '@/services/testCatalogApi'
 import { Button } from '@/components/Button/Button'
 import { FavoriteButton } from '@/components/FavoriteButton/FavoriteButton'
 
@@ -17,8 +16,6 @@ interface Props extends PropsWithChildren {
 export const TestOverview: FC<Props> = ({ testInfo, children }) => {
   const router = useRouter()
   const [startAttempt] = useStartAttemptMutation()
-  const [addBookmark] = useCreateTestBookmarkMutation()
-  const [deleteBookmark] = useRemoveTestBookmarkMutation()
   const {
     testID,
     testAvatar,
@@ -40,15 +37,6 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
       await startAttempt(testID)
     }
     router.push(`${AppRoute.TestMain}/${testID}`)
-  }
-
-  const handleFavoriteClick = async (evt: ChangeEvent<HTMLInputElement>) => {
-    const isToggled = evt.target.checked
-    if (isToggled) {
-      await addBookmark(testID)
-    } else {
-      await deleteBookmark(testID)
-    }
   }
 
   return (
@@ -92,7 +80,7 @@ export const TestOverview: FC<Props> = ({ testInfo, children }) => {
           <Button type={'button'} view={'rounded'} onClick={handleStartTestClick}>
             {isInProgress ? 'Продолжить' : 'Начать'}
           </Button>
-          <FavoriteButton format={'button'} defaultChecked={isFavorite} onChange={handleFavoriteClick} />
+          <FavoriteButton format={'button'} defaultChecked={isFavorite} testID={testID} />
         </div>
       </section>
     </div>
