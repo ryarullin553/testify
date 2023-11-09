@@ -1,7 +1,7 @@
 import { QuestionInputArea } from './question-input-area/question-input-area'
 import styles from './create-question-manager.module.scss'
 import TrashIcon from './img/trash_icon.svg'
-import { FC, useState, FormEvent } from 'react'
+import { FC, useState, FormEvent, useRef } from 'react'
 import { Answer, Question, QuestionWithCorrectAnswer, Test } from '../../../types/Test'
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/services/testCreationApi'
 import { Button } from '@/components/Button/Button'
@@ -38,7 +38,8 @@ export const CreateQuestionManager: FC<Props> = ({
   const [questionTypeState, setQuestionTypeState] = useState(questionType)
   const [createQuestion] = useCreateQuestionMutation()
   const [updateQuestion] = useUpdateQuestionMutation()
-  const [generateAnswers] = useGenerateAnswersMutation()
+  const formRef = useRef<HTMLFormElement>(null)
+
   const options = {
     SINGLE_CHOICE: 'Одиночный выбор',
     MULTIPLE_CHOICE: 'Множественный выбор',
@@ -112,19 +113,14 @@ export const CreateQuestionManager: FC<Props> = ({
   //   setGenerateAmount(newValue)
   // }
 
-  const handleGenerateAnswersClick = async () => {
-    const request = {
-      questionDescription: 'Сколько рогов у коровы',
-      numberToGenerate: 3,
-      correctAnswers: ['0'],
-      answers: ['3', '1'],
-    }
-    generateAnswers(request)
-  }
-
   return (
     <section className={styles.formWrapper}>
-      <form className={styles.questionForm} id={'question-form'} name={'question-form'} onSubmit={handleFormSubmit}>
+      <form
+        className={styles.questionForm}
+        ref={formRef}
+        id={'question-form'}
+        name={'question-form'}
+        onSubmit={handleFormSubmit}>
         <div className={styles.questionContainer}>
           <QuestionInputArea currentQuestionIndex={currentQuestionIndex} questionDescription={questionDescription} />
           <Select options={options} currentValue={questionTypeState} handleSelect={handleSelect} />
@@ -143,7 +139,7 @@ export const CreateQuestionManager: FC<Props> = ({
         <Button type={'button'} colorTheme={'hoverDark'} outerStyles={styles.plusButton} onClick={handleAnswerAdd}>
           +
         </Button>
-        {/* <AnswerGenerator handleGenerateAnswersClick={handleGenerateAnswersClick} /> */}
+        <AnswerGenerator formRef={formRef.current} />
         <PointsField
           defaultValue={questionPoints}
           disabled={!hasQuestionPoints}
