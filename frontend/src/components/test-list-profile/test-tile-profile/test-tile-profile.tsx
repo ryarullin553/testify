@@ -3,17 +3,19 @@ import { TestTileLinks } from './test-tile-links/test-tile-links'
 import { AvatarBlock } from '../../avatar-block/avatar-block'
 import { VisibilityButton } from './visibility-button/visibility-button'
 import { TestTileAttemptList } from './test-tile-attempt-list/test-tile-attempt-list'
-import { FC, useState, MouseEvent } from 'react'
-import { Test, TestWithAvatar } from '../../../types/Test'
+import { FC, useState } from 'react'
+import { TestWithAvatar } from '@/types/Test'
 import { useGetTestAttemptsQuery } from '@/services/testCatalogApi'
 import classNames from 'classnames'
+import { FavoriteButton } from '@/components/FavoriteButton/FavoriteButton'
 
 interface Props {
   testItem: TestWithAvatar
-  isEditable: boolean
+  isEditable?: boolean
+  isFavorite?: boolean
 }
 
-export const TestTileProfile: FC<Props> = ({ testItem, isEditable }) => {
+export const TestTileProfile: FC<Props> = ({ testItem, isEditable, isFavorite }) => {
   const { testTitle, testAvatar, testID, isPublished } = testItem
   const [isAttemptsShown, setIsAttemptsShown] = useState(false)
   const { data: attemptList } = useGetTestAttemptsQuery(testID, { skip: !isAttemptsShown })
@@ -33,6 +35,9 @@ export const TestTileProfile: FC<Props> = ({ testItem, isEditable }) => {
         </div>
         <AvatarBlock src={testAvatar} size={60} additionalStyle={styles.logo} />
         {isEditable && <TestTileLinks testID={testID} />}
+        {isFavorite && (
+          <FavoriteButton format={'icon'} defaultChecked={true} testID={testID} outerStyles={styles.favoriteButton} />
+        )}
       </article>
       {!isEditable && isAttemptsShown && !!attemptList && (
         <TestTileAttemptList testID={testID} attemptList={attemptList} />

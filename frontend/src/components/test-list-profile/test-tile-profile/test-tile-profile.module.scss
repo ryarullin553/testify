@@ -15,7 +15,7 @@
   padding: 20px;
 
   display: grid;
-  grid-template-columns: 60px 1fr 15px;
+  grid-template-columns: 60px 1fr 23px;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
     'logo title button'
@@ -45,24 +45,6 @@
   cursor: pointer;
 }
 
-.buttonMore {
-  position: relative;
-  bottom: 13px;
-  left: 17px;
-  grid-area: button;
-  word-wrap: normal;
-
-  color: #a5a5a5;
-
-  transform: rotate(90deg) scale(1.15);
-
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    color: #000000;
-  }
-}
-
 .titleWrapper {
   grid-area: title;
   display: flex;
@@ -72,4 +54,9 @@
   padding: 0;
 
   grid-area: logo;
+}
+
+.favoriteButton {
+  grid-area: button;
+  z-index: 1;
 }

@@ -5,4 +5,10 @@
 
   display: flex;
   gap: 15px;
+
+  .deleteButton {
+    &:hover {
+      color: var(--color-red);
+    }
+  }
 }
