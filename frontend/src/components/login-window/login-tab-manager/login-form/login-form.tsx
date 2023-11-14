@@ -18,9 +18,9 @@ interface Props {
 
 export const LoginForm: FC<Props> = ({ formTab, handleFormSubmit }) => {
   const [formState, setFormState] = useState<LoginFormState>({
-    email: '',
+    email: 'test@test.ru',
     username: '',
-    password: '',
+    password: 'test',
     passwordRepeat: '',
   })
 
