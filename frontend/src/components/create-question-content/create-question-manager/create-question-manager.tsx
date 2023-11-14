@@ -81,8 +81,29 @@ export const CreateQuestionManager: FC<Props> = ({
 
   const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
-    const formData = new FormData(evt.currentTarget)
+    const { answerList, correctAnswerIDs, questionDescription, questionPoints } = getFormData(evt.currentTarget)
+    const questionData: QuestionWithCorrectAnswer = {
+      testID,
+      questionID,
+      questionDescription,
+      questionAvatar: null,
+      questionType: questionTypeState,
+      answerOrder: answerOrderState,
+      answerList,
+      correctAnswerIDs,
+      questionPoints,
+    }
+    if (currentQuestionID <= 0) {
+      await createQuestion(questionData)
+      addNewQuestion()
+    } else await updateQuestion(questionData)
+  }
+
+  const getFormData = (form?: HTMLFormElement) => {
+    const formData = new FormData(form)
     const correctAnswerIDs = formData.getAll(`answer-select`).map(Number)
+    const questionDescription = formData.get('questionDescription') as string
+    const questionPoints = Number(formData.get('question-points'))
     const answerList = answerOrderState.reduce((acc: Record<number, Answer>, x) => {
       acc[x] = {
         answerID: x,
@@ -90,21 +111,7 @@ export const CreateQuestionManager: FC<Props> = ({
       }
       return acc
     }, {})
-    const questionData: QuestionWithCorrectAnswer = {
-      testID,
-      questionID,
-      questionDescription: formData.get('questionDescription') as string,
-      questionAvatar: null,
-      questionType: questionTypeState,
-      answerOrder: answerOrderState,
-      answerList,
-      correctAnswerIDs,
-      questionPoints: Number(formData.get('question-points')),
-    }
-    if (currentQuestionID <= 0) {
-      await createQuestion(questionData)
-      addNewQuestion()
-    } else await updateQuestion(questionData)
+    return { answerList, correctAnswerIDs, questionDescription, questionPoints }
   }
 
   // const handleGenerateAmountChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -139,7 +146,7 @@ export const CreateQuestionManager: FC<Props> = ({
         <Button type={'button'} colorTheme={'hoverDark'} outerStyles={styles.plusButton} onClick={handleAnswerAdd}>
           +
         </Button>
-        <AnswerGenerator formRef={formRef.current} />
+        {/* <AnswerGenerator formRef={formRef.current} getFormData={getFormData} /> */}
         <PointsField
           defaultValue={questionPoints}
           disabled={!hasQuestionPoints}

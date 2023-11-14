@@ -1,7 +1,6 @@
 import styles from './answer-tile.module.scss'
 import { FC, MouseEvent } from 'react'
-import { Answer, Question, QuestionTypes, Test } from '@/types/Test'
-import { useGetTestWithQuestionsQuery } from '@/services/testCreationApi'
+import { Question, QuestionTypes, Test } from '@/types/Test'
 
 interface Props {
   testID: Test['testID']
